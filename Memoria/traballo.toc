@@ -1,0 +1,232 @@
+\select@language {galician}
+\contentsline {chapter}{\numberline {1}Introduci\IeC {\'o}n}{1}
+\contentsline {chapter}{\numberline {2}Planificaci\IeC {\'o}n e presupostos}{3}
+\contentsline {chapter}{\numberline {3}Especificaci\IeC {\'o}n de requisitos}{5}
+\contentsline {section}{\numberline {3.1}Requisitos funcionais}{5}
+\contentsline {subsection}{\numberline {3.1.1}RF01}{5}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{5}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{5}
+\contentsline {subsubsection}{Casos de uso relacionados}{5}
+\contentsline {subsubsection}{Importancia}{5}
+\contentsline {subsection}{\numberline {3.1.2}RF02}{5}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{5}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{5}
+\contentsline {subsubsection}{Casos de uso relacionados}{6}
+\contentsline {subsubsection}{Importancia}{6}
+\contentsline {subsection}{\numberline {3.1.3}RF03}{6}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{6}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{6}
+\contentsline {subsubsection}{Casos de uso relacionados}{6}
+\contentsline {subsubsection}{Importancia}{6}
+\contentsline {subsection}{\numberline {3.1.4}RF04}{6}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{6}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{6}
+\contentsline {subsubsection}{Casos de uso relacionados}{6}
+\contentsline {subsubsection}{Importancia}{6}
+\contentsline {subsection}{\numberline {3.1.5}RF05}{6}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{6}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{7}
+\contentsline {subsubsection}{Casos de uso relacionados}{7}
+\contentsline {subsubsection}{Importancia}{7}
+\contentsline {subsection}{\numberline {3.1.6}RF06}{7}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{7}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{7}
+\contentsline {subsubsection}{Casos de uso relacionados}{7}
+\contentsline {subsubsection}{Importancia}{7}
+\contentsline {subsection}{\numberline {3.1.7}RF07}{7}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{7}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{7}
+\contentsline {subsubsection}{Casos de uso relacionados}{7}
+\contentsline {subsubsection}{Importancia}{7}
+\contentsline {subsection}{\numberline {3.1.8}RF08}{8}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{8}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{8}
+\contentsline {subsubsection}{Casos de uso relacionados}{8}
+\contentsline {subsubsection}{Importancia}{8}
+\contentsline {subsection}{\numberline {3.1.9}RF09}{8}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{8}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{8}
+\contentsline {subsubsection}{Casos de uso relacionados}{8}
+\contentsline {subsubsection}{Importancia}{8}
+\contentsline {subsection}{\numberline {3.1.10}RF10}{8}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{8}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{8}
+\contentsline {subsubsection}{Casos de uso relacionados}{9}
+\contentsline {subsubsection}{Importancia}{9}
+\contentsline {subsection}{\numberline {3.1.11}RF11}{9}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{9}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{9}
+\contentsline {subsubsection}{Casos de uso relacionados}{9}
+\contentsline {subsubsection}{Importancia}{9}
+\contentsline {subsection}{\numberline {3.1.12}RF12}{9}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{9}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{9}
+\contentsline {subsubsection}{Casos de uso relacionados}{9}
+\contentsline {subsubsection}{Importancia}{9}
+\contentsline {subsection}{\numberline {3.1.13}RF13}{10}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{10}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{10}
+\contentsline {subsubsection}{Casos de uso relacionados}{10}
+\contentsline {subsubsection}{Importancia}{10}
+\contentsline {subsection}{\numberline {3.1.14}RF14}{10}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{10}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{10}
+\contentsline {subsubsection}{Casos de uso relacionados}{10}
+\contentsline {subsubsection}{Importancia}{10}
+\contentsline {subsection}{\numberline {3.1.15}RF15}{10}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{10}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{11}
+\contentsline {subsubsection}{Casos de uso relacionados}{11}
+\contentsline {subsubsection}{Importancia}{11}
+\contentsline {subsection}{\numberline {3.1.16}RF16}{11}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{11}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{11}
+\contentsline {subsubsection}{Casos de uso relacionados}{11}
+\contentsline {subsubsection}{Importancia}{11}
+\contentsline {subsection}{\numberline {3.1.17}RF17}{11}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{11}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{11}
+\contentsline {subsubsection}{Casos de uso relacionados}{11}
+\contentsline {subsubsection}{Importancia}{11}
+\contentsline {subsection}{\numberline {3.1.18}RF18}{12}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{12}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{12}
+\contentsline {subsubsection}{Casos de uso relacionados}{12}
+\contentsline {subsubsection}{Importancia}{12}
+\contentsline {subsection}{\numberline {3.1.19}RF19}{12}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{12}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{12}
+\contentsline {subsubsection}{Casos de uso relacionados}{12}
+\contentsline {subsubsection}{Importancia}{12}
+\contentsline {subsection}{\numberline {3.1.20}RF20}{12}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{12}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{12}
+\contentsline {subsubsection}{Casos de uso relacionados}{13}
+\contentsline {subsubsection}{Importancia}{13}
+\contentsline {subsection}{\numberline {3.1.21}RF21}{13}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{13}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{13}
+\contentsline {subsubsection}{Casos de uso relacionados}{13}
+\contentsline {subsubsection}{Importancia}{13}
+\contentsline {subsection}{\numberline {3.1.22}RF22}{13}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{13}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{13}
+\contentsline {subsubsection}{Casos de uso relacionados}{13}
+\contentsline {subsubsection}{Importancia}{13}
+\contentsline {subsection}{\numberline {3.1.23}RF23}{14}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{14}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{14}
+\contentsline {subsubsection}{Casos de uso relacionados}{14}
+\contentsline {subsubsection}{Importancia}{14}
+\contentsline {subsection}{\numberline {3.1.24}RF24}{14}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{14}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{14}
+\contentsline {subsubsection}{Casos de uso relacionados}{14}
+\contentsline {subsubsection}{Importancia}{14}
+\contentsline {subsection}{\numberline {3.1.25}RF25}{14}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{14}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{15}
+\contentsline {subsubsection}{Casos de uso relacionados}{15}
+\contentsline {subsubsection}{Importancia}{15}
+\contentsline {subsection}{\numberline {3.1.26}RF26}{15}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{15}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{15}
+\contentsline {subsubsection}{Casos de uso relacionados}{15}
+\contentsline {subsubsection}{Importancia}{15}
+\contentsline {subsection}{\numberline {3.1.27}RF27}{15}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{15}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{15}
+\contentsline {subsubsection}{Casos de uso relacionados}{15}
+\contentsline {subsubsection}{Importancia}{15}
+\contentsline {subsection}{\numberline {3.1.28}RF28}{16}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{16}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{16}
+\contentsline {subsubsection}{Casos de uso relacionados}{16}
+\contentsline {subsubsection}{Importancia}{16}
+\contentsline {subsection}{\numberline {3.1.29}RF29}{16}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{16}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{16}
+\contentsline {subsubsection}{Casos de uso relacionados}{16}
+\contentsline {subsubsection}{Importancia}{16}
+\contentsline {subsection}{\numberline {3.1.30}RF30}{16}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{16}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{16}
+\contentsline {subsubsection}{Casos de uso relacionados}{17}
+\contentsline {subsubsection}{Importancia}{17}
+\contentsline {subsection}{\numberline {3.1.31}RF31}{17}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{17}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{17}
+\contentsline {subsubsection}{Casos de uso relacionados}{17}
+\contentsline {subsubsection}{Importancia}{17}
+\contentsline {subsection}{\numberline {3.1.32}RF32}{17}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{17}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{17}
+\contentsline {subsubsection}{Casos de uso relacionados}{17}
+\contentsline {subsubsection}{Importancia}{17}
+\contentsline {subsection}{\numberline {3.1.33}RF33}{17}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{17}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{18}
+\contentsline {subsubsection}{Casos de uso relacionados}{18}
+\contentsline {subsubsection}{Importancia}{18}
+\contentsline {subsection}{\numberline {3.1.34}RF34}{18}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{18}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{18}
+\contentsline {subsubsection}{Importancia}{18}
+\contentsline {subsection}{\numberline {3.1.35}RF35}{18}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{18}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{18}
+\contentsline {subsubsection}{Casos de uso relacionados}{18}
+\contentsline {subsubsection}{Importancia}{18}
+\contentsline {subsection}{\numberline {3.1.36}RF36}{18}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{18}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{19}
+\contentsline {subsubsection}{Casos de uso relacionados}{19}
+\contentsline {subsubsection}{Importancia}{19}
+\contentsline {section}{\numberline {3.2}Requisitos de calidade}{19}
+\contentsline {subsection}{\numberline {3.2.1}RC01}{19}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{19}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{19}
+\contentsline {subsubsection}{Casos de uso relacionados}{19}
+\contentsline {subsubsection}{Importancia}{19}
+\contentsline {section}{\numberline {3.3}Requisitos non funcionais}{19}
+\contentsline {subsection}{\numberline {3.3.1}RNF01}{19}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{19}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{19}
+\contentsline {subsubsection}{Casos de uso relacionados}{20}
+\contentsline {subsubsection}{Importancia}{20}
+\contentsline {subsection}{\numberline {3.3.2}RNF02}{20}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{20}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{20}
+\contentsline {subsubsection}{Casos de uso relacionados}{20}
+\contentsline {subsubsection}{Importancia}{20}
+\contentsline {subsection}{\numberline {3.3.3}RNF03}{20}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{20}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{20}
+\contentsline {subsubsection}{Casos de uso relacionados}{20}
+\contentsline {subsubsection}{Importancia}{20}
+\contentsline {subsection}{\numberline {3.3.4}RNF04}{20}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{20}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{21}
+\contentsline {subsubsection}{Casos de uso relacionados}{21}
+\contentsline {subsubsection}{Importancia}{21}
+\contentsline {subsection}{\numberline {3.3.5}RNF05}{21}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{21}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{21}
+\contentsline {subsubsection}{Casos de uso relacionados}{21}
+\contentsline {subsubsection}{Importancia}{21}
+\contentsline {chapter}{\numberline {4}Dese\IeC {\~n}o}{23}
+\contentsline {chapter}{\numberline {5}Exemplos}{25}
+\contentsline {section}{\numberline {5.1}Un exemplo de secci\IeC {\'o}n}{25}
+\contentsline {subsection}{\numberline {5.1.1}Un exemplo de subsecci\IeC {\'o}n}{25}
+\contentsline {subsection}{\numberline {5.1.2}Otro exemplo de subsecci\IeC {\'o}n}{25}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{25}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{25}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{25}
+\contentsline {section}{\numberline {5.2}Exemplos de figuras e cadros}{26}
+\contentsline {section}{\numberline {5.3}Exemplos de referencias \IeC {\'a} bibliograf\IeC {\'\i }a}{26}
+\contentsline {section}{\numberline {5.4}Exemplos de enumeraci\IeC {\'o}ns}{26}
+\contentsline {chapter}{\numberline {6}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{29}
+\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{31}
+\contentsline {chapter}{\numberline {B}Manuais de usuario}{33}
+\contentsline {chapter}{\numberline {C}Licenza}{35}
+\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{37}

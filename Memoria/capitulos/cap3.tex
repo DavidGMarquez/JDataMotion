@@ -1,0 +1,385 @@
+\chapter{Especificación de requisitos}
+
+\section{Requisitos funcionais}
+
+\subsection{RF01}
+\subsubsection{Título}
+Importar arquivos con datos para o experimento
+\subsubsection{Descripción}
+A aplicación debe permitir cargar do sistema de arquivos un ficheiro que conteña unha secuencia de datos (nun formato axeitado segundo o RNF02) para ser utilizados no experimento.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF02}
+\subsubsection{Título}
+Exportar datos
+\subsubsection{Descripción}
+A aplicación debe permitir almacear nun arquivo o conxunto de datos do arquivo actual (tendo en conta filtrados, modificacións, datos engadidos ou eliminados...). Os arquivos de saída deben respetar o RNF02.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF03}
+\subsubsection{Título}
+Gardar sesión
+\subsubsection{Descripción}
+A aplicación debe permitir gardar en disco a sesión (ou experimento) actual tal e como está no momento de executar esta acción.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF04}
+\subsubsection{Título}
+Abrir sesión
+\subsubsection{Descripción}
+A aplicación debe permitir restaurar unha sesión (ou experimento) gardada anteriormente, de xeito que se atope exactamente igual ca no momento en que se gardou.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF05}
+\subsubsection{Título}
+Representar os datos en forma de táboa
+\subsubsection{Descripción}
+A aplicación debe ser capaz de amosar os datos segundo unha táboa na que figuren cabeceiras, tipos, valores...
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF06}
+\subsubsection{Título}
+Insertar datos no experimento actual
+\subsubsection{Descripción}
+A aplicación debe permitir a inserción dinámica de datos no experimento actual.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF07}
+\subsubsection{Título}
+Modificar datos no experimento actual
+\subsubsection{Descripción}
+A aplicación debe permitir a modificación dinámica de datos no experimento actual.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF08}
+\subsubsection{Título}
+Eliminar datos no experimento actual
+\subsubsection{Descripción}
+A aplicación debe permitir a eliminación dinámica de datos no experimento actual.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF09}
+\subsubsection{Título}
+Asignar tipos aos atributos dun arquivo importado
+\subsubsection{Descripción}
+A aplicación debe permitir especificar os tipos de atributos presentes no arquivo importado. Por exemplo, os datos cuantitativos poderían ser enteiros ou reais, mentras que os cualitativos serían algo distinto (mesmamente strings).
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF10}
+\subsubsection{Título}
+Sinalar identificación temporal
+\subsubsection{Descripción}
+A aplicación debe permitir sinalar unha columna que exprese o orde ou a temporalidade dunha tupla, ou ben definir esta columna manualmente.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF11}
+\subsubsection{Título}
+Representar graficamente mediante scatterplot
+\subsubsection{Descripción}
+A aplicación debe ser capaz de representar gráficamente (mediante scatterplots) o conxunto de parámetros de entrada. Concretamente, débense poder representar ata 4 parámetros por cada scatterplot (ordeadas, abscisas, cor e forma dos puntos). A cor e a forma representan valores discretos, pero ademáis a forma pode representar valores continuos no caso dun degradado. Todos os scatterplots estarán englobados dentro do ``menú de visualización'', que cumprirá co RNF06.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF12}
+\subsubsection{Título}
+Engadir scatterplots ao menú de visualización
+\subsubsection{Descripción}
+A aplicación debe permitir engadir dinámicamente novos scatterplots dentro do menú de visualización.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF13}
+\subsubsection{Título}
+Eliminar un scatterplot do menú de visualización
+\subsubsection{Descripción}
+A aplicación debe permitir eliminar un scatterplot do menú de visualización.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF14}
+\subsubsection{Título}
+Configurar un scatterplot do menú de visualización
+\subsubsection{Descripción}
+A aplicación debe permitir especificar para cada scatterplot do menú de visualización a tupla de atributos a comparar. Tamén se debe poder elixir dende o eixo de representación para cada atributo como a cor ou forma dos puntos. Ademáis tense que dispoñer da opción especificar numéricamente a posición x0 e y0 na que comeza a ventá de visualización, e o ancho e alto desta ventá, o cal constitúe implícitamente un xeito de situar a ventá de visualización, de facer zoom sobre ela e no caso da relación ancho/alto, mesmo de establecer escalas distintas para cada eixo. Esto último podería omitirse, en beneficio dun comportamento dinámico e por defecto da ventá de visualización, que se adaptaría para englobar a todos os puntos representados.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF15}
+\subsubsection{Título}
+Detallar punto seleccionado dentro do scatterplot
+\subsubsection{Descripción}
+Cada punto (non difuminado completamente) dos scatterplots pode ser seleccionado para ver nun apartado os seus detalles (todos os seus atributos, marca temporal...).
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF16}
+\subsubsection{Título}
+Resaltar punto en scatterplots
+\subsubsection{Descripción}
+Cada punto seleccionalo dentro dun scatterplot resaltarase tanto nel coma en todos os demáis scatterplots (que plasmarán outras proxeccións do mesmo punto).
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF17}
+\subsubsection{Título}
+Desprazar a ventá de visualización por arrastre de cada scatterplot (reposicionar)
+\subsubsection{Descripción}
+Para cada scatterplot poderemos usar unha ferramenta ``man'' para desprazar a ventá polo scatterplot.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF18}
+\subsubsection{Título}
+Facer zoom in e zoom out en cada scatterplot (escalar)
+\subsubsection{Descripción}
+Para cada scatterplot poderemos usar unha ferramenta de Zoom in e outra de Zoom out para facer zoom do scatterplot. O zoom aumentará ou diminuirá a razón de X1.2
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF19}
+\subsubsection{Título}
+Escalar e reposicionar dinámicamente
+\subsubsection{Descripción}
+Para cada scatterplot poderemos seleccionar que a ventá de visualización que o enfoca se adapte dinámicamente ao conxunto de datos representados (movéndose, afastándose, aproximándose... para englobar todos os datos).
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF20}
+\subsubsection{Título}
+Reproducir a secuencia de datos (Play)
+\subsubsection{Descripción}
+A aplicación debe de permitir que a visualización dos scatterplots poida basarse na variable temporal (ou de orde) para reproducir a secuencia de datos, amosando os datos de cada scatterplot baixo unha secuencia de vídeo. Nesta secuencia engadiríase á visualización en cada instante a tupla de atributos asociada a esa marca temporal. 
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF21}
+\subsubsection{Título}
+Difuminar puntos ao longo da reprodución
+\subsubsection{Descripción}
+A aplicación debe permitir difuminar os puntos xa representados a través do avance temporal.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF22}
+\subsubsection{Título}
+Representar estela
+\subsubsection{Descripción}
+A aplicación debe de permitir que cada novo punto ploteado se ligue ao último representado no scaterplott por medio dunha liña recta.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF23}
+\subsubsection{Título}
+Difuminar estela ao longo da reprodución
+\subsubsection{Descripción}
+A aplicación debe permitir difuminar as estelas xa representadas a través do avance temporal.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF24}
+\subsubsection{Título}
+Configurar a reprodución da secuencia de datos
+\subsubsection{Descripción}
+A aplicación debe de permitir que a visualización dos scatterplots sexa configurable en canto a tempo transcurrido entre marcas temporais cando estas sexan de orde, que a velocidade do Play sexa x1, x2 ou x4 ou que se reproduza cara adiante ou cara atrás. Ademáis débese poder especificar o número de marcas temporais que durará o difuminado dos puntos que se ploteen, de xeito que durante ese intervalo cada punto se vaia difuminando ata desaparecer. Pode ser  0 para que os puntos non se difuminen. A aplicación tamén debe permitir especificar o número de marcas temporais que durará o difuminado das estelas que se ploteen, de xeito que durante ese intervalo cada estela xa debuxada se vaia difuminando ata desaparecer. Pode ser 0 para que as estelas non se difuminen.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF25}
+\subsubsection{Título}
+Rebobinado e avance rápido da reprodución (Rewind, FastForward)
+\subsubsection{Descripción}
+A aplicación debe permitir avanzar e retroceder a alta velocidade (X8) a reprodución.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF26}
+\subsubsection{Título}
+Pausar a reprodución (Pause)
+\subsubsection{Descripción}
+A aplicación debe permitir parar a reprodución na marca de tempo na que se atope ao executar esta acción, mantendo as visualizacións para ese momento.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF27}
+\subsubsection{Título}
+Ir a un determinado instante dentro do intervalo temporal da reprodución (GoTo)
+\subsubsection{Descripción}
+A aplicación debe permitir situarse directamente sobre un instante de tempo, mantendo a reprodución pausada sobre esa marca temporal, e visualizando os scatterplots tal e como deben estar nese momento.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF28}
+\subsubsection{Título}
+Insertar filtros para os datos do experimento
+\subsubsection{Descripción}
+A aplicación debe permitir engadir unha serie de filtros que se aplicarán de xeito secuencial sobre a secuencia de datos coa que se esté a traballar. Chamarémoslle "secuencia de filtros" a esta secuencia.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF29}
+\subsubsection{Título}
+Gardar unha subsecuencia de filtros do experimento
+\subsubsection{Descripción}
+A aplicación debe permitir gardar unha subsecuencia de filtros dentro dos que se estén aplicando sobre o experimento. Esta subsecuencia pode comprender tanto un só filtro como a secuencia de filtros enteira.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF30}
+\subsubsection{Título}
+Cargar unha secuencia de filtros para o experimento
+\subsubsection{Descripción}
+A aplicación debe permitir cargar do sistema de arquivos unha secuencia de filtros que se engadirá á cabeza da secuencia de filtros (a cal pode estar vacía). Esta secuencia tamén pode estar composta por un só filtro.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF31}
+\subsubsection{Título}
+Eliminar un filtro para os datos do experimento
+\subsubsection{Descripción}
+A aplicación debe permitir eliminar un determinado filtro dentro da secuencia de filtros.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF32}
+\subsubsection{Título}
+Configurar filtros para os datos do experimento
+\subsubsection{Descripción}
+A aplicación debe permitir seleccionar un determinado filtro dentro da secuencia de filtros para modificar a regla de filtrado implícita.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF33}
+\subsubsection{Título}
+Mover os filtros dentro da secuencia de filtros
+\subsubsection{Descripción}
+A aplicación debe permitir desprazar un filtro dentro da secuencia de filtros do experimento, de xeito que o orde de aplicación dos filtros varíe. O desprazamento realizarase insertando o filtro en cuestión nunha nova posición.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF34}
+\subsubsection{Título}
+Calcular distancia entre dous puntos do plano
+\subsubsection{Descripción}
+A aplicación debe permitir o cálculo da distancia entre dous puntos do plano.
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF35}
+\subsubsection{Título}
+Configurar a fórmula para achar distancia entre dous puntos do plano
+\subsubsection{Descripción}
+A aplicación debe permitir a introdución da fórmula que se desexe para calcular a distancia entre dous puntos
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RF36}
+\subsubsection{Título}
+Configurar o menú de visualización
+\subsubsection{Descripción}
+A aplicación debe permitir cambiar os parámetros de visualización dos scatterplots que compoñen o menú de visualización, por exemplo, a cor das estelas, do fondo, dos eixos... ou a fonte, tamaño de letra...
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Optativa
+
+\section{Requisitos de calidade}
+
+\subsection{RC01}
+\subsubsection{Título}
+Latencia mínima para o procesamento
+\subsubsection{Descripción}
+A aplicación debe responder nun tempo razoable ás operacións executadas polo usuario, e intentar que esa latencia escale de xeito controlado ao aumentar a talla dos parámetros.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\section{Requisitos non funcionais}
+
+\subsection{RNF01}
+\subsubsection{Título}
+Formatos de entrada admitidos ao importar e exportar arquivos
+\subsubsection{Descripción}
+A aplicación debe estar preparada para importar e exportar arquivos en distintos formatos, como son o CSV e ARFF.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RNF02}
+\subsubsection{Título}
+Modularidade no deseño dos filtros
+\subsubsection{Descripción}
+A aplicación debe facilitar unha interface para a inclusión e uso de filtros personalizados (.jar) no proxecto.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RNF03}
+\subsubsection{Título}
+Relación programa-sesión
+\subsubsection{Descripción}
+Cada instancia do programa debe traballar cunha única sesión (experimento).
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RNF04}
+\subsubsection{Título}
+Representación matricial dos scatterplots
+\subsubsection{Descripción}
+Os scatterplots represéntanse de xeito matricial, facendo que cada parámetro dentro dun eixo sexa enfrentado a cada un dos demáis do outro eixo, e en cada punto desa dupla se sitúe o scatterplot que compara ambos parámetros. Deste xeito, os scatterplots non son acumulables: se temos un que representa X fronte a Y, non podemos engadir outro que represente X fronte a Y, pois ocuparían ambos a misma cela dentro da matriz de scatterplots.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
+\subsection{RNF05}
+\subsubsection{Título}
+Interface de fiestra para engadir contido
+\subsubsection{Descripción}
+Dentro do apartado de detalles que ilustrará a fondo os atributos dun punto seleccionado haberá un espacio asociado a unha interface que poderá ser implementada para engadir calquer contido.
+\subsubsection{Casos de uso relacionados}
+\subsubsection{Importancia}
+Esencial
+
