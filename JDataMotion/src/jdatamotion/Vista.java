@@ -1,5 +1,7 @@
 package jdatamotion;
 
+import info.clearthought.layout.TableLayout;
+import info.clearthought.layout.TableLayoutConstraints;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -336,21 +338,40 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             jFramesAmpliar.add(aljf);
             matrizScatterPlots.add(alsp);
         }
-        if (numAtributosNumericos > 0) {
-            actualizarScatterPlotsVisibles(numAtributosNumericos);
-            CyclicBarrier barrier = new CyclicBarrier(contarScatterplotsVisibles() + 1);
-            for (int i = numAtributosNumericos - 1; i >= 0; i--) {
-                if (!filaScatterPlotsVacia(i)) {
-                    new FioFilas(indices, i, meuModelo.getIndiceAtributoNominal(), this, barrier).start();
-                }
+        actualizarScatterPlotsVisibles(numAtributosNumericos);
+        jPopupMenu1.setVisible(false);
+        jPanel4.removeAll();
+        int numCols = numColumnasNonVacias();
+        int numFilas = numFilasNonVacias();
+        int max = Math.max(numFilas, numCols);
+        double cols[] = new double[numCols];
+        double filas[] = new double[numFilas];
+        for (int i = 0; i < max; i++) {
+            if (i < numCols) {
+                cols[i] = TableLayout.FILL;
             }
-            try {
-                barrier.await();
-            } catch (InterruptedException | BrokenBarrierException ex) {
-                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+            if (i < numFilas) {
+                filas[i] = TableLayout.FILL;
             }
-            mostrarMatrizScatterplots();
         }
+        jPanel4.setLayout(new TableLayout(cols, filas));
+        CyclicBarrier barrier = new CyclicBarrier(numFilas * numCols + 1);
+        int filasVacias = 0;
+        for (int i = numAtributosNumericos - 1; i >= 0; i--) {
+            if (!filaScatterPlotsVacia(i)) {
+                new FioFilas(indices, i, filasVacias, meuModelo.getIndiceAtributoNominal(), this, barrier).start();
+            } else {
+                filasVacias++;
+            }
+        }
+        try {
+            barrier.await();
+        } catch (InterruptedException | BrokenBarrierException ex) {
+            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jPanel4.revalidate();
+        jPanel4.repaint();
+        jPanel4.setVisible(true);
     }
 
     private void anularSeleccions(XYPlot xyPlot) {
@@ -372,69 +393,20 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         return c;
     }
 
-    public void mostrarMatrizScatterplots() {
-        jPopupMenu1.setVisible(false);
-        jPanel4.removeAll();
-        if (numColumnasNonVacias() > 0) {
-            jPanel4.setLayout(new GridLayout(0, numColumnasNonVacias()));
-            for (int i = matrizScatterPlots.size() - 1; i >= 0; i--) {
-                if (!filaScatterPlotsVacia(i)) {
-                    for (int j = 0; j < matrizScatterPlots.get(i).size(); j++) {
-                        if (!columnaScatterPlotsVacia(j)) {
-                            if (!scatterPlotsVisibles[i][j]) {
-                                jPanel4.add(new JLabel());
-                            } else {
-                                ChartPanel meuChartPanel = matrizScatterPlots.get(i).get(j).getMeuChartPanel();
-                                meuChartPanel.setLayout(new GridBagLayout());
-                                JButton clickmeButton = new JButton();
-                                final int a = i;
-                                final int b = j;
-                                clickmeButton.setAction(new AbstractAction() {
-                                    @Override
-                                    public void actionPerformed(ActionEvent e) {
-                                        JFrame jfa = jFramesAmpliar.get(a).get(b);
-                                        if (!jfa.isVisible()) {
-                                            jfa.setLocation(getX() + 20 * (contarJFramesVisibles() + 1), getY() + 20 * (contarJFramesVisibles() + 1));
-                                            jfa.setVisible(true);
-                                        } else {
-                                            jfa.toFront();
-                                        }
-                                    }
-                                });
-                                clickmeButton.setIcon(new ImageIcon(getClass().getResource("imaxes/ampliar.png")));
-                                clickmeButton.setPreferredSize(new Dimension(20, 20));
-                                GridBagConstraints c = new GridBagConstraints();
-                                c.anchor = GridBagConstraints.SOUTHEAST;
-                                c.weightx = 1;
-                                c.weighty = 1;
-                                meuChartPanel.add(clickmeButton, c);
-                                jPanel4.add(meuChartPanel);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < getMatrizScatterPlots().size(); i++) {
-            if (getMatrizScatterPlots().get(i) != null) {
-                for (int j = 0; j < getMatrizScatterPlots().get(i).size(); j++) {
-                    if (getMatrizScatterPlots().get(i).get(j) != null) {
-                        ChartPanel chart = (ChartPanel) getjFramesAmpliar().get(i).get(j).getContentPane();
-                        ScatterPlot sp = getMatrizScatterPlots().get(i).get(j);
-                        anularSeleccions(chart.getChart().getXYPlot());
-                        anularSeleccions(sp.getMeuChartPanel().getChart().getXYPlot());
-                    }
-                }
-            }
-        }
-        jPanel4.revalidate();
-        jPanel4.repaint();
-    }
-
     private int numColumnasNonVacias() {
         int n = 0;
         for (int i = 0; i < matrizScatterPlots.size(); i++) {
             if (!columnaScatterPlotsVacia(i)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    private int numFilasNonVacias() {
+        int n = 0;
+        for (int i = 0; i < matrizScatterPlots.size(); i++) {
+            if (!filaScatterPlotsVacia(i)) {
                 n++;
             }
         }
@@ -465,31 +437,65 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         private final int j;
         private final int i;
         private final int indiceNominal;
+        private final int filasVacias;
+        private final int columnasVacias;
         private final Vista vista;
         private final CyclicBarrier barrier;
 
-        public FioColumnas(ArrayList<Integer> indices, int j, int i, int indiceNominal, Vista vista, CyclicBarrier barrier) {
+        public FioColumnas(ArrayList<Integer> indices, int j, int i, int filasVacias, int columnasVacias, int indiceNominal, Vista vista, CyclicBarrier barrier) {
             this.indices = indices;
             this.j = j;
             this.i = i;
             this.indiceNominal = indiceNominal;
+            this.filasVacias = filasVacias;
+            this.columnasVacias = columnasVacias;
             this.vista = vista;
             this.barrier = barrier;
         }
 
         @Override
         public void run() {
-            int indiceI = indices.get(i);
-            int indiceJ = indices.get(j);
-            ScatterPlot spmatrix = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista, true);
-            ScatterPlot spframe = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista, false);
-            ChartPanel jpanelsp = spmatrix.getMeuChartPanel();
-            JFrame jFrameScatterPlotAmpliado = new JFrame("'" + meuModelo.obterNomeAtributo(indiceJ) + "' " + bundle.getString("fronteA") + " '" + meuModelo.obterNomeAtributo(indiceI) + "'");
-            jFrameScatterPlotAmpliado.setIconImage(new ImageIcon(getClass().getResource("imaxes/faviconGrafica.png")).getImage());
-            jFrameScatterPlotAmpliado.setContentPane(spframe.getMeuChartPanel());
-            jFrameScatterPlotAmpliado.setSize(600, 400);
-            jFramesAmpliar.get(i).set(j, jFrameScatterPlotAmpliado);
-            matrizScatterPlots.get(i).set(j, spmatrix);
+            if (!scatterPlotsVisibles[i][j]) {
+                jPanel4.add(new JLabel(), new TableLayoutConstraints(j - columnasVacias, indices.size() - 1 - i - filasVacias));
+            } else {
+                int indiceI = indices.get(i);
+                int indiceJ = indices.get(j);
+                ScatterPlot spmatrix = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista, true);
+                ScatterPlot spframe = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista, false);
+                JFrame jFrameScatterPlotAmpliado = new JFrame("'" + meuModelo.obterNomeAtributo(indiceJ) + "' " + bundle.getString("fronteA") + " '" + meuModelo.obterNomeAtributo(indiceI) + "'");
+                jFrameScatterPlotAmpliado.setIconImage(new ImageIcon(getClass().getResource("imaxes/faviconGrafica.png")).getImage());
+                jFrameScatterPlotAmpliado.setContentPane(spframe.getMeuChartPanel());
+                jFrameScatterPlotAmpliado.setSize(600, 400);
+                jFramesAmpliar.get(i).set(j, jFrameScatterPlotAmpliado);
+                matrizScatterPlots.get(i).set(j, spmatrix);
+                ChartPanel meuChartPanel = spmatrix.getMeuChartPanel();
+                meuChartPanel.setLayout(new GridBagLayout());
+                anularSeleccions(meuChartPanel.getChart().getXYPlot());
+                anularSeleccions(spmatrix.getMeuChartPanel().getChart().getXYPlot());
+                JButton clickmeButton = new JButton();
+                final int a = i;
+                final int b = j;
+                clickmeButton.setAction(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JFrame jfa = jFramesAmpliar.get(a).get(b);
+                        if (!jfa.isVisible()) {
+                            jfa.setLocation(getX() + 20 * (contarJFramesVisibles() + 1), getY() + 20 * (contarJFramesVisibles() + 1));
+                            jfa.setVisible(true);
+                        } else {
+                            jfa.toFront();
+                        }
+                    }
+                });
+                clickmeButton.setIcon(new ImageIcon(getClass().getResource("imaxes/ampliar.png")));
+                clickmeButton.setPreferredSize(new Dimension(19, 19));
+                GridBagConstraints c = new GridBagConstraints();
+                c.anchor = GridBagConstraints.SOUTHEAST;
+                c.weightx = 1;
+                c.weighty = 1;
+                meuChartPanel.add(clickmeButton, c);
+                jPanel4.add(meuChartPanel, new TableLayoutConstraints(j - columnasVacias, indices.size() - 1 - i - filasVacias));
+            }
             try {
                 barrier.await();
             } catch (InterruptedException | BrokenBarrierException ex) {
@@ -504,11 +510,13 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         private final int i;
         private final int indiceNominal;
         private final Vista vista;
+        private final int filasVacias;
         private final CyclicBarrier barrier;
 
-        public FioFilas(ArrayList<Integer> indices, int i, int indiceNominal, Vista vista, CyclicBarrier barrier) {
+        public FioFilas(ArrayList<Integer> indices, int i, int filasVacias, int indiceNominal, Vista vista, CyclicBarrier barrier) {
             this.indices = indices;
             this.i = i;
+            this.filasVacias = filasVacias;
             this.indiceNominal = indiceNominal;
             this.vista = vista;
             this.barrier = barrier;
@@ -517,9 +525,12 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         @Override
         public void run() {
             int numAtributosNumericos = indices.size();
+            int columnasVacias = 0;
             for (int j = 0; j < numAtributosNumericos; j++) {
-                if (scatterPlotsVisibles[i][j]) {
-                    new FioColumnas(indices, j, i, indiceNominal, vista, barrier).start();
+                if (!columnaScatterPlotsVacia(j)) {
+                    new FioColumnas(indices, j, i, filasVacias, columnasVacias, indiceNominal, vista, barrier).start();
+                } else {
+                    columnasVacias++;
                 }
             }
         }
@@ -600,11 +611,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 @Override
                 public void run() {
                     actualizarPilas();
+                    revalidate();
+                    repaint();
                 }
             });
         }
-        revalidate();
-        repaint();
     }
 
     /**

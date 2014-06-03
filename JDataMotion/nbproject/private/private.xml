@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="1">
                 <name/>
-                <line>474</line>
+                <line>393</line>
                 <key/>
             </bookmark>
         </file>
@@ -28,6 +28,8 @@
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/test/jdatamotion/testRF01.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/idiomas/Bundle_es.properties</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Controlador.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/lib/jfreechart-1.0.17-sources/org/jfree/chart/ChartPanel.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ScatterPlot.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Comando.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/XYDatasetModelo.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoMudarNomeRelacion.java</file>
@@ -36,6 +38,7 @@
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Modelo.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/SesionVista.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoMudarTipo.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Sesion.java</file>
         </group>
     </open-files>
 </project-private>

@@ -33,6 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
@@ -102,36 +103,38 @@ public final class ScatterPlot implements Serializable {
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        double domainCrosshairValue = meuChartPanel.getChart().getXYPlot().getDomainCrosshairValue();
-                        double rangeCrosshairValue = meuChartPanel.getChart().getXYPlot().getRangeCrosshairValue();
-                        ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
-                        Enumeration e = instances.enumerateInstances();
-                        for (int i = 0; e.hasMoreElements(); i++) {
-                            Instance di = (Instance) e.nextElement();
-                            if (di.value(indiceAtributoX) == domainCrosshairValue && di.value(indiceAtributoY) == rangeCrosshairValue) {
-                                indicesInstancesPuntos.add(i);
-                            }
-                        }
-                        if (event.getTrigger().getClickCount() == 1) {
-                            minaVista.getjPopupMenu1().removeAll();
-                            minaVista.getjPopupMenu1().setLayout(new BoxLayout(minaVista.getjPopupMenu1(), BoxLayout.X_AXIS));
-                            for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
-                                if (i != 0) {
-                                    minaVista.getjPopupMenu1().add(new JSeparator(SwingConstants.VERTICAL));
+                        if (SwingUtilities.isLeftMouseButton(event.getTrigger()) && event.getTrigger().getClickCount() == 1) {
+                            double domainCrosshairValue = meuChartPanel.getChart().getXYPlot().getDomainCrosshairValue();
+                            double rangeCrosshairValue = meuChartPanel.getChart().getXYPlot().getRangeCrosshairValue();
+                            ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
+                            Enumeration e = instances.enumerateInstances();
+                            for (int i = 0; e.hasMoreElements(); i++) {
+                                Instance di = (Instance) e.nextElement();
+                                if (di.value(indiceAtributoX) == domainCrosshairValue && di.value(indiceAtributoY) == rangeCrosshairValue) {
+                                    indicesInstancesPuntos.add(i);
                                 }
-                                int p = indicesInstancesPuntos.get(i);
-                                JPanel pa = new JPanel();
-                                pa.setBorder(new LineBorder(obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
-                                pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
-                                Enumeration en = instances.enumerateAttributes();
-                                while (en.hasMoreElements()) {
-                                    Attribute a = (Attribute) en.nextElement();
-                                    pa.add(new JLabel(a.name() + ": " + (a.type() == Attribute.NUMERIC ? instances.instance(p).value(a) : instances.instance(p).stringValue(a))));
-                                }
-                                minaVista.getjPopupMenu1().add(pa);
                             }
-                            minaVista.getjPopupMenu1().show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
-                            minaVista.procesarSeleccion(indicesInstancesPuntos);
+                            if (!indicesInstancesPuntos.isEmpty()) {
+                                minaVista.getjPopupMenu1().removeAll();
+                                minaVista.getjPopupMenu1().setLayout(new BoxLayout(minaVista.getjPopupMenu1(), BoxLayout.X_AXIS));
+                                for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
+                                    if (i != 0) {
+                                        minaVista.getjPopupMenu1().add(new JSeparator(SwingConstants.VERTICAL));
+                                    }
+                                    int p = indicesInstancesPuntos.get(i);
+                                    JPanel pa = new JPanel();
+                                    pa.setBorder(new LineBorder(obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
+                                    pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
+                                    Enumeration en = instances.enumerateAttributes();
+                                    while (en.hasMoreElements()) {
+                                        Attribute a = (Attribute) en.nextElement();
+                                        pa.add(new JLabel(a.name() + ": " + (a.type() == Attribute.NUMERIC ? instances.instance(p).value(a) : instances.instance(p).stringValue(a))));
+                                    }
+                                    minaVista.getjPopupMenu1().add(pa);
+                                }
+                                minaVista.getjPopupMenu1().show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
+                                minaVista.procesarSeleccion(indicesInstancesPuntos);
+                            }
                         }
                     }
                 }
