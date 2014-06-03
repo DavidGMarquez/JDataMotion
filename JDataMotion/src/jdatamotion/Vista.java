@@ -371,7 +371,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         }
         jPanel4.revalidate();
         jPanel4.repaint();
-        jPanel4.setVisible(true);
     }
 
     private void anularSeleccions(XYPlot xyPlot) {
