@@ -1,0 +1,1 @@
+java -Xmx512m -XX:MaxPermSize=256m -jar "JDataMotion\dist\JDataMotion.jar"
