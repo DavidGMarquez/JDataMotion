@@ -5,6 +5,7 @@ import info.clearthought.layout.TableLayoutConstraints;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -37,8 +38,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -57,10 +56,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
@@ -102,6 +103,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     private static final int EXPLORADOR_GARDAR_SESION = 2;
     private static final int EXPLORADOR_GARDAR_FICHEIRO = 3;
     private Modelo meuModelo;
+    private final TarefaProgreso task;
     private Controlador meuControlador;
     private transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
     private transient ArrayList<ArrayList<JFrame>> jFramesAmpliar;
@@ -181,6 +183,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle");
         reset();
         initComponents();
+        task = new TarefaProgreso(jProgressBar1);
     }
 
     private int contarJFramesVisibles() {
@@ -343,34 +346,30 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         jPanel4.removeAll();
         int numCols = numColumnasNonVacias();
         int numFilas = numFilasNonVacias();
-        int max = Math.max(numFilas, numCols);
-        double cols[] = new double[numCols];
-        double filas[] = new double[numFilas];
-        for (int i = 0; i < max; i++) {
-            if (i < numCols) {
-                cols[i] = TableLayout.FILL;
+        if (numCols * numFilas != 0) {
+            int max = Math.max(numFilas, numCols);
+            double cols[] = new double[numCols];
+            double filas[] = new double[numFilas];
+            for (int i = 0; i < max; i++) {
+                if (i < numCols) {
+                    cols[i] = TableLayout.FILL;
+                }
+                if (i < numFilas) {
+                    filas[i] = TableLayout.FILL;
+                }
             }
-            if (i < numFilas) {
-                filas[i] = TableLayout.FILL;
+            jPanel4.setLayout(new TableLayout(cols, filas));
+            int filasVacias = 0;
+            task.start();
+            task.setEnd(numAtributosNumericos * numAtributosNumericos);
+            for (int i = numAtributosNumericos - 1; i >= 0; i--) {
+                if (!filaScatterPlotsVacia(i)) {
+                    new Thread(new FioFilas(indices, i, filasVacias, meuModelo.getIndiceAtributoNominal(), this)).start();
+                } else {
+                    filasVacias++;
+                }
             }
         }
-        jPanel4.setLayout(new TableLayout(cols, filas));
-        CyclicBarrier barrier = new CyclicBarrier(numFilas * numCols + 1);
-        int filasVacias = 0;
-        for (int i = numAtributosNumericos - 1; i >= 0; i--) {
-            if (!filaScatterPlotsVacia(i)) {
-                new FioFilas(indices, i, filasVacias, meuModelo.getIndiceAtributoNominal(), this, barrier).start();
-            } else {
-                filasVacias++;
-            }
-        }
-        try {
-            barrier.await();
-        } catch (InterruptedException | BrokenBarrierException ex) {
-            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        jPanel4.revalidate();
-        jPanel4.repaint();
     }
 
     private void anularSeleccions(XYPlot xyPlot) {
@@ -430,7 +429,85 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         return true;
     }
 
-    class FioColumnas extends Thread {
+    class TarefaProgreso extends SwingWorker<Void, Void> {
+
+        private final JProgressBar bar;
+        private double end;
+        private double acumulated;
+        private boolean finished;
+
+        public void setEnd(double end) {
+            this.end = end;
+        }
+
+        public JProgressBar getBar() {
+            return bar;
+        }
+
+        public double getEnd() {
+            return end;
+        }
+
+        public double getAcumulated() {
+            return acumulated;
+        }
+
+        private void reset() {
+            acumulated = 0;
+            try {
+                doInBackground();
+            } catch (Exception ex) {
+                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        public void start() {
+            finished = false;
+            reset();
+        }
+        
+        public void finish() {
+            reset();
+        }
+
+        public synchronized void acumulate(double fraction) {
+            acumulated += fraction;
+            try {
+                doInBackground();
+            } catch (Exception ex) {
+                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (acumulated >= end) {
+                finished = true;
+            }
+        }
+
+        public TarefaProgreso(JProgressBar bar) {
+            super();
+            this.bar = bar;
+            this.end = 0;
+            this.acumulated = 0;
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            int percent = Math.round((float) (end != 0 ? bar.getMaximum() * acumulated / end : 0));
+            bar.setValue(percent);
+            return null;
+        }
+
+        private synchronized boolean lockedTestFinished() {
+            if (finished == false) {
+                return false;
+            } else {
+                finished = false;
+                return true;
+            }
+        }
+
+    }
+
+    class FioColumnas extends SwingWorker<Void, Void> implements Runnable {
 
         private final ArrayList<Integer> indices;
         private final int j;
@@ -439,9 +516,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         private final int filasVacias;
         private final int columnasVacias;
         private final Vista vista;
-        private final CyclicBarrier barrier;
 
-        public FioColumnas(ArrayList<Integer> indices, int j, int i, int filasVacias, int columnasVacias, int indiceNominal, Vista vista, CyclicBarrier barrier) {
+        public FioColumnas(ArrayList<Integer> indices, int j, int i, int filasVacias, int columnasVacias, int indiceNominal, Vista vista) {
             this.indices = indices;
             this.j = j;
             this.i = i;
@@ -449,13 +525,13 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             this.filasVacias = filasVacias;
             this.columnasVacias = columnasVacias;
             this.vista = vista;
-            this.barrier = barrier;
         }
 
         @Override
-        public void run() {
+        public Void doInBackground() {
             if (!scatterPlotsVisibles[i][j]) {
                 jPanel4.add(new JLabel(), new TableLayoutConstraints(j - columnasVacias, indices.size() - 1 - i - filasVacias));
+                task.acumulate(0.75);
             } else {
                 int indiceI = indices.get(i);
                 int indiceJ = indices.get(j);
@@ -467,7 +543,9 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 jFrameScatterPlotAmpliado.setSize(600, 400);
                 jFramesAmpliar.get(i).set(j, jFrameScatterPlotAmpliado);
                 matrizScatterPlots.get(i).set(j, spmatrix);
+                task.acumulate(0.25);
                 ChartPanel meuChartPanel = spmatrix.getMeuChartPanel();
+                task.acumulate(0.25);
                 meuChartPanel.setLayout(new GridBagLayout());
                 anularSeleccions(meuChartPanel.getChart().getXYPlot());
                 anularSeleccions(spmatrix.getMeuChartPanel().getChart().getXYPlot());
@@ -486,6 +564,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         }
                     }
                 });
+                task.acumulate(0.25);
                 clickmeButton.setIcon(new ImageIcon(getClass().getResource("imaxes/ampliar.png")));
                 clickmeButton.setPreferredSize(new Dimension(19, 19));
                 GridBagConstraints c = new GridBagConstraints();
@@ -495,43 +574,49 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 meuChartPanel.add(clickmeButton, c);
                 jPanel4.add(meuChartPanel, new TableLayoutConstraints(j - columnasVacias, indices.size() - 1 - i - filasVacias));
             }
-            try {
-                barrier.await();
-            } catch (InterruptedException | BrokenBarrierException ex) {
-                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+            task.acumulate(0.25);
+            return null;
+        }
+
+        @Override
+        public void done() {
+            boolean isFinished = task.lockedTestFinished();
+            if (isFinished) {
+                jPanel4.revalidate();
+                jPanel4.repaint();
+                task.finish();
             }
         }
     }
 
-    class FioFilas extends Thread {
+    class FioFilas extends SwingWorker<Void, Void> implements Runnable {
 
         private final ArrayList<Integer> indices;
         private final int i;
         private final int indiceNominal;
         private final Vista vista;
         private final int filasVacias;
-        private final CyclicBarrier barrier;
 
-        public FioFilas(ArrayList<Integer> indices, int i, int filasVacias, int indiceNominal, Vista vista, CyclicBarrier barrier) {
+        public FioFilas(ArrayList<Integer> indices, int i, int filasVacias, int indiceNominal, Vista vista) {
             this.indices = indices;
             this.i = i;
             this.filasVacias = filasVacias;
             this.indiceNominal = indiceNominal;
             this.vista = vista;
-            this.barrier = barrier;
         }
 
         @Override
-        public void run() {
+        public Void doInBackground() {
             int numAtributosNumericos = indices.size();
             int columnasVacias = 0;
             for (int j = 0; j < numAtributosNumericos; j++) {
                 if (!columnaScatterPlotsVacia(j)) {
-                    new FioColumnas(indices, j, i, filasVacias, columnasVacias, indiceNominal, vista, barrier).start();
+                    new Thread(new FioColumnas(indices, j, i, filasVacias, columnasVacias, indiceNominal, vista)).start();
                 } else {
                     columnasVacias++;
                 }
             }
+            return null;
         }
     }
 
@@ -666,6 +751,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         jScrollPane5 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
+        jProgressBar1 = new javax.swing.JProgressBar();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -876,7 +962,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         .addComponent(jScrollPane9)
                         .addGap(17, 17, 17))
                     .addGroup(jDialog2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
                         .addGap(6, 6, 6)))
                 .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
@@ -885,7 +971,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap())
+                .addGap(7, 7, 7))
         );
 
         jDialog3.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -1106,6 +1192,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             }
         );
         jTabbedPane1.setEnabled(false);
+
+        jProgressBar1.setName("jProgressBar1"); // NOI18N
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
@@ -1332,12 +1420,18 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1133, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleDescription("");
@@ -1542,6 +1636,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                     }
                     JLabel l = new JLabel();
                     l.setToolTipText(meuModelo.obterNomeAtributo(atributosNumericos.get(j)) + " " + bundle.getString("fronteA") + " " + meuModelo.obterNomeAtributo(atributosNumericos.get(k)));
+                    l.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     l.setOpaque(true);
                     l.setPreferredSize(new Dimension(anchoCela, altoCela));
                     if (scatterPlotsVisibles.length > 0 && scatterPlotsVisiblesAux[j][k]) {
@@ -2256,6 +2351,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     javax.swing.JPanel jPanel6;
     javax.swing.JPanel jPanel7;
     javax.swing.JPopupMenu jPopupMenu1;
+    javax.swing.JProgressBar jProgressBar1;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
