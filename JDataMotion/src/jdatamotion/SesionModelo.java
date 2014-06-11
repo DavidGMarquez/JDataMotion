@@ -31,6 +31,15 @@ import weka.core.Instances;
  */
 public class SesionModelo extends Sesion {
 
+    private int indiceAtributoNominal;
+
+    public void setIndiceAtributoNominal(int indiceAtributoNominal) {
+        this.indiceAtributoNominal = indiceAtributoNominal;
+    }
+
+    public int getIndiceAtributoNominal() {
+        return indiceAtributoNominal;
+    }
     private String direccionAoFicheiro;
     private Instances cabeceiras;
     private int indiceTemporal;

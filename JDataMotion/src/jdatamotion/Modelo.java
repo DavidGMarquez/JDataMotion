@@ -50,8 +50,6 @@ class Modelo extends Observable implements Sesionizable {
     public void setAtributos(Instances atributos) {
         this.atributos = atributos;
         setChanged();
-        notifyObservers();
-        clearChanged();
     }
 
     public String obterNomeAtributo(int columna) {
@@ -71,8 +69,6 @@ class Modelo extends Observable implements Sesionizable {
         }
         this.indiceTemporal = indiceTemporal;
         setChanged();
-        notifyObservers();
-        clearChanged();
     }
 
     public Modelo() {
@@ -202,6 +198,11 @@ class Modelo extends Observable implements Sesionizable {
         return digest.digest();
     }
 
+    public void update() {
+        notifyObservers();
+        clearChanged();
+    }
+
     public ArrayList<Integer> obterIndicesAtributosNumericosNoModelo() {
         ArrayList<Integer> indices = new ArrayList<>();
         for (int i = 0; i < obterNumAtributos(); i++) {
@@ -245,11 +246,9 @@ class Modelo extends Observable implements Sesionizable {
                 break;
         }
         setChanged();
-        notifyObservers();
-        clearChanged();
     }
 
-    void exportarFicheiro(String path, String extension) throws IOException {
+    public void exportarFicheiro(String path, String extension) throws IOException {
         switch (extension) {
             case "csv":
                 CSVSaver saverCSV = new CSVSaver();
@@ -278,6 +277,7 @@ class Modelo extends Observable implements Sesionizable {
         s.setDireccionAoFicheiro(getDireccionAoFicheiro());
         s.setIndiceTemporal(getIndiceTemporal());
         s.setHash(getHash());
+        s.setIndiceAtributoNominal(getIndiceAtributoNominal());
         return s;
     }
 
@@ -292,6 +292,7 @@ class Modelo extends Observable implements Sesionizable {
         hash = s.getHash();
         direccionAoFicheiro = s.getDireccionAoFicheiro();
         importarFicheiro(s.getDireccionAoFicheiro());
+        indiceAtributoNominal = s.getIndiceAtributoNominal();
     }
 
     private Attribute extraerCabeceira(String nome, int type, Object argumento) {
@@ -323,8 +324,6 @@ class Modelo extends Observable implements Sesionizable {
     void engadirDatos() {
         getAtributos().add(new DenseInstance(obterNumAtributos()));
         setChanged();
-        notifyObservers();
-        clearChanged();
     }
 
     public Object obterDato(int fila, int columna) {
@@ -390,8 +389,6 @@ class Modelo extends Observable implements Sesionizable {
             throw e;
         } finally {
             setChanged();
-            notifyObservers();
-            clearChanged();
         }
     }
 
@@ -404,15 +401,11 @@ class Modelo extends Observable implements Sesionizable {
             getAtributos().remove(in);
         }
         setChanged();
-        notifyObservers();
-        clearChanged();
     }
 
     public void mudarNomeRelacion(String nomeRelacion) {
         atributos.setRelationName(nomeRelacion);
         setChanged();
-        notifyObservers();
-        clearChanged();
     }
 
     public void mudarTipo(int columnaTaboa, int novoTipo) throws Exception {
@@ -560,8 +553,6 @@ class Modelo extends Observable implements Sesionizable {
             atributos.setRelationName(nomeRelacion);
         } finally {
             setChanged();
-            notifyObservers();
-            clearChanged();
         }
     }
 }

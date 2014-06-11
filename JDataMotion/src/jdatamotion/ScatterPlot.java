@@ -57,7 +57,11 @@ public final class ScatterPlot implements Serializable {
     private final int indiceAtributoY;
     private final int indiceAtributoColor;
     private transient Vista minaVista;
-    private final ChartPanel meuChartPanel;
+    private ChartPanel meuChartPanel;
+
+    public void setMeuChartPanel(ChartPanel meuChartPanel) {
+        this.meuChartPanel = meuChartPanel;
+    }
 
     public int getIndiceAtributoColor() {
         return indiceAtributoColor;
@@ -79,16 +83,13 @@ public final class ScatterPlot implements Serializable {
         return instances;
     }
 
-    public ScatterPlot(final Instances instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, Vista vista, boolean celdaMatriz) {
+    public ScatterPlot(final Instances instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, Vista vista) {
         this.indiceAtributoX = indiceAtributoX;
         this.indiceAtributoColor = indiceAtributoColor;
         this.minaVista = vista;
         this.indiceAtributoY = indiceAtributoY;
         this.instances = instances;
         JFreeChart jfreechart = createChart(new XYDatasetModelo(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor));
-        if (celdaMatriz) {
-            jfreechart.setTitle((String) null);
-        }
         if (jfreechart.getXYPlot().getSeriesCount() == 1) {
             jfreechart.removeLegend();
         }
@@ -128,7 +129,8 @@ public final class ScatterPlot implements Serializable {
                                     Enumeration en = instances.enumerateAttributes();
                                     while (en.hasMoreElements()) {
                                         Attribute a = (Attribute) en.nextElement();
-                                        pa.add(new JLabel(a.name() + ": " + (a.type() == Attribute.NUMERIC ? instances.instance(p).value(a) : instances.instance(p).stringValue(a))));
+                                        boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
+                                        pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
                                     }
                                     minaVista.getjPopupMenu1().add(pa);
                                 }

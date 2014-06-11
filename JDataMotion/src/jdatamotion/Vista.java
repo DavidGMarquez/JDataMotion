@@ -38,6 +38,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -104,12 +106,13 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     private static final int EXPLORADOR_GARDAR_FICHEIRO = 3;
     private Modelo meuModelo;
     private final TarefaProgreso task;
+    private final ExecutorService cachedPool;
     private Controlador meuControlador;
     private transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
     private transient ArrayList<ArrayList<JFrame>> jFramesAmpliar;
     private int ultimaColumnaModeloSeleccionada;
     private boolean scatterPlotsVisibles[][];
-    public static ResourceBundle bundle;
+    public static final ResourceBundle bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle");
     private static final String ficheiroConfiguracion = "configuracion.properties";
 
     public ResourceBundle getBundle() {
@@ -180,10 +183,10 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle");
         reset();
         initComponents();
         task = new TarefaProgreso(jProgressBar1);
+        cachedPool = Executors.newCachedThreadPool();
     }
 
     private int contarJFramesVisibles() {
@@ -198,12 +201,26 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         return c;
     }
 
-    public void inicializar(Modelo modelo) {
+    public void inicializar(Modelo modelo, boolean visualizar) {
         meuModelo = modelo;
         meuModelo.addObserver(this);
         crearControlador();
         meuControlador.inicializar(modelo, this);
-        visualizar();
+        if (visualizar) {
+            visualizar();
+        }
+    }
+
+    public Modelo getMeuModelo() {
+        return meuModelo;
+    }
+
+    public Controlador getMeuControlador() {
+        return meuControlador;
+    }
+
+    public JPanel getjPanel7() {
+        return jPanel7;
     }
 
     public void procesarSeleccion(ArrayList<Integer> indicesInstances) {
@@ -263,9 +280,13 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     public void aplicarSesion(Sesion sesion) throws Exception {
         SesionVista s = (SesionVista) sesion;
         setScatterPlotsVisibles(s.getScatterPlotsVisibles());
-        for (ArrayList<ScatterPlot> alsp : matrizScatterPlots) {
-            for (ScatterPlot sp : alsp) {
-                sp.setMinaVista(this);
+        if (matrizScatterPlots != null) {
+            for (ArrayList<ScatterPlot> alsp : matrizScatterPlots) {
+                for (ScatterPlot sp : alsp) {
+                    if (sp != null) {
+                        sp.setMinaVista(this);
+                    }
+                }
             }
         }
     }
@@ -325,6 +346,10 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         return jFramesAmpliar;
     }
 
+    public TarefaProgreso getTask() {
+        return task;
+    }
+
     private void pintarMenuVisualizacion() {
         pecharJFramesScatterPlot();
         ArrayList<Integer> indices = meuModelo.obterIndicesAtributosNumericosNoModelo();
@@ -361,10 +386,10 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             jPanel4.setLayout(new TableLayout(cols, filas));
             int filasVacias = 0;
             task.start();
-            task.setEnd(numAtributosNumericos * numAtributosNumericos);
+            task.setEnd(numCols * numFilas * 100);
             for (int i = numAtributosNumericos - 1; i >= 0; i--) {
                 if (!filaScatterPlotsVacia(i)) {
-                    new Thread(new FioFilas(indices, i, filasVacias, meuModelo.getIndiceAtributoNominal(), this)).start();
+                    cachedPool.submit(new FioFilas(indices, i, filasVacias, meuModelo.getIndiceAtributoNominal(), this));
                 } else {
                     filasVacias++;
                 }
@@ -432,11 +457,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     class TarefaProgreso extends SwingWorker<Void, Void> {
 
         private final JProgressBar bar;
-        private double end;
-        private double acumulated;
+        private int end;
+        private int acumulated;
         private boolean finished;
 
-        public void setEnd(double end) {
+        public void setEnd(int end) {
             this.end = end;
         }
 
@@ -444,11 +469,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             return bar;
         }
 
-        public double getEnd() {
+        public int getEnd() {
             return end;
         }
 
-        public double getAcumulated() {
+        public int getAcumulated() {
             return acumulated;
         }
 
@@ -465,12 +490,12 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             finished = false;
             reset();
         }
-        
+
         public void finish() {
             reset();
         }
 
-        public synchronized void acumulate(double fraction) {
+        public synchronized void acumulate(int fraction) {
             acumulated += fraction;
             try {
                 doInBackground();
@@ -531,24 +556,25 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         public Void doInBackground() {
             if (!scatterPlotsVisibles[i][j]) {
                 jPanel4.add(new JLabel(), new TableLayoutConstraints(j - columnasVacias, indices.size() - 1 - i - filasVacias));
-                task.acumulate(0.75);
+                task.acumulate(100);
             } else {
                 int indiceI = indices.get(i);
                 int indiceJ = indices.get(j);
-                ScatterPlot spmatrix = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista, true);
-                ScatterPlot spframe = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista, false);
+                ScatterPlot spmatrix = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista);
+                spmatrix.getMeuChartPanel().getChart().setTitle((String) null);
+                task.acumulate(40);
+                ScatterPlot spframe = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista);
+                task.acumulate(40);
                 JFrame jFrameScatterPlotAmpliado = new JFrame("'" + meuModelo.obterNomeAtributo(indiceJ) + "' " + bundle.getString("fronteA") + " '" + meuModelo.obterNomeAtributo(indiceI) + "'");
                 jFrameScatterPlotAmpliado.setIconImage(new ImageIcon(getClass().getResource("imaxes/faviconGrafica.png")).getImage());
                 jFrameScatterPlotAmpliado.setContentPane(spframe.getMeuChartPanel());
                 jFrameScatterPlotAmpliado.setSize(600, 400);
                 jFramesAmpliar.get(i).set(j, jFrameScatterPlotAmpliado);
                 matrizScatterPlots.get(i).set(j, spmatrix);
-                task.acumulate(0.25);
                 ChartPanel meuChartPanel = spmatrix.getMeuChartPanel();
-                task.acumulate(0.25);
-                meuChartPanel.setLayout(new GridBagLayout());
                 anularSeleccions(meuChartPanel.getChart().getXYPlot());
                 anularSeleccions(spmatrix.getMeuChartPanel().getChart().getXYPlot());
+                meuChartPanel.setLayout(new GridBagLayout());
                 JButton clickmeButton = new JButton();
                 final int a = i;
                 final int b = j;
@@ -564,7 +590,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         }
                     }
                 });
-                task.acumulate(0.25);
                 clickmeButton.setIcon(new ImageIcon(getClass().getResource("imaxes/ampliar.png")));
                 clickmeButton.setPreferredSize(new Dimension(19, 19));
                 GridBagConstraints c = new GridBagConstraints();
@@ -573,8 +598,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 c.weighty = 1;
                 meuChartPanel.add(clickmeButton, c);
                 jPanel4.add(meuChartPanel, new TableLayoutConstraints(j - columnasVacias, indices.size() - 1 - i - filasVacias));
+                task.acumulate(20);
             }
-            task.acumulate(0.25);
             return null;
         }
 
@@ -582,9 +607,9 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         public void done() {
             boolean isFinished = task.lockedTestFinished();
             if (isFinished) {
+                task.finish();
                 jPanel4.revalidate();
                 jPanel4.repaint();
-                task.finish();
             }
         }
     }
@@ -611,7 +636,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             int columnasVacias = 0;
             for (int j = 0; j < numAtributosNumericos; j++) {
                 if (!columnaScatterPlotsVacia(j)) {
-                    new Thread(new FioColumnas(indices, j, i, filasVacias, columnasVacias, indiceNominal, vista)).start();
+                    cachedPool.submit(new FioColumnas(indices, j, i, filasVacias, columnasVacias, indiceNominal, vista));
                 } else {
                     columnasVacias++;
                 }

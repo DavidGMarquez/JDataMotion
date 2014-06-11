@@ -104,6 +104,7 @@ class Controlador implements Sesionizable {
                 mudarNomeRelacion(((String) argumento));
                 break;
         }
+        meuModelo.update();
     }
 
     private void mudarNomeRelacion(String nomeRelacion) {
@@ -169,7 +170,6 @@ class Controlador implements Sesionizable {
             for (Sesion s : sesions) {
                 aplicarSesionEnObxectivo(s);
             }
-            minaVista.update(null, null);
         } catch (ExcepcionArquivoModificado ex) {
             minaVista.amosarDialogo("Erro: O arquivo '" + ex.getUrl() + "' foi modificado e as sesións construidas sobre él quedaron corruptas.\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
