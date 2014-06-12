@@ -1,5 +1,24 @@
 package jdatamotion;
 
+import jdatamotion.sesions.SesionModelo;
+import jdatamotion.sesions.Sesionizable;
+import jdatamotion.sesions.SesionControlador;
+import jdatamotion.sesions.Sesion;
+import jdatamotion.sesions.SesionVista;
+import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
+import jdatamotion.excepcions.ExcepcionComandoInutil;
+import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
+import jdatamotion.comandos.ComandoMudarNomeRelacion;
+import jdatamotion.comandos.ComandoExportarFicheiro;
+import jdatamotion.comandos.ComandoEngadirDatos;
+import jdatamotion.comandos.ComandoMudarDato;
+import jdatamotion.comandos.ComandoMudarTipo;
+import jdatamotion.comandos.ComandoImportarFicheiro;
+import jdatamotion.comandos.ComandoMudarIndiceTemporal;
+import jdatamotion.comandos.ComandoEliminarDatos;
+import jdatamotion.comandos.ComandoRestaurar;
+import jdatamotion.comandos.ComandoDesfacible;
+import jdatamotion.comandos.Comando;
 import java.io.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,13 +30,14 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jdatamotion.excepcions.ExcepcionArquivoModificado;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  *
  * @author Pablo Pérez Romaní
  */
-class Controlador implements Sesionizable {
+public class Controlador implements Sesionizable {
 
     public static final int IMPORTAR_FICHEIRO = 0;
     public static final int ABRIR_SESION = 1;

@@ -1,5 +1,12 @@
 package jdatamotion;
 
+import jdatamotion.sesions.SesionModelo;
+import jdatamotion.sesions.Sesionizable;
+import jdatamotion.sesions.Sesion;
+import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
+import jdatamotion.excepcions.ExcepcionArquivoModificado;
+import jdatamotion.excepcions.ExcepcionComandoInutil;
+import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,7 +36,7 @@ import weka.filters.unsupervised.attribute.StringToNominal;
  *
  * @author Pablo Pérez Romaní
  */
-class Modelo extends Observable implements Sesionizable {
+public class Modelo extends Observable implements Sesionizable {
 
     private InstancesComparable atributos;
     private int indiceTemporal;
@@ -110,7 +117,7 @@ class Modelo extends Observable implements Sesionizable {
             return false;
         }
         Modelo m = (Modelo) o;
-        return EqualsBuilder.reflectionEquals(this, m,new String[]{"changed","obs"});
+        return EqualsBuilder.reflectionEquals(this, m, new String[]{"changed", "obs"});
     }
 
     @Override
@@ -347,7 +354,7 @@ class Modelo extends Observable implements Sesionizable {
         return attr;
     }
 
-    void engadirDatos() {
+    public void engadirDatos() {
         getAtributos().add(new DenseInstance(obterNumAtributos()));
         setChanged();
     }
@@ -418,7 +425,7 @@ class Modelo extends Observable implements Sesionizable {
         }
     }
 
-    void eliminarDatos(Integer[] datos) {
+    public void eliminarDatos(Integer[] datos) {
         ArrayList<Instance> candidatos = new ArrayList<>();
         for (Integer i : datos) {
             candidatos.add(getAtributos().get(i));

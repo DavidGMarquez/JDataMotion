@@ -1,5 +1,8 @@
 package jdatamotion;
 
+import jdatamotion.sesions.Sesionizable;
+import jdatamotion.sesions.Sesion;
+import jdatamotion.sesions.SesionVista;
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstraints;
 import java.awt.BasicStroke;
@@ -8,18 +11,22 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Paint;
+import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -28,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +53,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -60,8 +70,10 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JViewport;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
@@ -76,18 +88,33 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.basic.BasicLabelUI;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.DomainInfo;
+import org.jfree.data.Range;
+import org.jfree.data.RangeInfo;
+import org.jfree.data.xy.AbstractXYDataset;
+import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.Drawable;
 import org.jsoup.Jsoup;
 import weka.core.Attribute;
+import weka.core.Instance;
 
 /**
  *
@@ -236,7 +263,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                     anularSeleccions(chart.getChart().getXYPlot());
                     anularSeleccions(sp.getMeuChartPanel().getChart().getXYPlot());
                     for (int k = 0; k < indicesInstances.size(); k++) {
-                        Color color = ScatterPlot.obterCoresHSB(k, indicesInstances.size());
+                        Color color = obterCoresHSB(k, indicesInstances.size());
                         sp.getMeuChartPanel().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
                         chart.getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
                     }
@@ -489,9 +516,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         public void start() {
             finished = false;
             reset();
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         }
 
         public void finish() {
+            setCursor(Cursor.getDefaultCursor());
             reset();
         }
 
@@ -1743,6 +1772,84 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         JDataMotion.main(null);
     }
 
+    public static class VerticalLabelUI extends BasicLabelUI {
+
+        static {
+            labelUI = new VerticalLabelUI(false);
+        }
+
+        protected boolean clockwise;
+
+        public VerticalLabelUI(boolean clockwise) {
+            super();
+            this.clockwise = clockwise;
+        }
+
+        @Override
+        public Dimension getPreferredSize(JComponent c) {
+            Dimension dim = super.getPreferredSize(c);
+            return new Dimension(dim.height, dim.width);
+        }
+
+        private static final Rectangle paintIconR = new Rectangle();
+        private static final Rectangle paintTextR = new Rectangle();
+        private static final Rectangle paintViewR = new Rectangle();
+        private static Insets paintViewInsets = new Insets(0, 0, 0, 0);
+
+        @Override
+        public void paint(Graphics g, JComponent c) {
+            JLabel label = (JLabel) c;
+            String text = label.getText();
+            Icon icon = (label.isEnabled()) ? label.getIcon() : label.getDisabledIcon();
+
+            if ((icon == null) && (text == null)) {
+                return;
+            }
+
+            FontMetrics fm = g.getFontMetrics();
+            paintViewInsets = c.getInsets(paintViewInsets);
+
+            paintViewR.x = paintViewInsets.left;
+            paintViewR.y = paintViewInsets.top;
+
+            // Use inverted height &amp; width
+            paintViewR.height = c.getWidth() - (paintViewInsets.left + paintViewInsets.right);
+            paintViewR.width = c.getHeight() - (paintViewInsets.top + paintViewInsets.bottom);
+
+            paintIconR.x = paintIconR.y = paintIconR.width = paintIconR.height = 0;
+            paintTextR.x = paintTextR.y = paintTextR.width = paintTextR.height = 0;
+
+            String clippedText = layoutCL(label, fm, text, icon, paintViewR, paintIconR, paintTextR);
+
+            Graphics2D g2 = (Graphics2D) g;
+            AffineTransform tr = g2.getTransform();
+            if (clockwise) {
+                g2.rotate(Math.PI / 2);
+                g2.translate(0, -c.getWidth());
+            } else {
+                g2.rotate(-Math.PI / 2);
+                g2.translate(-c.getHeight(), 0);
+            }
+
+            if (icon != null) {
+                icon.paintIcon(c, g, paintIconR.x, paintIconR.y);
+            }
+
+            if (text != null) {
+                int textX = paintTextR.x;
+                int textY = paintTextR.y + fm.getAscent();
+
+                if (label.isEnabled()) {
+                    paintEnabledText(label, g, clippedText, textX, textY);
+                } else {
+                    paintDisabledText(label, g, clippedText, textX, textY);
+                }
+            }
+            g2.setTransform(tr);
+        }
+
+    }
+
     private void mudarIdioma(String locale) {
         if (JOptionPane.showConfirmDialog(this, bundle.getString("confirmacionMudarIdioma"), bundle.getString("confirmacionMudarIdiomaTitulo"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             try {
@@ -1794,6 +1901,33 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
     public JFileChooser getjFileChooser1() {
         return jFileChooser1;
+    }
+
+    class FiltroExtension implements Serializable {
+
+        public String nome;
+        public String[] extensions;
+
+        public FiltroExtension(String nome, String[] extensions) {
+            this.nome = nome;
+            this.extensions = extensions;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public String[] getExtensions() {
+            return extensions;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+
+        public void setExtensions(String[] extensions) {
+            this.extensions = extensions;
+        }
     }
 
     private void ConfigurarJFileChooserAbrir(final int eventoParaControlador) {
@@ -1981,7 +2115,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         JOptionPane.showMessageDialog(this, mensaxe, titulo, tipo);
     }
 
-    public class JPanelModelo extends JPanel {
+    class JPanelModelo extends JPanel {
 
         private JTable minaTaboa;
 
@@ -2273,7 +2407,151 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         }
     }
 
-    public class JTableParcheada extends JTable {
+    public final class ScatterPlot implements Serializable {
+
+        private InstancesComparable instances;
+        private final int indiceAtributoX;
+        private final int indiceAtributoY;
+        private final int indiceAtributoColor;
+        private transient Vista minaVista;
+        private ChartPanel meuChartPanel;
+
+        public void setMeuChartPanel(ChartPanel meuChartPanel) {
+            this.meuChartPanel = meuChartPanel;
+        }
+
+        public int getIndiceAtributoColor() {
+            return indiceAtributoColor;
+        }
+
+        public void setMinaVista(Vista minaVista) {
+            this.minaVista = minaVista;
+        }
+
+        public Vista getMinaVista() {
+            return minaVista;
+        }
+
+        public void setInstances(InstancesComparable instances) {
+            this.instances = instances;
+        }
+
+        public InstancesComparable getInstances() {
+            return instances;
+        }
+
+        public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, Vista vista) {
+            this.indiceAtributoX = indiceAtributoX;
+            this.indiceAtributoColor = indiceAtributoColor;
+            this.minaVista = vista;
+            this.indiceAtributoY = indiceAtributoY;
+            this.instances = instances;
+            JFreeChart jfreechart = createChart(new XYDatasetModelo(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor));
+            if (jfreechart.getXYPlot().getSeriesCount() == 1) {
+                jfreechart.removeLegend();
+            }
+            ChartFactory.setChartTheme(StandardChartTheme.createDarknessTheme());
+            ChartUtilities.applyCurrentTheme(jfreechart);
+            ChartPanel chartpanel = new ChartPanel(jfreechart);
+            chartpanel.setMouseWheelEnabled(true);
+            chartpanel.setPreferredSize(new Dimension(340, 210));
+            chartpanel.addChartMouseListener(new ChartMouseListener() {
+                @Override
+                public void chartMouseClicked(final ChartMouseEvent event) {
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (SwingUtilities.isLeftMouseButton(event.getTrigger()) && event.getTrigger().getClickCount() == 1) {
+                                double domainCrosshairValue = meuChartPanel.getChart().getXYPlot().getDomainCrosshairValue();
+                                double rangeCrosshairValue = meuChartPanel.getChart().getXYPlot().getRangeCrosshairValue();
+                                ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
+                                Enumeration e = instances.enumerateInstances();
+                                for (int i = 0; e.hasMoreElements(); i++) {
+                                    Instance di = (Instance) e.nextElement();
+                                    if (di.value(indiceAtributoX) == domainCrosshairValue && di.value(indiceAtributoY) == rangeCrosshairValue) {
+                                        indicesInstancesPuntos.add(i);
+                                    }
+                                }
+                                if (!indicesInstancesPuntos.isEmpty()) {
+                                    minaVista.getjPopupMenu1().removeAll();
+                                    minaVista.getjPopupMenu1().setLayout(new BoxLayout(minaVista.getjPopupMenu1(), BoxLayout.X_AXIS));
+                                    for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
+                                        if (i != 0) {
+                                            minaVista.getjPopupMenu1().add(new JSeparator(SwingConstants.VERTICAL));
+                                        }
+                                        int p = indicesInstancesPuntos.get(i);
+                                        JPanel pa = new JPanel();
+                                        pa.setBorder(new LineBorder(obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
+                                        pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
+                                        Enumeration en = instances.enumerateAttributes();
+                                        while (en.hasMoreElements()) {
+                                            Attribute a = (Attribute) en.nextElement();
+                                            boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
+                                            pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
+                                        }
+                                        minaVista.getjPopupMenu1().add(pa);
+                                    }
+                                    minaVista.getjPopupMenu1().show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
+                                    minaVista.procesarSeleccion(indicesInstancesPuntos);
+                                }
+                            }
+                        }
+                    }
+                    );
+                }
+
+                @Override
+                public void chartMouseMoved(ChartMouseEvent event) {
+                }
+            });
+            this.meuChartPanel = chartpanel;
+        }
+
+        private JFreeChart createChart(XYDataset xydataset) {
+            JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + minaVista.getBundle().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, true, false);
+            XYPlot xyplot = (XYPlot) jfreechart.getPlot();
+            xyplot.setDomainCrosshairVisible(true);
+            xyplot.setDomainCrosshairLockedOnData(true);
+            xyplot.setRangeCrosshairVisible(true);
+            xyplot.setRangeCrosshairLockedOnData(true);
+            xyplot.setDomainZeroBaselineVisible(true);
+            xyplot.setRangeZeroBaselineVisible(true);
+            xyplot.setDomainPannable(true);
+            xyplot.setRangePannable(true);
+            NumberAxis numberaxis = (NumberAxis) xyplot.getDomainAxis();
+            numberaxis.setAutoRangeIncludesZero(false);
+            return jfreechart;
+        }
+
+        public int getIndiceAtributoX() {
+            return indiceAtributoX;
+        }
+
+        public int getIndiceAtributoY() {
+            return indiceAtributoY;
+        }
+
+        public ChartPanel getMeuChartPanel() {
+            return meuChartPanel;
+        }
+
+        private XYDataset dataset;
+
+        public void setDataset(XYDataset dataset) {
+            this.dataset = dataset;
+        }
+
+        public XYDataset getDataset() {
+            return dataset;
+        }
+
+    }
+
+    private static Color obterCoresHSB(int cor, int totalCores) {
+        return Color.getHSBColor((float) cor / totalCores, (float) 0.9, (float) 0.9);
+    }
+
+    class JTableParcheada extends JTable {
 
         public JTableParcheada(TableModel tm) {
             super(tm);
@@ -2322,6 +2600,259 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             panelDetallarAtributo.repaint();
         }
     }
+
+    class XYDatasetModelo extends AbstractXYDataset implements XYDataset,
+            DomainInfo, RangeInfo {
+
+        private static final long serialVersionUID = 1L;
+        private final Double xValues[][];
+        private final Double yValues[][];
+        private final int seriesCount;
+        private final int itemCount;
+        private Number domainMin;
+        private Number domainMax;
+        private Number rangeMin;
+        private Number rangeMax;
+        private Range domainRange;
+        private Range range;
+        private final InstancesComparable atributos;
+        private final int atributoColor;
+        private final int atributoY;
+        private final int atributoX;
+
+        public long getSerialVersionUID() {
+            return serialVersionUID;
+        }
+
+        public Double[][] getxValues() {
+            return xValues;
+        }
+
+        public Double[][] getyValues() {
+            return yValues;
+        }
+
+        public int getItemCount() {
+            return itemCount;
+        }
+
+        public Number getDomainMin() {
+            return domainMin;
+        }
+
+        public Number getDomainMax() {
+            return domainMax;
+        }
+
+        public Number getRangeMin() {
+            return rangeMin;
+        }
+
+        public Number getRangeMax() {
+            return rangeMax;
+        }
+
+        public Range getRange() {
+            return range;
+        }
+
+        public InstancesComparable getAtributos() {
+            return atributos;
+        }
+
+        public XYDatasetModelo(InstancesComparable atributos, int atributoX, int atributoY, int atributoColor) {
+            this.atributos = atributos;
+            this.atributoX = atributoX;
+            this.atributoY = atributoY;
+            this.atributoColor = atributoColor;
+            int numeroInstancias = atributos.numInstances();
+            double d = (1.0D / 0.0D);
+            double d1 = (-1.0D / 0.0D);
+            double d2 = (1.0D / 0.0D);
+            double d3 = (-1.0D / 0.0D);
+            if (atributoColor > -1) {
+                Enumeration en = atributos.attribute(atributoColor).enumerateValues();
+                int numeroValoresAtributoNominal = 0;
+                while (en.hasMoreElements()) {
+                    en.nextElement();
+                    numeroValoresAtributoNominal++;
+                }
+                ArrayList<ArrayList<Double>> xv = new ArrayList<>();
+                ArrayList<ArrayList<Double>> yv = new ArrayList<>();
+                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
+                    xv.add(new ArrayList<Double>());
+                    yv.add(new ArrayList<Double>());
+                }
+                for (int l = 0; l < numeroInstancias; l++) {
+                    xv.get((int) atributos.instance(l).value(atributoColor)).add(atributos.instance(l).value(atributoX));
+                    yv.get((int) atributos.instance(l).value(atributoColor)).add(atributos.instance(l).value(atributoY));
+                }
+                int maxInstanciasNominal = 0;
+                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
+                    int size = xv.get(i).size();
+                    if (size > maxInstanciasNominal) {
+                        maxInstanciasNominal = size;
+                    }
+                }
+                seriesCount = numeroValoresAtributoNominal;
+                itemCount = maxInstanciasNominal;
+                xValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
+                yValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
+                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
+                    for (int j = 0; j < xv.get(i).size(); j++) {
+                        Double d4 = xv.get(i).get(j);
+                        if (d4 < d) {
+                            d = d4;
+                        }
+                        if (d4 > d1) {
+                            d1 = d4;
+                        }
+                        xValues[i][j] = d4;
+                        Double d5 = yv.get(i).get(j);
+                        if (d5 < d2) {
+                            d2 = d5;
+                        }
+                        if (d5 > d3) {
+                            d3 = d5;
+                        }
+                        yValues[i][j] = d5;
+                    }
+                }
+            } else {
+                seriesCount = 1;
+                itemCount = numeroInstancias;
+                xValues = new Double[1][numeroInstancias];
+                yValues = new Double[1][numeroInstancias];
+                for (int l = 0; l < numeroInstancias; l++) {
+                    double d4 = atributos.instance(l).value(atributoX);
+                    xValues[0][l] = d4;
+                    if (d4 < d) {
+                        d = d4;
+                    }
+                    if (d4 > d1) {
+                        d1 = d4;
+                    }
+                    double d5 = atributos.instance(l).value(atributoY);
+                    yValues[0][l] = d5;
+                    if (d5 < d2) {
+                        d2 = d5;
+                    }
+                    if (d5 > d3) {
+                        d3 = d5;
+                    }
+                }
+            }
+            try {
+                domainMin = d;
+                domainMax = d1;
+                domainRange = new Range(d, d1);
+                rangeMin = d2;
+                rangeMax = d3;
+                range = new Range(d2, d3);
+            } catch (IllegalArgumentException e) {
+            }
+        }
+
+        @Override
+        public Number getX(int i, int j) {
+            return xValues[i][j];
+        }
+
+        @Override
+        public Number getY(int i, int j) {
+            return yValues[i][j];
+        }
+
+        @Override
+        public int getSeriesCount() {
+            return seriesCount;
+        }
+
+        @Override
+        public Comparable<String> getSeriesKey(int i) {
+            return atributoColor > -1 ? atributos.attribute(atributoColor).value(i) : "";
+        }
+
+        @Override
+        public int getItemCount(int i) {
+            return itemCount;
+        }
+
+        public double getDomainLowerBound() {
+            return domainMin.doubleValue();
+        }
+
+        @Override
+        public double getDomainLowerBound(boolean flag) {
+            return domainMin.doubleValue();
+        }
+
+        public double getDomainUpperBound() {
+            return domainMax.doubleValue();
+        }
+
+        @Override
+        public double getDomainUpperBound(boolean flag) {
+            return domainMax.doubleValue();
+        }
+
+        public Range getDomainBounds() {
+            return domainRange;
+        }
+
+        @Override
+        public Range getDomainBounds(boolean flag) {
+            return domainRange;
+        }
+
+        public Range getDomainRange() {
+            return domainRange;
+        }
+
+        public double getRangeLowerBound() {
+            return rangeMin.doubleValue();
+        }
+
+        @Override
+        public double getRangeLowerBound(boolean flag) {
+            return rangeMin.doubleValue();
+        }
+
+        public double getRangeUpperBound() {
+            return rangeMax.doubleValue();
+        }
+
+        @Override
+        public double getRangeUpperBound(boolean flag) {
+            return rangeMax.doubleValue();
+        }
+
+        @Override
+        public Range getRangeBounds(boolean flag) {
+            return range;
+        }
+
+        public Range getValueRange() {
+            return range;
+        }
+
+        public Number getMinimumDomainValue() {
+            return domainMin;
+        }
+
+        public Number getMaximumDomainValue() {
+            return domainMax;
+        }
+
+        public Number getMinimumRangeValue() {
+            return domainMin;
+        }
+
+        public Number getMaximumRangeValue() {
+            return domainMax;
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JRadioButtonMenuItem botonData;
