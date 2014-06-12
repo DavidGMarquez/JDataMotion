@@ -24,30 +24,46 @@
 package jdatamotion;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Stack;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  *
  * @author usuario
  */
 public class XestorComandos implements Serializable {
-
+    
     private final Stack<ComandoDesfacible> pilaDesfacer;
     private final Stack<ComandoDesfacible> pilaRefacer;
-
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof XestorComandos == false) {
+            return false;
+        }
+        XestorComandos m = (XestorComandos) o;
+        return m.getPilaDesfacer().equals(getPilaDesfacer()) && m.getPilaRefacer().equals(getPilaRefacer());
+    }
+    
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
+    }
+    
     public XestorComandos() {
         pilaDesfacer = new Stack<>();
         pilaRefacer = new Stack<>();
     }
-
+    
     public Stack<ComandoDesfacible> getPilaDesfacer() {
         return pilaDesfacer;
     }
-
+    
     public Stack<ComandoDesfacible> getPilaRefacer() {
         return pilaRefacer;
     }
-
+    
     public void ExecutarComando(Comando cmd) throws Exception {
         ExcepcionLeve excepcionLeve = null;
         try {
@@ -63,29 +79,29 @@ public class XestorComandos implements Serializable {
             throw excepcionLeve;
         }
     }
-
+    
     public void Reverter() throws Exception {
         for (int i = pilaDesfacer.size() - 1; i >= 0; i--) {
             pilaDesfacer.get(i).Desfacer();
         }
     }
-
+    
     public boolean pilaDesfacerVacia() {
         return pilaDesfacer.empty();
     }
-
+    
     public void vaciarPilaRefacer() {
         pilaRefacer.removeAllElements();
     }
-
+    
     public void vaciarPilaDesfacer() {
         pilaDesfacer.removeAllElements();
     }
-
+    
     public boolean pilaRefacerVacia() {
         return pilaRefacer.empty();
     }
-
+    
     public void Desfacer() throws Exception {
         if (!pilaDesfacer.empty()) {
             ComandoDesfacible cmd = (ComandoDesfacible) pilaDesfacer.peek();
@@ -93,7 +109,7 @@ public class XestorComandos implements Serializable {
             pilaRefacer.push(pilaDesfacer.pop());
         }
     }
-
+    
     public void Refacer() throws Exception {
         if (!pilaRefacer.empty()) {
             ComandoDesfacible cmd = (ComandoDesfacible) pilaRefacer.peek();

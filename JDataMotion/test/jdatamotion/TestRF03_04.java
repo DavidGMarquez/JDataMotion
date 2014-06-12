@@ -35,7 +35,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import static junit.framework.TestCase.assertEquals;
 import junit.framework.TestSuite;
-import weka.core.Instances;
 
 public class TestRF03_04 extends TestCase {
 
@@ -48,9 +47,15 @@ public class TestRF03_04 extends TestCase {
             String pathSaida = new URI(getClass().getResource(".").toString()).getPath() + "temp01.jdm";
             vista.getMeuControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathEntrada);
             vista.getMeuControlador().manexarEvento(Controlador.MUDAR_DATO, new Object[]{5, 5, 45.0});
-            Instances is1 = modelo.getAtributos();
+            vista.getMeuControlador().manexarEvento(Controlador.ELIMINAR_DATOS, new Integer[]{2, 4, 12});
+            Controlador c1 = vista.getMeuControlador();
             vista.getMeuControlador().manexarEvento(Controlador.GARDAR_SESION, pathSaida);
+            modelo = new Modelo();
+            vista = new Vista();
+            vista.inicializar(modelo, false);
             vista.getMeuControlador().manexarEvento(Controlador.ABRIR_SESION, pathSaida);
+            vista.getMeuControlador().manexarEvento(Controlador.DESFACER, null);
+            vista.getMeuControlador().manexarEvento(Controlador.REFACER, null);
 
             //Altera o valor do quinto valor da quinta instancia
             //modelo.getAtributos().instance(5).setValue(5, 9.0);
@@ -58,11 +63,22 @@ public class TestRF03_04 extends TestCase {
             //modelo.getAtributos().renameAttribute(5, "OTRO NOMBRE ATRIBUTO");
             //Altera o nome da relación
             //modelo.getAtributos().setRelationName("OTRO NOMBRE RELACION");
-            
-            Instances is2 = modelo.getAtributos();
-            assertEquals(new InstancesComparable(is1), new InstancesComparable(is2));
+            //Altera a direccion ao ficheiro
+            //modelo.setDireccionAoFicheiro("OTRA DIRECCION AL FICHERO");
+            //Altera o hashcode
+            //modelo.setHashCode(new byte[]{2,2,2});
+            //Altera o índice temporal
+            /*try {
+             modelo.setIndiceTemporal(-4);
+             } catch (ExcepcionFormatoIdentificacionTemporal ex) {
+             Logger.getLogger(TestRF03_04.class.getName()).log(Level.SEVERE, null, ex);
+             }*/
+            //Altera o índice do atributo nominal
+            //modelo.setIndiceAtributoNominal(-4);
+            Controlador c2 = vista.getMeuControlador();
+            assertEquals(c1, c2);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(TestRF01_02.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestRF03_04.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

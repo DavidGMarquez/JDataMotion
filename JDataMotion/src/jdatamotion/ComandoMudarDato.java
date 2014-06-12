@@ -23,11 +23,8 @@
  */
 package jdatamotion;
 
-import java.io.Serializable;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import weka.core.Attribute;
+import java.util.Objects;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  *
@@ -39,6 +36,22 @@ class ComandoMudarDato extends ComandoDesfacible {
     private final int columna;
     private final Object novoValor;
     private final Object antigoValor;
+
+    public int getFila() {
+        return fila;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
+    public Object getNovoValor() {
+        return novoValor;
+    }
+
+    public Object getAntigoValor() {
+        return antigoValor;
+    }
 
     public ComandoMudarDato(Modelo modelo, int fila, int columna, Object novoValor) {
         super(modelo, Vista.bundle.getString("comandoMudarDato"));

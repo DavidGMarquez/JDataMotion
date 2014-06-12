@@ -30,7 +30,6 @@ import org.jfree.data.Range;
 import org.jfree.data.RangeInfo;
 import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
-import weka.core.Instances;
 
 /**
  *
@@ -50,7 +49,7 @@ public class XYDatasetModelo extends AbstractXYDataset implements XYDataset,
     private Number rangeMax;
     private Range domainRange;
     private Range range;
-    private final Instances atributos;
+    private final InstancesComparable atributos;
     private final int atributoColor;
     private final int atributoY;
     private final int atributoX;
@@ -91,11 +90,11 @@ public class XYDatasetModelo extends AbstractXYDataset implements XYDataset,
         return range;
     }
 
-    public Instances getAtributos() {
+    public InstancesComparable getAtributos() {
         return atributos;
     }
 
-    public XYDatasetModelo(Instances atributos, int atributoX, int atributoY, int atributoColor) {
+    public XYDatasetModelo(InstancesComparable atributos, int atributoX, int atributoY, int atributoColor) {
         this.atributos = atributos;
         this.atributoX = atributoX;
         this.atributoY = atributoY;

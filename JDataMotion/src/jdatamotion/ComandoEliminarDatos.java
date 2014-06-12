@@ -23,8 +23,6 @@
  */
 package jdatamotion;
 
-import weka.core.Instances;
-
 /**
  *
  * @author usuario
@@ -32,7 +30,7 @@ import weka.core.Instances;
 class ComandoEliminarDatos extends ComandoDesfacible {
 
     private final Integer[] indicesDatos;
-    private Instances modeloAntigo;
+    private InstancesComparable modeloAntigo;
 
     public ComandoEliminarDatos(Modelo modelo, Integer[] datos) {
         super(modelo, Vista.bundle.getString("Vista.jMenuItem14.text"));
@@ -46,7 +44,7 @@ class ComandoEliminarDatos extends ComandoDesfacible {
 
     @Override
     public void Executar() throws Exception {
-        this.modeloAntigo = new Instances(((Modelo) getObxectivo()).getAtributos());
+        this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getAtributos());
         ((Modelo) getObxectivo()).eliminarDatos(indicesDatos);
     }
 }

@@ -23,8 +23,6 @@
  */
 package jdatamotion;
 
-import weka.core.Instances;
-
 /**
  *
  * @author usuario
@@ -33,7 +31,7 @@ public class ComandoMudarTipo extends ComandoDesfacible {
 
     private final int novoTipo;
     private final int columnaModelo;
-    private Instances modeloAntigo;
+    private InstancesComparable modeloAntigo;
     private int indiceAtributoNominalAntigo;
 
     public ComandoMudarTipo(Modelo modelo, int columnaModelo, int novoTipo) {
@@ -51,7 +49,7 @@ public class ComandoMudarTipo extends ComandoDesfacible {
     @Override
     public void Executar() throws Exception {
         this.indiceAtributoNominalAntigo = ((Modelo) getObxectivo()).getIndiceAtributoNominal();
-        this.modeloAntigo = new Instances(((Modelo) getObxectivo()).getAtributos());
+        this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getAtributos());
         ((Modelo) getObxectivo()).mudarTipo(columnaModelo, novoTipo);
     }
 

@@ -48,11 +48,10 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYDataset;
 import weka.core.Attribute;
 import weka.core.Instance;
-import weka.core.Instances;
 
 public final class ScatterPlot implements Serializable {
 
-    private Instances instances;
+    private InstancesComparable instances;
     private final int indiceAtributoX;
     private final int indiceAtributoY;
     private final int indiceAtributoColor;
@@ -75,15 +74,15 @@ public final class ScatterPlot implements Serializable {
         return minaVista;
     }
 
-    public void setInstances(Instances instances) {
+    public void setInstances(InstancesComparable instances) {
         this.instances = instances;
     }
 
-    public Instances getInstances() {
+    public InstancesComparable getInstances() {
         return instances;
     }
 
-    public ScatterPlot(final Instances instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, Vista vista) {
+    public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, Vista vista) {
         this.indiceAtributoX = indiceAtributoX;
         this.indiceAtributoColor = indiceAtributoColor;
         this.minaVista = vista;

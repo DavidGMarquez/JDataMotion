@@ -24,6 +24,9 @@
 package jdatamotion;
 
 import java.io.Serializable;
+import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  *
@@ -39,8 +42,30 @@ public abstract class Comando implements Serializable {
         this.nome = nome;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Comando == false) {
+            return false;
+        }
+        Comando c = (Comando) o;
+        return EqualsBuilder.reflectionEquals(this, c);
+    }
+
     public String getNome() {
-        return this.nome;
+        return nome;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.obxectivo);
+        hash = 59 * hash + Objects.hashCode(this.nome);
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 
     public abstract void Executar() throws Exception;

@@ -23,8 +23,6 @@
  */
 package jdatamotion;
 
-import weka.core.Instances;
-
 /**
  *
  * @author usuario

@@ -8,8 +8,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  *
@@ -62,6 +64,45 @@ class Controlador implements Sesionizable {
         }
     }
 
+    /**
+     * Manexa o evento recibido e realiza as operacións oportunas. O parámetro
+     * opcion representa o tipo de evento. O parámetro argumento contén a
+     * entrada ou entradas necesarias para levar a cabo este evento.
+     * <p>
+     * Os eventos posibles cos seus argumentos válidos figuran na seguinte
+     * táboa:
+     * <table>
+     * <tr><th>Evento</th><th>opcion</th><th>argumento</th></tr>
+     * <tr><td>Importar
+     * ficheiro</td><td>Controlador.IMPORTAR_FICHEIRO</td><td>String
+     * url</td></tr>
+     * <tr><td>Abrir sesión</td><td>Controlador.ABRIR_SESION</td><td>String
+     * url</td></tr>
+     * <tr><td>Gardar sesión</td><td>Controlador.GARDAR_SESION</td><td>String
+     * url</td></tr>
+     * <tr><td>Exportar
+     * ficheiro</td><td>Controlador.EXPORTAR_FICHEIRO</td><td>{String extension,
+     * String path}</td></tr>
+     * <tr><td>Mudar dato</td><td>Controlador.MUDAR_DATO</td><td>{int numFila,
+     * int numColumna, Object novoDato}</td></tr>
+     * <tr><td>Engadir
+     * datos</td><td>Controlador,ENGADIR_DATOS</td><td>-</td></tr>
+     * <tr><td>Eliminar
+     * datos</td><td>Controlador.ELIMINAR_DATOS</td><td>Integer[]
+     * numsFilas</td></tr>
+     * <tr><td>Desfacer</td><td>Controlador.DESFACER</td><td>-</td></tr>
+     * <tr><td>Refacer</td><td>Controlador.REFACER</td><td>-</td></tr>
+     * <tr><td>Restaurar</td><td>Controlador.RESTAURAR</td><td>-</td></tr>
+     * <tr><td>Mudar índice
+     * temporal</td><td>Controlador.MUDAR_INDICE_TEMPORAL</td><td>int
+     * novoIndiceTemporal</td></tr>
+     * <tr><td>Mudar tipo</td><td>Controlador.MUDAR_TIPO</td><td>{int
+     * numColumna, int novoTipo}</td></tr>
+     * <tr><td>Mudar nome
+     * relación</td><td>Controlador.MUDAR_NOME_RELACION</td><td>String
+     * novoNomeRelacion</td></tr>
+     * </table>
+     */
     public void manexarEvento(int opcion, Object argumento) {
         switch (opcion) {
             case IMPORTAR_FICHEIRO:
@@ -258,9 +299,9 @@ class Controlador implements Sesionizable {
         return xestorComandos;
     }
 
-    private void eliminarDatos(Integer[] datos) {
+    private void eliminarDatos(Integer[] filas) {
         try {
-            xestorComandos.ExecutarComando(new ComandoEliminarDatos(meuModelo, datos));
+            xestorComandos.ExecutarComando(new ComandoEliminarDatos(meuModelo, filas));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -288,6 +329,29 @@ class Controlador implements Sesionizable {
         } else if (c.getObxectivo().getClass().equals(Vista.class)) {
             c.setObxectivo(minaVista);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Controlador == false) {
+            return false;
+        }
+        Controlador m = (Controlador) o;
+        return m.getMeuModelo().equals(getMeuModelo()) && m.getXestorComandos().equals(getXestorComandos());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.meuModelo);
+        hash = 41 * hash + Objects.hashCode(this.minaVista);
+        hash = 41 * hash + Objects.hashCode(this.xestorComandos);
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
     }
 
     @Override

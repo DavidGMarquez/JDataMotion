@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Modelo.java</url>
             <bookmark id="2">
                 <name/>
-                <line>510</line>
+                <line>536</line>
                 <key/>
             </bookmark>
         </file>
@@ -21,30 +21,45 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoRestaurar.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/XestorComandos.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/VerticalLabelUI.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ExcepcionComandoInutil.java</file>
+            <file>jar:file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/lib/weka-dev-3.7.10-sources.jar!/weka/core/converters/ArffLoader.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/SesionModelo.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/idiomas/Bundle.properties</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/VerticalLabelUI.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoDesfacible.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoMudarDato.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/test/jdatamotion/example01.arff</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Controlador.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/InstancesComparable.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/idiomas/Bundle_es.properties</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Controlador.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ExcepcionLeve.java</file>
             <file>jar:file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/lib/weka-dev-3.7.10-sources.jar!/weka/core/converters/AbstractSaver.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/lib/jfreechart-1.0.17-sources/org/jfree/chart/ChartPanel.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ScatterPlot.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Comando.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ExcepcionArquivoModificado.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/lib/jfreechart-1.0.17-sources/org/jfree/chart/ChartPanel.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/XYDatasetModelo.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ExcepcionArquivoModificado.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/SesionControlador.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/test/jdatamotion/TestRF03_04.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoMudarNomeRelacion.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoEngadirDatos.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Vista.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/JDataMotion.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/test/jdatamotion/InstancesComparable.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Modelo.java</file>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoImportarFicheiro.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoExportarFicheiro.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/FiltroExtension.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoEliminarDatos.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/SesionVista.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoImportarFicheiro.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/test/jdatamotion/TestRF01_02.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ExcepcionCambiarTipoAtributo.java</file>
             <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoMudarTipo.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/LectorFicheiros.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/XestorComandos.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/idiomas/Bundle.properties</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/test/jdatamotion/example01.arff</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ExcepcionFormatoIdentificacionTemporal.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Sesionizable.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Comando.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoMudarNomeRelacion.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/JDataMotion.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Modelo.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/Sesion.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/JDataMotion/src/jdatamotion/ComandoMudarIndiceTemporal.java</file>
         </group>
     </open-files>
 </project-private>

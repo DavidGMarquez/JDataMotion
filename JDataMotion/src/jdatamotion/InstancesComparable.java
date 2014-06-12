@@ -23,6 +23,7 @@
  */
 package jdatamotion;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import weka.core.Attribute;
@@ -40,12 +41,16 @@ public class InstancesComparable extends Instances {
         super(i);
     }
 
+    InstancesComparable(String relationName, ArrayList<Attribute> aux, int i) {
+        super(relationName, aux, i);
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Instances == false) {
+        if (o instanceof InstancesComparable == false) {
             return false;
         }
-        Instances is = (Instances) o;
+        InstancesComparable is = (InstancesComparable) o;
         Enumeration e1 = is.enumerateInstances();
         Enumeration e2 = enumerateInstances();
         InstanceComparator a = new InstanceComparator();

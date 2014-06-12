@@ -23,8 +23,6 @@
  */
 package jdatamotion;
 
-import weka.core.Instances;
-
 /**
  *
  * @author usuariosy
@@ -41,7 +39,7 @@ public class SesionModelo extends Sesion {
         return indiceAtributoNominal;
     }
     private String direccionAoFicheiro;
-    private Instances cabeceiras;
+    private InstancesComparable cabeceiras;
     private int indiceTemporal;
     private byte[] hash;
     private String nomeRelacion;
@@ -74,7 +72,7 @@ public class SesionModelo extends Sesion {
         this.direccionAoFicheiro = direccionAoFicheiro;
     }
 
-    public void setCabeceiras(Instances cabeceiras) {
+    public void setCabeceiras(InstancesComparable cabeceiras) {
         this.cabeceiras = cabeceiras;
     }
 
@@ -86,7 +84,7 @@ public class SesionModelo extends Sesion {
         return direccionAoFicheiro;
     }
 
-    public Instances getCabeceiras() {
+    public InstancesComparable getCabeceiras() {
         return cabeceiras;
     }
 

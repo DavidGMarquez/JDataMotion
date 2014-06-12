@@ -23,15 +23,13 @@
  */
 package jdatamotion;
 
-import weka.core.Instances;
-
 /**
  *
  * @author usuario
  */
 class ComandoRestaurar extends ComandoDesfacible {
 
-    private Instances datosAntigos;
+    private InstancesComparable datosAntigos;
 
     public ComandoRestaurar(Controlador controlador) {
         super(controlador, Vista.bundle.getString("Vista.jMenuItem10.text"));
@@ -44,7 +42,7 @@ class ComandoRestaurar extends ComandoDesfacible {
 
     @Override
     public void Executar() throws Exception {
-        this.datosAntigos = new Instances(((Controlador) getObxectivo()).getMeuModelo().getAtributos());
+        this.datosAntigos = new InstancesComparable(((Controlador) getObxectivo()).getMeuModelo().getAtributos());
         ((Controlador) getObxectivo()).getMeuModelo().restaurar();
     }
 }
