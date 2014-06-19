@@ -25,7 +25,6 @@ package jdatamotion.comandos;
 
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import jdatamotion.comandos.ComandoDesfacible;
 
 /**
  *
@@ -33,8 +32,8 @@ import jdatamotion.comandos.ComandoDesfacible;
  */
 public class ComandoMudarNomeRelacion extends ComandoDesfacible {
 
-    private String novoNome;
-    private String antigoNome;
+    private final String novoNome;
+    private final String antigoNome;
 
     public ComandoMudarNomeRelacion(Modelo modelo, String novoNome) {
         super(modelo, Vista.bundle.getString("Vista.jMenuItem15.text"));

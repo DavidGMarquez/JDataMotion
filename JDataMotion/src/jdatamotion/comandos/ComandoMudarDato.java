@@ -23,11 +23,8 @@
  */
 package jdatamotion.comandos;
 
-import jdatamotion.comandos.ComandoDesfacible;
-import java.util.Objects;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  *

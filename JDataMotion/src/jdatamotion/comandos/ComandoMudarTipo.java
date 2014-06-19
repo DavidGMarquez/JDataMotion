@@ -26,7 +26,6 @@ package jdatamotion.comandos;
 import jdatamotion.InstancesComparable;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import jdatamotion.comandos.ComandoDesfacible;
 
 /**
  *

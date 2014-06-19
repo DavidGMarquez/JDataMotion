@@ -48,6 +48,14 @@ public class XestorComandos implements Serializable {
         XestorComandos m = (XestorComandos) o;
         return m.getPilaDesfacer().equals(getPilaDesfacer()) && m.getPilaRefacer().equals(getPilaRefacer());
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 47 * hash + Objects.hashCode(this.pilaDesfacer);
+        hash = 47 * hash + Objects.hashCode(this.pilaRefacer);
+        return hash;
+    }
     
     @Override
     public String toString() {

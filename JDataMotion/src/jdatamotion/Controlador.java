@@ -87,7 +87,7 @@ public class Controlador implements Sesionizable {
     /**
      * Manexa o evento recibido e realiza as operacións oportunas. O parámetro
      * opcion representa o tipo de evento. O parámetro argumento contén a
-     * entrada ou entradas necesarias para levar a cabo este evento.
+     * entrada necesaria para levar a cabo este evento.
      * <p>
      * Os eventos posibles cos seus argumentos válidos figuran na seguinte
      * táboa:
@@ -122,6 +122,9 @@ public class Controlador implements Sesionizable {
      * relación</td><td>Controlador.MUDAR_NOME_RELACION</td><td>String
      * novoNomeRelacion</td></tr>
      * </table>
+     *
+     * @param opcion o tipo de evento
+     * @param argumento a entrada necesaria
      */
     public void manexarEvento(int opcion, Object argumento) {
         switch (opcion) {
@@ -219,6 +222,10 @@ public class Controlador implements Sesionizable {
         }
     }
 
+    /**
+     *
+     * @param path
+     */
     @SuppressWarnings("unchecked")
     private void abrirSesion(String path) {
         try {
@@ -383,9 +390,9 @@ public class Controlador implements Sesionizable {
             actualizarObxectivosComando(c);
             c.Executar();
         }
-        for (Comando c : xestorComandos.getPilaRefacer()) {
+        xestorComandos.getPilaRefacer().stream().forEach((c) -> {
             actualizarObxectivosComando(c);
-        }
+        });
     }
 
     private void restaurar() {

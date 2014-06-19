@@ -430,9 +430,9 @@ public class Modelo extends Observable implements Sesionizable {
         for (Integer i : datos) {
             candidatos.add(getAtributos().get(i));
         }
-        for (Instance in : candidatos) {
+        candidatos.stream().forEach((in) -> {
             getAtributos().remove(in);
-        }
+        });
         setChanged();
     }
 
