@@ -1,8 +1,5 @@
 package jdatamotion;
 
-import jdatamotion.sesions.Sesionizable;
-import jdatamotion.sesions.Sesion;
-import jdatamotion.sesions.SesionVista;
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstraints;
 import java.awt.BasicStroke;
@@ -93,6 +90,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import jdatamotion.sesions.Sesion;
+import jdatamotion.sesions.SesionVista;
+import jdatamotion.sesions.Sesionizable;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
 import org.jfree.chart.ChartMouseListener;
@@ -105,11 +105,10 @@ import org.jfree.chart.annotations.XYDrawableAnnotation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.DomainInfo;
 import org.jfree.data.Range;
-import org.jfree.data.RangeInfo;
-import org.jfree.data.xy.AbstractXYDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.Drawable;
 import org.jsoup.Jsoup;
 import weka.core.Attribute;
@@ -145,10 +144,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         return bundle;
     }
 
-    public boolean[][] getScatterPlotsVisibles() {
-        return scatterPlotsVisibles;
-    }
-
     private void pecharJFramesScatterPlot() {
         if (jFramesAmpliar != null) {
             jFramesAmpliar.stream().filter((jFramesAmpliar1) -> (jFramesAmpliar1 != null)).forEach((jFramesAmpliar1) -> {
@@ -162,10 +157,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     public final void reset() {
         this.ultimaColumnaModeloSeleccionada = -1;
         this.scatterPlotsVisibles = new boolean[0][0];
-    }
-
-    public ArrayList<ArrayList<ScatterPlot>> getMatrizScatterPlots() {
-        return matrizScatterPlots;
     }
 
     public Vista() {
@@ -247,11 +238,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         double grosorInicial = 1.0;
         double pasoGrosor = 0.0;
         double pasoRadio = 1;
-        for (int i = 0; i < getMatrizScatterPlots().size(); i++) {
-            for (int j = 0; j < getMatrizScatterPlots().get(i).size(); j++) {
+        for (int i = 0; i < matrizScatterPlots.size(); i++) {
+            for (int j = 0; j < matrizScatterPlots.get(i).size(); j++) {
                 if (getjFramesAmpliar().get(i).get(j) != null) {
                     ChartPanel chart = (ChartPanel) getjFramesAmpliar().get(i).get(j).getContentPane();
-                    ScatterPlot sp = getMatrizScatterPlots().get(i).get(j);
+                    ScatterPlot sp = matrizScatterPlots.get(i).get(j);
                     anularSeleccions(chart.getChart().getXYPlot());
                     anularSeleccions(sp.getMeuChartPanel().getChart().getXYPlot());
                     for (int k = 0; k < indicesInstances.size(); k++) {
@@ -279,26 +270,14 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         return s;
     }
 
-    public void setMatrizScatterPlots(ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots) {
-        this.matrizScatterPlots = matrizScatterPlots;
-    }
-
-    public void setjFramesAmpliar(ArrayList<ArrayList<JFrame>> jFramesAmpliar) {
-        this.jFramesAmpliar = jFramesAmpliar;
-    }
-
-    public void setUltimaColumnaModeloSeleccionada(int ultimaColumnaModeloSeleccionada) {
-        this.ultimaColumnaModeloSeleccionada = ultimaColumnaModeloSeleccionada;
-    }
-
-    public void setScatterPlotsVisibles(boolean[][] scatterPlotsVisibles) {
-        this.scatterPlotsVisibles = scatterPlotsVisibles;
+    public boolean[][] getScatterPlotsVisibles() {
+        return scatterPlotsVisibles;
     }
 
     @Override
     public void aplicarSesion(Sesion sesion) throws Exception {
         SesionVista s = (SesionVista) sesion;
-        setScatterPlotsVisibles(s.getScatterPlotsVisibles());
+        scatterPlotsVisibles = s.getScatterPlotsVisibles();
         if (matrizScatterPlots != null) {
             matrizScatterPlots.stream().forEach((ArrayList<ScatterPlot> alsp) -> {
                 alsp.stream().filter((sp) -> (sp != null)).forEach((ScatterPlot sp) -> {
@@ -361,10 +340,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
     public ArrayList<ArrayList<JFrame>> getjFramesAmpliar() {
         return jFramesAmpliar;
-    }
-
-    public TarefaProgreso getTask() {
-        return task;
     }
 
     private void pintarMenuVisualizacion() {
@@ -1931,11 +1906,15 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         switch (eventoParaControlador) {
             case Controlador.ABRIR_SESION:
                 ext.add(new FiltroExtension(bundle.getString("formatoSesion") + " (*.jdm)", new String[]{"jdm"}));
+                ext.add(new FiltroExtension(bundle.getString("todosOsFicheiros") + " (*.*)", null));
+                definirExtensions(ext);
                 jDialog1.setTitle(bundle.getString("Vista.jMenuItem3.text"));
                 getjFileChooser1().setApproveButtonText(bundle.getString("abrir"));
                 break;
             case Controlador.IMPORTAR_FICHEIRO:
                 ext.add(new FiltroExtension(bundle.getString("formatosImportarFicheiro") + " (*.csv;*.arff)", new String[]{"csv", "arff"}));
+                ext.add(new FiltroExtension(bundle.getString("todosOsFicheiros") + " (*.*)", null));
+                definirExtensions(ext);
                 jDialog1.setTitle(bundle.getString("Vista.jMenuItem1.text"));
                 getjFileChooser1().setApproveButtonText(bundle.getString("importar"));
                 break;
@@ -1950,15 +1929,16 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         getjFileChooser1().getSelectedFile().getAbsolutePath());
             }
         });
-        definirExtensions(ext);
         getjFileChooser1().revalidate();
         getjFileChooser1().repaint();
     }
 
-    public void definirExtensions(ArrayList<FiltroExtension> ext) {
+    private void definirExtensions(ArrayList<FiltroExtension> ext) {
         for (FileFilter e : jFileChooser1.getChoosableFileFilters()) {
             jFileChooser1.removeChoosableFileFilter(e);
         }
+        UIManager.put("FileChooser.acceptAllFileFilterText", bundle.getString("todosOsFicheiros"));
+        jFileChooser1.setAcceptAllFileFilterUsed(false);
         ext.stream().forEach((e) -> {
             if (e.getExtensions() == null) {
                 jFileChooser1.setAcceptAllFileFilterUsed(true);
@@ -1981,6 +1961,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         switch (eventoParaControlador) {
             case Controlador.GARDAR_SESION:
                 ext.add(new FiltroExtension(bundle.getString("formatoSesion") + " (*.jdm)", new String[]{"jdm"}));
+                definirExtensions(ext);
                 jDialog1.setTitle(bundle.getString("Vista.jMenuItem4.text"));
                 getjFileChooser1().setSelectedFile(new File(bundle.getString("SenTitulo") + ".jdm"));
                 getjFileChooser1().addActionListener((ActionEvent e) -> {
@@ -2010,25 +1991,15 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 getjFileChooser1().setApproveButtonText(bundle.getString("gardar"));
                 break;
             case Controlador.EXPORTAR_FICHEIRO:
-                ext.add(new FiltroExtension(bundle.getString("formatoExportarFicheiro1") + " (*.arff)", new String[]{"arff"}));
+                FiltroExtension def = new FiltroExtension(bundle.getString("formatoExportarFicheiro1") + " (*.arff)", new String[]{"arff"});
+                ext.add(def);
                 ext.add(new FiltroExtension(bundle.getString("formatoExportarFicheiro2") + " (*.csv)", new String[]{"csv"}));
+                definirExtensions(ext);
                 jDialog1.setTitle(bundle.getString("Vista.jMenuItem2.text"));
                 getjFileChooser1().addPropertyChangeListener("fileFilterChanged", (PropertyChangeEvent evt) -> {
-                    if (evt.getNewValue() != null) {
-                        int numero = 0;
-                        String base1 = getjFileChooser1().getCurrentDirectory() + "\\";
-                        String path = base1 + bundle.getString("SenTitulo") + "." + ((FileNameExtensionFilter) evt.getNewValue()).getExtensions()[0];
-                        File f;
-                        if (new File(path).exists()) {
-                            do {
-                                numero++;
-                                path = base1 + bundle.getString("SenTitulo") + " (" + numero + ")." + ((FileNameExtensionFilter) evt.getNewValue()).getExtensions()[0];
-                                f = new File(path);
-                            } while (f.exists());
-                        }
-                        getjFileChooser1().setSelectedFile(new File(path));
-                    }
+                    actualizarNomeFicheiro();
                 });
+                actualizarNomeFicheiro();
                 getjFileChooser1().addActionListener((ActionEvent e) -> {
                     switch (e.getActionCommand()) {
                         case "ApproveSelection":
@@ -2062,9 +2033,23 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 getjFileChooser1().setApproveButtonText(bundle.getString("exportar"));
                 break;
         }
-        definirExtensions(ext);
         getjFileChooser1().revalidate();
         getjFileChooser1().repaint();
+    }
+
+    private void actualizarNomeFicheiro() {
+        int numero = 0;
+        String base = getjFileChooser1().getCurrentDirectory() + "\\";
+        String path = base + bundle.getString("SenTitulo") + "." + ((FileNameExtensionFilter) getjFileChooser1().getFileFilter()).getExtensions()[0];
+        File f;
+        if (new File(path).exists()) {
+            do {
+                numero++;
+                path = base + bundle.getString("SenTitulo") + " (" + numero + ")." + ((FileNameExtensionFilter) getjFileChooser1().getFileFilter()).getExtensions()[0];
+                f = new File(path);
+            } while (f.exists());
+        }
+        getjFileChooser1().setSelectedFile(new File(path));
     }
 
     public void amosarDialogo(String mensaxe, int tipo) {
@@ -2418,7 +2403,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             this.indiceAtributoY = indiceAtributoY;
             this.instances = instances;
             JFreeChart jfreechart = createChart(new XYDatasetModelo(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor));
-            if (jfreechart.getXYPlot().getSeriesCount() == 1) {
+            if (indiceAtributoColor < 0) {
                 jfreechart.removeLegend();
             }
             ChartFactory.setChartTheme(StandardChartTheme.createDarknessTheme());
@@ -2568,12 +2553,9 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         }
     }
 
-    class XYDatasetModelo extends AbstractXYDataset implements XYDataset,
-            DomainInfo, RangeInfo {
+    class XYDatasetModelo extends XYSeriesCollection {
 
         private static final long serialVersionUID = 1L;
-        private final Double xValues[][];
-        private final Double yValues[][];
         private final int seriesCount;
         private final int itemCount;
         private Number domainMin;
@@ -2589,14 +2571,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
         public long getSerialVersionUID() {
             return serialVersionUID;
-        }
-
-        public Double[][] getxValues() {
-            return xValues;
-        }
-
-        public Double[][] getyValues() {
-            return yValues;
         }
 
         public int getItemCount() {
@@ -2628,6 +2602,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         }
 
         public XYDatasetModelo(InstancesComparable atributos, int atributoX, int atributoY, int atributoColor) {
+            super();
             this.atributos = atributos;
             this.atributoX = atributoX;
             this.atributoY = atributoY;
@@ -2663,9 +2638,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 }
                 seriesCount = numeroValoresAtributoNominal;
                 itemCount = maxInstanciasNominal;
-                xValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
-                yValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
                 for (int i = 0; i < numeroValoresAtributoNominal; i++) {
+                    XYSeries s = new XYSeries(atributos.attribute(atributoColor).value(i));
                     for (int j = 0; j < xv.get(i).size(); j++) {
                         Double d4 = xv.get(i).get(j);
                         if (d4 < d) {
@@ -2674,7 +2648,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         if (d4 > d1) {
                             d1 = d4;
                         }
-                        xValues[i][j] = d4;
                         Double d5 = yv.get(i).get(j);
                         if (d5 < d2) {
                             d2 = d5;
@@ -2682,17 +2655,16 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         if (d5 > d3) {
                             d3 = d5;
                         }
-                        yValues[i][j] = d5;
+                        s.add(d4, d5);
                     }
+                    addSeries(s);
                 }
             } else {
                 seriesCount = 1;
                 itemCount = numeroInstancias;
-                xValues = new Double[1][numeroInstancias];
-                yValues = new Double[1][numeroInstancias];
+                XYSeries s = new XYSeries(new Integer(0));
                 for (int l = 0; l < numeroInstancias; l++) {
                     double d4 = atributos.instance(l).value(atributoX);
-                    xValues[0][l] = d4;
                     if (d4 < d) {
                         d = d4;
                     }
@@ -2700,14 +2672,15 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         d1 = d4;
                     }
                     double d5 = atributos.instance(l).value(atributoY);
-                    yValues[0][l] = d5;
                     if (d5 < d2) {
                         d2 = d5;
                     }
                     if (d5 > d3) {
                         d3 = d5;
                     }
+                    s.add(d4, d5);
                 }
+                addSeries(s);
             }
             try {
                 domainMin = d;
@@ -2718,31 +2691,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 range = new Range(d2, d3);
             } catch (IllegalArgumentException e) {
             }
-        }
-
-        @Override
-        public Number getX(int i, int j) {
-            return xValues[i][j];
-        }
-
-        @Override
-        public Number getY(int i, int j) {
-            return yValues[i][j];
-        }
-
-        @Override
-        public int getSeriesCount() {
-            return seriesCount;
-        }
-
-        @Override
-        public Comparable<String> getSeriesKey(int i) {
-            return atributoColor > -1 ? atributos.attribute(atributoColor).value(i) : "";
-        }
-
-        @Override
-        public int getItemCount(int i) {
-            return itemCount;
         }
 
         public double getDomainLowerBound() {
@@ -2780,23 +2728,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             return rangeMin.doubleValue();
         }
 
-        @Override
-        public double getRangeLowerBound(boolean flag) {
-            return rangeMin.doubleValue();
-        }
-
         public double getRangeUpperBound() {
             return rangeMax.doubleValue();
-        }
-
-        @Override
-        public double getRangeUpperBound(boolean flag) {
-            return rangeMax.doubleValue();
-        }
-
-        @Override
-        public Range getRangeBounds(boolean flag) {
-            return range;
         }
 
         public Range getValueRange() {

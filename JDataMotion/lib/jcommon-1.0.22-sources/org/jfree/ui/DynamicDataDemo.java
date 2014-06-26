@@ -63,7 +63,7 @@
  *
  */
 
-package org.jfree.ui;
+package jdatamotion;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -84,15 +84,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import org.jfree.ui.NumberCellRenderer;
 
 /**
  * A collection of utility methods relating to user interfaces.
  *
  * @author David Gilbert
  */
-public class RefineryUtilities {
+public class DynamicDataDemo {
 
-    private RefineryUtilities() {
+    private DynamicDataDemo() {
     }
 
     /**
