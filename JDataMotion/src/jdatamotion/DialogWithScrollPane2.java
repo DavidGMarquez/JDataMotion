@@ -32,6 +32,7 @@ public class DialogWithScrollPane2 extends JFrame {
             g.fillRect(20, 50, 100, 200);
          }
       };
+      blueRectPanel.add(new JButton("A VERE"));
       blueRectPanel.setOpaque(false);
 
       final JLayeredPane layeredPane = new JLayeredPane();
