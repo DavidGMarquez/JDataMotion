@@ -775,8 +775,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel3 = new javax.swing.JLabel();
@@ -897,6 +897,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         jDialog2.setTitle(bundle.getString("Vista.jMenuItem16.text")); // NOI18N
         jDialog2.setModal(true);
         jDialog2.setName("jDialog2"); // NOI18N
+        jDialog2.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jButton1.setText(bundle.getString("Aceptar")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
@@ -989,7 +990,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         .addComponent(jScrollPane9)
                         .addGap(17, 17, 17))
                     .addGroup(jDialog2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
                         .addGap(6, 6, 6)))
                 .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
@@ -998,7 +999,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(8, 8, 8))
+                .addContainerGap())
         );
 
         jDialog3.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -1140,10 +1141,9 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
         jTabbedPane1.addTab(bundle.getString("Vista.jScrollPane4.TabConstraints.tabTitle"), jScrollPane4); // NOI18N
 
-        jScrollPane5.setName("jScrollPane5"); // NOI18N
+        jLayeredPane1.setName("jLayeredPane1"); // NOI18N
 
-        jPanel3.setBackground(new java.awt.Color(193, 230, 255));
-        jPanel3.setName("jPanel3"); // NOI18N
+        jScrollPane5.setName("jScrollPane5"); // NOI18N
 
         jPanel4.setBackground(new java.awt.Color(0, 0, 0));
         jPanel4.setName("jPanel4"); // NOI18N
@@ -1152,35 +1152,29 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1256, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        jScrollPane5.setViewportView(jPanel4);
+
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
         );
+        jLayeredPane1.setLayer(jScrollPane5, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jScrollPane5.setViewportView(jPanel3);
+        jTabbedPane1.addTab(bundle.getString("Vista.jLayeredPane1.TabConstraints.tabTitle"), jLayeredPane1); // NOI18N
 
-        jTabbedPane1.addTab(bundle.getString("Vista.jScrollPane5.TabConstraints.tabTitle"), jScrollPane5); // NOI18N
-
-        String iconUrl = "";
         String nomeLabel = "";
         for (int i = 0; i < 3; i++) {
             switch (i) {
@@ -1191,7 +1185,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 nomeLabel = bundle.getString("Vista.jScrollPane4.TabConstraints.tabTitle");
                 break;
                 case 2:
-                nomeLabel = bundle.getString("Vista.jScrollPane5.TabConstraints.tabTitle");
+                nomeLabel = bundle.getString("Vista.jLayeredPane1.TabConstraints.tabTitle");
                 break;
             }
             final JLabel label = new JLabel("<html><body style='width:80px;text-align:center;margin-bottom:4px;'>" + nomeLabel + "</body></html>", JLabel.CENTER);
@@ -2776,6 +2770,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel3;
+    javax.swing.JLayeredPane jLayeredPane1;
     javax.swing.JMenu jMenu1;
     javax.swing.JMenu jMenu2;
     javax.swing.JMenu jMenu3;
@@ -2804,7 +2799,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     javax.swing.JMenuItem jMenuItem9;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
-    javax.swing.JPanel jPanel3;
     javax.swing.JPanel jPanel4;
     javax.swing.JPanel jPanel5;
     javax.swing.JPanel jPanel6;
