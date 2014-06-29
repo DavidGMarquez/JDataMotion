@@ -21,8 +21,6 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -46,7 +44,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -65,15 +62,12 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JViewport;
@@ -138,9 +132,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     private Modelo meuModelo;
     private final TarefaProgreso task;
     private final ExecutorService cachedPool;
+    private ManexadorScatterPlots mansp;
     private Controlador meuControlador;
-    private transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
-    private transient ArrayList<ArrayList<JFrame>> jFramesAmpliar;
     private int ultimaColumnaModeloSeleccionada;
     private boolean scatterPlotsVisibles[][];
     public static ResourceBundle bundle;
@@ -151,8 +144,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     }
 
     private void pecharJFramesScatterPlot() {
-        if (jFramesAmpliar != null) {
-            jFramesAmpliar.stream().filter((jFramesAmpliar1) -> (jFramesAmpliar1 != null)).forEach((jFramesAmpliar1) -> {
+        if (mansp != null) {
+            mansp.getjFramesAmpliar().stream().filter((jFramesAmpliar1) -> (jFramesAmpliar1 != null)).forEach((jFramesAmpliar1) -> {
                 jFramesAmpliar1.stream().filter((jFramesAmpliar11) -> (jFramesAmpliar11 != null)).forEach((jFramesAmpliar11) -> {
                     jFramesAmpliar11.dispose();
                 });
@@ -211,7 +204,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
     private int contarJFramesVisibles() {
         int c = 0;
-        for (ArrayList<JFrame> aljf : jFramesAmpliar) {
+        for (ArrayList<JFrame> aljf : mansp.getjFramesAmpliar()) {
             c = aljf.stream().filter((jf) -> (jf != null && jf.isVisible())).map((_item) -> 1).reduce(c, Integer::sum);
         }
         return c;
@@ -244,11 +237,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         double grosorInicial = 1.0;
         double pasoGrosor = 0.0;
         double pasoRadio = 1;
-        for (int i = 0; i < matrizScatterPlots.size(); i++) {
-            for (int j = 0; j < matrizScatterPlots.get(i).size(); j++) {
-                if (getjFramesAmpliar().get(i).get(j) != null) {
-                    ChartPanel chart = (ChartPanel) getjFramesAmpliar().get(i).get(j).getContentPane();
-                    ScatterPlot sp = matrizScatterPlots.get(i).get(j);
+        for (int i = 0; i < mansp.getMatrizScatterPlots().size(); i++) {
+            for (int j = 0; j < mansp.getMatrizScatterPlots().get(i).size(); j++) {
+                if (mansp.getjFramesAmpliar().get(i).get(j) != null) {
+                    ChartPanel chart = (ChartPanel) mansp.getjFramesAmpliar().get(i).get(j).getContentPane();
+                    ScatterPlot sp = mansp.getMatrizScatterPlots().get(i).get(j);
                     anularSeleccions(chart.getChart().getXYPlot());
                     anularSeleccions(sp.getMeuChartPanel().getChart().getXYPlot());
                     for (int k = 0; k < indicesInstances.size(); k++) {
@@ -284,8 +277,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     public void aplicarSesion(Sesion sesion) throws Exception {
         SesionVista s = (SesionVista) sesion;
         scatterPlotsVisibles = s.getScatterPlotsVisibles();
-        if (matrizScatterPlots != null) {
-            matrizScatterPlots.stream().forEach((ArrayList<ScatterPlot> alsp) -> {
+        if (mansp.getMatrizScatterPlots() != null) {
+            mansp.getMatrizScatterPlots().stream().forEach((ArrayList<ScatterPlot> alsp) -> {
                 alsp.stream().filter((sp) -> (sp != null)).forEach((ScatterPlot sp) -> {
                     sp.setMinaVista(Vista.this);
                 });
@@ -344,16 +337,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         this.setVisible(true);
     }
 
-    public ArrayList<ArrayList<JFrame>> getjFramesAmpliar() {
-        return jFramesAmpliar;
-    }
-
     private void pintarMenuVisualizacion() {
         pecharJFramesScatterPlot();
         ArrayList<Integer> indices = meuModelo.obterIndicesAtributosNumericosNoModelo();
         int numAtributosNumericos = indices.size();
-        jFramesAmpliar = new ArrayList<>(numAtributosNumericos);
-        matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
+        mansp = new ManexadorScatterPlots(numAtributosNumericos);
         for (int in = 0; in < numAtributosNumericos; in++) {
             ArrayList<JFrame> aljf = new ArrayList<>();
             ArrayList<ScatterPlot> alsp = new ArrayList<>();
@@ -361,8 +349,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 aljf.add(null);
                 alsp.add(null);
             }
-            jFramesAmpliar.add(aljf);
-            matrizScatterPlots.add(alsp);
+            mansp.getjFramesAmpliar().add(aljf);
+            mansp.getMatrizScatterPlots().add(alsp);
         }
         actualizarScatterPlotsVisibles(numAtributosNumericos);
         jPopupMenu1.setVisible(false);
@@ -417,7 +405,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
     private int numColumnasNonVacias() {
         int n = 0;
-        for (int i = 0; i < matrizScatterPlots.size(); i++) {
+        for (int i = 0; i < mansp.getMatrizScatterPlots().size(); i++) {
             if (!columnaScatterPlotsVacia(i)) {
                 n++;
             }
@@ -427,7 +415,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
     private int numFilasNonVacias() {
         int n = 0;
-        for (int i = 0; i < matrizScatterPlots.size(); i++) {
+        for (int i = 0; i < mansp.getMatrizScatterPlots().size(); i++) {
             if (!filaScatterPlotsVacia(i)) {
                 n++;
             }
@@ -572,8 +560,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 jFrameScatterPlotAmpliado.setIconImage(new ImageIcon(getClass().getResource("imaxes/faviconGrafica.png")).getImage());
                 jFrameScatterPlotAmpliado.setContentPane(spframe.getMeuChartPanel());
                 jFrameScatterPlotAmpliado.setSize(600, 400);
-                jFramesAmpliar.get(i).set(j, jFrameScatterPlotAmpliado);
-                matrizScatterPlots.get(i).set(j, spmatrix);
+                mansp.getjFramesAmpliar().get(i).set(j, jFrameScatterPlotAmpliado);
+                mansp.getMatrizScatterPlots().get(i).set(j, spmatrix);
                 ChartPanel meuChartPanel = spmatrix.getMeuChartPanel();
                 anularSeleccions(meuChartPanel.getChart().getXYPlot());
                 anularSeleccions(spmatrix.getMeuChartPanel().getChart().getXYPlot());
@@ -584,7 +572,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 clickmeButton.setAction(new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        JFrame jfa = jFramesAmpliar.get(a).get(b);
+                        JFrame jfa = mansp.getjFramesAmpliar().get(a).get(b);
                         if (!jfa.isVisible()) {
                             jfa.setLocation(getX() + 20 * (contarJFramesVisibles() + 1), getY() + 20 * (contarJFramesVisibles() + 1));
                             jfa.setVisible(true);
@@ -1069,6 +1057,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
         jButton8.setText(bundle.getString("Vista.jButton8.text")); // NOI18N
         jButton8.setName("jButton8"); // NOI18N
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1659,6 +1652,10 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
         configurarEstablecerAtributoNominalRepresentado();
     }//GEN-LAST:event_jMenuItem17ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     @SuppressWarnings("unchecked")
     private void configurarEstablecerAtributoNominalRepresentado() {
@@ -2355,6 +2352,60 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         jMenuItem14.setEnabled(activar);
     }
 
+    class TarefaPlay extends SwingWorker<Void, Void> {
+
+        private ScatterPlot sp;
+
+        public void setSp(ScatterPlot sp) {
+            this.sp = sp;
+        }
+
+        public TarefaPlay() {
+            super();
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            XYDatasetModelo d = (XYDatasetModelo) sp.getMeuChartPanel().getChart().getXYPlot().getDataset();
+            int i, numI = d.getSeriesCount();
+            for (i = 0; i < numI; i++) {
+                while (!d.todoVisualizado()) {
+                    d.visualizarItems(1);
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            return null;
+        }
+
+    }
+
+    class ManexadorScatterPlots {
+
+        public ManexadorScatterPlots() {
+        }
+
+        private TarefaPlay tarefaPlay;
+        private transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
+        private transient ArrayList<ArrayList<JFrame>> jFramesAmpliar;
+
+        private ManexadorScatterPlots(int numAtributosNumericos) {
+            matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
+            jFramesAmpliar = new ArrayList<>(numAtributosNumericos);
+        }
+
+        public ArrayList<ArrayList<ScatterPlot>> getMatrizScatterPlots() {
+            return matrizScatterPlots;
+        }
+
+        public ArrayList<ArrayList<JFrame>> getjFramesAmpliar() {
+            return jFramesAmpliar;
+        }
+    }
+
     class TaboaConcreta extends AbstractTableModel {
 
         private final ArrayList<String> atributos;
@@ -2546,17 +2597,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         public ChartPanel getMeuChartPanel() {
             return meuChartPanel;
         }
-
-        private XYDataset dataset;
-
-        public void setDataset(XYDataset dataset) {
-            this.dataset = dataset;
-        }
-
-        public XYDataset getDataset() {
-            return dataset;
-        }
-
     }
 
     private static Color obterCoresHSB(int cor, int totalCores) {
@@ -2628,6 +2668,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         private final int atributoColor;
         private final int atributoY;
         private final int atributoX;
+        private final Double xValues[][];
+        private final Double yValues[][];
 
         public long getSerialVersionUID() {
             return serialVersionUID;
@@ -2698,8 +2740,10 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 }
                 seriesCount = numeroValoresAtributoNominal;
                 itemCount = maxInstanciasNominal;
+                xValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
+                yValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
                 for (int i = 0; i < numeroValoresAtributoNominal; i++) {
-                    XYSeries s = new XYSeries(atributos.attribute(atributoColor).value(i));
+                    XYSeries s = new XYSeries(atributos.attribute(atributoColor).value(i), false);
                     for (int j = 0; j < xv.get(i).size(); j++) {
                         Double d4 = xv.get(i).get(j);
                         if (d4 < d) {
@@ -2708,6 +2752,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         if (d4 > d1) {
                             d1 = d4;
                         }
+                        xValues[i][j] = d4;
                         Double d5 = yv.get(i).get(j);
                         if (d5 < d2) {
                             d2 = d5;
@@ -2715,16 +2760,19 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         if (d5 > d3) {
                             d3 = d5;
                         }
-                        s.add(d4, d5);
+                        yValues[i][j] = d5;
                     }
                     addSeries(s);
                 }
             } else {
                 seriesCount = 1;
                 itemCount = numeroInstancias;
-                XYSeries s = new XYSeries(new Integer(0));
+                xValues = new Double[1][numeroInstancias];
+                yValues = new Double[1][numeroInstancias];
+                XYSeries s = new XYSeries(new Integer(0), false);
                 for (int l = 0; l < numeroInstancias; l++) {
                     double d4 = atributos.instance(l).value(atributoX);
+                    xValues[0][l] = d4;
                     if (d4 < d) {
                         d = d4;
                     }
@@ -2732,13 +2780,13 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         d1 = d4;
                     }
                     double d5 = atributos.instance(l).value(atributoY);
+                    yValues[0][l] = d5;
                     if (d5 < d2) {
                         d2 = d5;
                     }
                     if (d5 > d3) {
                         d3 = d5;
                     }
-                    s.add(d4, d5);
                 }
                 addSeries(s);
             }
@@ -2810,6 +2858,23 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
         public Number getMaximumRangeValue() {
             return domainMax;
+        }
+
+        public void visualizarItems(int i) {
+            for (int a = 0; a < i; a++) {
+                if (!todoVisualizado()) {
+                    int ic = getSeries(0).getItemCount();
+                    getSeries(0).add(xValues[0][ic], yValues[0][ic]);
+                }
+            }
+        }
+
+        public boolean nadaVisualizado() {
+            return getSeries(0).getItemCount() == 0;
+        }
+
+        public boolean todoVisualizado() {
+            return xValues[0].length <= getSeries(0).getItemCount();
         }
     }
 
