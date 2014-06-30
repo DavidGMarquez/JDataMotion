@@ -78,6 +78,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
@@ -143,16 +144,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         return bundle;
     }
 
-    private void pecharJFramesScatterPlot() {
-        if (mansp != null) {
-            mansp.getjFramesAmpliar().stream().filter((jFramesAmpliar1) -> (jFramesAmpliar1 != null)).forEach((jFramesAmpliar1) -> {
-                jFramesAmpliar1.stream().filter((jFramesAmpliar11) -> (jFramesAmpliar11 != null)).forEach((jFramesAmpliar11) -> {
-                    jFramesAmpliar11.dispose();
-                });
-            });
-        }
-    }
-
     public final void reset() {
         this.ultimaColumnaModeloSeleccionada = -1;
         this.scatterPlotsVisibles = new boolean[0][0];
@@ -198,14 +189,15 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", new Locale("en"));
         reset();
         initComponents();
+        jPanel8.setVisible(false);
         task = new TarefaProgreso(jProgressBar1);
         cachedPool = Executors.newCachedThreadPool();
     }
 
     private int contarJFramesVisibles() {
         int c = 0;
-        for (ArrayList<JFrame> aljf : mansp.getjFramesAmpliar()) {
-            c = aljf.stream().filter((jf) -> (jf != null && jf.isVisible())).map((_item) -> 1).reduce(c, Integer::sum);
+        for (ArrayList<ScatterPlot> alsp : mansp.getMatrizScatterPlots()) {
+            c = alsp.stream().filter((sp) -> (sp.getjFrameAmpliado().isVisible())).map((_item) -> 1).reduce(c, Integer::sum);
         }
         return c;
     }
@@ -239,15 +231,16 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         double pasoRadio = 1;
         for (int i = 0; i < mansp.getMatrizScatterPlots().size(); i++) {
             for (int j = 0; j < mansp.getMatrizScatterPlots().get(i).size(); j++) {
-                if (mansp.getjFramesAmpliar().get(i).get(j) != null) {
-                    ChartPanel chart = (ChartPanel) mansp.getjFramesAmpliar().get(i).get(j).getContentPane();
+                if (mansp.getMatrizScatterPlots().get(i).get(j) != null) {
                     ScatterPlot sp = mansp.getMatrizScatterPlots().get(i).get(j);
-                    anularSeleccions(chart.getChart().getXYPlot());
-                    anularSeleccions(sp.getMeuChartPanel().getChart().getXYPlot());
+                    anularSeleccions(sp.getjFrameAmpliado().getChartPanel().getChart().getXYPlot());
+                    anularSeleccions(sp.getChartPanelCela().getChart().getXYPlot());
                     for (int k = 0; k < indicesInstances.size(); k++) {
-                        Color color = obterCoresHSB(k, indicesInstances.size());
-                        sp.getMeuChartPanel().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
-                        chart.getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
+                        if (mansp.getVisualizados() > indicesInstances.get(k)) {
+                            Color color = obterCoresHSB(k, indicesInstances.size());
+                            sp.getChartPanelCela().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
+                            sp.getjFrameAmpliado().getChartPanel().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
+                        }
                     }
                 }
             }
@@ -338,20 +331,12 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     }
 
     private void pintarMenuVisualizacion() {
-        pecharJFramesScatterPlot();
+        if (mansp != null) {
+            mansp.pecharJFramesChartPanel();
+        }
         ArrayList<Integer> indices = meuModelo.obterIndicesAtributosNumericosNoModelo();
         int numAtributosNumericos = indices.size();
         mansp = new ManexadorScatterPlots(numAtributosNumericos);
-        for (int in = 0; in < numAtributosNumericos; in++) {
-            ArrayList<JFrame> aljf = new ArrayList<>();
-            ArrayList<ScatterPlot> alsp = new ArrayList<>();
-            for (int in2 = 0; in2 < numAtributosNumericos; in2++) {
-                aljf.add(null);
-                alsp.add(null);
-            }
-            mansp.getjFramesAmpliar().add(aljf);
-            mansp.getMatrizScatterPlots().add(alsp);
-        }
         actualizarScatterPlotsVisibles(numAtributosNumericos);
         jPopupMenu1.setVisible(false);
         jPanel4.removeAll();
@@ -552,27 +537,22 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 int indiceI = indices.get(i);
                 int indiceJ = indices.get(j);
                 ScatterPlot spmatrix = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista);
-                spmatrix.getMeuChartPanel().getChart().setTitle((String) null);
                 task.acumulate(40);
-                ScatterPlot spframe = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista);
-                task.acumulate(40);
-                JFrame jFrameScatterPlotAmpliado = new JFrame("'" + meuModelo.obterNomeAtributo(indiceJ) + "' " + bundle.getString("fronteA") + " '" + meuModelo.obterNomeAtributo(indiceI) + "'");
-                jFrameScatterPlotAmpliado.setIconImage(new ImageIcon(getClass().getResource("imaxes/faviconGrafica.png")).getImage());
-                jFrameScatterPlotAmpliado.setContentPane(spframe.getMeuChartPanel());
-                jFrameScatterPlotAmpliado.setSize(600, 400);
-                mansp.getjFramesAmpliar().get(i).set(j, jFrameScatterPlotAmpliado);
                 mansp.getMatrizScatterPlots().get(i).set(j, spmatrix);
-                ChartPanel meuChartPanel = spmatrix.getMeuChartPanel();
-                anularSeleccions(meuChartPanel.getChart().getXYPlot());
-                anularSeleccions(spmatrix.getMeuChartPanel().getChart().getXYPlot());
-                meuChartPanel.setLayout(new GridBagLayout());
+                ChartPanel chartPanelCela = spmatrix.getChartPanelCela();
+                JFrameChartPanel jFrameAmpliado = spmatrix.getjFrameAmpliado();
+                chartPanelCela.getChart().setTitle((String) null);
+                anularSeleccions(chartPanelCela.getChart().getXYPlot());
+                anularSeleccions(jFrameAmpliado.getChartPanel().getChart().getXYPlot());
+                chartPanelCela.setLayout(new GridBagLayout());
                 JButton clickmeButton = new JButton();
+                task.acumulate(40);
                 final int a = i;
                 final int b = j;
                 clickmeButton.setAction(new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        JFrame jfa = mansp.getjFramesAmpliar().get(a).get(b);
+                        JFrameChartPanel jfa = mansp.getMatrizScatterPlots().get(a).get(b).getjFrameAmpliado();
                         if (!jfa.isVisible()) {
                             jfa.setLocation(getX() + 20 * (contarJFramesVisibles() + 1), getY() + 20 * (contarJFramesVisibles() + 1));
                             jfa.setVisible(true);
@@ -587,8 +567,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 c.anchor = GridBagConstraints.SOUTHEAST;
                 c.weightx = 1;
                 c.weighty = 1;
-                meuChartPanel.add(clickmeButton, c);
-                jPanel4.add(meuChartPanel, new TableLayoutConstraints(j - columnasVacias, indices.size() - 1 - i - filasVacias));
+                chartPanelCela.add(clickmeButton, c);
+                jPanel4.add(chartPanelCela, new TableLayoutConstraints(j - columnasVacias, indices.size() - 1 - i - filasVacias));
                 task.acumulate(20);
             }
             return null;
@@ -1242,6 +1222,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             }
         );
         jTabbedPane1.setEnabled(false);
+        jTabbedPane1.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                jPanel8.setVisible(jTabbedPane1.getSelectedIndex() == 2);
+            }
+        });
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -1261,7 +1246,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jLayeredPane1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jLayeredPane1Layout.createSequentialGroup()
@@ -1654,7 +1639,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-
+        mansp.play();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     @SuppressWarnings("unchecked")
@@ -1788,7 +1773,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     }
 
     public void reiniciarAplicacion() {
-        pecharJFramesScatterPlot();
+        mansp.pecharJFramesChartPanel();
         dispose();
         JDataMotion.main(null);
     }
@@ -2352,57 +2337,78 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         jMenuItem14.setEnabled(activar);
     }
 
-    class TarefaPlay extends SwingWorker<Void, Void> {
-
-        private ScatterPlot sp;
-
-        public void setSp(ScatterPlot sp) {
-            this.sp = sp;
-        }
-
-        public TarefaPlay() {
-            super();
-        }
-
-        @Override
-        protected Void doInBackground() throws Exception {
-            XYDatasetModelo d = (XYDatasetModelo) sp.getMeuChartPanel().getChart().getXYPlot().getDataset();
-            int i, numI = d.getSeriesCount();
-            for (i = 0; i < numI; i++) {
-                while (!d.todoVisualizado()) {
-                    d.visualizarItems(1);
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-            return null;
-        }
-
-    }
-
     class ManexadorScatterPlots {
 
-        public ManexadorScatterPlots() {
+        private void pecharJFramesChartPanel() {
+            matrizScatterPlots.stream().filter((alsp) -> (alsp != null)).forEach((alsp) -> {
+                alsp.stream().filter((sp) -> (sp != null)).forEach((sp) -> {
+                    sp.getjFrameAmpliado().dispose();
+                });
+            });
+        }
+
+        class TarefaPlay extends SwingWorker<Void, Void> {
+
+            private final ArrayList<ArrayList<ScatterPlot>> alalsp;
+
+            public TarefaPlay(ArrayList<ArrayList<ScatterPlot>> alsp) {
+                super();
+                this.alalsp = alsp;
+            }
+
+            @Override
+            protected Void doInBackground() throws Exception {
+                XYDatasetModelo d = (XYDatasetModelo) alalsp.get(0).get(0).getChartPanelCela().getChart().getXYPlot().getDataset();
+                int i, numI = d.getSeriesCount();
+                for (i = 0; i < numI; i++) {
+                    while (!d.todoVisualizado()) {
+                        synchronized (this) {
+                            alalsp.stream().forEach((alsp) -> {
+                                alsp.stream().forEach((sp) -> {
+                                    ((XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
+                                });
+                            });
+                            visualizados++;
+                        }
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                return null;
+            }
+
+        }
+
+        public void play() {
+            cachedPool.submit(tarefaPlay);
         }
 
         private TarefaPlay tarefaPlay;
         private transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
-        private transient ArrayList<ArrayList<JFrame>> jFramesAmpliar;
+        private int visualizados;
 
-        private ManexadorScatterPlots(int numAtributosNumericos) {
+        public int getVisualizados() {
+            return visualizados;
+        }
+
+        public ManexadorScatterPlots(int numAtributosNumericos) {
             matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
-            jFramesAmpliar = new ArrayList<>(numAtributosNumericos);
+            for (int in = 0; in < numAtributosNumericos; in++) {
+                ArrayList<ScatterPlot> alsp = new ArrayList<>();
+                for (int in2 = 0; in2 < numAtributosNumericos; in2++) {
+                    alsp.add(null);
+                }
+                matrizScatterPlots.add(alsp);
+            }
+            tarefaPlay = new TarefaPlay(matrizScatterPlots);
+            visualizados = 0;
         }
 
         public ArrayList<ArrayList<ScatterPlot>> getMatrizScatterPlots() {
             return matrizScatterPlots;
-        }
-
-        public ArrayList<ArrayList<JFrame>> getjFramesAmpliar() {
-            return jFramesAmpliar;
         }
     }
 
@@ -2474,17 +2480,39 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         }
     }
 
-    public final class ScatterPlot implements Serializable {
+    public class JFrameChartPanel extends JFrame {
+
+        private final ChartPanel chartPanel;
+
+        public ChartPanel getChartPanel() {
+            return chartPanel;
+        }
+
+        public JFrameChartPanel(ChartPanel chartPanel, int indiceI, int indiceJ) {
+            super("'" + meuModelo.obterNomeAtributo(indiceJ) + "' " + bundle.getString("fronteA") + " '" + meuModelo.obterNomeAtributo(indiceI) + "'");
+            this.chartPanel = chartPanel;
+            setIconImage(new ImageIcon(getClass().getResource("imaxes/faviconGrafica.png")).getImage());
+            setContentPane(chartPanel);
+            setSize(600, 400);
+        }
+    }
+
+    public class ScatterPlot implements Serializable {
 
         private InstancesComparable instances;
         private final int indiceAtributoX;
         private final int indiceAtributoY;
         private final int indiceAtributoColor;
         private transient Vista minaVista;
-        private ChartPanel meuChartPanel;
+        private ChartPanel chartPanelCela;
+        private final JFrameChartPanel jFrameAmpliado;
 
-        public void setMeuChartPanel(ChartPanel meuChartPanel) {
-            this.meuChartPanel = meuChartPanel;
+        public void setChartPanelCela(ChartPanel meuChartPanel) {
+            this.chartPanelCela = meuChartPanel;
+        }
+
+        public JFrameChartPanel getjFrameAmpliado() {
+            return jFrameAmpliado;
         }
 
         public int getIndiceAtributoColor() {
@@ -2520,6 +2548,14 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             ChartFactory.setChartTheme(StandardChartTheme.createDarknessTheme());
             ChartUtilities.applyCurrentTheme(jfreechart);
             ChartPanel chartpanel = new ChartPanel(jfreechart);
+            ChartPanel chartPanelAmpliado = new ChartPanel(jfreechart);
+            configurarChartPanel(chartpanel);
+            configurarChartPanel(chartPanelAmpliado);
+            this.chartPanelCela = chartpanel;
+            this.jFrameAmpliado = new JFrameChartPanel(chartPanelAmpliado, indiceAtributoX, indiceAtributoY);
+        }
+
+        private void configurarChartPanel(ChartPanel chartpanel) {
             chartpanel.setMouseWheelEnabled(true);
             chartpanel.setPreferredSize(new Dimension(340, 210));
             chartpanel.addChartMouseListener(new ChartMouseListener() {
@@ -2527,8 +2563,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 public void chartMouseClicked(final ChartMouseEvent event) {
                     java.awt.EventQueue.invokeLater(() -> {
                         if (SwingUtilities.isLeftMouseButton(event.getTrigger()) && event.getTrigger().getClickCount() == 1) {
-                            double domainCrosshairValue = meuChartPanel.getChart().getXYPlot().getDomainCrosshairValue();
-                            double rangeCrosshairValue = meuChartPanel.getChart().getXYPlot().getRangeCrosshairValue();
+                            double domainCrosshairValue = chartPanelCela.getChart().getXYPlot().getDomainCrosshairValue();
+                            double rangeCrosshairValue = chartPanelCela.getChart().getXYPlot().getRangeCrosshairValue();
                             ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
                             Enumeration e = instances.enumerateInstances();
                             for (int i = 0; e.hasMoreElements(); i++) {
@@ -2541,22 +2577,24 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                                 minaVista.getjPopupMenu1().removeAll();
                                 minaVista.getjPopupMenu1().setLayout(new BoxLayout(minaVista.getjPopupMenu1(), BoxLayout.X_AXIS));
                                 for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
-                                    if (i != 0) {
-                                        minaVista.getjPopupMenu1().add(new JSeparator(SwingConstants.VERTICAL));
+                                    if (mansp.getVisualizados() > indicesInstancesPuntos.get(i)) {
+                                        if (i != 0) {
+                                            minaVista.getjPopupMenu1().add(new JSeparator(SwingConstants.VERTICAL));
+                                        }
+                                        int p = indicesInstancesPuntos.get(i);
+                                        JPanel pa = new JPanel();
+                                        pa.setBorder(new LineBorder(obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
+                                        pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
+                                        Enumeration en = instances.enumerateAttributes();
+                                        while (en.hasMoreElements()) {
+                                            Attribute a = (Attribute) en.nextElement();
+                                            boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
+                                            pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
+                                        }
+                                        minaVista.getjPopupMenu1().add(pa);
                                     }
-                                    int p = indicesInstancesPuntos.get(i);
-                                    JPanel pa = new JPanel();
-                                    pa.setBorder(new LineBorder(obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
-                                    pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
-                                    Enumeration en = instances.enumerateAttributes();
-                                    while (en.hasMoreElements()) {
-                                        Attribute a = (Attribute) en.nextElement();
-                                        boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
-                                        pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
-                                    }
-                                    minaVista.getjPopupMenu1().add(pa);
                                 }
-                                minaVista.getjPopupMenu1().show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
+                                minaVista.getjPopupMenu1().show(event.getTrigger().getComponent(), event.getTrigger().getX() + 1, event.getTrigger().getY() + 1);
                                 minaVista.procesarSeleccion(indicesInstancesPuntos);
                             }
                         }
@@ -2567,7 +2605,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 public void chartMouseMoved(ChartMouseEvent event) {
                 }
             });
-            this.meuChartPanel = chartpanel;
         }
 
         private JFreeChart createChart(XYDataset xydataset) {
@@ -2594,8 +2631,8 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             return indiceAtributoY;
         }
 
-        public ChartPanel getMeuChartPanel() {
-            return meuChartPanel;
+        public ChartPanel getChartPanelCela() {
+            return chartPanelCela;
         }
     }
 
