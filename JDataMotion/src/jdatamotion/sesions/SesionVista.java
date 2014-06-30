@@ -23,6 +23,8 @@
  */
 package jdatamotion.sesions;
 
+import jdatamotion.ManexadorScatterPlots;
+
 /**
  *
  * @author usuariosy
@@ -30,13 +32,22 @@ package jdatamotion.sesions;
 public class SesionVista extends Sesion {
 
     private boolean scatterPlotsVisibles[][];
+    private ManexadorScatterPlots manexadorScatterPlots;
+
+    public void setManexadorScatterPlots(ManexadorScatterPlots manexadorScatterPlots) {
+        this.manexadorScatterPlots = manexadorScatterPlots;
+    }
 
     public void setScatterPlotsVisibles(boolean[][] scatterPlotsVisibles) {
         this.scatterPlotsVisibles = scatterPlotsVisibles;
     }
-    
+
     public boolean[][] getScatterPlotsVisibles() {
         return scatterPlotsVisibles;
+    }
+
+    public ManexadorScatterPlots getManexadorScatterPlots() {
+        return manexadorScatterPlots;
     }
 
     public SesionVista() {
