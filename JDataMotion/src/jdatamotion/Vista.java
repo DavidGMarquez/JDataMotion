@@ -338,7 +338,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         }
         ArrayList<Integer> indices = meuModelo.obterIndicesAtributosNumericosNoModelo();
         int numAtributosNumericos = indices.size();
-        mansp = new ManexadorScatterPlots(numAtributosNumericos, scatterPlotsVisibles);
+        mansp = new ManexadorScatterPlots(numAtributosNumericos, scatterPlotsVisibles, jSlider1);
         actualizarScatterPlotsVisibles(numAtributosNumericos);
         jPopupMenu1.setVisible(false);
         jPanel4.removeAll();
@@ -740,6 +740,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         jPanel3 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jButton8 = new javax.swing.JButton();
+        jSlider1 = new javax.swing.JSlider();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -1044,12 +1045,17 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             }
         });
 
+        jSlider1.setValue(0);
+        jSlider1.setName("jSlider1"); // NOI18N
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(273, Short.MAX_VALUE)
+                .addContainerGap(67, Short.MAX_VALUE)
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1057,7 +1063,9 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(4, 4, 4)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1639,6 +1647,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         mansp.play();
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/pause.png")));
     }//GEN-LAST:event_jButton8ActionPerformed
 
     @SuppressWarnings("unchecked")
@@ -1772,7 +1781,9 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     }
 
     public void reiniciarAplicacion() {
-        mansp.pecharJFramesChartPanel();
+        if (mansp != null) {
+            mansp.pecharJFramesChartPanel();
+        }
         dispose();
         JDataMotion.main(null);
     }
@@ -2620,7 +2631,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     class XYDatasetModelo extends XYSeriesCollection {
 
         private static final long serialVersionUID = 1L;
-        private final int seriesCount;
         private final int itemCount;
         private Number domainMin;
         private Number domainMax;
@@ -2696,14 +2706,15 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                     yv.get((int) atributos.instance(l).value(atributoColor)).add(atributos.instance(l).value(atributoY));
                 }
                 int maxInstanciasNominal = 0;
+                int itemCountTemp = 0;
                 for (int i = 0; i < numeroValoresAtributoNominal; i++) {
                     int size = xv.get(i).size();
+                    itemCountTemp += size;
                     if (size > maxInstanciasNominal) {
                         maxInstanciasNominal = size;
                     }
                 }
-                seriesCount = numeroValoresAtributoNominal;
-                itemCount = maxInstanciasNominal;
+                itemCount = itemCountTemp;
                 xValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
                 yValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
                 for (int i = 0; i < numeroValoresAtributoNominal; i++) {
@@ -2729,7 +2740,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                     addSeries(s);
                 }
             } else {
-                seriesCount = 1;
                 itemCount = numeroInstancias;
                 xValues = new Double[1][numeroInstancias];
                 yValues = new Double[1][numeroInstancias];
@@ -2914,6 +2924,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     javax.swing.JPopupMenu.Separator jSeparator2;
     javax.swing.JPopupMenu.Separator jSeparator3;
     javax.swing.JPopupMenu.Separator jSeparator4;
+    javax.swing.JSlider jSlider1;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JMenu menuTipo;
     javax.swing.JPanel panelDetallarAtributo;

@@ -28,8 +28,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JSlider;
 import javax.swing.SwingWorker;
 import jdatamotion.Vista.ScatterPlot;
+import jdatamotion.Vista.XYDatasetModelo;
 
 /**
  *
@@ -37,6 +39,7 @@ import jdatamotion.Vista.ScatterPlot;
  */
 public class ManexadorScatterPlots {
 
+    private final JSlider slider;
     private final ExecutorService cachedPool;
 
     public void pecharJFramesChartPanel() {
@@ -52,30 +55,33 @@ public class ManexadorScatterPlots {
         private final ArrayList<ArrayList<ScatterPlot>> alalsp;
         private final boolean[][] scatterPlotsVisibles;
 
-        public TarefaPlay(ArrayList<ArrayList<Vista.ScatterPlot>> alsp,boolean[][] scatterPlotsVisibles) {
+        public TarefaPlay(ArrayList<ArrayList<ScatterPlot>> alsp, boolean[][] scatterPlotsVisibles) {
             super();
             this.alalsp = alsp;
-            this.scatterPlotsVisibles=scatterPlotsVisibles;
+            this.scatterPlotsVisibles = scatterPlotsVisibles;
         }
 
         @Override
         protected Void doInBackground() throws Exception {
-            Vista.XYDatasetModelo d = (Vista.XYDatasetModelo) alalsp.get(0).get(0).getChartPanelCela().getChart().getXYPlot().getDataset();
-            int i, numI = d.getSeriesCount();
-            for (i = 0; i < numI; i++) {
+            XYDatasetModelo d = (XYDatasetModelo) alalsp.get(0).get(0).getChartPanelCela().getChart().getXYPlot().getDataset();
+            int numI = d.getSeriesCount();
+            double progress = 0.0;
+            for (int i = 0; i < numI; i++) {
                 while (!d.todoVisualizado()) {
                     synchronized (this) {
                         for (int j = alalsp.size() - 1; j >= 0; j--) {
                             for (int k = 0; k < alalsp.get(j).size(); k++) {
                                 if (scatterPlotsVisibles[j][k]) {
-                                    ((Vista.XYDatasetModelo) alalsp.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
+                                    ((XYDatasetModelo) alalsp.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
                                 }
                             }
                         }
                         visualizados++;
+                        progress += 100.0 / d.getItemCount();
+                        slider.setValue((int) progress);
                     }
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -91,28 +97,29 @@ public class ManexadorScatterPlots {
     }
 
     private final TarefaPlay tarefaPlay;
-    private final transient ArrayList<ArrayList<Vista.ScatterPlot>> matrizScatterPlots;
+    private final transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
     private int visualizados;
 
     public int getVisualizados() {
         return visualizados;
     }
 
-    public ManexadorScatterPlots(int numAtributosNumericos,boolean[][] scatterPlotsVisibles) {
+    public ManexadorScatterPlots(int numAtributosNumericos, boolean[][] scatterPlotsVisibles, JSlider slider) {
         cachedPool = Executors.newCachedThreadPool();
         matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
         for (int in = 0; in < numAtributosNumericos; in++) {
-            ArrayList<Vista.ScatterPlot> alsp = new ArrayList<>();
+            ArrayList<ScatterPlot> alsp = new ArrayList<>();
             for (int in2 = 0; in2 < numAtributosNumericos; in2++) {
                 alsp.add(null);
             }
             matrizScatterPlots.add(alsp);
         }
-        tarefaPlay = new TarefaPlay(matrizScatterPlots,scatterPlotsVisibles);
+        tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
         visualizados = 0;
+        this.slider = slider;
     }
 
-    public ArrayList<ArrayList<Vista.ScatterPlot>> getMatrizScatterPlots() {
+    public ArrayList<ArrayList<ScatterPlot>> getMatrizScatterPlots() {
         return matrizScatterPlots;
     }
 }
