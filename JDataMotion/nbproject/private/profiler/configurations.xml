@@ -142,12 +142,12 @@
 <entry key="3_profiler.settings.instrumentation.filter.selectedprofiler.simple.filter.type">0</entry>
 <entry key="1_profiler.settings.instrumentation.root.methods.size">0</entry>
 <entry key="1_profiler.settings.instr.scheme">1</entry>
-<entry key="0_profiler.settings.threads.monitoring.enabled">true</entry>
 <entry key="1_profiler.settings.lockcontention.monitoring.enabled">false</entry>
 <entry key="0_profiler.settigns.ispreset">true</entry>
+<entry key="0_profiler.settings.threads.monitoring.enabled">true</entry>
 <entry key="0_profiler.settings.instr.scheme">1</entry>
-<entry key="2_profiler.settings.override.jvm.args"/>
 <entry key="1_profiler.settings.settings.name">Analyze Performance</entry>
+<entry key="2_profiler.settings.override.jvm.args"/>
 <entry key="2_profiler.settings.cpu.profiling.type">0</entry>
 <entry key="0_profiler.settings.obj.alloc.stack.sampling.interval">10</entry>
 </properties>

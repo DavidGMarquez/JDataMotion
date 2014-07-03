@@ -23,11 +23,9 @@
  */
 package jdatamotion;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JSlider;
 import javax.swing.SwingWorker;
 import jdatamotion.Vista.ScatterPlot;
@@ -37,10 +35,22 @@ import jdatamotion.Vista.XYDatasetModelo;
  *
  * @author usuario
  */
-public class ManexadorScatterPlots {
+public final class ManexadorScatterPlots {
 
     private final JSlider slider;
-    private final ExecutorService cachedPool;
+    public static final int PLAY = 0;
+    public static final int PAUSE = 1;
+    private final boolean[][] scatterPlotsVisibles;
+    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
+    private final PropertyChangeListener propertyChangeListener;
+
+    public int getEstado() {
+        if (tarefaPlay == null) {
+            return PAUSE;
+        } else {
+            return tarefaPlay.getEstado();
+        }
+    }
 
     public void pecharJFramesChartPanel() {
         matrizScatterPlots.stream().filter((alsp) -> (alsp != null)).forEach((alsp) -> {
@@ -50,24 +60,30 @@ public class ManexadorScatterPlots {
         });
     }
 
-    class TarefaPlay extends SwingWorker<Void, Void> {
+    final class TarefaPlay extends SwingWorker<Void, Void> {
 
         private final ArrayList<ArrayList<ScatterPlot>> alalsp;
         private final boolean[][] scatterPlotsVisibles;
+        private int estado;
 
         public TarefaPlay(ArrayList<ArrayList<ScatterPlot>> alsp, boolean[][] scatterPlotsVisibles) {
             super();
             this.alalsp = alsp;
             this.scatterPlotsVisibles = scatterPlotsVisibles;
+            setEstado(PAUSE);
+        }
+
+        public void setEstado(int estado) {
+            firePropertyChange("estadoReproductor", this.estado, estado);
+            this.estado = estado;
         }
 
         @Override
         protected Void doInBackground() throws Exception {
             XYDatasetModelo d = (XYDatasetModelo) alalsp.get(0).get(0).getChartPanelCela().getChart().getXYPlot().getDataset();
             int numI = d.getSeriesCount();
-            double progress = 0.0;
             for (int i = 0; i < numI; i++) {
-                while (!d.todoVisualizado()) {
+                while (!d.todoVisualizado() && estado == PLAY) {
                     synchronized (this) {
                         for (int j = alalsp.size() - 1; j >= 0; j--) {
                             for (int k = 0; k < alalsp.get(j).size(); k++) {
@@ -77,26 +93,43 @@ public class ManexadorScatterPlots {
                             }
                         }
                         visualizados++;
-                        progress += 100.0 / d.getItemCount();
-                        slider.setValue((int) progress);
+                        slider.setValue((int) 100.0 * visualizados / d.getItemCount());
                     }
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
             return null;
         }
 
+        private void pause() {
+            setEstado(PAUSE);
+        }
+
+        public int getEstado() {
+            return estado;
+        }
+
+        public void play() {
+            setEstado(PLAY);
+            execute();
+        }
+
+    }
+
+    public void pause() {
+        tarefaPlay.pause();
     }
 
     public void play() {
-        cachedPool.submit(tarefaPlay);
+        this.tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
+        this.tarefaPlay.addPropertyChangeListener(propertyChangeListener);
+        this.tarefaPlay.play();
     }
 
-    private final TarefaPlay tarefaPlay;
+    private TarefaPlay tarefaPlay;
     private final transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
     private int visualizados;
 
@@ -104,18 +137,19 @@ public class ManexadorScatterPlots {
         return visualizados;
     }
 
-    public ManexadorScatterPlots(int numAtributosNumericos, boolean[][] scatterPlotsVisibles, JSlider slider) {
-        cachedPool = Executors.newCachedThreadPool();
-        matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
+    public ManexadorScatterPlots(int numAtributosNumericos, boolean[][] scatterPlotsVisibles, JSlider slider, PropertyChangeListener propertyChangeListener) {
+        this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
+        this.propertyChangeListener = propertyChangeListener;
+        this.scatterPlotsVisibles = scatterPlotsVisibles;
         for (int in = 0; in < numAtributosNumericos; in++) {
             ArrayList<ScatterPlot> alsp = new ArrayList<>();
             for (int in2 = 0; in2 < numAtributosNumericos; in2++) {
                 alsp.add(null);
             }
-            matrizScatterPlots.add(alsp);
+            this.matrizScatterPlots.add(alsp);
         }
-        tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
-        visualizados = 0;
+        this.tarefaPlay = null;
+        this.visualizados = 0;
         this.slider = slider;
     }
 

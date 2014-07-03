@@ -119,7 +119,7 @@ import weka.core.Instance;
  *
  * @author usuario
  */
-public class Vista extends JFrame implements Observer, Sesionizable {
+public class Vista extends JFrame implements Observer, Sesionizable, PropertyChangeListener {
 
     public static final int ERROR_MESSAGE = JOptionPane.ERROR_MESSAGE;
     public static final int WARNING_MESSAGE = JOptionPane.WARNING_MESSAGE;
@@ -147,6 +147,28 @@ public class Vista extends JFrame implements Observer, Sesionizable {
     public final void reset() {
         this.ultimaColumnaModeloSeleccionada = -1;
         this.scatterPlotsVisibles = new boolean[0][0];
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("estadoReproductor")) {
+            int newValue = (int) evt.getNewValue();
+            jButton8.removeActionListener(jButton8.getActionListeners()[0]);
+            switch (newValue) {
+                case ManexadorScatterPlots.PLAY:
+                    jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/pause.png")));
+                    jButton8.addActionListener((ActionEvent evt1) -> {
+                        mansp.pause();
+                    });
+                    break;
+                case ManexadorScatterPlots.PAUSE:
+                    jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/play.png")));
+                    jButton8.addActionListener((ActionEvent evt1) -> {
+                        mansp.play();
+                    });
+                    break;
+            }
+        }
     }
 
     public Vista() {
@@ -338,7 +360,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         }
         ArrayList<Integer> indices = meuModelo.obterIndicesAtributosNumericosNoModelo();
         int numAtributosNumericos = indices.size();
-        mansp = new ManexadorScatterPlots(numAtributosNumericos, scatterPlotsVisibles, jSlider1);
+        mansp = new ManexadorScatterPlots(numAtributosNumericos, scatterPlotsVisibles, jSlider1, this);
         actualizarScatterPlotsVisibles(numAtributosNumericos);
         jPopupMenu1.setVisible(false);
         jPanel4.removeAll();
@@ -543,7 +565,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 mansp.getMatrizScatterPlots().get(i).set(j, spmatrix);
                 ChartPanel chartPanelCela = spmatrix.getChartPanelCela();
                 JFrameChartPanel jFrameAmpliado = spmatrix.getjFrameAmpliado();
-                chartPanelCela.getChart().setTitle((String) null);
                 anularSeleccions(chartPanelCela.getChart().getXYPlot());
                 anularSeleccions(jFrameAmpliado.getChartPanel().getChart().getXYPlot());
                 chartPanelCela.setLayout(new GridBagLayout());
@@ -965,7 +986,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                         .addComponent(jScrollPane9)
                         .addGap(17, 17, 17))
                     .addGroup(jDialog2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1)
                         .addGap(6, 6, 6)))
                 .addGroup(jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
@@ -1237,7 +1258,11 @@ public class Vista extends JFrame implements Observer, Sesionizable {
         jTabbedPane1.setEnabled(false);
         jTabbedPane1.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                jPanel8.setVisible(jTabbedPane1.getSelectedIndex() == 2);
+                SwingUtilities.invokeLater(new Runnable () {
+                    public void run() {
+                        jPanel8.setVisible(jTabbedPane1.getSelectedIndex() == 2);
+                    }
+                });
             }
         });
 
@@ -1647,7 +1672,6 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         mansp.play();
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/pause.png")));
     }//GEN-LAST:event_jButton8ActionPerformed
 
     @SuppressWarnings("unchecked")
@@ -2476,16 +2500,21 @@ public class Vista extends JFrame implements Observer, Sesionizable {
             this.minaVista = vista;
             this.indiceAtributoY = indiceAtributoY;
             this.instances = instances;
-            JFreeChart jfreechart = createChart(new XYDatasetModelo(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor));
+            XYDatasetModelo xydm = new XYDatasetModelo(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor);
+            JFreeChart jfreechart1 = createChart(xydm);
+            JFreeChart jfreechart2 = createChart(xydm);
             if (indiceAtributoColor < 0) {
-                jfreechart.removeLegend();
+                jfreechart1.removeLegend();
+                jfreechart2.removeLegend();
             }
             ChartFactory.setChartTheme(StandardChartTheme.createDarknessTheme());
-            ChartUtilities.applyCurrentTheme(jfreechart);
-            ChartPanel chartpanel = new ChartPanel(jfreechart);
-            task.acumulate(40);
-            ChartPanel chartPanelAmpliado = new ChartPanel(jfreechart);
-            task.acumulate(40);
+            ChartUtilities.applyCurrentTheme(jfreechart1);
+            ChartUtilities.applyCurrentTheme(jfreechart2);
+            ChartPanel chartpanel = new ChartPanel(jfreechart1);
+            task.acumulate(35);
+            ChartPanel chartPanelAmpliado = new ChartPanel(jfreechart2);
+            task.acumulate(35);
+            chartpanel.getChart().setTitle((String) null);
             configurarChartPanel(chartpanel);
             configurarChartPanel(chartPanelAmpliado);
             this.chartPanelCela = chartpanel;
@@ -2500,8 +2529,9 @@ public class Vista extends JFrame implements Observer, Sesionizable {
                 public void chartMouseClicked(final ChartMouseEvent event) {
                     java.awt.EventQueue.invokeLater(() -> {
                         if (SwingUtilities.isLeftMouseButton(event.getTrigger()) && event.getTrigger().getClickCount() == 1) {
-                            double domainCrosshairValue = chartPanelCela.getChart().getXYPlot().getDomainCrosshairValue();
-                            double rangeCrosshairValue = chartPanelCela.getChart().getXYPlot().getRangeCrosshairValue();
+                            XYPlot xyp = event.getChart().getXYPlot();
+                            double domainCrosshairValue = xyp.getDomainCrosshairValue();
+                            double rangeCrosshairValue = xyp.getRangeCrosshairValue();
                             ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
                             Enumeration e = instances.enumerateInstances();
                             for (int i = 0; e.hasMoreElements(); i++) {
@@ -2546,7 +2576,7 @@ public class Vista extends JFrame implements Observer, Sesionizable {
 
         private JFreeChart createChart(XYDataset xydataset) {
             JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + minaVista.getBundle().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, true, false);
-            task.acumulate(40);
+            task.acumulate(15);
             XYPlot xyplot = (XYPlot) jfreechart.getPlot();
             xyplot.setDomainCrosshairVisible(true);
             xyplot.setDomainCrosshairLockedOnData(true);
