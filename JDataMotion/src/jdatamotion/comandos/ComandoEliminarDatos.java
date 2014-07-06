@@ -23,7 +23,7 @@
  */
 package jdatamotion.comandos;
 
-import jdatamotion.InstancesComparable;
+import jdatamotion.Modelo.InstancesComparable;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
 
@@ -48,7 +48,7 @@ public class ComandoEliminarDatos extends ComandoDesfacible {
 
     @Override
     public void Executar() throws Exception {
-        this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getAtributos());
+        this.modeloAntigo = ((Modelo) getObxectivo()).new InstancesComparable(((Modelo) getObxectivo()).getAtributos());
         ((Modelo) getObxectivo()).eliminarDatos(indicesDatos);
     }
 }

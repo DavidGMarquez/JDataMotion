@@ -28,9 +28,11 @@ import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jdatamotion.excepcions.ExcepcionArquivoModificado;
+import jdatamotion.excepcions.ExcepcionLeve;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
@@ -54,8 +56,8 @@ public class Controlador implements Sesionizable {
     public static final int MUDAR_TIPO = 13;
     public static final int MUDAR_NOME_RELACION = 14;
     public static final boolean debug = true;
-    private Modelo meuModelo;
-    private Vista minaVista;
+    private transient Modelo meuModelo;
+    private transient Vista minaVista;
     private XestorComandos xestorComandos;
 
     public Controlador() {
@@ -434,4 +436,100 @@ public class Controlador implements Sesionizable {
             }
         }
     }
+
+    public class XestorComandos implements Serializable {
+
+        private final Stack<ComandoDesfacible> pilaDesfacer;
+        private final Stack<ComandoDesfacible> pilaRefacer;
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof XestorComandos == false) {
+                return false;
+            }
+            XestorComandos m = (XestorComandos) o;
+            return m.getPilaDesfacer().equals(getPilaDesfacer()) && m.getPilaRefacer().equals(getPilaRefacer());
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 47 * hash + Objects.hashCode(this.pilaDesfacer);
+            hash = 47 * hash + Objects.hashCode(this.pilaRefacer);
+            return hash;
+        }
+
+        @Override
+        public String toString() {
+            return ReflectionToStringBuilder.toString(this);
+        }
+
+        public XestorComandos() {
+            pilaDesfacer = new Stack<>();
+            pilaRefacer = new Stack<>();
+        }
+
+        public Stack<ComandoDesfacible> getPilaDesfacer() {
+            return pilaDesfacer;
+        }
+
+        public Stack<ComandoDesfacible> getPilaRefacer() {
+            return pilaRefacer;
+        }
+
+        public void ExecutarComando(Comando cmd) throws Exception {
+            ExcepcionLeve excepcionLeve = null;
+            try {
+                cmd.Executar();
+            } catch (ExcepcionLeve e) {
+                excepcionLeve = e;
+            }
+            if (cmd instanceof ComandoDesfacible) {
+                pilaDesfacer.push((ComandoDesfacible) cmd);
+                vaciarPilaRefacer();
+            }
+            if (excepcionLeve != null) {
+                throw excepcionLeve;
+            }
+        }
+
+        public void Reverter() throws Exception {
+            for (int i = pilaDesfacer.size() - 1; i >= 0; i--) {
+                pilaDesfacer.get(i).Desfacer();
+            }
+        }
+
+        public boolean pilaDesfacerVacia() {
+            return pilaDesfacer.empty();
+        }
+
+        public void vaciarPilaRefacer() {
+            pilaRefacer.removeAllElements();
+        }
+
+        public void vaciarPilaDesfacer() {
+            pilaDesfacer.removeAllElements();
+        }
+
+        public boolean pilaRefacerVacia() {
+            return pilaRefacer.empty();
+        }
+
+        public void Desfacer() throws Exception {
+            if (!pilaDesfacer.empty()) {
+                ComandoDesfacible cmd = (ComandoDesfacible) pilaDesfacer.peek();
+                cmd.Desfacer();
+                pilaRefacer.push(pilaDesfacer.pop());
+            }
+        }
+
+        public void Refacer() throws Exception {
+            if (!pilaRefacer.empty()) {
+                ComandoDesfacible cmd = (ComandoDesfacible) pilaRefacer.peek();
+                cmd.Executar();
+                pilaDesfacer.push(pilaRefacer.pop());
+            }
+        }
+    }
+
 }

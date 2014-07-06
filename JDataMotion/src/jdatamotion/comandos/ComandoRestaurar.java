@@ -24,7 +24,8 @@
 package jdatamotion.comandos;
 
 import jdatamotion.Controlador;
-import jdatamotion.InstancesComparable;
+import jdatamotion.Modelo;
+import jdatamotion.Modelo.InstancesComparable;
 import jdatamotion.Vista;
 
 /**
@@ -46,7 +47,7 @@ public class ComandoRestaurar extends ComandoDesfacible {
 
     @Override
     public void Executar() throws Exception {
-        this.datosAntigos = new InstancesComparable(((Controlador) getObxectivo()).getMeuModelo().getAtributos());
+        this.datosAntigos = ((Modelo) getObxectivo()).new InstancesComparable(((Controlador) getObxectivo()).getMeuModelo().getAtributos());
         ((Controlador) getObxectivo()).getMeuModelo().restaurar();
     }
 }

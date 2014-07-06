@@ -23,13 +23,55 @@
  */
 package jdatamotion;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Stroke;
+import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import jdatamotion.Vista.ScatterPlot;
-import jdatamotion.Vista.XYDatasetModelo;
+import javax.swing.border.LineBorder;
+import jdatamotion.Modelo.InstancesComparable;
+import jdatamotion.Vista.TarefaProgreso;
+import static jdatamotion.Vista.bundle;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
+import org.jfree.chart.annotations.XYAnnotation;
+import org.jfree.chart.annotations.XYDrawableAnnotation;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.Range;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.Drawable;
+import weka.core.Attribute;
+import weka.core.Instance;
 
 /**
  *
@@ -37,12 +79,28 @@ import jdatamotion.Vista.XYDatasetModelo;
  */
 public final class ManexadorScatterPlots {
 
-    private final JSlider slider;
     public static final int PLAY = 0;
     public static final int PAUSE = 1;
+    private final JSlider slider;
     private final boolean[][] scatterPlotsVisibles;
-    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
-    private final PropertyChangeListener propertyChangeListener;
+    private final ArrayList<PropertyChangeListener> propertyChangeListeners;
+    private TarefaPlay tarefaPlay;
+    private final transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
+    private int visualizados;
+    private final int numSeries;
+    private final int numItems;
+
+    public int getNumSeries() {
+        return numSeries;
+    }
+
+    public int getNumItems() {
+        return numItems;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+        this.propertyChangeListeners.add(propertyChangeListener);
+    }
 
     public int getEstado() {
         if (tarefaPlay == null) {
@@ -60,15 +118,17 @@ public final class ManexadorScatterPlots {
         });
     }
 
+    public void goTo(int value) {
+        System.out.println(value);
+    }
+
     final class TarefaPlay extends SwingWorker<Void, Void> {
 
-        private final ArrayList<ArrayList<ScatterPlot>> alalsp;
         private final boolean[][] scatterPlotsVisibles;
         private int estado;
 
         public TarefaPlay(ArrayList<ArrayList<ScatterPlot>> alsp, boolean[][] scatterPlotsVisibles) {
             super();
-            this.alalsp = alsp;
             this.scatterPlotsVisibles = scatterPlotsVisibles;
             setEstado(PAUSE);
         }
@@ -78,33 +138,41 @@ public final class ManexadorScatterPlots {
             this.estado = estado;
         }
 
+        public boolean todoVisualizado() {
+            return visualizados >= numItems;
+        }
+
         @Override
         protected Void doInBackground() throws Exception {
-            XYDatasetModelo d = (XYDatasetModelo) alalsp.get(0).get(0).getChartPanelCela().getChart().getXYPlot().getDataset();
-            int numI = d.getSeriesCount();
-            for (int i = 0; i < numI; i++) {
-                while (!d.todoVisualizado() && estado == PLAY) {
-                    synchronized (this) {
-                        for (int j = alalsp.size() - 1; j >= 0; j--) {
-                            for (int k = 0; k < alalsp.get(j).size(); k++) {
-                                if (scatterPlotsVisibles[j][k]) {
-                                    ((XYDatasetModelo) alalsp.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
+            try {
+                for (int i = 0; i < numItems; i++) {
+                    while (!todoVisualizado() && estado == PLAY) {
+                        synchronized (this) {
+                            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                                    if (scatterPlotsVisibles[j][k]) {
+                                        ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
+                                    }
                                 }
                             }
+                            visualizados++;
+                            slider.setValue((int) 100.0 * visualizados / numItems);
                         }
-                        visualizados++;
-                        slider.setValue((int) 100.0 * visualizados / d.getItemCount());
-                    }
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ex) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {
+                        }
                     }
                 }
+                setEstado(PAUSE);
+            } catch (Exception e) {
+                Logger.getLogger(ManexadorScatterPlots.class.getName()).log(Level.SEVERE, null, e);
+                throw e;
             }
             return null;
         }
 
-        private void pause() {
+        public void pause() {
             setEstado(PAUSE);
         }
 
@@ -124,22 +192,25 @@ public final class ManexadorScatterPlots {
     }
 
     public void play() {
-        this.tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
-        this.tarefaPlay.addPropertyChangeListener(propertyChangeListener);
-        this.tarefaPlay.play();
+        tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
+        propertyChangeListeners.stream().forEach((p) -> {
+            tarefaPlay.addPropertyChangeListener(p);
+        });
+        tarefaPlay.play();
     }
-
-    private TarefaPlay tarefaPlay;
-    private final transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
-    private int visualizados;
 
     public int getVisualizados() {
         return visualizados;
     }
 
-    public ManexadorScatterPlots(int numAtributosNumericos, boolean[][] scatterPlotsVisibles, JSlider slider, PropertyChangeListener propertyChangeListener) {
+    public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, int numAtributosNumericos, boolean[][] scatterPlotsVisibles, JSlider slider) {
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
-        this.propertyChangeListener = propertyChangeListener;
+        this.numItems = instances.numInstances();
+        if (atributoColor == -1) {
+            this.numSeries = 1;
+        } else {
+            this.numSeries = instances.attribute(atributoColor).numValues();
+        }
         this.scatterPlotsVisibles = scatterPlotsVisibles;
         for (int in = 0; in < numAtributosNumericos; in++) {
             ArrayList<ScatterPlot> alsp = new ArrayList<>();
@@ -151,9 +222,426 @@ public final class ManexadorScatterPlots {
         this.tarefaPlay = null;
         this.visualizados = 0;
         this.slider = slider;
+        this.propertyChangeListeners = new ArrayList<>();
     }
 
     public ArrayList<ArrayList<ScatterPlot>> getMatrizScatterPlots() {
         return matrizScatterPlots;
     }
+
+    public class JFrameChartPanel extends JFrame {
+
+        private final ChartPanel chartPanel;
+
+        public ChartPanel getChartPanel() {
+            return chartPanel;
+        }
+
+        public JFrameChartPanel(String title, ChartPanel chartPanel, int indiceI, int indiceJ) {
+            super();
+            this.chartPanel = chartPanel;
+            setIconImage(new ImageIcon(getClass().getResource("imaxes/faviconGrafica.png")).getImage());
+            setContentPane(chartPanel);
+            setSize(600, 400);
+        }
+    }
+
+    class XYDatasetModelo extends XYSeriesCollection {
+
+        private Number domainMin;
+        private Number domainMax;
+        private Number rangeMin;
+        private Number rangeMax;
+        private Range domainRange;
+        private Range range;
+        private final int atributoY;
+        private final int atributoX;
+        private final Double xValues[][];
+        private final Double yValues[][];
+
+        public Number getDomainMin() {
+            return domainMin;
+        }
+
+        public Number getDomainMax() {
+            return domainMax;
+        }
+
+        public Number getRangeMin() {
+            return rangeMin;
+        }
+
+        public Number getRangeMax() {
+            return rangeMax;
+        }
+
+        public Range getRange() {
+            return range;
+        }
+
+        public XYDatasetModelo(InstancesComparable atributos, int atributoX, int atributoY, int atributoColor) {
+            super();
+            this.atributoX = atributoX;
+            this.atributoY = atributoY;
+            int numeroInstancias = atributos.numInstances();
+            double d = (1.0D / 0.0D);
+            double d1 = (-1.0D / 0.0D);
+            double d2 = (1.0D / 0.0D);
+            double d3 = (-1.0D / 0.0D);
+            if (atributoColor > -1) {
+                int numeroValoresAtributoNominal = atributos.attribute(atributoColor).numValues();
+                ArrayList<ArrayList<Double>> xv = new ArrayList<>();
+                ArrayList<ArrayList<Double>> yv = new ArrayList<>();
+                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
+                    xv.add(new ArrayList<>());
+                    yv.add(new ArrayList<>());
+                }
+                for (int l = 0; l < numeroInstancias; l++) {
+                    xv.get((int) atributos.instance(l).value(atributoColor)).add(atributos.instance(l).value(atributoX));
+                    yv.get((int) atributos.instance(l).value(atributoColor)).add(atributos.instance(l).value(atributoY));
+                }
+                int maxInstanciasNominal = 0;
+                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
+                    int size = xv.get(i).size();
+                    if (size > maxInstanciasNominal) {
+                        maxInstanciasNominal = size;
+                    }
+                }
+                xValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
+                yValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
+                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
+                    XYSeries s = new XYSeries(atributos.attribute(atributoColor).value(i), false);
+                    for (int j = 0; j < xv.get(i).size(); j++) {
+                        Double d4 = xv.get(i).get(j);
+                        if (d4 < d) {
+                            d = d4;
+                        }
+                        if (d4 > d1) {
+                            d1 = d4;
+                        }
+                        xValues[i][j] = d4;
+                        Double d5 = yv.get(i).get(j);
+                        if (d5 < d2) {
+                            d2 = d5;
+                        }
+                        if (d5 > d3) {
+                            d3 = d5;
+                        }
+                        yValues[i][j] = d5;
+                    }
+                    addSeries(s);
+                }
+            } else {
+                xValues = new Double[1][numeroInstancias];
+                yValues = new Double[1][numeroInstancias];
+                XYSeries s = new XYSeries(new Integer(0), false);
+                for (int l = 0; l < numeroInstancias; l++) {
+                    double d4 = atributos.instance(l).value(atributoX);
+                    xValues[0][l] = d4;
+                    if (d4 < d) {
+                        d = d4;
+                    }
+                    if (d4 > d1) {
+                        d1 = d4;
+                    }
+                    double d5 = atributos.instance(l).value(atributoY);
+                    yValues[0][l] = d5;
+                    if (d5 < d2) {
+                        d2 = d5;
+                    }
+                    if (d5 > d3) {
+                        d3 = d5;
+                    }
+                }
+                addSeries(s);
+            }
+            try {
+                domainMin = d;
+                domainMax = d1;
+                domainRange = new Range(d, d1);
+                rangeMin = d2;
+                rangeMax = d3;
+                range = new Range(d2, d3);
+            } catch (IllegalArgumentException e) {
+            }
+        }
+
+        public double getDomainLowerBound() {
+            return domainMin.doubleValue();
+        }
+
+        @Override
+        public double getDomainLowerBound(boolean flag) {
+            return domainMin.doubleValue();
+        }
+
+        public double getDomainUpperBound() {
+            return domainMax.doubleValue();
+        }
+
+        @Override
+        public double getDomainUpperBound(boolean flag) {
+            return domainMax.doubleValue();
+        }
+
+        public Range getDomainBounds() {
+            return domainRange;
+        }
+
+        @Override
+        public Range getDomainBounds(boolean flag) {
+            return domainRange;
+        }
+
+        public Range getDomainRange() {
+            return domainRange;
+        }
+
+        public double getRangeLowerBound() {
+            return rangeMin.doubleValue();
+        }
+
+        public double getRangeUpperBound() {
+            return rangeMax.doubleValue();
+        }
+
+        public Range getValueRange() {
+            return range;
+        }
+
+        public Number getMinimumDomainValue() {
+            return domainMin;
+        }
+
+        public Number getMaximumDomainValue() {
+            return domainMax;
+        }
+
+        public Number getMinimumRangeValue() {
+            return domainMin;
+        }
+
+        public Number getMaximumRangeValue() {
+            return domainMax;
+        }
+
+        public void visualizarItems(int i) {
+            for (int a = 0; a < i; a++) {
+                if (xValues[0].length > getSeries(0).getItemCount()) {
+                    int ic = getSeries(0).getItemCount();
+                    getSeries(0).add(xValues[0][ic], yValues[0][ic]);
+                }
+            }
+        }
+
+    }
+
+    public void anularSeleccions(XYPlot xyPlot) {
+        List annotations = xyPlot.getAnnotations();
+        for (Iterator it = annotations.iterator(); it.hasNext();) {
+            XYAnnotation annotation = (XYAnnotation) it.next();
+            xyPlot.removeAnnotation(annotation);
+        }
+    }
+
+    public void procesarSeleccion(InstancesComparable instances, ArrayList<Integer> indicesInstances) {
+        double radioInicial = 15.0;
+        double grosorInicial = 1.0;
+        double pasoGrosor = 0.0;
+        double pasoRadio = 1;
+        for (int i = 0; i < getMatrizScatterPlots().size(); i++) {
+            for (int j = 0; j < getMatrizScatterPlots().get(i).size(); j++) {
+                if (getMatrizScatterPlots().get(i).get(j) != null) {
+                    ScatterPlot sp = getMatrizScatterPlots().get(i).get(j);
+                    anularSeleccions(sp.getjFrameAmpliado().getChartPanel().getChart().getXYPlot());
+                    anularSeleccions(sp.getChartPanelCela().getChart().getXYPlot());
+                    for (int k = 0; k < indicesInstances.size(); k++) {
+                        if (getVisualizados() > indicesInstances.get(k)) {
+                            Color color = obterCoresHSB(k, indicesInstances.size());
+                            sp.getChartPanelCela().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
+                            sp.getjFrameAmpliado().getChartPanel().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static Color obterCoresHSB(int cor, int totalCores) {
+        return Color.getHSBColor((float) cor / totalCores, (float) 0.9, (float) 0.9);
+    }
+
+    public ScatterPlot scatterPlotFactory(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, TarefaProgreso task, Vista vista) {
+        return new ScatterPlot(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor, task, vista);
+    }
+
+    public class ScatterPlot implements Serializable {
+
+        private final int indiceAtributoX;
+        private final int indiceAtributoY;
+        private final int indiceAtributoColor;
+        private ChartPanel chartPanelCela;
+        private final JFrameChartPanel jFrameAmpliado;
+
+        public void setChartPanelCela(ChartPanel meuChartPanel) {
+            this.chartPanelCela = meuChartPanel;
+        }
+
+        public JFrameChartPanel getjFrameAmpliado() {
+            return jFrameAmpliado;
+        }
+
+        public int getIndiceAtributoColor() {
+            return indiceAtributoColor;
+        }
+
+        public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, TarefaProgreso task, Vista vista) {
+            this.indiceAtributoX = indiceAtributoX;
+            this.indiceAtributoColor = indiceAtributoColor;
+            this.indiceAtributoY = indiceAtributoY;
+            XYDatasetModelo xydm = new XYDatasetModelo(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor);
+            JFreeChart jfreechart1 = createChart(instances, xydm, task);
+            JFreeChart jfreechart2 = createChart(instances, xydm, task);
+            if (indiceAtributoColor < 0) {
+                jfreechart1.removeLegend();
+                jfreechart2.removeLegend();
+            }
+            ChartFactory.setChartTheme(StandardChartTheme.createDarknessTheme());
+            ChartUtilities.applyCurrentTheme(jfreechart1);
+            ChartUtilities.applyCurrentTheme(jfreechart2);
+            this.chartPanelCela = new ChartPanel(jfreechart1);
+            task.acumulate(35);
+            ChartPanel chartPanelAmpliado = new ChartPanel(jfreechart2);
+            task.acumulate(35);
+            this.chartPanelCela.getChart().setTitle((String) null);
+            configurarChartPanel(this.chartPanelCela, instances, vista);
+            configurarChartPanel(chartPanelAmpliado, instances, vista);
+            this.jFrameAmpliado = new JFrameChartPanel("'" + instances.attribute(indiceAtributoY).name() + "' " + bundle.getString("fronteA") + " '" + instances.attribute(indiceAtributoX).name() + "'", chartPanelAmpliado, indiceAtributoX, indiceAtributoY);
+            anularSeleccions(this.chartPanelCela.getChart().getXYPlot());
+            anularSeleccions(this.jFrameAmpliado.getChartPanel().getChart().getXYPlot());
+        }
+
+        private void configurarChartPanel(ChartPanel chartpanel, InstancesComparable instances, Vista vista) {
+            chartpanel.setMouseWheelEnabled(true);
+            chartpanel.setPreferredSize(new Dimension(340, 210));
+            chartpanel.addChartMouseListener(new ChartMouseListener() {
+                @Override
+                public void chartMouseClicked(final ChartMouseEvent event) {
+                    java.awt.EventQueue.invokeLater(() -> {
+                        if (SwingUtilities.isLeftMouseButton(event.getTrigger()) && event.getTrigger().getClickCount() == 1) {
+                            XYPlot xyp = event.getChart().getXYPlot();
+                            double domainCrosshairValue = xyp.getDomainCrosshairValue();
+                            double rangeCrosshairValue = xyp.getRangeCrosshairValue();
+                            ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
+                            Enumeration e = instances.enumerateInstances();
+                            for (int i = 0; e.hasMoreElements(); i++) {
+                                Instance di = (Instance) e.nextElement();
+                                if (di.value(indiceAtributoX) == domainCrosshairValue && di.value(indiceAtributoY) == rangeCrosshairValue) {
+                                    indicesInstancesPuntos.add(i);
+                                }
+                            }
+                            if (!indicesInstancesPuntos.isEmpty()) {
+                                JPopupMenu jpopup = vista.getjPopupMenu1();
+                                jpopup.removeAll();
+                                jpopup.setLayout(new BoxLayout(jpopup, BoxLayout.X_AXIS));
+                                for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
+                                    if (getVisualizados() > indicesInstancesPuntos.get(i)) {
+                                        if (i != 0) {
+                                            jpopup.add(new JSeparator(SwingConstants.VERTICAL));
+                                        }
+                                        int p = indicesInstancesPuntos.get(i);
+                                        JPanel pa = new JPanel();
+                                        pa.setBorder(new LineBorder(obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
+                                        pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
+                                        Enumeration en = instances.enumerateAttributes();
+                                        while (en.hasMoreElements()) {
+                                            Attribute a = (Attribute) en.nextElement();
+                                            boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
+                                            pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
+                                        }
+                                        jpopup.add(pa);
+                                    }
+                                }
+                                jpopup.show(event.getTrigger().getComponent(), event.getTrigger().getX() + 1, event.getTrigger().getY() + 1);
+                                procesarSeleccion(instances, indicesInstancesPuntos);
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void chartMouseMoved(ChartMouseEvent event) {
+                }
+            });
+        }
+
+        private JFreeChart createChart(InstancesComparable instances, XYDataset xydataset, TarefaProgreso task) {
+            JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + Vista.getBundle().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, true, false);
+            task.acumulate(15);
+            XYPlot xyplot = (XYPlot) jfreechart.getPlot();
+            xyplot.setDomainCrosshairVisible(true);
+            xyplot.setDomainCrosshairLockedOnData(true);
+            xyplot.setRangeCrosshairVisible(true);
+            xyplot.setRangeCrosshairLockedOnData(true);
+            xyplot.setDomainZeroBaselineVisible(true);
+            xyplot.setRangeZeroBaselineVisible(true);
+            xyplot.setDomainPannable(true);
+            xyplot.setRangePannable(true);
+            NumberAxis numberaxis = (NumberAxis) xyplot.getDomainAxis();
+            numberaxis.setAutoRangeIncludesZero(false);
+            return jfreechart;
+        }
+
+        public int getIndiceAtributoX() {
+            return indiceAtributoX;
+        }
+
+        public int getIndiceAtributoY() {
+            return indiceAtributoY;
+        }
+
+        public ChartPanel getChartPanelCela() {
+            return chartPanelCela;
+        }
+    }
+
+    class CircleDrawer implements Drawable {
+
+        private final Paint outlinePaint;
+        private final Stroke outlineStroke;
+        private final Paint fillPaint;
+
+        public CircleDrawer(Paint paint, Stroke stroke, Paint paint1) {
+            outlinePaint = paint;
+            outlineStroke = stroke;
+            fillPaint = paint1;
+        }
+
+        @Override
+        public void draw(Graphics2D graphics2d, Rectangle2D rectangle2d) {
+            java.awt.geom.Ellipse2D.Double double1 = new java.awt.geom.Ellipse2D.Double(
+                    rectangle2d.getX(), rectangle2d.getY(), rectangle2d.getWidth(),
+                    rectangle2d.getHeight());
+            if (fillPaint != null) {
+                graphics2d.setPaint(fillPaint);
+                graphics2d.fill(double1);
+            }
+            if (outlinePaint != null && outlineStroke != null) {
+                graphics2d.setPaint(outlinePaint);
+                graphics2d.setStroke(outlineStroke);
+                graphics2d.draw(double1);
+            }
+            graphics2d.setPaint(Color.black);
+            graphics2d.setStroke(new BasicStroke(1.0F));
+            java.awt.geom.Line2D.Double double2 = new java.awt.geom.Line2D.Double(
+                    rectangle2d.getCenterX(), rectangle2d.getMinY(),
+                    rectangle2d.getCenterX(), rectangle2d.getMaxY());
+            java.awt.geom.Line2D.Double double3 = new java.awt.geom.Line2D.Double(
+                    rectangle2d.getMinX(), rectangle2d.getCenterY(),
+                    rectangle2d.getMaxX(), rectangle2d.getCenterY());
+            graphics2d.draw(double2);
+            graphics2d.draw(double3);
+        }
+    }
+
 }

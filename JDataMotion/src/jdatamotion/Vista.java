@@ -2,7 +2,6 @@ package jdatamotion;
 
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstraints;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -16,15 +15,12 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Paint;
 import java.awt.Rectangle;
-import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -37,8 +33,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
@@ -51,7 +45,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -68,10 +61,9 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSeparator;
+import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JViewport;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
@@ -91,29 +83,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import jdatamotion.ManexadorScatterPlots.JFrameChartPanel;
+import jdatamotion.ManexadorScatterPlots.ScatterPlot;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionVista;
 import jdatamotion.sesions.Sesionizable;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.StandardChartTheme;
-import org.jfree.chart.annotations.XYAnnotation;
-import org.jfree.chart.annotations.XYDrawableAnnotation;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.Range;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.Drawable;
 import org.jsoup.Jsoup;
 import weka.core.Attribute;
-import weka.core.Instance;
 
 /**
  *
@@ -130,17 +107,17 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private static final int EXPLORADOR_ABRIR_SESION = 1;
     private static final int EXPLORADOR_GARDAR_SESION = 2;
     private static final int EXPLORADOR_GARDAR_FICHEIRO = 3;
-    private Modelo meuModelo;
+    private transient Modelo meuModelo;
     private final TarefaProgreso task;
     private final ExecutorService cachedPool;
     private ManexadorScatterPlots mansp;
-    private Controlador meuControlador;
+    private transient Controlador meuControlador;
     private int ultimaColumnaModeloSeleccionada;
     private boolean scatterPlotsVisibles[][];
     public static ResourceBundle bundle;
     private static final String ficheiroConfiguracion = "configuracion.properties";
 
-    public ResourceBundle getBundle() {
+    public static ResourceBundle getBundle() {
         return bundle;
     }
 
@@ -219,7 +196,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private int contarJFramesVisibles() {
         int c = 0;
         for (ArrayList<ScatterPlot> alsp : mansp.getMatrizScatterPlots()) {
-            c = alsp.stream().filter((sp) -> (sp.getjFrameAmpliado().isVisible())).map((_item) -> 1).reduce(c, Integer::sum);
+            c = alsp.stream().filter((jf) -> (jf != null && jf.getjFrameAmpliado().isVisible())).map((_item) -> 1).reduce(c, Integer::sum);
         }
         return c;
     }
@@ -244,29 +221,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     public JPanel getjPanel7() {
         return jPanel7;
-    }
-
-    public void procesarSeleccion(ArrayList<Integer> indicesInstances) {
-        double radioInicial = 15.0;
-        double grosorInicial = 1.0;
-        double pasoGrosor = 0.0;
-        double pasoRadio = 1;
-        for (int i = 0; i < mansp.getMatrizScatterPlots().size(); i++) {
-            for (int j = 0; j < mansp.getMatrizScatterPlots().get(i).size(); j++) {
-                if (mansp.getMatrizScatterPlots().get(i).get(j) != null) {
-                    ScatterPlot sp = mansp.getMatrizScatterPlots().get(i).get(j);
-                    anularSeleccions(sp.getjFrameAmpliado().getChartPanel().getChart().getXYPlot());
-                    anularSeleccions(sp.getChartPanelCela().getChart().getXYPlot());
-                    for (int k = 0; k < indicesInstances.size(); k++) {
-                        if (mansp.getVisualizados() > indicesInstances.get(k)) {
-                            Color color = obterCoresHSB(k, indicesInstances.size());
-                            sp.getChartPanelCela().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
-                            sp.getjFrameAmpliado().getChartPanel().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), sp.getInstances().get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public JPanel getjPanel4() {
@@ -294,52 +248,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         SesionVista s = (SesionVista) sesion;
         scatterPlotsVisibles = s.getScatterPlotsVisibles();
         mansp = s.getManexadorScatterPlots();
-        if (mansp != null && mansp.getMatrizScatterPlots() != null) {
-            mansp.getMatrizScatterPlots().stream().forEach((ArrayList<ScatterPlot> alsp) -> {
-                alsp.stream().filter((sp) -> (sp != null)).forEach((ScatterPlot sp) -> {
-                    sp.setMinaVista(Vista.this);
-                });
-            });
-        }
-    }
-
-    class CircleDrawer implements Drawable {
-
-        private final Paint outlinePaint;
-        private final Stroke outlineStroke;
-        private final Paint fillPaint;
-
-        public CircleDrawer(Paint paint, Stroke stroke, Paint paint1) {
-            outlinePaint = paint;
-            outlineStroke = stroke;
-            fillPaint = paint1;
-        }
-
-        @Override
-        public void draw(Graphics2D graphics2d, Rectangle2D rectangle2d) {
-            java.awt.geom.Ellipse2D.Double double1 = new java.awt.geom.Ellipse2D.Double(
-                    rectangle2d.getX(), rectangle2d.getY(), rectangle2d.getWidth(),
-                    rectangle2d.getHeight());
-            if (fillPaint != null) {
-                graphics2d.setPaint(fillPaint);
-                graphics2d.fill(double1);
-            }
-            if (outlinePaint != null && outlineStroke != null) {
-                graphics2d.setPaint(outlinePaint);
-                graphics2d.setStroke(outlineStroke);
-                graphics2d.draw(double1);
-            }
-            graphics2d.setPaint(Color.black);
-            graphics2d.setStroke(new BasicStroke(1.0F));
-            java.awt.geom.Line2D.Double double2 = new java.awt.geom.Line2D.Double(
-                    rectangle2d.getCenterX(), rectangle2d.getMinY(),
-                    rectangle2d.getCenterX(), rectangle2d.getMaxY());
-            java.awt.geom.Line2D.Double double3 = new java.awt.geom.Line2D.Double(
-                    rectangle2d.getMinX(), rectangle2d.getCenterY(),
-                    rectangle2d.getMaxX(), rectangle2d.getCenterY());
-            graphics2d.draw(double2);
-            graphics2d.draw(double3);
-        }
     }
 
     public void crearControlador() {
@@ -360,7 +268,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         ArrayList<Integer> indices = meuModelo.obterIndicesAtributosNumericosNoModelo();
         int numAtributosNumericos = indices.size();
-        mansp = new ManexadorScatterPlots(numAtributosNumericos, scatterPlotsVisibles, jSlider1, this);
+        mansp = new ManexadorScatterPlots(meuModelo.getAtributos(), meuModelo.getIndiceAtributoNominal(), numAtributosNumericos, scatterPlotsVisibles, jSlider1);
+        mansp.addPropertyChangeListener(this);
         actualizarScatterPlotsVisibles(numAtributosNumericos);
         jPopupMenu1.setVisible(false);
         jPanel4.removeAll();
@@ -384,19 +293,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             task.setEnd(numCols * numFilas * 100);
             for (int i = numAtributosNumericos - 1; i >= 0; i--) {
                 if (!filaScatterPlotsVacia(i)) {
-                    cachedPool.submit(new FioFilas(indices, i, filasVacias, meuModelo.getIndiceAtributoNominal(), this));
+                    cachedPool.submit(new FioFilas(indices, i, filasVacias, meuModelo.getIndiceAtributoNominal()));
                 } else {
                     filasVacias++;
                 }
             }
-        }
-    }
-
-    private void anularSeleccions(XYPlot xyPlot) {
-        List annotations = xyPlot.getAnnotations();
-        for (Iterator it = annotations.iterator(); it.hasNext();) {
-            XYAnnotation annotation = (XYAnnotation) it.next();
-            xyPlot.removeAnnotation(annotation);
         }
     }
 
@@ -450,7 +351,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         return true;
     }
 
-    class TarefaProgreso extends SwingWorker<Void, Void> {
+    public class TarefaProgreso extends SwingWorker<Void, Void> {
 
         private final JProgressBar bar;
         private int end;
@@ -540,16 +441,14 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         private final int indiceNominal;
         private final int filasVacias;
         private final int columnasVacias;
-        private final Vista vista;
 
-        public FioColumnas(ArrayList<Integer> indices, int j, int i, int filasVacias, int columnasVacias, int indiceNominal, Vista vista) {
+        public FioColumnas(ArrayList<Integer> indices, int j, int i, int filasVacias, int columnasVacias, int indiceNominal) {
             this.indices = indices;
             this.j = j;
             this.i = i;
             this.indiceNominal = indiceNominal;
             this.filasVacias = filasVacias;
             this.columnasVacias = columnasVacias;
-            this.vista = vista;
         }
 
         @Override
@@ -561,12 +460,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             } else {
                 int indiceI = indices.get(i);
                 int indiceJ = indices.get(j);
-                ScatterPlot spmatrix = new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, vista);
+                ScatterPlot spmatrix;
+                spmatrix = mansp.new ScatterPlot(meuModelo.getAtributos(), indiceJ, indiceI, indiceNominal, task, Vista.this);
                 mansp.getMatrizScatterPlots().get(i).set(j, spmatrix);
                 ChartPanel chartPanelCela = spmatrix.getChartPanelCela();
-                JFrameChartPanel jFrameAmpliado = spmatrix.getjFrameAmpliado();
-                anularSeleccions(chartPanelCela.getChart().getXYPlot());
-                anularSeleccions(jFrameAmpliado.getChartPanel().getChart().getXYPlot());
                 chartPanelCela.setLayout(new GridBagLayout());
                 JButton clickmeButton = new JButton();
                 final int a = i;
@@ -611,15 +508,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         private final ArrayList<Integer> indices;
         private final int i;
         private final int indiceNominal;
-        private final Vista vista;
         private final int filasVacias;
 
-        public FioFilas(ArrayList<Integer> indices, int i, int filasVacias, int indiceNominal, Vista vista) {
+        public FioFilas(ArrayList<Integer> indices, int i, int filasVacias, int indiceNominal) {
             this.indices = indices;
             this.i = i;
             this.filasVacias = filasVacias;
             this.indiceNominal = indiceNominal;
-            this.vista = vista;
         }
 
         @Override
@@ -628,7 +523,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             int columnasVacias = 0;
             for (int j = 0; j < numAtributosNumericos; j++) {
                 if (!columnaScatterPlotsVacia(j)) {
-                    cachedPool.submit(new FioColumnas(indices, j, i, filasVacias, columnasVacias, indiceNominal, vista));
+                    cachedPool.submit(new FioColumnas(indices, j, i, filasVacias, columnasVacias, indiceNominal));
                 } else {
                     columnasVacias++;
                 }
@@ -1058,7 +953,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel8.setOpaque(false);
 
         jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/play.png"))); // NOI18N
-        jButton8.setText(bundle.getString("Vista.jButton8.text")); // NOI18N
         jButton8.setName("jButton8"); // NOI18N
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1068,6 +962,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jSlider1.setValue(0);
         jSlider1.setName("jSlider1"); // NOI18N
+        jSlider1.addChangeListener(new ChangeListener() {
+            @Override
+            public synchronized void stateChanged(ChangeEvent e) {
+                if(e.getSource() instanceof JSlider) {
+                    JSlider s=(JSlider)e.getSource();
+                    mansp.goTo(s.getValue());
+                }
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1673,6 +1576,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         mansp.play();
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    public JSlider getjSlider1() {
+        return jSlider1;
+    }
 
     @SuppressWarnings("unchecked")
     private void configurarEstablecerAtributoNominalRepresentado() {
@@ -2439,175 +2346,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
-    public class JFrameChartPanel extends JFrame {
-
-        private final ChartPanel chartPanel;
-
-        public ChartPanel getChartPanel() {
-            return chartPanel;
-        }
-
-        public JFrameChartPanel(ChartPanel chartPanel, int indiceI, int indiceJ) {
-            super("'" + meuModelo.obterNomeAtributo(indiceJ) + "' " + bundle.getString("fronteA") + " '" + meuModelo.obterNomeAtributo(indiceI) + "'");
-            this.chartPanel = chartPanel;
-            setIconImage(new ImageIcon(getClass().getResource("imaxes/faviconGrafica.png")).getImage());
-            setContentPane(chartPanel);
-            setSize(600, 400);
-        }
-    }
-
-    public class ScatterPlot implements Serializable {
-
-        private InstancesComparable instances;
-        private final int indiceAtributoX;
-        private final int indiceAtributoY;
-        private final int indiceAtributoColor;
-        private transient Vista minaVista;
-        private ChartPanel chartPanelCela;
-        private final JFrameChartPanel jFrameAmpliado;
-
-        public void setChartPanelCela(ChartPanel meuChartPanel) {
-            this.chartPanelCela = meuChartPanel;
-        }
-
-        public JFrameChartPanel getjFrameAmpliado() {
-            return jFrameAmpliado;
-        }
-
-        public int getIndiceAtributoColor() {
-            return indiceAtributoColor;
-        }
-
-        public void setMinaVista(Vista minaVista) {
-            this.minaVista = minaVista;
-        }
-
-        public Vista getMinaVista() {
-            return minaVista;
-        }
-
-        public void setInstances(InstancesComparable instances) {
-            this.instances = instances;
-        }
-
-        public InstancesComparable getInstances() {
-            return instances;
-        }
-
-        public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, Vista vista) {
-            this.indiceAtributoX = indiceAtributoX;
-            this.indiceAtributoColor = indiceAtributoColor;
-            this.minaVista = vista;
-            this.indiceAtributoY = indiceAtributoY;
-            this.instances = instances;
-            XYDatasetModelo xydm = new XYDatasetModelo(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor);
-            JFreeChart jfreechart1 = createChart(xydm);
-            JFreeChart jfreechart2 = createChart(xydm);
-            if (indiceAtributoColor < 0) {
-                jfreechart1.removeLegend();
-                jfreechart2.removeLegend();
-            }
-            ChartFactory.setChartTheme(StandardChartTheme.createDarknessTheme());
-            ChartUtilities.applyCurrentTheme(jfreechart1);
-            ChartUtilities.applyCurrentTheme(jfreechart2);
-            ChartPanel chartpanel = new ChartPanel(jfreechart1);
-            task.acumulate(35);
-            ChartPanel chartPanelAmpliado = new ChartPanel(jfreechart2);
-            task.acumulate(35);
-            chartpanel.getChart().setTitle((String) null);
-            configurarChartPanel(chartpanel);
-            configurarChartPanel(chartPanelAmpliado);
-            this.chartPanelCela = chartpanel;
-            this.jFrameAmpliado = new JFrameChartPanel(chartPanelAmpliado, indiceAtributoX, indiceAtributoY);
-        }
-
-        private void configurarChartPanel(ChartPanel chartpanel) {
-            chartpanel.setMouseWheelEnabled(true);
-            chartpanel.setPreferredSize(new Dimension(340, 210));
-            chartpanel.addChartMouseListener(new ChartMouseListener() {
-                @Override
-                public void chartMouseClicked(final ChartMouseEvent event) {
-                    java.awt.EventQueue.invokeLater(() -> {
-                        if (SwingUtilities.isLeftMouseButton(event.getTrigger()) && event.getTrigger().getClickCount() == 1) {
-                            XYPlot xyp = event.getChart().getXYPlot();
-                            double domainCrosshairValue = xyp.getDomainCrosshairValue();
-                            double rangeCrosshairValue = xyp.getRangeCrosshairValue();
-                            ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
-                            Enumeration e = instances.enumerateInstances();
-                            for (int i = 0; e.hasMoreElements(); i++) {
-                                Instance di = (Instance) e.nextElement();
-                                if (di.value(indiceAtributoX) == domainCrosshairValue && di.value(indiceAtributoY) == rangeCrosshairValue) {
-                                    indicesInstancesPuntos.add(i);
-                                }
-                            }
-                            if (!indicesInstancesPuntos.isEmpty()) {
-                                minaVista.getjPopupMenu1().removeAll();
-                                minaVista.getjPopupMenu1().setLayout(new BoxLayout(minaVista.getjPopupMenu1(), BoxLayout.X_AXIS));
-                                for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
-                                    if (mansp.getVisualizados() > indicesInstancesPuntos.get(i)) {
-                                        if (i != 0) {
-                                            minaVista.getjPopupMenu1().add(new JSeparator(SwingConstants.VERTICAL));
-                                        }
-                                        int p = indicesInstancesPuntos.get(i);
-                                        JPanel pa = new JPanel();
-                                        pa.setBorder(new LineBorder(obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
-                                        pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
-                                        Enumeration en = instances.enumerateAttributes();
-                                        while (en.hasMoreElements()) {
-                                            Attribute a = (Attribute) en.nextElement();
-                                            boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
-                                            pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
-                                        }
-                                        minaVista.getjPopupMenu1().add(pa);
-                                    }
-                                }
-                                minaVista.getjPopupMenu1().show(event.getTrigger().getComponent(), event.getTrigger().getX() + 1, event.getTrigger().getY() + 1);
-                                minaVista.procesarSeleccion(indicesInstancesPuntos);
-                            }
-                        }
-                    });
-                }
-
-                @Override
-                public void chartMouseMoved(ChartMouseEvent event) {
-                }
-            });
-        }
-
-        private JFreeChart createChart(XYDataset xydataset) {
-            JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + minaVista.getBundle().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, true, false);
-            task.acumulate(15);
-            XYPlot xyplot = (XYPlot) jfreechart.getPlot();
-            xyplot.setDomainCrosshairVisible(true);
-            xyplot.setDomainCrosshairLockedOnData(true);
-            xyplot.setRangeCrosshairVisible(true);
-            xyplot.setRangeCrosshairLockedOnData(true);
-            xyplot.setDomainZeroBaselineVisible(true);
-            xyplot.setRangeZeroBaselineVisible(true);
-            xyplot.setDomainPannable(true);
-            xyplot.setRangePannable(true);
-            NumberAxis numberaxis = (NumberAxis) xyplot.getDomainAxis();
-            numberaxis.setAutoRangeIncludesZero(false);
-            return jfreechart;
-        }
-
-        public int getIndiceAtributoX() {
-            return indiceAtributoX;
-        }
-
-        public int getIndiceAtributoY() {
-            return indiceAtributoY;
-        }
-
-        public ChartPanel getChartPanelCela() {
-            return chartPanelCela;
-        }
-    }
-
-    private static Color obterCoresHSB(int cor, int totalCores) {
-        return Color.getHSBColor((float) cor / totalCores, (float) 0.9, (float) 0.9);
-    }
-
     class JTableParcheada extends JTable {
 
         public JTableParcheada(TableModel tm) {
@@ -2657,231 +2395,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             panelDetallarAtributo.repaint();
         }
     }
-
-    class XYDatasetModelo extends XYSeriesCollection {
-
-        private static final long serialVersionUID = 1L;
-        private final int itemCount;
-        private Number domainMin;
-        private Number domainMax;
-        private Number rangeMin;
-        private Number rangeMax;
-        private Range domainRange;
-        private Range range;
-        private final InstancesComparable atributos;
-        private final int atributoColor;
-        private final int atributoY;
-        private final int atributoX;
-        private final Double xValues[][];
-        private final Double yValues[][];
-
-        public long getSerialVersionUID() {
-            return serialVersionUID;
-        }
-
-        public int getItemCount() {
-            return itemCount;
-        }
-
-        public Number getDomainMin() {
-            return domainMin;
-        }
-
-        public Number getDomainMax() {
-            return domainMax;
-        }
-
-        public Number getRangeMin() {
-            return rangeMin;
-        }
-
-        public Number getRangeMax() {
-            return rangeMax;
-        }
-
-        public Range getRange() {
-            return range;
-        }
-
-        public InstancesComparable getAtributos() {
-            return atributos;
-        }
-
-        public XYDatasetModelo(InstancesComparable atributos, int atributoX, int atributoY, int atributoColor) {
-            super();
-            this.atributos = atributos;
-            this.atributoX = atributoX;
-            this.atributoY = atributoY;
-            this.atributoColor = atributoColor;
-            int numeroInstancias = atributos.numInstances();
-            double d = (1.0D / 0.0D);
-            double d1 = (-1.0D / 0.0D);
-            double d2 = (1.0D / 0.0D);
-            double d3 = (-1.0D / 0.0D);
-            if (atributoColor > -1) {
-                Enumeration en = atributos.attribute(atributoColor).enumerateValues();
-                int numeroValoresAtributoNominal = 0;
-                while (en.hasMoreElements()) {
-                    en.nextElement();
-                    numeroValoresAtributoNominal++;
-                }
-                ArrayList<ArrayList<Double>> xv = new ArrayList<>();
-                ArrayList<ArrayList<Double>> yv = new ArrayList<>();
-                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
-                    xv.add(new ArrayList<>());
-                    yv.add(new ArrayList<>());
-                }
-                for (int l = 0; l < numeroInstancias; l++) {
-                    xv.get((int) atributos.instance(l).value(atributoColor)).add(atributos.instance(l).value(atributoX));
-                    yv.get((int) atributos.instance(l).value(atributoColor)).add(atributos.instance(l).value(atributoY));
-                }
-                int maxInstanciasNominal = 0;
-                int itemCountTemp = 0;
-                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
-                    int size = xv.get(i).size();
-                    itemCountTemp += size;
-                    if (size > maxInstanciasNominal) {
-                        maxInstanciasNominal = size;
-                    }
-                }
-                itemCount = itemCountTemp;
-                xValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
-                yValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
-                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
-                    XYSeries s = new XYSeries(atributos.attribute(atributoColor).value(i), false);
-                    for (int j = 0; j < xv.get(i).size(); j++) {
-                        Double d4 = xv.get(i).get(j);
-                        if (d4 < d) {
-                            d = d4;
-                        }
-                        if (d4 > d1) {
-                            d1 = d4;
-                        }
-                        xValues[i][j] = d4;
-                        Double d5 = yv.get(i).get(j);
-                        if (d5 < d2) {
-                            d2 = d5;
-                        }
-                        if (d5 > d3) {
-                            d3 = d5;
-                        }
-                        yValues[i][j] = d5;
-                    }
-                    addSeries(s);
-                }
-            } else {
-                itemCount = numeroInstancias;
-                xValues = new Double[1][numeroInstancias];
-                yValues = new Double[1][numeroInstancias];
-                XYSeries s = new XYSeries(new Integer(0), false);
-                for (int l = 0; l < numeroInstancias; l++) {
-                    double d4 = atributos.instance(l).value(atributoX);
-                    xValues[0][l] = d4;
-                    if (d4 < d) {
-                        d = d4;
-                    }
-                    if (d4 > d1) {
-                        d1 = d4;
-                    }
-                    double d5 = atributos.instance(l).value(atributoY);
-                    yValues[0][l] = d5;
-                    if (d5 < d2) {
-                        d2 = d5;
-                    }
-                    if (d5 > d3) {
-                        d3 = d5;
-                    }
-                }
-                addSeries(s);
-            }
-            try {
-                domainMin = d;
-                domainMax = d1;
-                domainRange = new Range(d, d1);
-                rangeMin = d2;
-                rangeMax = d3;
-                range = new Range(d2, d3);
-            } catch (IllegalArgumentException e) {
-            }
-        }
-
-        public double getDomainLowerBound() {
-            return domainMin.doubleValue();
-        }
-
-        @Override
-        public double getDomainLowerBound(boolean flag) {
-            return domainMin.doubleValue();
-        }
-
-        public double getDomainUpperBound() {
-            return domainMax.doubleValue();
-        }
-
-        @Override
-        public double getDomainUpperBound(boolean flag) {
-            return domainMax.doubleValue();
-        }
-
-        public Range getDomainBounds() {
-            return domainRange;
-        }
-
-        @Override
-        public Range getDomainBounds(boolean flag) {
-            return domainRange;
-        }
-
-        public Range getDomainRange() {
-            return domainRange;
-        }
-
-        public double getRangeLowerBound() {
-            return rangeMin.doubleValue();
-        }
-
-        public double getRangeUpperBound() {
-            return rangeMax.doubleValue();
-        }
-
-        public Range getValueRange() {
-            return range;
-        }
-
-        public Number getMinimumDomainValue() {
-            return domainMin;
-        }
-
-        public Number getMaximumDomainValue() {
-            return domainMax;
-        }
-
-        public Number getMinimumRangeValue() {
-            return domainMin;
-        }
-
-        public Number getMaximumRangeValue() {
-            return domainMax;
-        }
-
-        public void visualizarItems(int i) {
-            for (int a = 0; a < i; a++) {
-                if (!todoVisualizado()) {
-                    int ic = getSeries(0).getItemCount();
-                    getSeries(0).add(xValues[0][ic], yValues[0][ic]);
-                }
-            }
-        }
-
-        public boolean nadaVisualizado() {
-            return getSeries(0).getItemCount() == 0;
-        }
-
-        public boolean todoVisualizado() {
-            return xValues[0].length <= getSeries(0).getItemCount();
-        }
-    }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JRadioButtonMenuItem botonData;

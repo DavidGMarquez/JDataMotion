@@ -22,7 +22,8 @@
  * THE SOFTWARE.
  */
 package jdatamotion.sesions;
-import jdatamotion.InstancesComparable;
+
+import jdatamotion.Modelo.InstancesComparable;
 
 /**
  *
@@ -30,6 +31,11 @@ import jdatamotion.InstancesComparable;
  */
 public class SesionModelo extends Sesion {
 
+    private String direccionAoFicheiro;
+    private InstancesComparable cabeceiras;
+    private int indiceTemporal;
+    private byte[] hash;
+    private String nomeRelacion;
     private int indiceAtributoNominal;
 
     public void setIndiceAtributoNominal(int indiceAtributoNominal) {
@@ -39,11 +45,6 @@ public class SesionModelo extends Sesion {
     public int getIndiceAtributoNominal() {
         return indiceAtributoNominal;
     }
-    private String direccionAoFicheiro;
-    private InstancesComparable cabeceiras;
-    private int indiceTemporal;
-    private byte[] hash;
-    private String nomeRelacion;
 
     public void setNomeRelacion(String nomeRelacion) {
         this.nomeRelacion = nomeRelacion;

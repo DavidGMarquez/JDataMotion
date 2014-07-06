@@ -31,6 +31,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jdatamotion.Modelo.InstancesComparable;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

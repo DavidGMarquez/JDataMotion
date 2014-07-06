@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Observable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -23,6 +24,8 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
+import weka.core.InstanceComparator;
+import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
@@ -588,4 +591,61 @@ public class Modelo extends Observable implements Sesionizable {
             setChanged();
         }
     }
+
+    public class InstancesComparable extends Instances {
+
+        public InstancesComparable(Instances i) {
+            super(i);
+        }
+
+        public InstancesComparable(String relationName, ArrayList<Attribute> aux, int i) {
+            super(relationName, aux, i);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof InstancesComparable == false) {
+                return false;
+            }
+            InstancesComparable is = (InstancesComparable) o;
+            Enumeration e1 = is.enumerateInstances();
+            Enumeration e2 = enumerateInstances();
+            InstanceComparator a = new InstanceComparator();
+            if (!relationName().equals(is.relationName())) {
+                return false;
+            }
+            while (e1.hasMoreElements() || e1.hasMoreElements()) {
+                try {
+                    Instance i1 = (Instance) e1.nextElement();
+                    Instance i2 = (Instance) e2.nextElement();
+                    if (a.compare(i1, i2) != 0) {
+                        return false;
+                    }
+                } catch (NoSuchElementException e) {
+                    return false;
+                }
+            }
+            e1 = is.enumerateAttributes();
+            e2 = enumerateAttributes();
+            while (e1.hasMoreElements() || e1.hasMoreElements()) {
+                try {
+                    Attribute a1 = (Attribute) e1.nextElement();
+                    Attribute a2 = (Attribute) e2.nextElement();
+                    if (!a1.equals(a2)) {
+                        return false;
+                    }
+                } catch (NoSuchElementException e) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            return hash;
+        }
+    }
+
 }

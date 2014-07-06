@@ -23,8 +23,8 @@
  */
 package jdatamotion.comandos;
 
-import jdatamotion.InstancesComparable;
 import jdatamotion.Modelo;
+import jdatamotion.Modelo.InstancesComparable;
 import jdatamotion.Vista;
 
 /**
@@ -53,7 +53,7 @@ public class ComandoMudarTipo extends ComandoDesfacible {
     @Override
     public void Executar() throws Exception {
         this.indiceAtributoNominalAntigo = ((Modelo) getObxectivo()).getIndiceAtributoNominal();
-        this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getAtributos());
+        this.modeloAntigo = ((Modelo) getObxectivo()).new InstancesComparable(((Modelo) getObxectivo()).getAtributos());
         ((Modelo) getObxectivo()).mudarTipo(columnaModelo, novoTipo);
     }
 

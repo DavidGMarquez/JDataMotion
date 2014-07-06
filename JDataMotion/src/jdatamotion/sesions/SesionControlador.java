@@ -22,7 +22,8 @@
  * THE SOFTWARE.
  */
 package jdatamotion.sesions;
-import jdatamotion.XestorComandos;
+
+import jdatamotion.Controlador.XestorComandos;
 
 /**
  *
@@ -31,7 +32,7 @@ import jdatamotion.XestorComandos;
 public class SesionControlador extends Sesion {
 
     private XestorComandos xestorComandos;
-    
+
     public void setXestorComandos(XestorComandos xestorComandos) {
         this.xestorComandos = xestorComandos;
     }

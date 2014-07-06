@@ -898,9 +898,6 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/jdatamotion/imaxes/play.png"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jButton8.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-                    </Property>
                     <Property name="name" type="java.lang.String" value="jButton8" noResource="true"/>
                   </Properties>
                   <Events>
@@ -912,6 +909,10 @@
                     <Property name="value" type="int" value="0"/>
                     <Property name="name" type="java.lang.String" value="jSlider1" noResource="true"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jSlider1.addChangeListener(new ChangeListener() {&#xd;&#xa;@Override&#xd;&#xa;public synchronized void stateChanged(ChangeEvent e) {&#xd;&#xa;      if(e.getSource() instanceof JSlider) {&#xd;&#xa;JSlider s=(JSlider)e.getSource();&#xd;&#xa;mansp.goTo(s.getValue());&#xd;&#xa;}&#xd;&#xa;    }&#xd;&#xa;});&#xd;&#xa;"/>
+                    <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="Vista_jSlider1"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
