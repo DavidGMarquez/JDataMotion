@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="1">
                 <name/>
-                <line>405</line>
+                <line>407</line>
                 <key/>
             </bookmark>
         </file>
@@ -20,7 +20,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/src/jdatamotion/Controlador.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/src/jdatamotion/Vista.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/test/jdatamotion/TestRF03_04.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
+            <file>file:/C:/Users/usuario/Desktop/ETSE/4º/2º%20cuatrimestre/Traballo%20Fin%20de%20Grao/JDataMotion/lib/jfreechart-1.0.17-sources/org/jfree/data/xy/XYSeries.java</file>
         </group>
     </open-files>
 </project-private>

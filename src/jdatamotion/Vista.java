@@ -114,6 +114,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private transient Controlador meuControlador;
     private int ultimaColumnaModeloSeleccionada;
     private boolean scatterPlotsVisibles[][];
+    private boolean pulsarSlider;
     public static ResourceBundle bundle;
     private static final String ficheiroConfiguracion = "configuracion.properties";
 
@@ -185,12 +186,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", new Locale("en"));
+        this.bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", new Locale("en"));
         reset();
         initComponents();
-        jPanel8.setVisible(false);
-        task = new TarefaProgreso(jProgressBar1);
-        cachedPool = Executors.newCachedThreadPool();
+        this.pulsarSlider = false;
+        this.jPanel8.setVisible(false);
+        this.task = new TarefaProgreso(jProgressBar1);
+        this.cachedPool = Executors.newCachedThreadPool();
     }
 
     private int contarJFramesVisibles() {
@@ -962,10 +964,18 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jSlider1.setValue(0);
         jSlider1.setName("jSlider1"); // NOI18N
+        jSlider1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jSlider1MousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jSlider1MouseReleased(evt);
+            }
+        });
         jSlider1.addChangeListener(new ChangeListener() {
             @Override
             public synchronized void stateChanged(ChangeEvent e) {
-                if(e.getSource() instanceof JSlider) {
+                if(pulsarSlider && e.getSource() instanceof JSlider) {
                     JSlider s=(JSlider)e.getSource();
                     mansp.goTo(s.getValue());
                 }
@@ -1576,6 +1586,16 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         mansp.play();
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jSlider1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MousePressed
+        mansp.pause();
+        pulsarSlider = true;
+    }//GEN-LAST:event_jSlider1MousePressed
+
+    private void jSlider1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MouseReleased
+       pulsarSlider=false;
+       mansp.play();
+    }//GEN-LAST:event_jSlider1MouseReleased
 
     public JSlider getjSlider1() {
         return jSlider1;

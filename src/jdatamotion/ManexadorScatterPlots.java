@@ -118,8 +118,35 @@ public final class ManexadorScatterPlots {
         });
     }
 
+    public boolean nadaVisualizado() {
+        return visualizados == 0;
+    }
+
+    public boolean todoVisualizado() {
+        return visualizados >= numItems;
+    }
+
     public void goTo(int value) {
-        System.out.println(value);
+        int to = (int) (numItems * value / 100.0);
+        if (to > visualizados) { //GoTo hacia adiante
+            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                    if (scatterPlotsVisibles[j][k]) {
+                        ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(to - visualizados);
+                    }
+                }
+            }
+            visualizados = to;
+        } else if (to < visualizados) { //GoTo hacia atrás
+            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                    if (scatterPlotsVisibles[j][k]) {
+                        ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).agocharItems(visualizados - to);
+                    }
+                }
+            }
+            visualizados = to;
+        }
     }
 
     final class TarefaPlay extends SwingWorker<Void, Void> {
@@ -138,30 +165,22 @@ public final class ManexadorScatterPlots {
             this.estado = estado;
         }
 
-        public boolean todoVisualizado() {
-            return visualizados >= numItems;
-        }
-
         @Override
         protected Void doInBackground() throws Exception {
             try {
-                for (int i = 0; i < numItems; i++) {
-                    while (!todoVisualizado() && estado == PLAY) {
-                        synchronized (this) {
-                            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
-                                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
-                                    if (scatterPlotsVisibles[j][k]) {
-                                        ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
-                                    }
-                                }
+                while (!todoVisualizado() && estado == PLAY) {
+                    for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                        for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                            if (scatterPlotsVisibles[j][k]) {
+                                ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
                             }
-                            visualizados++;
-                            slider.setValue((int) 100.0 * visualizados / numItems);
                         }
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ex) {
-                        }
+                    }
+                    visualizados++;
+                    slider.setValue((int) 100.0 * visualizados / numItems);
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
                     }
                 }
                 setEstado(PAUSE);
@@ -227,6 +246,7 @@ public final class ManexadorScatterPlots {
 
     public ArrayList<ArrayList<ScatterPlot>> getMatrizScatterPlots() {
         return matrizScatterPlots;
+
     }
 
     public class JFrameChartPanel extends JFrame {
@@ -434,6 +454,15 @@ public final class ManexadorScatterPlots {
             }
         }
 
+        public void agocharItems(int i) {
+            for (int a = 0; a < i; a++) {
+                if (getSeries(0).getItemCount() > 0) {
+                    int ic = getSeries(0).getItemCount();
+                    getSeries(0).remove(ic - 1);
+                }
+            }
+        }
+
     }
 
     public void anularSeleccions(XYPlot xyPlot) {
@@ -473,6 +502,7 @@ public final class ManexadorScatterPlots {
 
     public ScatterPlot scatterPlotFactory(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, TarefaProgreso task, Vista vista) {
         return new ScatterPlot(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor, task, vista);
+
     }
 
     public class ScatterPlot implements Serializable {

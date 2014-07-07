@@ -909,8 +909,12 @@
                     <Property name="value" type="int" value="0"/>
                     <Property name="name" type="java.lang.String" value="jSlider1" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jSlider1MousePressed"/>
+                    <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jSlider1MouseReleased"/>
+                  </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jSlider1.addChangeListener(new ChangeListener() {&#xd;&#xa;@Override&#xd;&#xa;public synchronized void stateChanged(ChangeEvent e) {&#xd;&#xa;      if(e.getSource() instanceof JSlider) {&#xd;&#xa;JSlider s=(JSlider)e.getSource();&#xd;&#xa;mansp.goTo(s.getValue());&#xd;&#xa;}&#xd;&#xa;    }&#xd;&#xa;});&#xd;&#xa;"/>
+                    <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jSlider1.addChangeListener(new ChangeListener() {&#xd;&#xa;@Override&#xd;&#xa;public synchronized void stateChanged(ChangeEvent e) {&#xd;&#xa;      if(pulsarSlider &amp;&amp; e.getSource() instanceof JSlider) {&#xd;&#xa;JSlider s=(JSlider)e.getSource();&#xd;&#xa;mansp.goTo(s.getValue());&#xd;&#xa;}&#xd;&#xa;    }&#xd;&#xa;});&#xd;&#xa;"/>
                     <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="Vista_jSlider1"/>
                   </AuxValues>
                 </Component>
