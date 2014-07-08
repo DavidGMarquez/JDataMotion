@@ -763,30 +763,34 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jProgressBar1" min="-2" pref="300" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="314" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jProgressBar1" min="-2" pref="300" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="350" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
-          <Component id="jLayeredPane1" alignment="1" max="32767" attributes="0"/>
+          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+              <Component id="jLayeredPane1" alignment="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jLayeredPane1" max="32767" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jProgressBar1" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+              <Component id="jLayeredPane1" alignment="0" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -810,25 +814,20 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
+              <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                  <Component id="jPanel3" alignment="1" max="32767" attributes="0"/>
+                  <Component id="jPanel3" alignment="0" pref="750" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
                   <Component id="jTabbedPane1" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                  <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jPanel3" alignment="0" pref="418" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -838,13 +837,16 @@
           <Properties>
             <Property name="name" type="java.lang.String" value="jPanel3" noResource="true"/>
             <Property name="opaque" type="boolean" value="false"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[418, 62]"/>
+            </Property>
           </Properties>
 
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="331" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -853,9 +855,9 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="358" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -871,10 +873,14 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace pref="67" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="jSlider1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButton8" min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="jButton10" min="-2" pref="40" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton8" min="-2" pref="80" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton9" min="-2" pref="40" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -883,9 +889,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jSlider1" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jButton10" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="jButton9" min="-2" pref="25" max="-2" attributes="0"/>
                               <Component id="jButton8" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="jSlider1" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -914,9 +922,31 @@
                     <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jSlider1MouseReleased"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jSlider1.addChangeListener(new ChangeListener() {&#xd;&#xa;@Override&#xd;&#xa;public synchronized void stateChanged(ChangeEvent e) {&#xd;&#xa;      if(pulsarSlider &amp;&amp; e.getSource() instanceof JSlider) {&#xd;&#xa;JSlider s=(JSlider)e.getSource();&#xd;&#xa;mansp.goTo(s.getValue());&#xd;&#xa;}&#xd;&#xa;    }&#xd;&#xa;});&#xd;&#xa;"/>
+                    <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jSlider1.addChangeListener(new ChangeListener() {&#xd;&#xa;@Override&#xd;&#xa;public void stateChanged(ChangeEvent e) {&#xd;&#xa;      if(pulsarSlider &amp;&amp; e.getSource() instanceof JSlider) {&#xd;&#xa;JSlider s=(JSlider)e.getSource();&#xd;&#xa;mansp.goTo(s.getValue());&#xd;&#xa;}&#xd;&#xa;    }&#xd;&#xa;});&#xd;&#xa;"/>
                     <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="Vista_jSlider1"/>
                   </AuxValues>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButton9">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/jdatamotion/imaxes/goToEnd.png"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="jButton9" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton9ActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButton10">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/jdatamotion/imaxes/goToStart.png"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="jButton10" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton10ActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -940,20 +970,20 @@
             <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
           </AccessibilityProperties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="String nomeLabel = &quot;&quot;;&#xa;        for (int i = 0; i &lt; 3; i++) {&#xa;            switch (i) {&#xa;                case 0:&#xa;                    nomeLabel = bundle.getString(&quot;Vista.jScrollPane2.TabConstraints.tabTitle&quot;);&#xa;                    break;&#xa;                case 1:&#xa;                    nomeLabel = bundle.getString(&quot;Vista.jScrollPane4.TabConstraints.tabTitle&quot;);&#xa;                    break;&#xa;                case 2:&#xa;                    nomeLabel = bundle.getString(&quot;Vista.jScrollPane5.TabConstraints.tabTitle&quot;);&#xa;                    break;&#xa;            }&#xa;            final JLabel label = new JLabel(&quot;&lt;html&gt;&lt;body style=&apos;width:80px;text-align:center;margin-bottom:4px;&apos;&gt;&quot; + nomeLabel + &quot;&lt;/body&gt;&lt;/html&gt;&quot;, JLabel.CENTER);&#xa;            label.setFont(new Font(&quot;Calibri&quot;, 1, 16));&#xa;            label.addPropertyChangeListener(&quot;enabled&quot;, new PropertyChangeListener() {&#xa;                @Override&#xa;        public void propertyChange(PropertyChangeEvent evt) {&#xa;                    if (!(boolean) evt.getNewValue()) {&#xa;                        Jsoup.parse(label.getText());&#xa;                    }&#xa;                }&#xa;            });&#xa;            jTabbedPane1.setTabComponentAt(i, label);&#xa;        }&#xa;&#xa;        jTabbedPane1.addPropertyChangeListener(&#xa;                &quot;enabled&quot;, new PropertyChangeListener() {&#xa;                    @Override&#xa;        public void propertyChange(PropertyChangeEvent evt&#xa;                    ) {&#xa;                        for (int i = 0; i &lt; jTabbedPane1.getTabCount(); i++) {&#xa;                            ((JLabel) jTabbedPane1.getTabComponentAt(i)).setEnabled((boolean) (evt.getNewValue()));&#xa;                        }&#xa;                    }&#xa;                }&#xa;        );&#xa;        jTabbedPane1.setEnabled(false);&#xa;        jTabbedPane1.addChangeListener(new ChangeListener() {&#xa;            public void stateChanged(ChangeEvent e) {&#xa;                SwingUtilities.invokeLater(new Runnable () {&#xa; public void run() {&#xa;                jPanel8.setVisible(jTabbedPane1.getSelectedIndex() == 2);&#xa;}&#xa;            });&#xa;            }&#xa;        });&#xa;"/>
+            <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="String nomeLabel = &quot;&quot;;&#xa;        for (int i = 0; i &lt; 3; i++) {&#xa;            switch (i) {&#xa;                case 0:&#xa;                    nomeLabel = bundle.getString(&quot;Vista.jMenu4.text&quot;);&#xa;                    break;&#xa;                case 1:&#xa;                    nomeLabel = bundle.getString(&quot;Vista.jMenu7.text&quot;);&#xa;                    break;&#xa;                case 2:&#xa;                    nomeLabel = bundle.getString(&quot;Vista.jMenu8.text&quot;);&#xa;                    break;&#xa;            }&#xa;            final JLabel label = new JLabel(&quot;&lt;html&gt;&lt;body style=&apos;width:80px;text-align:center;margin-bottom:4px;&apos;&gt;&quot; + nomeLabel + &quot;&lt;/body&gt;&lt;/html&gt;&quot;, JLabel.CENTER);&#xa;            label.setFont(new Font(&quot;Calibri&quot;, 1, 16));&#xa;            label.addPropertyChangeListener(&quot;enabled&quot;, new PropertyChangeListener() {&#xa;                @Override&#xa;        public void propertyChange(PropertyChangeEvent evt) {&#xa;                    if (!(boolean) evt.getNewValue()) {&#xa;                        Jsoup.parse(label.getText());&#xa;                    }&#xa;                }&#xa;            });&#xa;            jTabbedPane1.setTabComponentAt(i, label);&#xa;        }&#xa;&#xa;        jTabbedPane1.addPropertyChangeListener(&#xa;                &quot;enabled&quot;, new PropertyChangeListener() {&#xa;                    @Override&#xa;        public void propertyChange(PropertyChangeEvent evt&#xa;                    ) {&#xa;                        for (int i = 0; i &lt; jTabbedPane1.getTabCount(); i++) {&#xa;                            ((JLabel) jTabbedPane1.getTabComponentAt(i)).setEnabled((boolean) (evt.getNewValue()));&#xa;                        }&#xa;                    }&#xa;                }&#xa;        );&#xa;        jTabbedPane1.setEnabled(false);&#xa;        jTabbedPane1.addChangeListener(new ChangeListener() {&#xa;            public void stateChanged(ChangeEvent e) {&#xa;                SwingUtilities.invokeLater(new Runnable () {&#xa; public void run() {&#xa;                jPanel8.setVisible(jTabbedPane1.getSelectedIndex() == 2);&#xa;}&#xa;            });&#xa;            }&#xa;        });&#xa;"/>
           </AuxValues>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
           <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+            <Container class="javax.swing.JScrollPane" name="jScrollPane4">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="jScrollPane4" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Model">
+                  <JTabbedPaneConstraints tabName="tab4">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jScrollPane2.TabConstraints.tabTitle" replaceFormat="bundle.getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jScrollPane4.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </JTabbedPaneConstraints>
                 </Constraint>
@@ -995,7 +1025,7 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jLabel1" max="32767" attributes="0"/>
                                   <Component id="jLabel2" max="32767" attributes="0"/>
@@ -1006,6 +1036,7 @@
                                       <Component id="jScrollPane6" min="-2" pref="175" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jScrollPane7" min="-2" pref="125" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane3" max="32767" attributes="0"/>
                               </Group>
@@ -1021,6 +1052,26 @@
                       </Properties>
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                      <SubComponents>
+                        <Container class="javax.swing.JPanel" name="jPanel9">
+                          <Properties>
+                            <Property name="name" type="java.lang.String" value="jPanel9" noResource="true"/>
+                          </Properties>
+
+                          <Layout>
+                            <DimensionLayout dim="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                            </DimensionLayout>
+                            <DimensionLayout dim="1">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                            </DimensionLayout>
+                          </Layout>
+                        </Container>
+                      </SubComponents>
                     </Container>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane3">
                       <Properties>
@@ -1085,54 +1136,43 @@
                 </Container>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane4">
+            <Container class="javax.swing.JPanel" name="jPanel2">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jScrollPane4" noResource="true"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="d1" green="fe" red="d1" type="rgb"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="jPanel2" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Filters">
-                    <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jScrollPane4.TabConstraints.tabTitle" replaceFormat="bundle.getString(&quot;{key}&quot;)"/>
-                    </Property>
+                  <JTabbedPaneConstraints tabName="tab5">
+                    <Property name="tabTitle" type="java.lang.String" value="tab5"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>
 
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-              <SubComponents>
-                <Container class="javax.swing.JPanel" name="jPanel2">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="d1" green="fe" red="d1" type="rgb"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="jPanel2" noResource="true"/>
-                  </Properties>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                </Container>
-              </SubComponents>
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
             </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane5">
+            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jScrollPane5" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Display">
+                  <JTabbedPaneConstraints tabName="tab4">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jScrollPane5.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jScrollPane2.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </JTabbedPaneConstraints>
                 </Constraint>

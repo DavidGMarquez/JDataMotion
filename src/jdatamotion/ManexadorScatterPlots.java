@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -81,6 +82,7 @@ public final class ManexadorScatterPlots {
 
     public static final int PLAY = 0;
     public static final int PAUSE = 1;
+    public static final int FREEZE = 2;
     private final JSlider slider;
     private final boolean[][] scatterPlotsVisibles;
     private final ArrayList<PropertyChangeListener> propertyChangeListeners;
@@ -103,11 +105,7 @@ public final class ManexadorScatterPlots {
     }
 
     public int getEstado() {
-        if (tarefaPlay == null) {
-            return PAUSE;
-        } else {
-            return tarefaPlay.getEstado();
-        }
+        return tarefaPlay.getEstado();
     }
 
     public void pecharJFramesChartPanel() {
@@ -128,7 +126,7 @@ public final class ManexadorScatterPlots {
 
     public void goTo(int value) {
         int to = (int) (numItems * value / 100.0);
-        if (to > visualizados) { //GoTo hacia adiante
+        if (to > visualizados) {
             for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
                 for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
                     if (scatterPlotsVisibles[j][k]) {
@@ -137,7 +135,7 @@ public final class ManexadorScatterPlots {
                 }
             }
             visualizados = to;
-        } else if (to < visualizados) { //GoTo hacia atrás
+        } else if (to < visualizados) {
             for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
                 for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
                     if (scatterPlotsVisibles[j][k]) {
@@ -149,14 +147,16 @@ public final class ManexadorScatterPlots {
         }
     }
 
+    public void freeze() {
+        tarefaPlay.freeze();
+    }
+
     final class TarefaPlay extends SwingWorker<Void, Void> {
 
-        private final boolean[][] scatterPlotsVisibles;
         private int estado;
 
         public TarefaPlay(ArrayList<ArrayList<ScatterPlot>> alsp, boolean[][] scatterPlotsVisibles) {
             super();
-            this.scatterPlotsVisibles = scatterPlotsVisibles;
             setEstado(PAUSE);
         }
 
@@ -183,7 +183,11 @@ public final class ManexadorScatterPlots {
                     } catch (InterruptedException ex) {
                     }
                 }
-                setEstado(PAUSE);
+                if (!todoVisualizado()) {
+                    setEstado(FREEZE);
+                } else {
+                    setEstado(PAUSE);
+                }
             } catch (Exception e) {
                 Logger.getLogger(ManexadorScatterPlots.class.getName()).log(Level.SEVERE, null, e);
                 throw e;
@@ -195,6 +199,10 @@ public final class ManexadorScatterPlots {
             setEstado(PAUSE);
         }
 
+        public void freeze() {
+            setEstado(FREEZE);
+        }
+
         public int getEstado() {
             return estado;
         }
@@ -203,7 +211,6 @@ public final class ManexadorScatterPlots {
             setEstado(PLAY);
             execute();
         }
-
     }
 
     public void pause() {
@@ -222,7 +229,8 @@ public final class ManexadorScatterPlots {
         return visualizados;
     }
 
-    public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, int numAtributosNumericos, boolean[][] scatterPlotsVisibles, JSlider slider) {
+    public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, boolean[][] scatterPlotsVisibles, JSlider slider) {
+        int numAtributosNumericos = scatterPlotsVisibles.length;
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
         this.numItems = instances.numInstances();
         if (atributoColor == -1) {
@@ -238,10 +246,11 @@ public final class ManexadorScatterPlots {
             }
             this.matrizScatterPlots.add(alsp);
         }
-        this.tarefaPlay = null;
+        this.propertyChangeListeners = new ArrayList<>();
+        this.tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
+        tarefaPlay.setEstado(PAUSE);
         this.visualizados = 0;
         this.slider = slider;
-        this.propertyChangeListeners = new ArrayList<>();
     }
 
     public ArrayList<ArrayList<ScatterPlot>> getMatrizScatterPlots() {
@@ -445,7 +454,7 @@ public final class ManexadorScatterPlots {
             return domainMax;
         }
 
-        public void visualizarItems(int i) {
+        public synchronized void visualizarItems(int i) {
             for (int a = 0; a < i; a++) {
                 if (xValues[0].length > getSeries(0).getItemCount()) {
                     int ic = getSeries(0).getItemCount();
@@ -454,7 +463,7 @@ public final class ManexadorScatterPlots {
             }
         }
 
-        public void agocharItems(int i) {
+        public synchronized void agocharItems(int i) {
             for (int a = 0; a < i; a++) {
                 if (getSeries(0).getItemCount() > 0) {
                     int ic = getSeries(0).getItemCount();

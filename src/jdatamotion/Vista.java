@@ -115,7 +115,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private int ultimaColumnaModeloSeleccionada;
     private boolean scatterPlotsVisibles[][];
     private boolean pulsarSlider;
-    public static ResourceBundle bundle;
+    private int ultimoEstadoReproductor;
+    public static ResourceBundle bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", new Locale("en"));
     private static final String ficheiroConfiguracion = "configuracion.properties";
 
     public static ResourceBundle getBundle() {
@@ -128,23 +129,27 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public synchronized void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("estadoReproductor")) {
             int newValue = (int) evt.getNewValue();
-            jButton8.removeActionListener(jButton8.getActionListeners()[0]);
-            switch (newValue) {
-                case ManexadorScatterPlots.PLAY:
-                    jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/pause.png")));
-                    jButton8.addActionListener((ActionEvent evt1) -> {
-                        mansp.pause();
-                    });
-                    break;
-                case ManexadorScatterPlots.PAUSE:
-                    jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/play.png")));
-                    jButton8.addActionListener((ActionEvent evt1) -> {
-                        mansp.play();
-                    });
-                    break;
+            if (newValue != ManexadorScatterPlots.FREEZE) {
+                for (ActionListener al : jButton8.getActionListeners()) {
+                    jButton8.removeActionListener(al);
+                }
+                switch (newValue) {
+                    case ManexadorScatterPlots.PLAY:
+                        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/pause.png")));
+                        jButton8.addActionListener((ActionEvent evt1) -> {
+                            mansp.pause();
+                        });
+                        break;
+                    case ManexadorScatterPlots.PAUSE:
+                        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/play.png")));
+                        jButton8.addActionListener((ActionEvent evt1) -> {
+                            mansp.play();
+                        });
+                        break;
+                }
             }
         }
     }
@@ -186,7 +191,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        this.bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", new Locale("en"));
         reset();
         initComponents();
         this.pulsarSlider = false;
@@ -267,13 +271,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private void pintarMenuVisualizacion() {
         if (mansp != null) {
             mansp.pecharJFramesChartPanel();
+            mansp.pause();
         }
         ArrayList<Integer> indices = meuModelo.obterIndicesAtributosNumericosNoModelo();
         int numAtributosNumericos = indices.size();
-        mansp = new ManexadorScatterPlots(meuModelo.getAtributos(), meuModelo.getIndiceAtributoNominal(), numAtributosNumericos, scatterPlotsVisibles, jSlider1);
+        mansp = new ManexadorScatterPlots(meuModelo.getAtributos(), meuModelo.getIndiceAtributoNominal(), scatterPlotsVisibles, jSlider1);
         mansp.addPropertyChangeListener(this);
         actualizarScatterPlotsVisibles(numAtributosNumericos);
         jPopupMenu1.setVisible(false);
+        jSlider1.setValue(0);
         jPanel4.removeAll();
         int numCols = numColumnasNonVacias();
         int numFilas = numFilasNonVacias();
@@ -659,19 +665,21 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel8 = new javax.swing.JPanel();
         jButton8 = new javax.swing.JButton();
         jSlider1 = new javax.swing.JSlider();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane4 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
+        jPanel9 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         panelModelo = new JPanelModelo();
         jScrollPane7 = new javax.swing.JScrollPane();
         panelDetallarAtributo = new JPanelActualizable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jPanel4 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -950,6 +958,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jPanel3.setName("jPanel3"); // NOI18N
         jPanel3.setOpaque(false);
+        jPanel3.setPreferredSize(new java.awt.Dimension(418, 62));
 
         jPanel8.setName("jPanel8"); // NOI18N
         jPanel8.setOpaque(false);
@@ -974,11 +983,27 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         });
         jSlider1.addChangeListener(new ChangeListener() {
             @Override
-            public synchronized void stateChanged(ChangeEvent e) {
+            public void stateChanged(ChangeEvent e) {
                 if(pulsarSlider && e.getSource() instanceof JSlider) {
                     JSlider s=(JSlider)e.getSource();
                     mansp.goTo(s.getValue());
                 }
+            }
+        });
+
+        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/goToEnd.png"))); // NOI18N
+        jButton9.setName("jButton9"); // NOI18N
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/goToStart.png"))); // NOI18N
+        jButton10.setName("jButton10"); // NOI18N
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
             }
         });
 
@@ -987,19 +1012,25 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(67, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(4, 4, 4)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1008,16 +1039,16 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(331, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(0, 0, 0)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(358, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
@@ -1026,12 +1057,27 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jTabbedPane1.setName(""); // NOI18N
         jTabbedPane1.setOpaque(true);
 
-        jScrollPane2.setName("jScrollPane2"); // NOI18N
+        jScrollPane4.setName("jScrollPane4"); // NOI18N
 
         jPanel1.setBackground(new java.awt.Color(255, 232, 198));
         jPanel1.setName("jPanel1"); // NOI18N
 
         jScrollPane6.setName("jScrollPane6"); // NOI18N
+
+        jPanel9.setName("jPanel9"); // NOI18N
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jScrollPane6.setViewportView(jPanel9);
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
@@ -1073,7 +1119,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1082,16 +1128,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane3))
                 .addContainerGap())
         );
 
-        jScrollPane2.setViewportView(jPanel1);
+        jScrollPane4.setViewportView(jPanel1);
 
-        jTabbedPane1.addTab(bundle.getString("Vista.jScrollPane2.TabConstraints.tabTitle"), jScrollPane2); // NOI18N
-
-        jScrollPane4.setName("jScrollPane4"); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("Vista.jScrollPane4.TabConstraints.tabTitle"), jScrollPane4); // NOI18N
 
         jPanel2.setBackground(new java.awt.Color(209, 254, 209));
         jPanel2.setName("jPanel2"); // NOI18N
@@ -1107,11 +1152,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jScrollPane4.setViewportView(jPanel2);
+        jTabbedPane1.addTab("tab5", jPanel2);
 
-        jTabbedPane1.addTab(bundle.getString("Vista.jScrollPane4.TabConstraints.tabTitle"), jScrollPane4); // NOI18N
-
-        jScrollPane5.setName("jScrollPane5"); // NOI18N
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         jPanel4.setBackground(new java.awt.Color(0, 0, 0));
         jPanel4.setName("jPanel4"); // NOI18N
@@ -1127,21 +1170,21 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jScrollPane5.setViewportView(jPanel4);
+        jScrollPane2.setViewportView(jPanel4);
 
-        jTabbedPane1.addTab(bundle.getString("Vista.jScrollPane5.TabConstraints.tabTitle"), jScrollPane5); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("Vista.jScrollPane2.TabConstraints.tabTitle"), jScrollPane2); // NOI18N
 
         String nomeLabel = "";
         for (int i = 0; i < 3; i++) {
             switch (i) {
                 case 0:
-                nomeLabel = bundle.getString("Vista.jScrollPane2.TabConstraints.tabTitle");
+                nomeLabel = bundle.getString("Vista.jMenu4.text");
                 break;
                 case 1:
-                nomeLabel = bundle.getString("Vista.jScrollPane4.TabConstraints.tabTitle");
+                nomeLabel = bundle.getString("Vista.jMenu7.text");
                 break;
                 case 2:
-                nomeLabel = bundle.getString("Vista.jScrollPane5.TabConstraints.tabTitle");
+                nomeLabel = bundle.getString("Vista.jMenu8.text");
                 break;
             }
             final JLabel label = new JLabel("<html><body style='width:80px;text-align:center;margin-bottom:4px;'>" + nomeLabel + "</body></html>", JLabel.CENTER);
@@ -1183,21 +1226,17 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jLayeredPane1.setLayout(jLayeredPane1Layout);
         jLayeredPane1Layout.setHorizontalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE))
         );
         jLayeredPane1Layout.setVerticalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(37, 37, 37))
             .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE))
         );
         jLayeredPane1.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(jTabbedPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -1436,23 +1475,25 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(314, 314, 314)
-                        .addComponent(jLabel3)))
-                .addContainerGap(350, Short.MAX_VALUE))
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLayeredPane1))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLayeredPane1)
-                .addGap(0, 0, 0)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLayeredPane1))
         );
 
         pack();
@@ -1583,19 +1624,34 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         configurarEstablecerAtributoNominalRepresentado();
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        jSlider1.setValue(0);
+        mansp.pause();
+        mansp.goTo(0);
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        jSlider1.setValue(100);
+        mansp.pause();
+        mansp.goTo(100);
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jSlider1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MouseReleased
+        if (ultimoEstadoReproductor == ManexadorScatterPlots.PLAY) {
+            mansp.play();
+        }
+        pulsarSlider = false;
+    }//GEN-LAST:event_jSlider1MouseReleased
+
+    private void jSlider1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MousePressed
+        pulsarSlider = true;
+        ultimoEstadoReproductor = mansp.getEstado();
+        mansp.freeze();
+    }//GEN-LAST:event_jSlider1MousePressed
+
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         mansp.play();
     }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void jSlider1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MousePressed
-        mansp.pause();
-        pulsarSlider = true;
-    }//GEN-LAST:event_jSlider1MousePressed
-
-    private void jSlider1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MouseReleased
-       pulsarSlider=false;
-       mansp.play();
-    }//GEN-LAST:event_jSlider1MouseReleased
 
     public JSlider getjSlider1() {
         return jSlider1;
@@ -2423,12 +2479,14 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JRadioButtonMenuItem botonNumerico;
     javax.swing.JRadioButtonMenuItem botonString;
     javax.swing.JButton jButton1;
+    javax.swing.JButton jButton10;
     javax.swing.JButton jButton2;
     javax.swing.JButton jButton3;
     javax.swing.JButton jButton4;
     javax.swing.JButton jButton5;
     javax.swing.JButton jButton6;
     javax.swing.JButton jButton8;
+    javax.swing.JButton jButton9;
     javax.swing.JComboBox jComboBox1;
     javax.swing.JDialog jDialog1;
     javax.swing.JDialog jDialog2;
@@ -2472,13 +2530,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JPanel jPanel6;
     javax.swing.JPanel jPanel7;
     javax.swing.JPanel jPanel8;
+    javax.swing.JPanel jPanel9;
     javax.swing.JPopupMenu jPopupMenu1;
     javax.swing.JProgressBar jProgressBar1;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
     javax.swing.JScrollPane jScrollPane4;
-    javax.swing.JScrollPane jScrollPane5;
     javax.swing.JScrollPane jScrollPane6;
     javax.swing.JScrollPane jScrollPane7;
     javax.swing.JScrollPane jScrollPane8;
