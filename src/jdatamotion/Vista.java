@@ -496,6 +496,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 c.weighty = 1;
                 chartPanelCela.add(clickmeButton, c);
                 jPanel4.add(chartPanelCela, new TableLayoutConstraints(j - columnasVacias, indices.size() - 1 - i - filasVacias));
+                chartPanelCela.revalidate();
+                chartPanelCela.repaint();
             }
             return null;
         }

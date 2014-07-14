@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -275,6 +274,31 @@ public final class ManexadorScatterPlots {
         }
     }
 
+    private class PuntoConNominal {
+
+        private final int atributoNominal;
+        private final double valorX;
+        private final double valorY;
+
+        public int getAtributoNominal() {
+            return atributoNominal;
+        }
+
+        public double getValorX() {
+            return valorX;
+        }
+
+        public double getValorY() {
+            return valorY;
+        }
+
+        public PuntoConNominal(int atributoNominal, double valorX, double valorY) {
+            this.atributoNominal = atributoNominal;
+            this.valorX = valorX;
+            this.valorY = valorY;
+        }
+    }
+
     class XYDatasetModelo extends XYSeriesCollection {
 
         private Number domainMin;
@@ -285,8 +309,7 @@ public final class ManexadorScatterPlots {
         private Range range;
         private final int atributoY;
         private final int atributoX;
-        private final Double xValues[][];
-        private final Double yValues[][];
+        private final PuntoConNominal puntos[];
 
         public Number getDomainMin() {
             return domainMin;
@@ -318,71 +341,29 @@ public final class ManexadorScatterPlots {
             double d2 = (1.0D / 0.0D);
             double d3 = (-1.0D / 0.0D);
             if (atributoColor > -1) {
-                int numeroValoresAtributoNominal = atributos.attribute(atributoColor).numValues();
-                ArrayList<ArrayList<Double>> xv = new ArrayList<>();
-                ArrayList<ArrayList<Double>> yv = new ArrayList<>();
-                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
-                    xv.add(new ArrayList<>());
-                    yv.add(new ArrayList<>());
-                }
-                for (int l = 0; l < numeroInstancias; l++) {
-                    xv.get((int) atributos.instance(l).value(atributoColor)).add(atributos.instance(l).value(atributoX));
-                    yv.get((int) atributos.instance(l).value(atributoColor)).add(atributos.instance(l).value(atributoY));
-                }
-                int maxInstanciasNominal = 0;
-                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
-                    int size = xv.get(i).size();
-                    if (size > maxInstanciasNominal) {
-                        maxInstanciasNominal = size;
-                    }
-                }
-                xValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
-                yValues = new Double[numeroValoresAtributoNominal][maxInstanciasNominal];
-                for (int i = 0; i < numeroValoresAtributoNominal; i++) {
-                    XYSeries s = new XYSeries(atributos.attribute(atributoColor).value(i), false);
-                    for (int j = 0; j < xv.get(i).size(); j++) {
-                        Double d4 = xv.get(i).get(j);
-                        if (d4 < d) {
-                            d = d4;
-                        }
-                        if (d4 > d1) {
-                            d1 = d4;
-                        }
-                        xValues[i][j] = d4;
-                        Double d5 = yv.get(i).get(j);
-                        if (d5 < d2) {
-                            d2 = d5;
-                        }
-                        if (d5 > d3) {
-                            d3 = d5;
-                        }
-                        yValues[i][j] = d5;
-                    }
-                    addSeries(s);
+                for (int i = 0; i < atributos.attribute(atributoColor).numValues(); i++) {
+                    addSeries(new XYSeries(atributos.attribute(atributoColor).value(i), false));
                 }
             } else {
-                xValues = new Double[1][numeroInstancias];
-                yValues = new Double[1][numeroInstancias];
-                XYSeries s = new XYSeries(new Integer(0), false);
-                for (int l = 0; l < numeroInstancias; l++) {
-                    double d4 = atributos.instance(l).value(atributoX);
-                    xValues[0][l] = d4;
-                    if (d4 < d) {
-                        d = d4;
-                    }
-                    if (d4 > d1) {
-                        d1 = d4;
-                    }
-                    double d5 = atributos.instance(l).value(atributoY);
-                    yValues[0][l] = d5;
-                    if (d5 < d2) {
-                        d2 = d5;
-                    }
-                    if (d5 > d3) {
-                        d3 = d5;
-                    }
+                addSeries(new XYSeries(0, false));
+            }
+            puntos = new PuntoConNominal[numeroInstancias];
+            for (int j = 0; j < numeroInstancias; j++) {
+                Double d4 = atributos.instance(j).value(atributoX);
+                if (d4 < d) {
+                    d = d4;
                 }
-                addSeries(s);
+                if (d4 > d1) {
+                    d1 = d4;
+                }
+                Double d5 = atributos.instance(j).value(atributoY);
+                if (d5 < d2) {
+                    d2 = d5;
+                }
+                if (d5 > d3) {
+                    d3 = d5;
+                }
+                puntos[j] = new PuntoConNominal(atributoColor > -1 ? (int) atributos.instance(j).value(atributoColor) : 0, d4, d5);
             }
             try {
                 domainMin = d;
@@ -454,22 +435,22 @@ public final class ManexadorScatterPlots {
             return domainMax;
         }
 
-        public synchronized void visualizarItems(int i) {
+        public void visualizarItems(int i) {
             for (int a = 0; a < i; a++) {
-                if (xValues[0].length > getSeries(0).getItemCount()) {
-                    int ic = getSeries(0).getItemCount();
-                    getSeries(0).add(xValues[0][ic], yValues[0][ic]);
-                }
+                PuntoConNominal p = puntos[visualizados + a];
+                getSeries(p.getAtributoNominal()).add(p.getValorX(), p.getValorY(), false);
             }
+            fireDatasetChanged();
         }
 
-        public synchronized void agocharItems(int i) {
+        public void agocharItems(int i) {
+            setNotify(false);
             for (int a = 0; a < i; a++) {
-                if (getSeries(0).getItemCount() > 0) {
-                    int ic = getSeries(0).getItemCount();
-                    getSeries(0).remove(ic - 1);
-                }
+                PuntoConNominal xv = puntos[visualizados - a - 1];
+                XYSeries xys = getSeries(xv.getAtributoNominal());
+                xys.remove(xys.getItemCount() - 1);
             }
+            setNotify(true);
         }
 
     }
