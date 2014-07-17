@@ -309,7 +309,25 @@ public final class ManexadorScatterPlots {
         private Range range;
         private final int atributoY;
         private final int atributoX;
+        private final int atributoColor;
         private final PuntoConNominal puntos[];
+        private final InstancesComparable atributos;
+
+        public int getAtributoY() {
+            return atributoY;
+        }
+
+        public int getAtributoX() {
+            return atributoX;
+        }
+
+        public int getAtributoColor() {
+            return atributoColor;
+        }
+
+        public PuntoConNominal[] getPuntos() {
+            return puntos;
+        }
 
         public Number getDomainMin() {
             return domainMin;
@@ -323,6 +341,14 @@ public final class ManexadorScatterPlots {
             return rangeMin;
         }
 
+        @Override
+        public Comparable<String> getSeriesKey(int i) {
+            if (atributoColor < 0) {
+                return "";
+            }
+            return i > 0 ? atributos.attribute(atributoColor).value(i - 1) : bundle.getString("senDefinir");
+        }
+
         public Number getRangeMax() {
             return rangeMax;
         }
@@ -333,19 +359,20 @@ public final class ManexadorScatterPlots {
 
         public XYDatasetModelo(InstancesComparable atributos, int atributoX, int atributoY, int atributoColor) {
             super();
+            this.atributos = atributos;
             this.atributoX = atributoX;
             this.atributoY = atributoY;
+            this.atributoColor = atributoColor;
             int numeroInstancias = atributos.numInstances();
             double d = (1.0D / 0.0D);
             double d1 = (-1.0D / 0.0D);
             double d2 = (1.0D / 0.0D);
             double d3 = (-1.0D / 0.0D);
+            addSeries(new XYSeries(-1, false));
             if (atributoColor > -1) {
                 for (int i = 0; i < atributos.attribute(atributoColor).numValues(); i++) {
-                    addSeries(new XYSeries(atributos.attribute(atributoColor).value(i), false));
+                    addSeries(new XYSeries(i, false));
                 }
-            } else {
-                addSeries(new XYSeries(0, false));
             }
             puntos = new PuntoConNominal[numeroInstancias];
             for (int j = 0; j < numeroInstancias; j++) {
@@ -363,7 +390,7 @@ public final class ManexadorScatterPlots {
                 if (d5 > d3) {
                     d3 = d5;
                 }
-                puntos[j] = new PuntoConNominal(atributoColor > -1 ? (int) atributos.instance(j).value(atributoColor) : 0, d4, d5);
+                puntos[j] = new PuntoConNominal(atributoColor > -1 && Double.compare(atributos.instance(j).value(atributoColor), Double.NaN) != 0 ? (int) atributos.instance(j).value(atributoColor) : -1, d4, d5);
             }
             try {
                 domainMin = d;
@@ -438,7 +465,7 @@ public final class ManexadorScatterPlots {
         public void visualizarItems(int i) {
             for (int a = 0; a < i; a++) {
                 PuntoConNominal p = puntos[visualizados + a];
-                getSeries(p.getAtributoNominal()).add(p.getValorX(), p.getValorY(), false);
+                getSeries((Comparable) p.getAtributoNominal()).add(p.getValorX(), p.getValorY(), false);
             }
             fireDatasetChanged();
         }
@@ -447,7 +474,7 @@ public final class ManexadorScatterPlots {
             setNotify(false);
             for (int a = 0; a < i; a++) {
                 PuntoConNominal xv = puntos[visualizados - a - 1];
-                XYSeries xys = getSeries(xv.getAtributoNominal());
+                XYSeries xys = getSeries((Comparable) xv.getAtributoNominal());
                 xys.remove(xys.getItemCount() - 1);
             }
             setNotify(true);
