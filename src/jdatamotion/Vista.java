@@ -2461,8 +2461,63 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 panelDetallarAtributo.add(new JLabel(bundle.getString("indiceTemporal") + ": " + (meuModelo.getIndiceTemporal() == ultimaColumnaModeloSeleccionada ? bundle.getString("si") : bundle.getString("non"))));
                 switch (meuModelo.obterTipoAtributo(ultimaColumnaModeloSeleccionada)) {
                     case "numérico":
+                        int numInstancesNonNaN = 0;
+                        Double dato,
+                         min = null,
+                         max = null,
+                         desvTipica = null,
+                         media = null;
+                        for (int i = 0; i < meuModelo.getAtributos().numInstances(); i++) {
+                            dato = (Double) meuModelo.obterDato(i, ultimaColumnaModeloSeleccionada);
+                            if (Double.compare(dato, Double.NaN) != 0) {
+                                numInstancesNonNaN++;
+                                if (max == null) {
+                                    max = dato;
+                                    min = dato;
+                                    media = dato;
+                                } else {
+                                    if (dato > max) {
+                                        max = dato;
+                                    }
+                                    if (dato < min) {
+                                        min = dato;
+                                    }
+                                    media += dato;
+                                }
+                            }
+                        }
+                        if (media != null) {
+                            media /= numInstancesNonNaN;
+                            numInstancesNonNaN = 0;
+                            desvTipica = 0.0;
+                            for (int i = 0; i < meuModelo.getAtributos().numInstances(); i++) {
+                                dato = (Double) meuModelo.obterDato(i, ultimaColumnaModeloSeleccionada);
+                                if (Double.compare(dato, Double.NaN) != 0) {
+                                    numInstancesNonNaN++;
+                                    desvTipica += Math.pow(dato - media, 2.0);
+                                }
+                            }
+                            desvTipica /= (numInstancesNonNaN - 1);
+                        }
+                        panelDetallarAtributo.add(new JLabel(bundle.getString("maximo") + ": " + (max != null ? max : "-")));
+                        panelDetallarAtributo.add(new JLabel(bundle.getString("minimo") + ": " + (min != null ? min : "-")));
+                        panelDetallarAtributo.add(new JLabel(bundle.getString("media") + ": " + (media != null ? media : "-")));
+                        panelDetallarAtributo.add(new JLabel(bundle.getString("desviacionTipica") + ": " + (desvTipica != null && Double.compare(desvTipica, Double.NaN) != 0 ? desvTipica : "-")));
                         break;
                     case "nominal":
+                        ArrayList<Integer> coincidencias = new ArrayList<>();
+                        for (int i = 0; i < meuModelo.getAtributos().attribute(ultimaColumnaModeloSeleccionada).numValues() + 1; i++) {
+                            coincidencias.add(0);
+                        }
+                        for (int i = 0; i < meuModelo.getAtributos().numInstances(); i++) {
+                            int index = meuModelo.getAtributos().instance(i).isMissing(ultimaColumnaModeloSeleccionada) ? 0 : (int) meuModelo.getAtributos().instance(i).value(ultimaColumnaModeloSeleccionada) + 1;
+                            coincidencias.set(index, coincidencias.get(index) + 1);
+                        }
+                        panelDetallarAtributo.add(new JLabel(bundle.getString("valores") + ": "));
+                        panelDetallarAtributo.add(new JLabel("  " + bundle.getString("senDefinir") + " (" + coincidencias.get(0) + ")"));
+                        for (int i = 1; i < coincidencias.size(); i++) {
+                            panelDetallarAtributo.add(new JLabel("  " + meuModelo.getAtributos().attribute(ultimaColumnaModeloSeleccionada).value(i - 1) + " (" + coincidencias.get(i) + ")"));
+                        }
                         break;
                     case "string":
                         break;
