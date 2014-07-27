@@ -165,7 +165,7 @@ public final class ManexadorScatterPlots {
         }
 
         @Override
-        protected Void doInBackground() throws Exception {
+        protected Void doInBackground() {
             try {
                 while (!todoVisualizado() && estado == PLAY) {
                     for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
@@ -462,7 +462,7 @@ public final class ManexadorScatterPlots {
             return domainMax;
         }
 
-        public void visualizarItems(int i) {
+        public synchronized void visualizarItems(int i) {
             for (int a = 0; a < i; a++) {
                 PuntoConNominal p = puntos[visualizados + a];
                 getSeries((Comparable) p.getAtributoNominal()).add(p.getValorX(), p.getValorY(), false);
@@ -470,7 +470,7 @@ public final class ManexadorScatterPlots {
             fireDatasetChanged();
         }
 
-        public void agocharItems(int i) {
+        public synchronized void agocharItems(int i) {
             setNotify(false);
             for (int a = 0; a < i; a++) {
                 PuntoConNominal xv = puntos[visualizados - a - 1];
