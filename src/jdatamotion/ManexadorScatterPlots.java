@@ -29,6 +29,9 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
@@ -46,6 +49,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -83,6 +87,7 @@ public final class ManexadorScatterPlots {
     public static final int PAUSE = 1;
     public static final int FREEZE = 2;
     private final JSlider slider;
+    private final JTextField textField;
     private final boolean[][] scatterPlotsVisibles;
     private final ArrayList<PropertyChangeListener> propertyChangeListeners;
     private TarefaPlay tarefaPlay;
@@ -123,8 +128,7 @@ public final class ManexadorScatterPlots {
         return visualizados >= numItems;
     }
 
-    public void goTo(int value) {
-        int to = (int) (numItems * value / 100.0);
+    public void goTo(int to) {
         if (to > visualizados) {
             for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
                 for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
@@ -133,7 +137,6 @@ public final class ManexadorScatterPlots {
                     }
                 }
             }
-            visualizados = to;
         } else if (to < visualizados) {
             for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
                 for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
@@ -142,8 +145,11 @@ public final class ManexadorScatterPlots {
                     }
                 }
             }
-            visualizados = to;
         }
+        visualizados = to;
+        slider.setValue((int) 1.0 * slider.getMaximum() * to / numItems);
+        textField.setText(String.valueOf(to));
+        textField.setBackground(Color.white);
     }
 
     public void freeze() {
@@ -176,7 +182,9 @@ public final class ManexadorScatterPlots {
                         }
                     }
                     visualizados++;
-                    slider.setValue((int) 100.0 * visualizados / numItems);
+                    slider.setValue((int) 1.0 * slider.getMaximum() * visualizados / numItems);
+                    textField.setText(String.valueOf(visualizados));
+                    textField.setBackground(Color.white);
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException ex) {
@@ -228,7 +236,7 @@ public final class ManexadorScatterPlots {
         return visualizados;
     }
 
-    public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, boolean[][] scatterPlotsVisibles, JSlider slider) {
+    public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField) {
         int numAtributosNumericos = scatterPlotsVisibles.length;
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
         this.numItems = instances.numInstances();
@@ -250,6 +258,7 @@ public final class ManexadorScatterPlots {
         tarefaPlay.setEstado(PAUSE);
         this.visualizados = 0;
         this.slider = slider;
+        this.textField = textField;
     }
 
     public ArrayList<ArrayList<ScatterPlot>> getMatrizScatterPlots() {
@@ -391,6 +400,8 @@ public final class ManexadorScatterPlots {
                     d3 = d5;
                 }
                 puntos[j] = new PuntoConNominal(atributoColor > -1 && Double.compare(atributos.instance(j).value(atributoColor), Double.NaN) != 0 ? (int) atributos.instance(j).value(atributoColor) : -1, d4, d5);
+                getSeries((Comparable) puntos[j].getAtributoNominal()).add(puntos[j].getValorX(), puntos[j].getValorY(), false);
+                visualizados = numItems;
             }
             try {
                 domainMin = d;
@@ -399,6 +410,7 @@ public final class ManexadorScatterPlots {
                 rangeMin = d2;
                 rangeMax = d3;
                 range = new Range(d2, d3);
+                fireDatasetChanged();
             } catch (IllegalArgumentException e) {
             }
         }
@@ -571,6 +583,7 @@ public final class ManexadorScatterPlots {
         private void configurarChartPanel(ChartPanel chartpanel, InstancesComparable instances, Vista vista) {
             chartpanel.setMouseWheelEnabled(true);
             chartpanel.setPreferredSize(new Dimension(340, 210));
+            JPopupMenu jpopup = vista.getjPopupMenu1();
             chartpanel.addChartMouseListener(new ChartMouseListener() {
                 @Override
                 public void chartMouseClicked(final ChartMouseEvent event) {
@@ -588,7 +601,6 @@ public final class ManexadorScatterPlots {
                                 }
                             }
                             if (!indicesInstancesPuntos.isEmpty()) {
-                                JPopupMenu jpopup = vista.getjPopupMenu1();
                                 jpopup.removeAll();
                                 jpopup.setLayout(new BoxLayout(jpopup, BoxLayout.X_AXIS));
                                 for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
@@ -609,8 +621,9 @@ public final class ManexadorScatterPlots {
                                         jpopup.add(pa);
                                     }
                                 }
-                                jpopup.show(event.getTrigger().getComponent(), event.getTrigger().getX() + 1, event.getTrigger().getY() + 1);
+                                jpopup.show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
                                 procesarSeleccion(instances, indicesInstancesPuntos);
+
                             }
                         }
                     });
@@ -618,6 +631,21 @@ public final class ManexadorScatterPlots {
 
                 @Override
                 public void chartMouseMoved(ChartMouseEvent event) {
+                }
+            });
+            chartpanel.addMouseWheelListener((MouseWheelEvent e) -> {
+                jpopup.setVisible(false);
+            });
+            chartpanel.addMouseMotionListener(new MouseMotionListener() {
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    jpopup.setVisible(false);
+                }
+
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    jpopup.setVisible(false);
                 }
             });
         }
