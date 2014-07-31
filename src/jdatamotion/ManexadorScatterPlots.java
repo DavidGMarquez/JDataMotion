@@ -128,7 +128,7 @@ public final class ManexadorScatterPlots {
         return visualizados >= numItems;
     }
 
-    public void goTo(int to) {
+    public synchronized void goTo(int to) {
         if (to > visualizados) {
             for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
                 for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
@@ -147,7 +147,6 @@ public final class ManexadorScatterPlots {
             }
         }
         visualizados = to;
-        slider.setValue((int) 1.0 * slider.getMaximum() * to / numItems);
         textField.setText(String.valueOf(to));
         textField.setBackground(Color.white);
     }
@@ -174,20 +173,22 @@ public final class ManexadorScatterPlots {
         protected Void doInBackground() {
             try {
                 while (!todoVisualizado() && estado == PLAY) {
-                    for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
-                        for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
-                            if (scatterPlotsVisibles[j][k]) {
-                                ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
+                    synchronized (ManexadorScatterPlots.this) {
+                        for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                            for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                                if (scatterPlotsVisibles[j][k]) {
+                                    ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
+                                }
                             }
                         }
-                    }
-                    visualizados++;
-                    slider.setValue((int) 1.0 * slider.getMaximum() * visualizados / numItems);
-                    textField.setText(String.valueOf(visualizados));
-                    textField.setBackground(Color.white);
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ex) {
+                        visualizados++;
+                        slider.setValue((int) 1.0 * slider.getMaximum() * visualizados / numItems);
+                        textField.setText(String.valueOf(visualizados));
+                        textField.setBackground(Color.white);
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {
+                        }
                     }
                 }
                 if (!todoVisualizado()) {

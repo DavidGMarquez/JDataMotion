@@ -271,17 +271,33 @@ public class Modelo extends Observable implements Sesionizable {
         }
         switch (extension) {
             case "csv":
-                CSVLoader loaderCSV = new CSVLoader();
-                loaderCSV.setSource(new File(url));
-                atributos = new InstancesComparable(loaderCSV.getDataSet());
+            case "arff":
+                importarConExtension(url, extension);
                 break;
+            default:
+                try {
+                    importarConExtension(url, "arff");
+                } catch (IOException e) {
+                    importarConExtension(url, "csv");
+                }
+                break;
+        }
+        setChanged();
+    }
+
+    private void importarConExtension(String url, String extension) throws IOException {
+        switch (extension) {
             case "arff":
                 ArffLoader loaderARFF = new ArffLoader();
                 loaderARFF.setFile(new File(url));
                 atributos = new InstancesComparable(loaderARFF.getDataSet());
                 break;
+            case "csv":
+                CSVLoader loaderCSV = new CSVLoader();
+                loaderCSV.setSource(new File(url));
+                atributos = new InstancesComparable(loaderCSV.getDataSet());
+                break;
         }
-        setChanged();
     }
 
     public void exportarFicheiro(String path, String extension) throws IOException {
