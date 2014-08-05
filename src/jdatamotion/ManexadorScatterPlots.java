@@ -25,57 +25,41 @@ package jdatamotion;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.border.LineBorder;
 import jdatamotion.Modelo.InstancesComparable;
-import jdatamotion.Vista.TarefaProgreso;
 import static jdatamotion.Vista.bundle;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
+import org.jfree.chart.annotations.XYLineAnnotation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.Range;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.Drawable;
-import weka.core.Attribute;
-import weka.core.Instance;
 
 /**
  *
@@ -94,14 +78,14 @@ public final class ManexadorScatterPlots {
     private final transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
     private int visualizados;
     private final int numSeries;
-    private final int numItems;
+    private final InstancesComparable instances;
 
     public int getNumSeries() {
         return numSeries;
     }
 
     public int getNumItems() {
-        return numItems;
+        return instances.numInstances();
     }
 
     public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
@@ -125,7 +109,7 @@ public final class ManexadorScatterPlots {
     }
 
     public boolean todoVisualizado() {
-        return visualizados >= numItems;
+        return visualizados >= instances.numInstances();
     }
 
     public synchronized void goTo(int to) {
@@ -133,7 +117,9 @@ public final class ManexadorScatterPlots {
             for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
                 for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
                     if (scatterPlotsVisibles[j][k]) {
-                        ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(to - visualizados);
+                        ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+                        XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+                        xyd.visualizarItems(sp, to - visualizados);
                     }
                 }
             }
@@ -141,7 +127,9 @@ public final class ManexadorScatterPlots {
             for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
                 for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
                     if (scatterPlotsVisibles[j][k]) {
-                        ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).agocharItems(visualizados - to);
+                        ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+                        XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+                        xyd.agocharItems(sp, visualizados - to);
                     }
                 }
             }
@@ -164,7 +152,7 @@ public final class ManexadorScatterPlots {
             setEstado(PAUSE);
         }
 
-        public void setEstado(int estado) {
+        public synchronized void setEstado(int estado) {
             firePropertyChange("estadoReproductor", this.estado, estado);
             this.estado = estado;
         }
@@ -173,21 +161,25 @@ public final class ManexadorScatterPlots {
         protected Void doInBackground() {
             try {
                 while (!todoVisualizado() && estado == PLAY) {
-                    synchronized (ManexadorScatterPlots.this) {
-                        for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
-                            for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
-                                if (scatterPlotsVisibles[j][k]) {
-                                    ((XYDatasetModelo) matrizScatterPlots.get(j).get(k).getChartPanelCela().getChart().getXYPlot().getDataset()).visualizarItems(1);
+                    synchronized (this) {
+                        if (!todoVisualizado() && estado == PLAY) {
+                            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                                    if (scatterPlotsVisibles[j][k]) {
+                                        ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+                                        XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+                                        xyd.visualizarItems(sp, 1);
+                                    }
                                 }
                             }
-                        }
-                        visualizados++;
-                        slider.setValue((int) 1.0 * slider.getMaximum() * visualizados / numItems);
-                        textField.setText(String.valueOf(visualizados));
-                        textField.setBackground(Color.white);
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ex) {
+                            visualizados++;
+                            slider.setValue((int) 1.0 * slider.getMaximum() * visualizados / instances.numInstances());
+                            textField.setText(String.valueOf(visualizados));
+                            textField.setBackground(Color.white);
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException ex) {
+                            }
                         }
                     }
                 }
@@ -203,29 +195,29 @@ public final class ManexadorScatterPlots {
             return null;
         }
 
-        public void pause() {
+        public synchronized void pause() {
             setEstado(PAUSE);
         }
 
-        public void freeze() {
+        public synchronized void freeze() {
             setEstado(FREEZE);
         }
 
-        public int getEstado() {
+        public synchronized int getEstado() {
             return estado;
         }
 
-        public void play() {
+        public synchronized void play() {
             setEstado(PLAY);
             execute();
         }
     }
 
-    public void pause() {
+    public synchronized void pause() {
         tarefaPlay.pause();
     }
 
-    public void play() {
+    public synchronized void play() {
         tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
         propertyChangeListeners.stream().forEach((p) -> {
             tarefaPlay.addPropertyChangeListener(p);
@@ -233,14 +225,14 @@ public final class ManexadorScatterPlots {
         tarefaPlay.play();
     }
 
-    public int getVisualizados() {
+    public synchronized int getVisualizados() {
         return visualizados;
     }
 
     public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField) {
         int numAtributosNumericos = scatterPlotsVisibles.length;
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
-        this.numItems = instances.numInstances();
+        this.instances = instances;
         if (atributoColor == -1) {
             this.numSeries = 1;
         } else {
@@ -260,11 +252,6 @@ public final class ManexadorScatterPlots {
         this.visualizados = 0;
         this.slider = slider;
         this.textField = textField;
-    }
-
-    public ArrayList<ArrayList<ScatterPlot>> getMatrizScatterPlots() {
-        return matrizScatterPlots;
-
     }
 
     public class JFrameChartPanel extends JFrame {
@@ -367,6 +354,14 @@ public final class ManexadorScatterPlots {
             return range;
         }
 
+        public int obterItemsTotais() {
+            int r = 0;
+            for (int j = 0; j < getSeriesCount(); j++) {
+                r += getSeries(j).getItemCount();
+            }
+            return r;
+        }
+
         public XYDatasetModelo(InstancesComparable atributos, int atributoX, int atributoY, int atributoColor) {
             super();
             this.atributos = atributos;
@@ -402,7 +397,6 @@ public final class ManexadorScatterPlots {
                 }
                 puntos[j] = new PuntoConNominal(atributoColor > -1 && Double.compare(atributos.instance(j).value(atributoColor), Double.NaN) != 0 ? (int) atributos.instance(j).value(atributoColor) : -1, d4, d5);
                 getSeries((Comparable) puntos[j].getAtributoNominal()).add(puntos[j].getValorX(), puntos[j].getValorY(), false);
-                visualizados = numItems;
             }
             try {
                 domainMin = d;
@@ -475,64 +469,118 @@ public final class ManexadorScatterPlots {
             return domainMax;
         }
 
-        public synchronized void visualizarItems(int i) {
-            for (int a = 0; a < i; a++) {
+        public synchronized void visualizarItems(ScatterPlot sp, int numeroItems) {
+            sp.eliminarAnotacions(XYAnnotation.class);
+            for (int a = 0; a < numeroItems; a++) {
                 PuntoConNominal p = puntos[visualizados + a];
                 getSeries((Comparable) p.getAtributoNominal()).add(p.getValorX(), p.getValorY(), false);
             }
+            sp.pintarEstela();
             fireDatasetChanged();
         }
 
-        public synchronized void agocharItems(int i) {
+        public synchronized void agocharItems(ScatterPlot sp, int numeroItems) {
             setNotify(false);
-            for (int a = 0; a < i; a++) {
+            sp.eliminarAnotacions(XYAnnotation.class);
+            for (int a = 0; a < numeroItems; a++) {
                 PuntoConNominal xv = puntos[visualizados - a - 1];
                 XYSeries xys = getSeries((Comparable) xv.getAtributoNominal());
                 xys.remove(xys.getItemCount() - 1);
             }
+            sp.pintarEstela();
             setNotify(true);
         }
-
     }
 
-    public void anularSeleccions(XYPlot xyPlot) {
-        List annotations = xyPlot.getAnnotations();
-        for (Iterator it = annotations.iterator(); it.hasNext();) {
-            XYAnnotation annotation = (XYAnnotation) it.next();
-            xyPlot.removeAnnotation(annotation);
-        }
-    }
-
-    public void procesarSeleccion(InstancesComparable instances, ArrayList<Integer> indicesInstances) {
+    public synchronized void procesarSeleccion(InstancesComparable instances, ArrayList<Integer> indicesInstances) {
         double radioInicial = 15.0;
         double grosorInicial = 1.0;
         double pasoGrosor = 0.0;
         double pasoRadio = 1;
-        for (int i = 0; i < getMatrizScatterPlots().size(); i++) {
-            for (int j = 0; j < getMatrizScatterPlots().get(i).size(); j++) {
-                if (getMatrizScatterPlots().get(i).get(j) != null) {
-                    ScatterPlot sp = getMatrizScatterPlots().get(i).get(j);
-                    anularSeleccions(sp.getjFrameAmpliado().getChartPanel().getChart().getXYPlot());
-                    anularSeleccions(sp.getChartPanelCela().getChart().getXYPlot());
-                    for (int k = 0; k < indicesInstances.size(); k++) {
-                        if (getVisualizados() > indicesInstances.get(k)) {
-                            Color color = obterCoresHSB(k, indicesInstances.size());
-                            sp.getChartPanelCela().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
-                            sp.getjFrameAmpliado().getChartPanel().getChart().getXYPlot().addAnnotation(new XYDrawableAnnotation(instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(color, new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
-                        }
+        matrizScatterPlots.stream().forEach((matrizScatterPlot) -> {
+            matrizScatterPlot.stream().filter((matrizScatterPlot1) -> (matrizScatterPlot1 != null)).map((matrizScatterPlot1) -> matrizScatterPlot1).map((sp) -> {
+                sp.eliminarAnotacions(XYDrawableAnnotation.class);
+                return sp;
+            }).map((sp) -> {
+                sp.getChartPanelCela().getChart().getXYPlot().setNotify(false);
+                return sp;
+            }).map((sp) -> {
+                for (int k = 0; k < indicesInstances.size(); k++) {
+                    if (getVisualizados() > indicesInstances.get(k)) {
+                        sp.engadirAnotacion(new XYDrawableAnnotation(instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(obterCoresHSB(k, indicesInstances.size()), new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
                     }
                 }
-            }
-        }
+                return sp;
+            }).forEach((sp) -> {
+                sp.getChartPanelCela().getChart().getXYPlot().setNotify(true);
+            });
+        });
     }
 
-    private static Color obterCoresHSB(int cor, int totalCores) {
+    public synchronized int numColumnasNonVacias() {
+        int n = 0;
+        for (int i = 0; i < matrizScatterPlots.size(); i++) {
+            if (!columnaScatterPlotsVacia(i)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public synchronized int numFilasNonVacias() {
+        int n = 0;
+        for (int i = 0; i < matrizScatterPlots.size(); i++) {
+            if (!filaScatterPlotsVacia(i)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public synchronized boolean columnaScatterPlotsVacia(int columna) {
+        for (boolean[] bb : scatterPlotsVisibles) {
+            if (bb[columna]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public synchronized boolean filaScatterPlotsVacia(int fila) {
+        for (boolean b : scatterPlotsVisibles[fila]) {
+            if (b) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public synchronized ScatterPlot getScatterPlot(int i, int j) {
+        return matrizScatterPlots.get(i).get(j);
+    }
+
+    public synchronized void cubrirConScatterPlot(int i, int j, List<Integer> indices, int indiceAtributoNominal) {
+        if (scatterPlotsVisibles[i][j]) {
+            matrizScatterPlots.get(i).set(j, new ScatterPlot(instances, indices.get(j), indices.get(i), indiceAtributoNominal));
+        }
+        visualizados = instances.numInstances();
+    }
+
+    public static Color obterCoresHSB(int cor, int totalCores) {
         return Color.getHSBColor((float) cor / totalCores, (float) 0.9, (float) 0.9);
     }
 
-    public ScatterPlot scatterPlotFactory(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, TarefaProgreso task, Vista vista) {
-        return new ScatterPlot(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor, task, vista);
+    public static Color obterCorIntermedia(int cor, int totalCores, Color cor1, Color cor2) {
+        int r1 = cor1.getRed(), g1 = cor1.getGreen(), b1 = cor1.getBlue(), r2 = cor2.getRed(), g2 = cor2.getGreen(), b2 = cor2.getBlue();
+        return new Color((int) Math.round(1.0 * r1 + (r2 - r1) * cor / totalCores), (int) Math.round(1.0 * g1 + (g2 - g1) * cor / totalCores), (int) Math.round(1.0 * b1 + (b2 - b1) * cor / totalCores));
+    }
 
+    public synchronized int contarJFramesVisibles() {
+        int c = 0;
+        for (ArrayList<ScatterPlot> alsp : matrizScatterPlots) {
+            c = alsp.stream().filter((jf) -> (jf != null && jf.getjFrameAmpliado().isVisible())).map((_item) -> 1).reduce(c, Integer::sum);
+        }
+        return c;
     }
 
     public class ScatterPlot implements Serializable {
@@ -555,13 +603,56 @@ public final class ManexadorScatterPlots {
             return indiceAtributoColor;
         }
 
-        public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor, TarefaProgreso task, Vista vista) {
+        private class ChartPanelParcheado extends ChartPanel {
+
+            private int intentos;
+            private final int maxIntentos = 1;
+
+            public ChartPanelParcheado(JFreeChart chart) {
+                super(chart);
+            }
+
+            private void intentarPaintComponent(Graphics g) {
+                try {
+                    super.paintComponent(g);
+                } catch (ConcurrentModificationException e) {
+                    if (intentos < maxIntentos) {
+                        intentos++;
+                        intentarPaintComponent(g);
+                    }
+                }
+            }
+
+            @Override
+            public void paintComponent(Graphics g) {
+                intentos = 0;
+                intentarPaintComponent(g);
+            }
+        }
+
+        void pintarEstela() {
+            PuntoConNominal[] puntos = ((XYDatasetModelo) chartPanelCela.getChart().getXYPlot().getDataset()).getPuntos();
+            int numPuntos = ((XYDatasetModelo) chartPanelCela.getChart().getXYPlot().getDataset()).obterItemsTotais();
+            Color corEstela = Color.white;
+            Color corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint();
+            Color corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
+            int lonxitudeEstela = 5;
+            PuntoConNominal p, pAnterior;
+            for (int i = numPuntos - 1; i > 0 && i >= numPuntos - lonxitudeEstela; i--) {
+                p = puntos[i];
+                pAnterior = puntos[i - 1];
+                chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(pAnterior.valorX, pAnterior.valorY, p.valorX, p.valorY, new BasicStroke(2.0f), obterCorIntermedia(numPuntos - i - 1, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
+                jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(pAnterior.valorX, pAnterior.valorY, p.valorX, p.valorY, new BasicStroke(2.0f), obterCorIntermedia(numPuntos - i - 1, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
+            }
+        }
+
+        public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor) {
             this.indiceAtributoX = indiceAtributoX;
             this.indiceAtributoColor = indiceAtributoColor;
             this.indiceAtributoY = indiceAtributoY;
             XYDatasetModelo xydm = new XYDatasetModelo(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor);
-            JFreeChart jfreechart1 = createChart(instances, xydm, task);
-            JFreeChart jfreechart2 = createChart(instances, xydm, task);
+            JFreeChart jfreechart1 = createChart(instances, xydm);
+            JFreeChart jfreechart2 = createChart(instances, xydm);
             if (indiceAtributoColor < 0) {
                 jfreechart1.removeLegend();
                 jfreechart2.removeLegend();
@@ -569,91 +660,32 @@ public final class ManexadorScatterPlots {
             ChartFactory.setChartTheme(StandardChartTheme.createDarknessTheme());
             ChartUtilities.applyCurrentTheme(jfreechart1);
             ChartUtilities.applyCurrentTheme(jfreechart2);
-            this.chartPanelCela = new ChartPanel(jfreechart1);
-            task.acumulate(35);
-            ChartPanel chartPanelAmpliado = new ChartPanel(jfreechart2);
-            task.acumulate(35);
+            this.chartPanelCela = new ChartPanelParcheado(jfreechart1);
+            ChartPanel chartPanelAmpliado = new ChartPanelParcheado(jfreechart2);
             this.chartPanelCela.getChart().setTitle((String) null);
-            configurarChartPanel(this.chartPanelCela, instances, vista);
-            configurarChartPanel(chartPanelAmpliado, instances, vista);
             this.jFrameAmpliado = new JFrameChartPanel("'" + instances.attribute(indiceAtributoY).name() + "' " + bundle.getString("fronteA") + " '" + instances.attribute(indiceAtributoX).name() + "'", chartPanelAmpliado, indiceAtributoX, indiceAtributoY);
-            anularSeleccions(this.chartPanelCela.getChart().getXYPlot());
-            anularSeleccions(this.jFrameAmpliado.getChartPanel().getChart().getXYPlot());
         }
 
-        private void configurarChartPanel(ChartPanel chartpanel, InstancesComparable instances, Vista vista) {
-            chartpanel.setMouseWheelEnabled(true);
-            chartpanel.setPreferredSize(new Dimension(340, 210));
-            JPopupMenu jpopup = vista.getjPopupMenu1();
-            chartpanel.addChartMouseListener(new ChartMouseListener() {
-                @Override
-                public void chartMouseClicked(final ChartMouseEvent event) {
-                    java.awt.EventQueue.invokeLater(() -> {
-                        if (SwingUtilities.isLeftMouseButton(event.getTrigger()) && event.getTrigger().getClickCount() == 1) {
-                            XYPlot xyp = event.getChart().getXYPlot();
-                            double domainCrosshairValue = xyp.getDomainCrosshairValue();
-                            double rangeCrosshairValue = xyp.getRangeCrosshairValue();
-                            ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
-                            Enumeration e = instances.enumerateInstances();
-                            for (int i = 0; e.hasMoreElements(); i++) {
-                                Instance di = (Instance) e.nextElement();
-                                if (di.value(indiceAtributoX) == domainCrosshairValue && di.value(indiceAtributoY) == rangeCrosshairValue) {
-                                    indicesInstancesPuntos.add(i);
-                                }
-                            }
-                            if (!indicesInstancesPuntos.isEmpty()) {
-                                jpopup.removeAll();
-                                jpopup.setLayout(new BoxLayout(jpopup, BoxLayout.X_AXIS));
-                                for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
-                                    if (getVisualizados() > indicesInstancesPuntos.get(i)) {
-                                        if (i != 0) {
-                                            jpopup.add(new JSeparator(SwingConstants.VERTICAL));
-                                        }
-                                        int p = indicesInstancesPuntos.get(i);
-                                        JPanel pa = new JPanel();
-                                        pa.setBorder(new LineBorder(obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
-                                        pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
-                                        Enumeration en = instances.enumerateAttributes();
-                                        while (en.hasMoreElements()) {
-                                            Attribute a = (Attribute) en.nextElement();
-                                            boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
-                                            pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
-                                        }
-                                        jpopup.add(pa);
-                                    }
-                                }
-                                jpopup.show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
-                                procesarSeleccion(instances, indicesInstancesPuntos);
-
-                            }
-                        }
-                    });
+        public synchronized void eliminarAnotacions(Class claseAnotacion) {
+            XYPlot xyp1 = chartPanelCela.getChart().getXYPlot(), xyp2 = jFrameAmpliado.getChartPanel().getChart().getXYPlot();
+            List annotations = xyp1.getAnnotations();
+            Iterator it = annotations.iterator();
+            while (it.hasNext()) {
+                XYAnnotation a = (XYAnnotation) it.next();
+                if (claseAnotacion.isInstance(a)) {
+                    xyp1.removeAnnotation(a, false);
+                    xyp2.removeAnnotation(a, false);
                 }
-
-                @Override
-                public void chartMouseMoved(ChartMouseEvent event) {
-                }
-            });
-            chartpanel.addMouseWheelListener((MouseWheelEvent e) -> {
-                jpopup.setVisible(false);
-            });
-            chartpanel.addMouseMotionListener(new MouseMotionListener() {
-
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    jpopup.setVisible(false);
-                }
-
-                @Override
-                public void mouseMoved(MouseEvent e) {
-                    jpopup.setVisible(false);
-                }
-            });
+            }
         }
 
-        private JFreeChart createChart(InstancesComparable instances, XYDataset xydataset, TarefaProgreso task) {
-            JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + Vista.getBundle().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, true, false);
-            task.acumulate(15);
+        public synchronized void engadirAnotacion(XYAnnotation a) {
+            chartPanelCela.getChart().getXYPlot().addAnnotation(a, false);
+            jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(a, false);
+        }
+
+        private JFreeChart createChart(InstancesComparable instances, XYDatasetModelo xydataset) {
+            JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + Vista.getBundle().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, false, false);
             XYPlot xyplot = (XYPlot) jfreechart.getPlot();
             xyplot.setDomainCrosshairVisible(true);
             xyplot.setDomainCrosshairLockedOnData(true);

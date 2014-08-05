@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="1">
                 <name/>
-                <line>423</line>
+                <line>443</line>
                 <key/>
             </bookmark>
         </file>
@@ -20,11 +20,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/chart/plot/XYPlot.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/JDataMotion.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Vista.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Controlador.java</file>
-            <file>jar:file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/weka-dev-3.7.10-sources.jar!/weka/core/converters/ArffLoader.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Modelo.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
         </group>
     </open-files>
 </project-private>

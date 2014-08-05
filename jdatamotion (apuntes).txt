@@ -3,41 +3,24 @@ scatterplots por defecto al final SI
 play al final del slider -> replay SI
 marcar elemento en la reproducion SI
 boton paso adelante / paso atras SI
-estelas y difuminado de puntos NO
-saltar a un punto del slider NO
-grafica modelo (weka) NO
-cargar ficheros csv sin extension
-ocultar y borrar columnas NO
-errors* modelo scroll fuera de viewport
-jpanel negro background configurar
-test mas modulares NO
-engadir ou eliminar scatterplots mismo orden en filas e columnas HABLAR
-cambiar color y forma de los puntos en visualizacion NO
-cambiar preferencias visualizacion de todos los scatterplots NO
+saltar a un punto del slider SI
+cargar ficheros csv sin extension SI
+errors* modelo scroll fuera de viewport SI
 
-BUG:
-Exception in thread "AWT-EventQueue-0" java.lang.IndexOutOfBoundsException: Index: 164, Size: 164
-	at java.util.ArrayList.rangeCheck(ArrayList.java:638)
-	at java.util.ArrayList.get(ArrayList.java:414)
-	at org.jfree.data.xy.XYSeries.getRawDataItem(XYSeries.java:634)
-	at org.jfree.data.xy.XYSeries.getX(XYSeries.java:645)
-	at org.jfree.data.xy.XYSeriesCollection.getX(XYSeriesCollection.java:358)
-	at org.jfree.data.xy.AbstractXYDataset.getXValue(AbstractXYDataset.java:77)
-	at org.jfree.data.general.DatasetUtilities.iterateToFindRangeBounds(DatasetUtilities.java:1548)
-	at org.jfree.data.general.DatasetUtilities.findRangeBounds(DatasetUtilities.java:902)
-	at org.jfree.chart.renderer.xy.AbstractXYItemRenderer.findRangeBounds(AbstractXYItemRenderer.java:778)
-	at org.jfree.chart.renderer.xy.AbstractXYItemRenderer.findRangeBounds(AbstractXYItemRenderer.java:732)
-	at org.jfree.chart.plot.XYPlot.getDataRange(XYPlot.java:4509)
-	at org.jfree.chart.axis.NumberAxis.autoAdjustRange(NumberAxis.java:433)
-	at org.jfree.chart.axis.NumberAxis.configure(NumberAxis.java:415)
-	at org.jfree.chart.plot.XYPlot.configureRangeAxes(XYPlot.java:1274)
-	at org.jfree.chart.plot.XYPlot.datasetChanged(XYPlot.java:4578)
-	at org.jfree.data.general.AbstractDataset.notifyListeners(AbstractDataset.java:232)
-	at org.jfree.data.general.AbstractDataset.fireDatasetChanged(AbstractDataset.java:215)
-	at org.jfree.data.general.AbstractDataset.setNotify(AbstractDataset.java:160)
-	at jdatamotion.ManexadorScatterPlots$XYDatasetModelo.agocharItems(ManexadorScatterPlots.java:480)
-	at jdatamotion.ManexadorScatterPlots.goTo(ManexadorScatterPlots.java:141)
-	at jdatamotion.Vista$8.stateChanged(Vista.java:988)
-	at javax.swing.JSlider.fireStateChanged(JSlider.java:432)
-	
-	
+engadir ou eliminar scatterplots mismo orden en filas e columnas HABLAR
+
+cambiar color y forma de los puntos en visualizacion NO
+test mas modulares NO
+estelas y difuminado de puntos NO
+grafica modelo (weka) NO
+cambiar preferencias visualizacion de todos los scatterplots NO
+ocultar y borrar columnas NO
+
+comprobar rango textfield
+salto jSlider con todos los puntos visualizados
+revisar paso adelante (addseries)
+viewport scatterplots abajo izquierda
+
+filtros
+
+enviar correo con .jar
