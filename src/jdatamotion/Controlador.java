@@ -1,24 +1,5 @@
 package jdatamotion;
 
-import jdatamotion.sesions.SesionModelo;
-import jdatamotion.sesions.Sesionizable;
-import jdatamotion.sesions.SesionControlador;
-import jdatamotion.sesions.Sesion;
-import jdatamotion.sesions.SesionVista;
-import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
-import jdatamotion.excepcions.ExcepcionComandoInutil;
-import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
-import jdatamotion.comandos.ComandoMudarNomeRelacion;
-import jdatamotion.comandos.ComandoExportarFicheiro;
-import jdatamotion.comandos.ComandoEngadirDatos;
-import jdatamotion.comandos.ComandoMudarDato;
-import jdatamotion.comandos.ComandoMudarTipo;
-import jdatamotion.comandos.ComandoImportarFicheiro;
-import jdatamotion.comandos.ComandoMudarIndiceTemporal;
-import jdatamotion.comandos.ComandoEliminarDatos;
-import jdatamotion.comandos.ComandoRestaurar;
-import jdatamotion.comandos.ComandoDesfacible;
-import jdatamotion.comandos.Comando;
 import java.io.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -31,8 +12,30 @@ import java.util.Objects;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jdatamotion.comandos.Comando;
+import jdatamotion.comandos.ComandoDesfacible;
+import jdatamotion.comandos.ComandoEliminarAtributo;
+import jdatamotion.comandos.ComandoEliminarDatos;
+import jdatamotion.comandos.ComandoEngadirAtributo;
+import jdatamotion.comandos.ComandoEngadirDatos;
+import jdatamotion.comandos.ComandoExportarFicheiro;
+import jdatamotion.comandos.ComandoImportarFicheiro;
+import jdatamotion.comandos.ComandoMudarDato;
+import jdatamotion.comandos.ComandoMudarIndiceTemporal;
+import jdatamotion.comandos.ComandoMudarNomeRelacion;
+import jdatamotion.comandos.ComandoMudarTipo;
+import jdatamotion.comandos.ComandoRenomearAtributo;
+import jdatamotion.comandos.ComandoRestaurar;
 import jdatamotion.excepcions.ExcepcionArquivoModificado;
+import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
+import jdatamotion.excepcions.ExcepcionComandoInutil;
+import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
 import jdatamotion.excepcions.ExcepcionLeve;
+import jdatamotion.sesions.Sesion;
+import jdatamotion.sesions.SesionControlador;
+import jdatamotion.sesions.SesionModelo;
+import jdatamotion.sesions.SesionVista;
+import jdatamotion.sesions.Sesionizable;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
@@ -55,6 +58,9 @@ public class Controlador implements Sesionizable {
     public static final int MUDAR_INDICE_TEMPORAL = 12;
     public static final int MUDAR_TIPO = 13;
     public static final int MUDAR_NOME_RELACION = 14;
+    public static final int RENOMEAR_ATRIBUTO = 15;
+    public static final int ENGADIR_ATRIBUTO = 16;
+    public static final int ELIMINAR_ATRIBUTO = 17;
     public static final boolean debug = true;
     private transient Modelo meuModelo;
     private transient Vista minaVista;
@@ -123,6 +129,13 @@ public class Controlador implements Sesionizable {
      * <tr><td>Mudar nome
      * relación</td><td>Controlador.MUDAR_NOME_RELACION</td><td>String
      * novoNomeRelacion</td></tr>
+     * <tr><td>Renomear atributo</td><td>Controlador.RENOMEAR_ATRIBUTO
+     * </td><td>{int numAtributo, String nome}</td></tr>
+     * <tr><td>Engadir atributo</td><td>Controlador.ENGADIR_ATRIBUTO
+     * </td><td>-</td></tr>
+     * <tr><td>Eliminar
+     * atributo</td><td>Controlador.ELIMINAR_ATRIBUTO</td><td>int
+     * numColumna</td></tr>
      * </table>
      *
      * @param opcion o tipo de evento
@@ -168,6 +181,15 @@ public class Controlador implements Sesionizable {
                 break;
             case MUDAR_NOME_RELACION:
                 mudarNomeRelacion(((String) argumento));
+                break;
+            case RENOMEAR_ATRIBUTO:
+                renomearAtributo((int) ((Object[]) argumento)[0], (String) ((Object[]) argumento)[1]);
+                break;
+            case ENGADIR_ATRIBUTO:
+                engadirAtributo();
+                break;
+            case ELIMINAR_ATRIBUTO:
+                eliminarAtributo((int) argumento);
                 break;
         }
         meuModelo.update();
@@ -284,7 +306,6 @@ public class Controlador implements Sesionizable {
     private void mudarDato(int numFila, int numColumna, Object dato) {
         try {
             xestorComandos.ExecutarComando(new ComandoMudarDato(meuModelo, numFila, numColumna, dato));
-        } catch (ExcepcionComandoInutil e) {
         } catch (NumberFormatException e) {
             minaVista.amosarDialogo("Erro: o novo dato non pertence ao rango do atributo (" + meuModelo.obterTipoAtributo(numColumna) + ").\n" + e.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -437,6 +458,39 @@ public class Controlador implements Sesionizable {
         }
     }
 
+    private void renomearAtributo(int i, String novoNome) {
+        try {
+            xestorComandos.ExecutarComando(new ComandoRenomearAtributo(meuModelo, novoNome, i));
+        } catch (Exception ex) {
+            minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void engadirAtributo() {
+        try {
+            xestorComandos.ExecutarComando(new ComandoEngadirAtributo(meuModelo));
+        } catch (Exception ex) {
+            minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void eliminarAtributo(int i) {
+        try {
+            xestorComandos.ExecutarComando(new ComandoEliminarAtributo(meuModelo, i));
+        } catch (Exception ex) {
+            minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     public class XestorComandos implements Serializable {
 
         private final Stack<ComandoDesfacible> pilaDesfacer;
@@ -480,16 +534,19 @@ public class Controlador implements Sesionizable {
         public void ExecutarComando(Comando cmd) throws Exception {
             ExcepcionLeve excepcionLeve = null;
             try {
-                cmd.Executar();
-            } catch (ExcepcionLeve e) {
-                excepcionLeve = e;
-            }
-            if (cmd instanceof ComandoDesfacible) {
-                pilaDesfacer.push((ComandoDesfacible) cmd);
-                vaciarPilaRefacer();
-            }
-            if (excepcionLeve != null) {
-                throw excepcionLeve;
+                try {
+                    cmd.Executar();
+                } catch (ExcepcionLeve e) {
+                    excepcionLeve = e;
+                }
+                if (cmd instanceof ComandoDesfacible) {
+                    pilaDesfacer.push((ComandoDesfacible) cmd);
+                    vaciarPilaRefacer();
+                }
+                if (excepcionLeve != null) {
+                    throw excepcionLeve;
+                }
+            } catch (ExcepcionComandoInutil e) {
             }
         }
 

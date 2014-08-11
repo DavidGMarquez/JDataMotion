@@ -1,12 +1,5 @@
 package jdatamotion;
 
-import jdatamotion.sesions.SesionModelo;
-import jdatamotion.sesions.Sesionizable;
-import jdatamotion.sesions.Sesion;
-import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
-import jdatamotion.excepcions.ExcepcionArquivoModificado;
-import jdatamotion.excepcions.ExcepcionComandoInutil;
-import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,9 +9,17 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Observable;
+import jdatamotion.excepcions.ExcepcionArquivoModificado;
+import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
+import jdatamotion.excepcions.ExcepcionComandoInutil;
+import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
+import jdatamotion.sesions.Sesion;
+import jdatamotion.sesions.SesionModelo;
+import jdatamotion.sesions.Sesionizable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import weka.core.Attribute;
@@ -414,34 +415,30 @@ public class Modelo extends Observable implements Sesionizable {
     }
 
     public void mudarDato(int fila, int columna, Object valor) throws Exception {
-        try {
-            String stringValor = valor.toString();
-            if (obterDato(fila, columna).toString().equals(valor.toString()) || ("".equals(stringValor) && getAtributos().get(fila).isMissing(columna))) {
-                throw new ExcepcionComandoInutil();
-            }
-            if ("".equals(stringValor)) {
-                getAtributos().get(fila).setMissing(columna);
-            } else {
-                switch (getAtributos().attribute(columna).type()) {
-                    case Attribute.DATE:
-
-                        getAtributos().get(fila).setValue(columna, getAtributos().attribute(columna).parseDate(stringValor));
-                        break;
-                    case Attribute.NOMINAL:
-                    case Attribute.RELATIONAL:
-                    case Attribute.STRING:
-                        getAtributos().get(fila).setValue(columna, stringValor);
-                        break;
-                    case Attribute.NUMERIC:
-                        getAtributos().get(fila).setValue(columna, Double.parseDouble(stringValor));
-                        break;
-                }
-            }
-        } catch (NumberFormatException | ParseException | ExcepcionComandoInutil e) {
-            throw e;
-        } finally {
+        String stringValor = valor.toString();
+        if (obterDato(fila, columna).toString().equals(valor.toString()) || ("".equals(stringValor) && getAtributos().get(fila).isMissing(columna))) {
             setChanged();
+            throw new ExcepcionComandoInutil();
         }
+        if ("".equals(stringValor)) {
+            getAtributos().get(fila).setMissing(columna);
+        } else {
+            switch (getAtributos().attribute(columna).type()) {
+                case Attribute.DATE:
+
+                    getAtributos().get(fila).setValue(columna, getAtributos().attribute(columna).parseDate(stringValor));
+                    break;
+                case Attribute.NOMINAL:
+                case Attribute.RELATIONAL:
+                case Attribute.STRING:
+                    getAtributos().get(fila).setValue(columna, stringValor);
+                    break;
+                case Attribute.NUMERIC:
+                    getAtributos().get(fila).setValue(columna, Double.parseDouble(stringValor));
+                    break;
+            }
+        }
+        setChanged();
     }
 
     public void eliminarDatos(Integer[] datos) {
@@ -606,6 +603,37 @@ public class Modelo extends Observable implements Sesionizable {
         } finally {
             setChanged();
         }
+    }
+
+    public void engadirAtributo() {
+        int indice = 0;
+        boolean unico = false;
+        String nomeColumna = "";
+        while (!unico) {
+            indice++;
+            unico = true;
+            nomeColumna = Vista.bundle.getString("novoAtributo");
+            Enumeration e = atributos.enumerateAttributes();
+            while (e.hasMoreElements()) {
+                Attribute a = (Attribute) e.nextElement();
+                if (a.name().equals(nomeColumna + indice)) {
+                    unico = false;
+                    break;
+                }
+            }
+        }
+        atributos.insertAttributeAt(new Attribute(nomeColumna + indice, (List<String>) null), atributos.numAttributes());
+        setChanged();
+    }
+
+    public void eliminarAtributo(int indiceAtributoNoModelo) {
+        atributos.deleteAttributeAt(indiceAtributoNoModelo);
+        setChanged();
+    }
+
+    public void renomearAtributo(String nome, int indiceAtributoNoModelo) {
+        atributos.renameAttribute(indiceAtributoNoModelo, nome);
+        setChanged();
     }
 
     public class InstancesComparable extends Instances {

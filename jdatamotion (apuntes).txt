@@ -11,15 +11,15 @@ engadir ou eliminar scatterplots mismo orden en filas e columnas HABLAR
 
 cambiar color y forma de los puntos en visualizacion NO
 test mas modulares NO
-estelas y difuminado de puntos NO
+estelas y difuminado de puntos SI
 grafica modelo (weka) NO
 cambiar preferencias visualizacion de todos los scatterplots NO
-ocultar y borrar columnas NO
+ocultar y borrar columnas SI
 
-comprobar rango textfield
-salto jSlider con todos los puntos visualizados
-revisar paso adelante (addseries)
-viewport scatterplots abajo izquierda
+comprobar rango textfield SI
+salto jSlider con todos los puntos visualizados SI
+revisar paso adelante (addseries) SI
+viewport scatterplots abajo izquierda SI
 
 filtros
 

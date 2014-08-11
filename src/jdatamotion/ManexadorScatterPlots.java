@@ -606,19 +606,19 @@ public final class ManexadorScatterPlots {
         private class ChartPanelParcheado extends ChartPanel {
 
             private int intentos;
-            private final int maxIntentos = 1;
+            private final int maxIntentos = 5;
 
             public ChartPanelParcheado(JFreeChart chart) {
                 super(chart);
             }
 
-            private void intentarPaintComponent(Graphics g) {
+            private void tryToPaintComponent(Graphics g) {
                 try {
                     super.paintComponent(g);
                 } catch (ConcurrentModificationException e) {
                     if (intentos < maxIntentos) {
                         intentos++;
-                        intentarPaintComponent(g);
+                        tryToPaintComponent(g);
                     }
                 }
             }
@@ -626,7 +626,7 @@ public final class ManexadorScatterPlots {
             @Override
             public void paintComponent(Graphics g) {
                 intentos = 0;
-                intentarPaintComponent(g);
+                tryToPaintComponent(g);
             }
         }
 

@@ -88,7 +88,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import jdatamotion.ManexadorScatterPlots.JFrameChartPanel;
 import jdatamotion.ManexadorScatterPlots.ScatterPlot;
 import jdatamotion.excepcions.ExcepcionPuntoForaDeRango;
@@ -108,7 +107,7 @@ import weka.core.Instance;
  * @author usuario
  */
 public class Vista extends JFrame implements Observer, Sesionizable, PropertyChangeListener {
-
+    
     public static final int ERROR_MESSAGE = JOptionPane.ERROR_MESSAGE;
     public static final int WARNING_MESSAGE = JOptionPane.WARNING_MESSAGE;
     public static final int INFORMATION_MESSAGE = JOptionPane.INFORMATION_MESSAGE;
@@ -122,22 +121,23 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private ManexadorScatterPlots mansp;
     private final TarefaProgreso task;
     private transient Controlador meuControlador;
-    private int ultimaColumnaModeloSeleccionada;
+    private int columnaTaboaSeleccionada;
     private boolean scatterPlotsVisibles[][];
     private boolean pulsarSlider;
+    private JTableModelo jTableModelo;
     private int ultimoEstadoReproductor;
     public static ResourceBundle bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", new Locale("en"));
     private static final String ficheiroConfiguracion = "configuracion.properties";
-
+    
     public static ResourceBundle getBundle() {
         return bundle;
     }
-
+    
     public final void reset() {
-        this.ultimaColumnaModeloSeleccionada = -1;
+        this.columnaTaboaSeleccionada = -1;
         this.scatterPlotsVisibles = new boolean[0][0];
     }
-
+    
     @Override
     public synchronized void propertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
@@ -165,7 +165,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 break;
         }
     }
-
+    
     public Vista() {
         super();
         try {
@@ -209,7 +209,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         this.jPanel8.setVisible(false);
         this.task = new TarefaProgreso();
     }
-
+    
     public void inicializar(Modelo modelo, boolean visualizar) {
         meuModelo = modelo;
         meuModelo.addObserver(this);
@@ -219,27 +219,23 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             visualizar();
         }
     }
-
+    
     public Modelo getMeuModelo() {
         return meuModelo;
     }
-
+    
     public Controlador getMeuControlador() {
         return meuControlador;
     }
-
+    
     public JPanel getjPanel7() {
         return jPanel7;
     }
-
+    
     public JPanel getjPanel4() {
         return jPanel4;
     }
-
-    public int getUltimaColumnaModeloSeleccionada() {
-        return ultimaColumnaModeloSeleccionada;
-    }
-
+    
     @Override
     public Sesion obterSesion() {
         SesionVista s = new SesionVista();
@@ -247,36 +243,36 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         s.setManexadorScatterPlots(s.getManexadorScatterPlots());
         return s;
     }
-
+    
     public boolean[][] getScatterPlotsVisibles() {
         return scatterPlotsVisibles;
     }
-
+    
     @Override
     public void aplicarSesion(Sesion sesion) throws Exception {
         SesionVista s = (SesionVista) sesion;
         scatterPlotsVisibles = s.getScatterPlotsVisibles();
         mansp = s.getManexadorScatterPlots();
     }
-
+    
     public void crearControlador() {
         meuControlador = new Controlador();
     }
-
+    
     public void activar() {
         this.setEnabled(true);
     }
-
+    
     public void visualizar() {
         this.setVisible(true);
     }
-
+    
     private void activarPanelReproduccion(boolean activar) {
         for (Component comp : jPanel8.getComponents()) {
             comp.setEnabled(activar);
         }
     }
-
+    
     private void pintarMenuVisualizacion() {
         activarPanelReproduccion(false);
         if (mansp != null) {
@@ -349,7 +345,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jLabel4.setText("/" + String.valueOf(meuModelo.obterNumInstancias()));
         jTextField1.setText(String.valueOf(meuModelo.obterNumInstancias()));
     }
-
+    
     public void engadirScatterPlot(ScatterPlot sp, int j, int i) {
         if (sp == null) {
             jPanel4.add(new JLabel(), new TableLayoutConstraints(i, j));
@@ -382,7 +378,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             chartPanelCela.repaint();
         }
     }
-
+    
+    public int getColumnaModeloSeleccionada() {
+        return jTableModelo.getColumnModel().getColumn(columnaTaboaSeleccionada).getModelIndex();
+    }
+    
     public int contarScatterplotsVisibles() {
         int c = 0;
         for (boolean bb[] : scatterPlotsVisibles) {
@@ -394,24 +394,24 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         return c;
     }
-
+    
     public class TarefaProgreso extends SwingWorker<Void, Void> {
-
+        
         private int end;
         private int acumulated;
-
+        
         public void setEnd(int end) {
             this.end = end;
         }
-
+        
         public int getEnd() {
             return end;
         }
-
+        
         public int getAcumulated() {
             return acumulated;
         }
-
+        
         public void reset() {
             acumulated = 0;
             try {
@@ -420,20 +420,20 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        
         public TarefaProgreso() {
             super();
             this.end = 0;
             this.acumulated = 0;
         }
-
+        
         @Override
         protected Void doInBackground() throws Exception {
             int value = (int) (end != 0 ? Math.round(1.0 * jProgressBar1.getMaximum() * acumulated / end) : 0);
             jProgressBar1.setValue(value);
             return null;
         }
-
+        
         public void acumulate(int cantidade) {
             acumulated += cantidade;
             try {
@@ -443,7 +443,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
     }
-
+    
     private void configurarScatterPlot(ScatterPlot sp, Modelo.InstancesComparable instances) {
         configurarChartPanel(sp.getChartPanelCela(), instances, sp.getIndiceAtributoX(), sp.getIndiceAtributoY());
         configurarChartPanel(sp.getjFrameAmpliado().getChartPanel(), instances, sp.getIndiceAtributoX(), sp.getIndiceAtributoY());
@@ -471,7 +471,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         chartPanelCela.add(clickmeButton, c);
         sp.pintarEstela();
     }
-
+    
     private void configurarChartPanel(ChartPanel chartpanel, Modelo.InstancesComparable instances, int indiceAtributoX, int indiceAtributoY) {
         chartpanel.setMouseWheelEnabled(true);
         chartpanel.setPreferredSize(new Dimension(340, 210));
@@ -514,12 +514,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                             }
                             jPopupMenu1.show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
                             mansp.procesarSeleccion(instances, indicesInstancesPuntos);
-
+                            
                         }
                     }
                 });
             }
-
+            
             @Override
             public void chartMouseMoved(ChartMouseEvent event) {
             }
@@ -528,19 +528,19 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jPopupMenu1.setVisible(false);
         });
         chartpanel.addMouseMotionListener(new MouseMotionListener() {
-
+            
             @Override
             public void mouseDragged(MouseEvent e) {
                 jPopupMenu1.setVisible(false);
             }
-
+            
             @Override
             public void mouseMoved(MouseEvent e) {
                 jPopupMenu1.setVisible(false);
             }
         });
     }
-
+    
     private void actualizarScatterPlotsVisibles(int numAtributosNumericos) {
         if (numAtributosNumericos > scatterPlotsVisibles.length) {
             boolean temp[][] = new boolean[numAtributosNumericos][numAtributosNumericos];
@@ -562,26 +562,26 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             scatterPlotsVisibles = temp;
         }
     }
-
+    
     private void pintarMenuModelo() {
-        if (((JPanelModelo) panelModelo).esVacio()) {
+        if (jTableModelo == null) {
             inicializarPaneis();
         } else {
             actualizarPaneis();
         }
         jLabel2.setText(meuModelo.getAtributos().relationName());
     }
-
+    
     private void pintarMenuFiltros() {
-
+        
     }
-
+    
     private void pintarMenus() {
         pintarMenuModelo();
         pintarMenuFiltros();
         pintarMenuVisualizacion();
     }
-
+    
     public void actualizarPilas() {
         if (jTabbedPane1.isEnabled()) {
             if (!meuControlador.getXestorComandos().pilaDesfacerVacia()) {
@@ -600,7 +600,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
     }
-
+    
     @Override
     public void update(final Observable o, Object arg) {
         if (!jTabbedPane1.isEnabled() && o != null && !((Modelo) o).getAtributos().isEmpty()) {
@@ -611,6 +611,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jMenuItem15.setEnabled(true);
             jMenuItem16.setEnabled(true);
             jMenuItem17.setEnabled(true);
+            jMenuItem18.setEnabled(true);
+            jMenuItem21.setEnabled(true);
             jMenu4.setEnabled(true);
             jTabbedPane1.setEnabled(true);
             jTabbedPane1.setSelectedIndex(0);
@@ -643,6 +645,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         botonString = new javax.swing.JRadioButtonMenuItem();
         botonData = new javax.swing.JRadioButtonMenuItem();
         botonIndiceTemporal = new javax.swing.JRadioButtonMenuItem();
+        botonOcultarColumna = new javax.swing.JRadioButtonMenuItem();
         jDialog2 = new javax.swing.JDialog();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -677,7 +680,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jScrollPane6 = new javax.swing.JScrollPane();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        panelModelo = new JPanelModelo();
         jScrollPane7 = new javax.swing.JScrollPane();
         panelDetallarAtributo = new JPanelActualizable();
         jLabel1 = new javax.swing.JLabel();
@@ -707,7 +709,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jMenuItem13 = new javax.swing.JMenuItem();
         jMenuItem14 = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem18 = new javax.swing.JMenuItem();
+        jMenuItem19 = new javax.swing.JMenuItem();
+        jMenuItem20 = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
         jMenuItem15 = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem21 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem16 = new javax.swing.JMenuItem();
@@ -802,13 +810,20 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         });
         popupConfigurarAtributo.add(botonIndiceTemporal);
 
+        botonOcultarColumna.setText(bundle.getString("Vista.botonOcultarColumna.text")); // NOI18N
+        botonOcultarColumna.setName("botonOcultarColumna"); // NOI18N
+        botonOcultarColumna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonOcultarColumnaActionPerformed(evt);
+            }
+        });
+        popupConfigurarAtributo.add(botonOcultarColumna);
+
         jDialog2.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jDialog2.setTitle(bundle.getString("Vista.jMenuItem16.text")); // NOI18N
-        jDialog2.setMaximumSize(new java.awt.Dimension(500, 500));
         jDialog2.setMinimumSize(new java.awt.Dimension(500, 500));
         jDialog2.setModal(true);
         jDialog2.setName("jDialog2"); // NOI18N
-        jDialog2.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jButton1.setText(bundle.getString("Aceptar")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
@@ -1134,11 +1149,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
-        panelModelo.setMinimumSize(new java.awt.Dimension(250, 0));
-        panelModelo.setName("panelModelo"); // NOI18N
-        panelModelo.setLayout(new java.awt.GridLayout(1, 0));
-        jScrollPane3.setViewportView(panelModelo);
-
         jScrollPane7.setName("jScrollPane7"); // NOI18N
 
         panelDetallarAtributo.setName("panelDetallarAtributo"); // NOI18N
@@ -1204,7 +1214,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
@@ -1436,6 +1447,39 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jSeparator4.setName("jSeparator4"); // NOI18N
         jMenu4.add(jSeparator4);
 
+        jMenuItem18.setText(bundle.getString("Vista.jMenuItem18.text")); // NOI18N
+        jMenuItem18.setEnabled(false);
+        jMenuItem18.setName("jMenuItem18"); // NOI18N
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem18);
+
+        jMenuItem19.setText(bundle.getString("Vista.jMenuItem19.text")); // NOI18N
+        jMenuItem19.setEnabled(false);
+        jMenuItem19.setName("jMenuItem19"); // NOI18N
+        jMenuItem19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem19ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem19);
+
+        jMenuItem20.setText(bundle.getString("Vista.jMenuItem20.text")); // NOI18N
+        jMenuItem20.setEnabled(false);
+        jMenuItem20.setName("jMenuItem20"); // NOI18N
+        jMenuItem20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem20ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem20);
+
+        jSeparator5.setName("jSeparator5"); // NOI18N
+        jMenu4.add(jSeparator5);
+
         jMenuItem15.setText(bundle.getString("Vista.jMenuItem15.text")); // NOI18N
         jMenuItem15.setEnabled(false);
         jMenuItem15.setName("jMenuItem15"); // NOI18N
@@ -1445,6 +1489,19 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         });
         jMenu4.add(jMenuItem15);
+
+        jSeparator6.setName("jSeparator6"); // NOI18N
+        jMenu4.add(jSeparator6);
+
+        jMenuItem21.setText(bundle.getString("Vista.jMenuItem21.text")); // NOI18N
+        jMenuItem21.setEnabled(false);
+        jMenuItem21.setName("jMenuItem21"); // NOI18N
+        jMenuItem21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem21ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem21);
 
         jMenuBar1.add(jMenu4);
 
@@ -1566,15 +1623,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     public JPopupMenu getjPopupMenu1() {
         return jPopupMenu1;
     }
-
+    
     class ComponenteImaxe extends JComponent {
-
+        
         Image imaxe;
-
+        
         public ComponenteImaxe(Image i) {
             this.imaxe = i;
         }
-
+        
         @Override
         public void paintComponent(Graphics g) {
             g.drawImage(imaxe, 0, 0, getWidth(), getHeight(), this);
@@ -1600,7 +1657,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         pechar();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
-
+    
     public void pechar() {
         System.exit(0);
     }
@@ -1622,27 +1679,27 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void botonIndiceTemporalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIndiceTemporalActionPerformed
-        meuControlador.manexarEvento(Controlador.MUDAR_INDICE_TEMPORAL, ultimaColumnaModeloSeleccionada == meuModelo.getIndiceTemporal() ? -1 : ultimaColumnaModeloSeleccionada);
+        meuControlador.manexarEvento(Controlador.MUDAR_INDICE_TEMPORAL, getColumnaModeloSeleccionada() == meuModelo.getIndiceTemporal() ? -1 : getColumnaModeloSeleccionada());
     }//GEN-LAST:event_botonIndiceTemporalActionPerformed
-
+    
     public JMenuItem getjMenuItem14() {
         return jMenuItem14;
     }
 
     private void botonNumericoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNumericoActionPerformed
-        meuControlador.manexarEvento(Controlador.MUDAR_TIPO, new Object[]{ultimaColumnaModeloSeleccionada, Attribute.NUMERIC});
+        meuControlador.manexarEvento(Controlador.MUDAR_TIPO, new Object[]{getColumnaModeloSeleccionada(), Attribute.NUMERIC});
     }//GEN-LAST:event_botonNumericoActionPerformed
 
     private void botonStringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonStringActionPerformed
-        meuControlador.manexarEvento(Controlador.MUDAR_TIPO, new Object[]{ultimaColumnaModeloSeleccionada, Attribute.STRING});
+        meuControlador.manexarEvento(Controlador.MUDAR_TIPO, new Object[]{getColumnaModeloSeleccionada(), Attribute.STRING});
     }//GEN-LAST:event_botonStringActionPerformed
 
     private void botonNominalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNominalActionPerformed
-        meuControlador.manexarEvento(Controlador.MUDAR_TIPO, new Object[]{ultimaColumnaModeloSeleccionada, Attribute.NOMINAL});
+        meuControlador.manexarEvento(Controlador.MUDAR_TIPO, new Object[]{getColumnaModeloSeleccionada(), Attribute.NOMINAL});
     }//GEN-LAST:event_botonNominalActionPerformed
 
     private void botonDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDataActionPerformed
-        meuControlador.manexarEvento(Controlador.MUDAR_TIPO, new Object[]{ultimaColumnaModeloSeleccionada, Attribute.DATE});
+        meuControlador.manexarEvento(Controlador.MUDAR_TIPO, new Object[]{getColumnaModeloSeleccionada(), Attribute.DATE});
     }//GEN-LAST:event_botonDataActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
@@ -1658,18 +1715,18 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        ((JPanelModelo) panelModelo).finalizarEdicions();
+        jTableModelo.finalizarEdicions();
         meuControlador.manexarEvento(Controlador.ENGADIR_DATOS, null);
         jScrollPane3.getVerticalScrollBar().setValue(jScrollPane3.getVerticalScrollBar().getMaximum());
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
-        ((JPanelModelo) panelModelo).finalizarEdicions();
-        Integer[] indices = new Integer[((JPanelModelo) panelModelo).getMinaTaboa().getSelectedRowCount()];
+        jTableModelo.finalizarEdicions();
+        Integer[] indices = new Integer[jTableModelo.getSelectedRowCount()];
         for (int i = 0; i < indices.length; i++) {
-            indices[i] = ((JPanelModelo) panelModelo).getMinaTaboa().getSelectedRows()[i];
+            indices[i] = jTableModelo.getSelectedRows()[i];
         }
-        ((JPanelModelo) panelModelo).getMinaTaboa().getSelectionModel().clearSelection();
+        jTableModelo.getSelectionModel().clearSelection();
         meuControlador.manexarEvento(Controlador.ELIMINAR_DATOS, indices);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
@@ -1757,10 +1814,41 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    private void botonOcultarColumnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOcultarColumnaActionPerformed
+        TableColumn tc = jTableModelo.getColumnModel().getColumn(columnaTaboaSeleccionada);
+        tc.setMinWidth(0);
+        tc.setMaxWidth(0);
+    }//GEN-LAST:event_botonOcultarColumnaActionPerformed
+
+    private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
+        int columnaModelo = getColumnaModeloSeleccionada();
+        columnaTaboaSeleccionada = -1;
+        meuControlador.manexarEvento(Controlador.ELIMINAR_ATRIBUTO, columnaModelo);
+    }//GEN-LAST:event_jMenuItem19ActionPerformed
+
+    private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
+        meuControlador.manexarEvento(Controlador.ENGADIR_ATRIBUTO, null);
+    }//GEN-LAST:event_jMenuItem18ActionPerformed
+
+    private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
+        meuControlador.manexarEvento(Controlador.RENOMEAR_ATRIBUTO, new Object[]{getColumnaModeloSeleccionada(), "galleta"});
+    }//GEN-LAST:event_jMenuItem20ActionPerformed
+
+    private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
+        for (int i = 0; i < jTableModelo.getColumnModel().getColumnCount(); i++) {
+            TableColumn tc = jTableModelo.getColumnModel().getColumn(i);
+            if (jTableModelo.getColumnModel().getColumn(i).getWidth() == 0) {
+                tc.setMaxWidth(Integer.MAX_VALUE);
+                tc.setMinWidth(15);
+                tc.setPreferredWidth(75);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem21ActionPerformed
+    
     public JSlider getjSlider1() {
         return jSlider1;
     }
-
+    
     @SuppressWarnings("unchecked")
     private void configurarEstablecerAtributoNominalRepresentado() {
         jDialog3.setLocation((getWidth() - jDialog3.getPreferredSize().width) / 2, (getHeight() - jDialog3.getPreferredSize().height) / 2);
@@ -1791,7 +1879,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog3.pack();
         jDialog3.setVisible(true);
     }
-
+    
     private void configurarJDialogEngadirOuEliminarScatterplots() {
         jDialog2.setLocation((getWidth() - jDialog2.getPreferredSize().width) / 2, (getHeight() - jDialog2.getPreferredSize().height) / 2);
         jPanel5.removeAll();
@@ -1892,7 +1980,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog2.pack();
         jDialog2.setVisible(true);
     }
-
+    
     public void reiniciarAplicacion() {
         if (mansp != null) {
             mansp.pecharJFramesChartPanel();
@@ -1900,31 +1988,31 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         dispose();
         JDataMotion.main(null);
     }
-
+    
     static class VerticalLabelUI extends BasicLabelUI {
-
+        
         static {
             labelUI = new VerticalLabelUI(false);
         }
-
+        
         protected boolean clockwise;
-
+        
         public VerticalLabelUI(boolean clockwise) {
             super();
             this.clockwise = clockwise;
         }
-
+        
         @Override
         public Dimension getPreferredSize(JComponent c) {
             Dimension dim = super.getPreferredSize(c);
             return new Dimension(dim.height, dim.width);
         }
-
+        
         private static final Rectangle paintIconR = new Rectangle();
         private static final Rectangle paintTextR = new Rectangle();
         private static final Rectangle paintViewR = new Rectangle();
         private static Insets paintViewInsets = new Insets(0, 0, 0, 0);
-
+        
         @Override
         public void paint(Graphics g, JComponent c) {
             JLabel label = (JLabel) c;
@@ -1965,7 +2053,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             g2.setTransform(tr);
         }
     }
-
+    
     private void mudarIdioma(String locale) {
         if (JOptionPane.showConfirmDialog(this, bundle.getString("confirmacionMudarIdioma"), bundle.getString("confirmacionMudarIdiomaTitulo"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             try {
@@ -1982,7 +2070,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
     }
-
+    
     private void amosarAcercaDe() {
         try {
             JOptionPane.showMessageDialog(this, bundle.getString("AcercaDe"), bundle.getString("Vista.jMenuItem6.text"), INFORMATION_MESSAGE, new ImageIcon(ImageIO.read(getClass().getResource("imaxes/favicon.png")).getScaledInstance(75, 75, Image.SCALE_DEFAULT)));
@@ -1992,7 +2080,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
     }
-
+    
     private void abrirExploradorFicheiros(int opcion) {
         switch (opcion) {
             case EXPLORADOR_ABRIR_SESION:
@@ -2010,38 +2098,38 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         jDialog1.setVisible(true);
     }
-
+    
     public JDialog getjDialog1() {
         return jDialog1;
     }
-
+    
     class FiltroExtension implements Serializable {
-
+        
         public String nome;
         public String[] extensions;
-
+        
         public FiltroExtension(String nome, String[] extensions) {
             this.nome = nome;
             this.extensions = extensions;
         }
-
+        
         public String getNome() {
             return nome;
         }
-
+        
         public String[] getExtensions() {
             return extensions;
         }
-
+        
         public void setNome(String nome) {
             this.nome = nome;
         }
-
+        
         public void setExtensions(String[] extensions) {
             this.extensions = extensions;
         }
     }
-
+    
     private void configurarJFileChooserAbrir(final int eventoParaControlador) {
         ArrayList<FiltroExtension> ext = new ArrayList<>();
         for (ActionListener al : jFileChooser1.getActionListeners()) {
@@ -2071,7 +2159,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jFileChooser1.addActionListener((ActionEvent e) -> {
             jDialog1.dispose();
             if (JFileChooser.APPROVE_SELECTION.equals(e.getActionCommand())) {
-                ((JPanelModelo) panelModelo).vaciar();
+                jTableModelo = null;
                 meuControlador.manexarEvento(
                         eventoParaControlador,
                         jFileChooser1.getSelectedFile().getAbsolutePath());
@@ -2080,7 +2168,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jFileChooser1.revalidate();
         jFileChooser1.repaint();
     }
-
+    
     private void definirExtensions(ArrayList<FiltroExtension> ext) {
         for (FileFilter e : jFileChooser1.getChoosableFileFilters()) {
             jFileChooser1.removeChoosableFileFilter(e);
@@ -2096,7 +2184,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         });
     }
-
+    
     private void configurarJFileChooserGardar(final int eventoParaControlador) {
         ArrayList<FiltroExtension> ext = new ArrayList<>();
         for (ActionListener al : jFileChooser1.getActionListeners()) {
@@ -2184,7 +2272,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jFileChooser1.revalidate();
         jFileChooser1.repaint();
     }
-
+    
     private void actualizarNomeFicheiro() {
         int numero = 0;
         String base = jFileChooser1.getCurrentDirectory() + "\\";
@@ -2199,7 +2287,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         jFileChooser1.setSelectedFile(new File(path));
     }
-
+    
     public void amosarDialogo(String mensaxe, int tipo) {
         String titulo;
         String nomeAplicacion = JDataMotion.class.getSimpleName();
@@ -2224,53 +2312,22 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         JOptionPane.showMessageDialog(this, mensaxe, titulo, tipo);
     }
-
-    class JPanelModelo extends JPanel {
-
-        private JTable minaTaboa;
-
-        public int indiceModeloAIndiceTaboa(int indiceModelo) {
-
-            if (indiceModelo > -1) {
-                String nomeColumna = minaTaboa.getModel().getColumnName(indiceModelo);
-                for (int i = 0; i < minaTaboa.getColumnCount(); i++) {
-                    if (minaTaboa.getColumnName(i).equals(nomeColumna)) {
-                        return i;
-                    }
-                }
-            }
-            return -1;
-        }
-
-        public JTable getMinaTaboa() {
-            return this.minaTaboa;
-        }
-
-        public void setMinaTaboa(JTable minaTaboa) {
-            this.minaTaboa = minaTaboa;
-        }
-
+    
+    class JTableModelo extends JTable {
+        
         public void finalizarEdicions() {
-            TableCellEditor cellEditor = getMinaTaboa().getCellEditor();
-            if (cellEditor != null) {
-                cellEditor.stopCellEditing();
+            TableCellEditor ce = getCellEditor();
+            if (ce != null) {
+                ce.stopCellEditing();
             }
-            for (int i = 0; i < getMinaTaboa().getColumnModel().getColumnCount(); i++) {
-                TableColumn columna = getMinaTaboa().getColumnModel().getColumn(i);
+            for (int i = 0; i < getColumnModel().getColumnCount(); i++) {
+                TableColumn columna = getColumnModel().getColumn(i);
                 if (columna.getCellEditor() != null) {
                     columna.getCellEditor().cancelCellEditing();
                 }
             }
         }
-
-        public boolean esVacio() {
-            return (getMinaTaboa() == null);
-        }
-
-        public void vaciar() {
-            setMinaTaboa(null);
-        }
-
+        
         public void configurarColumnaNominal(TableColumn column, ArrayList<String> valoresNominais) {
             JComboBox<String> comboBox = new JComboBox<>();
             valoresNominais.stream().forEach((v) -> {
@@ -2282,12 +2339,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
             column.setCellRenderer(renderer);
         }
-
+        
         private void actualizarTaboaConModelo() {
-            int numFilasTaboa = ((TableModelPanelModelo) getMinaTaboa().getModel()).getRowCount(), numFilasModelo = meuModelo.obterNumInstancias();
+            int numFilasTaboa = ((TableModelPanelModelo) getModel()).getRowCount(), numFilasModelo = meuModelo.obterNumInstancias(), numColumnasTaboa = getColumnModel().getColumnCount(), numColumnasModelo = meuModelo.obterNumAtributos();
             if (numFilasTaboa > numFilasModelo) {
                 for (int i = numFilasTaboa - 1; i >= numFilasModelo; i--) {
-                    ((TableModelPanelModelo) getMinaTaboa().getModel()).removeRow(i);
+                    ((TableModelPanelModelo) getModel()).removeRow(i);
                 }
             } else if (numFilasTaboa < numFilasModelo) {
                 for (int i = numFilasModelo - 1; i >= numFilasTaboa; i--) {
@@ -2295,16 +2352,49 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     for (int j = 0; j < meuModelo.obterNumAtributos(); j++) {
                         arrayList.add("");
                     }
-                    ((TableModelPanelModelo) getMinaTaboa().getModel()).addRow(arrayList);
+                    ((TableModelPanelModelo) getModel()).addRow(arrayList);
+                }
+            }
+            if (numColumnasTaboa > numColumnasModelo) {
+                int indiceModeloEliminar = -1, indiceTaboaEliminar = -1;
+                for (int j = 0; j < getColumnModel().getColumnCount(); j++) {
+                    boolean disponible = false;
+                    for (int i = 0; !disponible && i < meuModelo.getAtributos().numAttributes(); i++) {
+                        if (meuModelo.getAtributos().attribute(i).name() == getColumnModel().getColumn(j).getHeaderValue()) {
+                            disponible = true;
+                            break;
+                        }
+                    }
+                    if (disponible == false) {
+                        indiceTaboaEliminar = j;
+                        indiceModeloEliminar = getColumnModel().getColumn(j).getModelIndex();
+                        break;
+                    }
+                }
+                getColumnModel().removeColumn(getColumnModel().getColumn(indiceTaboaEliminar));
+                for (int j = 0; j < numColumnasModelo; j++) {
+                    TableColumn tcaux = getColumnModel().getColumn(j);
+                    if (tcaux.getModelIndex() > indiceModeloEliminar) {
+                        tcaux.setModelIndex(tcaux.getModelIndex() - 1);
+                    }
+                }
+            } else if (numColumnasTaboa < numColumnasModelo) {
+                for (int i = numColumnasModelo - 1; i >= numColumnasTaboa; i--) {
+                    ((TableModelPanelModelo) getModel()).getAtributos().add(meuModelo.getAtributos().attribute(i).name());
+                    ((TableModelPanelModelo) getModel()).getDatos().stream().forEach((alo) -> {
+                        alo.add("");
+                    });
+                    getColumnModel().addColumn(new TableColumn(i));
                 }
             }
         }
-
-        public JPanelModelo() {
+        
+        public JTableModelo() {
             super();
         }
-
+        
         public void actualizar() {
+            resaltarColumnaSeleccionada();
             actualizarTaboaConModelo();
             jPanel10.removeAll();
             String data[][] = new String[meuModelo.obterNumInstancias()][1];
@@ -2327,42 +2417,42 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             renderer.setHorizontalAlignment(SwingConstants.CENTER);
             tablaIndices.setDefaultRenderer(tablaIndices.getColumnClass(0), renderer);
             tablaIndices.setBackground(Color.LIGHT_GRAY);
-            for (int j = 0; j < meuModelo.obterNumAtributos(); j++) {
-                int indiceModelo = getMinaTaboa().getColumnModel().getColumn(j).getModelIndex(), indiceTaboa = indiceModeloAIndiceTaboa(j);
-                String nomeCabeceira = meuModelo.obterNomeAtributo(indiceModelo);
-                if (meuModelo.getIndiceTemporal() == indiceModelo) {
+            for (int j = 0; j < getColumnModel().getColumnCount(); j++) {
+                int columnaModelo = getColumnModel().getColumn(j).getModelIndex();
+                String nomeCabeceira = meuModelo.obterNomeAtributo(columnaModelo);
+                if (meuModelo.getIndiceTemporal() == columnaModelo) {
                     nomeCabeceira = "<html><b style='white-space:nowrap;overflow:hidden;'>" + nomeCabeceira + " (" + bundle.getString("IT") + ")</b></html>";
                 }
-                getMinaTaboa().getColumnModel().getColumn(j).setHeaderValue(nomeCabeceira);
-                for (int i = 0; i < getMinaTaboa().getRowCount(); i++) {
-                    ((TableModelPanelModelo) getMinaTaboa().getModel()).setValueNoFiring(meuModelo.obterStringDato(i, j, false), i, j);
+                getColumnModel().getColumn(j).setHeaderValue(nomeCabeceira);
+                for (int i = 0; i < getRowCount(); i++) {
+                    ((TableModelPanelModelo) getModel()).setValueNoFiring(meuModelo.obterStringDato(i, columnaModelo, false), i, columnaModelo);
                 }
-                if (meuModelo.obterArrayListAtributos().get(j).type() == Attribute.NOMINAL) {
+                if (meuModelo.obterArrayListAtributos().get(columnaModelo).type() == Attribute.NOMINAL) {
                     ArrayList<String> valoresNominais = new ArrayList<>();
-                    Enumeration e = meuModelo.getAtributos().attribute(j).enumerateValues();
+                    Enumeration e = meuModelo.getAtributos().attribute(columnaModelo).enumerateValues();
                     while (e.hasMoreElements()) {
                         String el = (String) e.nextElement();
                         valoresNominais.add(el);
                     }
                     valoresNominais.add("");
-                    configurarColumnaNominal(getMinaTaboa().getColumnModel().getColumn(indiceTaboa), valoresNominais);
+                    configurarColumnaNominal(getColumnModel().getColumn(j), valoresNominais);
                 } else {
-                    restablecerConfiguracionColumna(getMinaTaboa().getColumnModel().getColumn(indiceTaboa));
+                    restablecerConfiguracionColumna(getColumnModel().getColumn(j));
                 }
             }
-            getMinaTaboa().revalidate();
-            getMinaTaboa().repaint();
+            revalidate();
+            repaint();
         }
-
-        public void establecerColumnaCabeceraResaltada(final int columna) {
-            for (int i = 0; i < getMinaTaboa().getColumnModel().getColumnCount(); i++) {
-                if (columna != i) {
-                    getMinaTaboa().getColumnModel().getColumn(i).setHeaderRenderer(null);
+        
+        public void resaltarColumnaSeleccionada() {
+            for (int i = 0; i < getColumnModel().getColumnCount(); i++) {
+                if (columnaTaboaSeleccionada != i) {
+                    getColumnModel().getColumn(i).setHeaderRenderer(null);
                 }
             }
-            if (columna > -1) {
-                final DefaultTableCellRenderer hr = (DefaultTableCellRenderer) getMinaTaboa().getTableHeader().getDefaultRenderer();
-                getMinaTaboa().getColumnModel().getColumn(columna).setHeaderRenderer(new DefaultTableCellRenderer() {
+            if (columnaTaboaSeleccionada > -1) {
+                final DefaultTableCellRenderer hr = (DefaultTableCellRenderer) getTableHeader().getDefaultRenderer();
+                getColumnModel().getColumn(columnaTaboaSeleccionada).setHeaderRenderer(new DefaultTableCellRenderer() {
                     @Override
                     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                         JLabel lbl = (JLabel) hr.getTableCellRendererComponent(table, value, true, true, row, column);
@@ -2371,11 +2461,14 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     }
                 });
             }
+            activarBorrarAtributo(columnaTaboaSeleccionada > -1);
+            activarRenomearAtributo(columnaTaboaSeleccionada > -1);
+            ((JPanelActualizable) panelDetallarAtributo).actualizar();
         }
-
+        
         public void restablecerConfiguracionColumna(TableColumn columna) {
-            for (int i = 0; i < getMinaTaboa().getColumnModel().getColumnCount(); i++) {
-                TableColumn columnaux = getMinaTaboa().getColumnModel().getColumn(i);
+            for (int i = 0; i < getColumnModel().getColumnCount(); i++) {
+                TableColumn columnaux = getColumnModel().getColumn(i);
                 if (columnaux.getCellEditor() != null) {
                     columnaux.getCellEditor().cancelCellEditing();
                 }
@@ -2383,30 +2476,43 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             columna.setCellEditor(null);
             columna.setCellRenderer(null);
         }
-
+        
+        @Override
+        public boolean getScrollableTracksViewportWidth() {
+            boolean response = false;
+            if (autoResizeMode != AUTO_RESIZE_OFF) {
+                if (getParent() instanceof JViewport) {
+                    response = ((JViewport) getParent()).getWidth() > getPreferredSize().width;
+                }
+            }
+            filler2.setPreferredSize(response ? filler2.getMinimumSize() : filler2.getMaximumSize());
+            return response;
+        }
+        
         public void inicializar() {
             removeAll();
-            setMinaTaboa(new JTableParcheada(null));
-            getMinaTaboa().setModel(new TableModelPanelModelo(meuModelo.obterArrayListNomesAtributos(), meuModelo.obterArrayListStringDatos(false)));
-            getMinaTaboa().setFillsViewportHeight(true);
-            configurarColumnas(getMinaTaboa());
-            jScrollPane3.setViewportView(getMinaTaboa());
-            getMinaTaboa().getModel().addTableModelListener((TableModelEvent e) -> {
+            setModel(new TableModelPanelModelo(meuModelo.obterArrayListNomesAtributos(), meuModelo.obterArrayListStringDatos(false)));
+            setFillsViewportHeight(true);
+            configurarColumnas();
+            jScrollPane3.setViewportView(this);
+            getModel().addTableModelListener((TableModelEvent e) -> {
                 int fila = e.getFirstRow(), columna = e.getColumn();
-                Object o = getMinaTaboa().getModel().getValueAt(fila, columna);
+                Object o = getModel().getValueAt(fila, columna);
                 meuControlador.manexarEvento(Controlador.MUDAR_DATO, new Object[]{fila, columna, o});
             });
-            getMinaTaboa().getTableHeader().addMouseListener(new MouseAdapter() {
+            getTableHeader().addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    ultimaColumnaModeloSeleccionada = getMinaTaboa().getColumnModel().getColumn(getMinaTaboa().columnAtPoint(e.getPoint())).getModelIndex();
+                    columnaTaboaSeleccionada = columnAtPoint(e.getPoint());
+                    resaltarColumnaSeleccionada();
                     if (SwingUtilities.isRightMouseButton(e)) {
-                        botonIndiceTemporal.setSelected(meuModelo.getIndiceTemporal() == ultimaColumnaModeloSeleccionada);
+                        botonIndiceTemporal.setSelected(meuModelo.getIndiceTemporal() == getColumnaModeloSeleccionada());
                         popupConfigurarAtributo.show(e.getComponent(), e.getX(), e.getY());
+                        botonOcultarColumna.setSelected(!getTableHeader().isVisible());
                         for (Component c : menuTipo.getMenuComponents()) {
                             ((JRadioButtonMenuItem) c).setSelected(false);
                         }
-                        switch (meuModelo.obterTipoAtributo(ultimaColumnaModeloSeleccionada)) {
+                        switch (meuModelo.obterTipoAtributo(getColumnaModeloSeleccionada())) {
                             case "numérico":
                                 botonNumerico.setSelected(true);
                                 break;
@@ -2421,150 +2527,141 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                                 break;
                         }
                     }
-                    establecerColumnaCabeceraResaltada(indiceModeloAIndiceTaboa(ultimaColumnaModeloSeleccionada));
-                    ((JPanelActualizable) panelDetallarAtributo).actualizar();
                 }
             });
             actualizar();
         }
-
-        public void configurarColumnas(JTable table) {
-            getMinaTaboa().getColumnModel().addColumnModelListener(new TableColumnModelListener() {
+        
+        public void configurarColumnas() {
+            getColumnModel().addColumnModelListener(new TableColumnModelListener() {
                 @Override
                 public void columnAdded(TableColumnModelEvent e) {
                 }
-
+                
                 @Override
                 public void columnRemoved(TableColumnModelEvent e) {
                 }
-
+                
                 @Override
                 public void columnMoved(TableColumnModelEvent e) {
+                    if (e.getFromIndex() == columnaTaboaSeleccionada) {
+                        columnaTaboaSeleccionada = e.getToIndex();
+                    }
                 }
-
+                
                 @Override
                 public void columnMarginChanged(ChangeEvent e) {
                 }
-
+                
                 @Override
                 public void columnSelectionChanged(ListSelectionEvent e) {
                 }
             });
-            getMinaTaboa().getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-                activarBorrarDatos(!((JPanelModelo) panelModelo).getMinaTaboa().getSelectionModel().isSelectionEmpty());
+            getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+                activarBorrarDatos(!jTableModelo.getSelectionModel().isSelectionEmpty());
             });
         }
     }
-
+    
     private void activarBorrarDatos(boolean activar) {
         jMenuItem14.setEnabled(activar);
     }
-
+    
+    private void activarBorrarAtributo(boolean activar) {
+        jMenuItem19.setEnabled(activar);
+    }
+    
+    private void activarRenomearAtributo(boolean activar) {
+        jMenuItem20.setEnabled(activar);
+    }
+    
     class TableModelPanelModelo extends AbstractTableModel {
-
+        
         private final ArrayList<String> atributos;
         private final ArrayList<ArrayList<Object>> datos;
-
+        
         public ArrayList<String> getAtributos() {
             return atributos;
         }
-
+        
         public ArrayList<ArrayList<Object>> getDatos() {
             return datos;
         }
-
+        
         TableModelPanelModelo(ArrayList<String> columnNames, ArrayList<ArrayList<Object>> data) {
             super();
             this.atributos = columnNames;
             this.datos = data;
         }
-
+        
         @Override
         public int getColumnCount() {
             return atributos.size();
         }
-
+        
         @Override
         public int getRowCount() {
             return datos.size();
         }
-
+        
         @Override
         public String getColumnName(int col) {
             return atributos.get(col);
         }
-
+        
         @Override
         public Object getValueAt(int row, int col) {
             return datos.get(row).get(col);
         }
-
+        
         public void addRow(ArrayList<Object> row) {
             datos.add(row);
         }
-
+        
         public void removeRow(int index) {
             datos.remove(index);
         }
-
+        
         @Override
         public Class getColumnClass(int c) {
             return String.class;
         }
-
+        
         @Override
         public boolean isCellEditable(int row, int col) {
             return true;
         }
-
+        
         public void setValueNoFiring(Object value, int row, int col) {
             datos.get(row).set(col, value);
         }
-
+        
         @Override
         public void setValueAt(Object value, int row, int col) {
             setValueNoFiring(value, row, col);
             fireTableCellUpdated(row, col);
         }
     }
-
-    class JTableParcheada extends JTable {
-
-        public JTableParcheada(TableModel tm) {
-            super(tm);
-        }
-
-        @Override
-        public boolean getScrollableTracksViewportWidth() {
-            boolean response = false;
-            if (autoResizeMode != AUTO_RESIZE_OFF) {
-                if (getParent() instanceof JViewport) {
-                    response = ((JViewport) getParent()).getWidth() > getPreferredSize().width;
-                }
-            }
-            filler2.setPreferredSize(response ? filler2.getMinimumSize() : filler2.getMaximumSize());
-            return response;
-        }
-    }
-
+    
     public void inicializarPaneis() {
-        ((JPanelModelo) panelModelo).inicializar();
+        jTableModelo = new JTableModelo();
+        jTableModelo.inicializar();
     }
-
+    
     public void actualizarPaneis() {
-        ((JPanelModelo) panelModelo).actualizar();
+        jTableModelo.actualizar();
         ((JPanelActualizable) panelDetallarAtributo).actualizar();
     }
-
+    
     class JPanelActualizable extends JPanel {
-
+        
         public void actualizar() {
             panelDetallarAtributo.removeAll();
-            if (ultimaColumnaModeloSeleccionada > -1) {
-                panelDetallarAtributo.add(new JLabel(bundle.getString("nomeAtributo") + ": " + meuModelo.obterNomeAtributo(ultimaColumnaModeloSeleccionada)));
-                panelDetallarAtributo.add(new JLabel(bundle.getString("tipo") + ": " + bundle.getString(meuModelo.obterTipoAtributo(ultimaColumnaModeloSeleccionada))));
-                panelDetallarAtributo.add(new JLabel(bundle.getString("indiceTemporal") + ": " + (meuModelo.getIndiceTemporal() == ultimaColumnaModeloSeleccionada ? bundle.getString("si") : bundle.getString("non"))));
-                switch (meuModelo.obterTipoAtributo(ultimaColumnaModeloSeleccionada)) {
+            if (columnaTaboaSeleccionada > -1) {
+                panelDetallarAtributo.add(new JLabel(bundle.getString("nomeAtributo") + ": " + meuModelo.obterNomeAtributo(getColumnaModeloSeleccionada())));
+                panelDetallarAtributo.add(new JLabel(bundle.getString("tipo") + ": " + bundle.getString(meuModelo.obterTipoAtributo(getColumnaModeloSeleccionada()))));
+                panelDetallarAtributo.add(new JLabel(bundle.getString("indiceTemporal") + ": " + (meuModelo.getIndiceTemporal() == getColumnaModeloSeleccionada() ? bundle.getString("si") : bundle.getString("non"))));
+                switch (meuModelo.obterTipoAtributo(getColumnaModeloSeleccionada())) {
                     case "numérico":
                         int numInstancesNonNaN = 0;
                         Double dato,
@@ -2573,7 +2670,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                          desvTipica = null,
                          media = null;
                         for (int i = 0; i < meuModelo.getAtributos().numInstances(); i++) {
-                            dato = (Double) meuModelo.obterDato(i, ultimaColumnaModeloSeleccionada);
+                            dato = (Double) meuModelo.obterDato(i, getColumnaModeloSeleccionada());
                             if (Double.compare(dato, Double.NaN) != 0) {
                                 numInstancesNonNaN++;
                                 if (max == null) {
@@ -2596,7 +2693,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                             numInstancesNonNaN = 0;
                             desvTipica = 0.0;
                             for (int i = 0; i < meuModelo.getAtributos().numInstances(); i++) {
-                                dato = (Double) meuModelo.obterDato(i, ultimaColumnaModeloSeleccionada);
+                                dato = (Double) meuModelo.obterDato(i, getColumnaModeloSeleccionada());
                                 if (Double.compare(dato, Double.NaN) != 0) {
                                     numInstancesNonNaN++;
                                     desvTipica += Math.pow(dato - media, 2.0);
@@ -2607,21 +2704,22 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         panelDetallarAtributo.add(new JLabel(bundle.getString("maximo") + ": " + (max != null ? max : "-")));
                         panelDetallarAtributo.add(new JLabel(bundle.getString("minimo") + ": " + (min != null ? min : "-")));
                         panelDetallarAtributo.add(new JLabel(bundle.getString("media") + ": " + (media != null ? media : "-")));
-                        panelDetallarAtributo.add(new JLabel(bundle.getString("desviacionTipica") + ": " + (desvTipica != null && Double.compare(desvTipica, Double.NaN) != 0 ? desvTipica : "-")));
+                        panelDetallarAtributo.add(new JLabel(bundle.getString("varianza") + ": " + (desvTipica != null && Double.compare(desvTipica, Double.NaN) != 0 ? desvTipica : "-")));
+                        panelDetallarAtributo.add(new JLabel(bundle.getString("desviacionTipica") + ": " + (desvTipica != null && Double.compare(desvTipica, Double.NaN) != 0 ? Math.sqrt(desvTipica) : "-")));
                         break;
                     case "nominal":
                         ArrayList<Integer> coincidencias = new ArrayList<>();
-                        for (int i = 0; i < meuModelo.getAtributos().attribute(ultimaColumnaModeloSeleccionada).numValues() + 1; i++) {
+                        for (int i = 0; i < meuModelo.getAtributos().attribute(getColumnaModeloSeleccionada()).numValues() + 1; i++) {
                             coincidencias.add(0);
                         }
                         for (int i = 0; i < meuModelo.getAtributos().numInstances(); i++) {
-                            int index = meuModelo.getAtributos().instance(i).isMissing(ultimaColumnaModeloSeleccionada) ? 0 : (int) meuModelo.getAtributos().instance(i).value(ultimaColumnaModeloSeleccionada) + 1;
+                            int index = meuModelo.getAtributos().instance(i).isMissing(getColumnaModeloSeleccionada()) ? 0 : (int) meuModelo.getAtributos().instance(i).value(getColumnaModeloSeleccionada()) + 1;
                             coincidencias.set(index, coincidencias.get(index) + 1);
                         }
                         panelDetallarAtributo.add(new JLabel(bundle.getString("valores") + ": "));
                         panelDetallarAtributo.add(new JLabel("  " + bundle.getString("senDefinir") + " (" + coincidencias.get(0) + ")"));
                         for (int i = 1; i < coincidencias.size(); i++) {
-                            panelDetallarAtributo.add(new JLabel("  " + meuModelo.getAtributos().attribute(ultimaColumnaModeloSeleccionada).value(i - 1) + " (" + coincidencias.get(i) + ")"));
+                            panelDetallarAtributo.add(new JLabel("  " + meuModelo.getAtributos().attribute(getColumnaModeloSeleccionada()).value(i - 1) + " (" + coincidencias.get(i) + ")"));
                         }
                         break;
                     case "string":
@@ -2640,6 +2738,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JRadioButtonMenuItem botonIndiceTemporal;
     javax.swing.JRadioButtonMenuItem botonNominal;
     javax.swing.JRadioButtonMenuItem botonNumerico;
+    javax.swing.JRadioButtonMenuItem botonOcultarColumna;
     javax.swing.JRadioButtonMenuItem botonString;
     javax.swing.Box.Filler filler1;
     javax.swing.Box.Filler filler2;
@@ -2682,7 +2781,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JMenuItem jMenuItem15;
     javax.swing.JMenuItem jMenuItem16;
     javax.swing.JMenuItem jMenuItem17;
+    javax.swing.JMenuItem jMenuItem18;
+    javax.swing.JMenuItem jMenuItem19;
     javax.swing.JMenuItem jMenuItem2;
+    javax.swing.JMenuItem jMenuItem20;
+    javax.swing.JMenuItem jMenuItem21;
     javax.swing.JMenuItem jMenuItem3;
     javax.swing.JMenuItem jMenuItem4;
     javax.swing.JMenuItem jMenuItem5;
@@ -2714,12 +2817,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JPopupMenu.Separator jSeparator2;
     javax.swing.JPopupMenu.Separator jSeparator3;
     javax.swing.JPopupMenu.Separator jSeparator4;
+    javax.swing.JPopupMenu.Separator jSeparator5;
+    javax.swing.JPopupMenu.Separator jSeparator6;
     javax.swing.JSlider jSlider1;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JTextField jTextField1;
     javax.swing.JMenu menuTipo;
     javax.swing.JPanel panelDetallarAtributo;
-    javax.swing.JPanel panelModelo;
     javax.swing.JPopupMenu popupConfigurarAtributo;
     // End of variables declaration//GEN-END:variables
 }
