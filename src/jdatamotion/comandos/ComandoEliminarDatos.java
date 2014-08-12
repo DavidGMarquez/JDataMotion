@@ -43,12 +43,12 @@ public class ComandoEliminarDatos extends ComandoDesfacible {
 
     @Override
     public void Desfacer() throws Exception {
-        ((Modelo) getObxectivo()).setAtributos(modeloAntigo);
+        ((Modelo) getObxectivo()).setInstancesComparable(modeloAntigo);
     }
 
     @Override
     public void Executar() throws Exception {
-        this.modeloAntigo = ((Modelo) getObxectivo()).new InstancesComparable(((Modelo) getObxectivo()).getAtributos());
+        this.modeloAntigo = ((Modelo) getObxectivo()).new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
         ((Modelo) getObxectivo()).eliminarDatos(indicesDatos);
     }
 }

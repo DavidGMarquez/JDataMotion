@@ -41,12 +41,12 @@ public class ComandoRestaurar extends ComandoDesfacible {
 
     @Override
     public void Desfacer() throws Exception {
-        ((Controlador) getObxectivo()).getMeuModelo().setAtributos(datosAntigos);
+        ((Controlador) getObxectivo()).getMeuModelo().setInstancesComparable(datosAntigos);
     }
 
     @Override
     public void Executar() throws Exception {
-        this.datosAntigos = ((Controlador) getObxectivo()).getMeuModelo().new InstancesComparable(((Controlador) getObxectivo()).getMeuModelo().getAtributos());
+        this.datosAntigos = ((Controlador) getObxectivo()).getMeuModelo().new InstancesComparable(((Controlador) getObxectivo()).getMeuModelo().getInstancesComparable());
         ((Controlador) getObxectivo()).getMeuModelo().restaurar();
     }
 }
