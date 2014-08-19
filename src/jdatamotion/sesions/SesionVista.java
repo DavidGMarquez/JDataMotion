@@ -33,6 +33,15 @@ public class SesionVista extends Sesion {
 
     private boolean scatterPlotsVisibles[][];
     private ManexadorScatterPlots manexadorScatterPlots;
+    private int ordeVisualizacion;
+
+    public int getOrdeVisualizacion() {
+        return ordeVisualizacion;
+    }
+
+    public void setOrdeVisualizacion(int ordeVisualizacion) {
+        this.ordeVisualizacion = ordeVisualizacion;
+    }
 
     public void setManexadorScatterPlots(ManexadorScatterPlots manexadorScatterPlots) {
         this.manexadorScatterPlots = manexadorScatterPlots;

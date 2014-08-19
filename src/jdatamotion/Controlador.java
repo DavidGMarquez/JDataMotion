@@ -430,7 +430,7 @@ public class Controlador implements Sesionizable {
         try {
             xestorComandos.ExecutarComando(new ComandoMudarIndiceTemporal(meuModelo, i));
         } catch (ExcepcionFormatoIdentificacionTemporal ex) {
-            minaVista.amosarDialogo("Erro: Non se pode empregar o tipo " + Modelo.obterNomeTipo(ex.getTipo()) + " para representar o índice temporal.\nEmpregue o tipo string para representar marcas de tempo ou o tipo numérico para representar unha orde.\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            minaVista.amosarDialogo("Erro: Non se pode empregar o tipo " + Modelo.obterNomeTipo(ex.getTipo()) + " para representar o índice temporal.\nEmpregue o tipo numérico para representar a orde.\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
                 Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
             }

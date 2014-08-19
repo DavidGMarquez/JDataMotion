@@ -73,10 +73,22 @@ public class Modelo extends Observable implements Sesionizable {
         this.indiceAtributoNominal = indiceAtributoNominal;
     }
 
+    private boolean contenSoValoresPositivos(int indiceAtributo) {
+        if (!instancesComparable.attribute(indiceAtributo).isNumeric()) {
+            return false;
+        }
+        for (Instance instancesComparable1 : instancesComparable) {
+            if (instancesComparable1.value(indiceAtributo) < 0.0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void setIndiceTemporal(int indiceTemporal) throws ExcepcionFormatoIdentificacionTemporal {
         if (indiceTemporal > -1) {
             int tipo = instancesComparable.attribute(indiceTemporal).type();
-            if (tipo != Attribute.NUMERIC && tipo != Attribute.STRING) {
+            if (!contenSoValoresPositivos(indiceTemporal)) {
                 throw new ExcepcionFormatoIdentificacionTemporal(tipo);
             }
         }

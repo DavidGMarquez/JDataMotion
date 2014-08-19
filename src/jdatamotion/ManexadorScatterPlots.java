@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -47,12 +48,11 @@ import jdatamotion.Modelo.InstancesComparable;
 import static jdatamotion.Vista.bundle;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartTheme;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
-import org.jfree.chart.annotations.XYLineAnnotation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -60,6 +60,10 @@ import org.jfree.data.Range;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.Drawable;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.Instance;
+import weka.core.Instances;
 
 /**
  *
@@ -76,9 +80,26 @@ public final class ManexadorScatterPlots {
     private final ArrayList<PropertyChangeListener> propertyChangeListeners;
     private TarefaPlay tarefaPlay;
     private final transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
-    private int visualizados;
     private final int numSeries;
+    private final NodeList<InstancesSimultaneas> eixoTemporal;
     private final InstancesComparable instances;
+    private final int paso;
+    private int t;
+    private Node<InstancesSimultaneas> nodoActual;
+    private int visualizados;
+    private int msInstances[];
+
+    public int getTInicial() {
+        return eixoTemporal.get(0).getObject().getMs();
+    }
+
+    public int getTActual() {
+        return t;
+    }
+
+    public int getTFinal() {
+        return eixoTemporal.getLast().getObject().getMs();
+    }
 
     public int getNumSeries() {
         return numSeries;
@@ -104,43 +125,212 @@ public final class ManexadorScatterPlots {
         });
     }
 
-    public boolean nadaVisualizado() {
-        return visualizados == 0;
+    public int[] getMsInstances() {
+        return msInstances;
     }
 
-    public boolean todoVisualizado() {
-        return visualizados >= instances.numInstances();
-    }
-
-    public synchronized void goTo(int to) {
-        if (to > visualizados) {
-            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
-                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
-                    if (scatterPlotsVisibles[j][k]) {
-                        ScatterPlot sp = matrizScatterPlots.get(j).get(k);
-                        XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
-                        xyd.visualizarItems(sp, to - visualizados);
+    public synchronized void goTo(double to) {
+        synchronized (tarefaPlay) {
+            int numeroItems = 0;
+            int toMs = (int) Math.round(to * (getTFinal() - getTInicial()) + getTInicial());
+            Node<InstancesSimultaneas> nodo = nodoActual;
+            if (toMs > t) {
+                numeroItems = numeroItemsAVisualizar(toMs);
+                for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                    for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                        if (scatterPlotsVisibles[j][k]) {
+                            ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+                            XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+                            nodo = xyd.visualizarItems(sp, numeroItems);
+                        }
+                    }
+                }
+            } else if (toMs < t) {
+                numeroItems = -numeroItemsAAgochar(toMs);
+                for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                    for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                        if (scatterPlotsVisibles[j][k]) {
+                            ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+                            XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+                            nodo = xyd.agocharItems(sp, -numeroItems);
+                        }
                     }
                 }
             }
-        } else if (to < visualizados) {
-            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
-                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
-                    if (scatterPlotsVisibles[j][k]) {
-                        ScatterPlot sp = matrizScatterPlots.get(j).get(k);
-                        XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
-                        xyd.agocharItems(sp, visualizados - to);
-                    }
-                }
-            }
+            textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + numeroItems));
+            slider.setValue((int) Math.round(to * slider.getMaximum()));
+            nodoActual = nodo;
+            t = (int) Math.round(getTInicial() + to * (getTFinal() - getTInicial()));
         }
-        visualizados = to;
-        textField.setText(String.valueOf(to));
-        textField.setBackground(Color.white);
+    }
+
+    private int numeroItemsAVisualizar(int toMs) {
+        int n = 0;
+        Node<InstancesSimultaneas> nodo = nodoActual.getNext();
+        while (nodo != null && nodo.getObject().getMs() <= toMs) {
+            n += nodo.getObject().size();
+            nodo = nodo.getNext();
+        }
+        return n;
+    }
+
+    private int numeroItemsAAgochar(int toMs) {
+        int n = 0;
+        Node<InstancesSimultaneas> nodo = nodoActual;
+        while (nodo != null && nodo.getObject().getMs() > toMs) {
+            n += nodo.getObject().size();
+            nodo = nodo.getBack();
+        }
+        return n;
     }
 
     public void freeze() {
         tarefaPlay.freeze();
+    }
+
+    void goToNext() {
+        goTo(nodoActual.getNext().getObject().getMs());
+    }
+
+    void goToBefore() {
+        goTo(nodoActual.getBack().getObject().getMs());
+    }
+
+    class Node<E> {
+
+        private Node<E> next;
+        private Node<E> back;
+        private final E object;
+
+        public Node<E> getNext() {
+            return next;
+        }
+
+        public Node<E> getBack() {
+            return back;
+        }
+
+        public E getObject() {
+            return object;
+        }
+
+        public Node(E object) {
+            this.object = object;
+        }
+    }
+
+    private class NodeList<E> extends ArrayList<Node<E>> {
+
+        private Node<E> first;
+        private Node<E> last;
+
+        public Node<E> getFirst() {
+            return first;
+        }
+
+        public Node<E> getLast() {
+            return last;
+        }
+
+        public NodeList() {
+            super();
+        }
+
+        public void addElement(E e) {
+            add(new Node<>(e));
+        }
+
+        @Override
+        public boolean add(Node<E> e) {
+            if (isEmpty()) {
+                e.back = null;
+                first = e;
+            } else {
+                last.next = e;
+                e.back = last;
+            }
+            e.next = null;
+            last = e;
+            return super.add(e);
+        }
+    }
+
+    class InstancesSimultaneas extends ArrayList<Instance> {
+
+        private Integer ms;
+
+        public Integer getMs() {
+            return this.ms;
+        }
+
+        public InstancesSimultaneas(Integer ms) {
+            super();
+            this.ms = ms;
+        }
+
+        public void setMs(Integer ms) {
+            this.ms = ms;
+        }
+    }
+
+    private NodeList<InstancesSimultaneas> fabricarEixo(InstancesComparable instances, int indiceTemporal, int ordeVisualizacion) {
+        NodeList<InstancesSimultaneas> eixo = new NodeList<>();
+        msInstances = new int[instances.numInstances()];
+        Instances ins = instances;
+        Double ultimoIndice;
+        switch (ordeVisualizacion) {
+            case Vista.ORDE_MODELO:
+                for (int i = 0; i < ins.numInstances(); i++) {
+                    Instance in = (Instance) ins.instance(i);
+                    eixo.addElement(new InstancesSimultaneas((i + 1) * paso));
+                    msInstances[i] = (i + 1) * paso;
+                    eixo.get(eixo.size() - 1).getObject().add(in);
+                }
+                break;
+            case Vista.ORDE_INDICE_TEMPORAL_NUMERICO:
+                ArrayList<Attribute> atributos = new ArrayList<>();
+                atributos.add(new Attribute("indiceInstancesOrixinal"));
+                atributos.add(new Attribute("indiceTemporal"));
+                Instances insts = new Instances("", atributos, ins.numInstances());
+                for (int i = 0; i < ins.numInstances(); i++) {
+                    insts.add(new DenseInstance(1.0, new double[]{i, ins.get(i).value(indiceTemporal)}));
+                }
+                insts.sort(1);
+                ultimoIndice = null;
+                int j = 0;
+                for (int i = 0; i < insts.numInstances(); i++) {
+                    Instance in = (Instance) insts.instance(i);
+                    if (!Objects.equals(in.value(1), ultimoIndice)) {
+                        eixo.addElement(new InstancesSimultaneas((i + 1) * paso));
+                        ultimoIndice = in.value(1);
+                        j++;
+                    }
+                    eixo.get(eixo.size() - 1).getObject().add(instances.instance((int) in.value(0)));
+                    msInstances[(int) in.value(0)] = j * paso;
+                }
+                break;
+            case Vista.ORDE_INDICE_TEMPORAL_NUMERICO_PONDERADO:
+                atributos = new ArrayList<>();
+                atributos.add(new Attribute("indiceInstancesOrixinal"));
+                atributos.add(new Attribute("indiceTemporal"));
+                insts = new Instances("", atributos, ins.numInstances());
+                for (int i = 0; i < ins.numInstances(); i++) {
+                    insts.add(new DenseInstance(1.0, new double[]{i, ins.get(i).value(indiceTemporal)}));
+                }
+                insts.sort(1);
+                ultimoIndice = null;
+                for (int i = 0; i < insts.numInstances(); i++) {
+                    Instance in = (Instance) insts.instance(i);
+                    msInstances[(int) in.value(0)] = (int) Math.round((float) in.value(1) * paso);
+                    if (!Objects.equals(in.value(1), ultimoIndice)) {
+                        eixo.addElement(new InstancesSimultaneas(msInstances[(int) in.value(0)]));
+                        ultimoIndice = in.value(1);
+                    }
+                    eixo.get(eixo.size() - 1).getObject().add(instances.instance((int) in.value(0)));
+                }
+                break;
+        }
+        return eixo;
     }
 
     final class TarefaPlay extends SwingWorker<Void, Void> {
@@ -152,7 +342,7 @@ public final class ManexadorScatterPlots {
             setEstado(PAUSE);
         }
 
-        public synchronized void setEstado(int estado) {
+        public void setEstado(int estado) {
             firePropertyChange("estadoReproductor", this.estado, estado);
             this.estado = estado;
         }
@@ -160,64 +350,70 @@ public final class ManexadorScatterPlots {
         @Override
         protected Void doInBackground() {
             try {
-                while (!todoVisualizado() && estado == PLAY) {
-                    synchronized (this) {
-                        if (!todoVisualizado() && estado == PLAY) {
-                            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
-                                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
-                                    if (scatterPlotsVisibles[j][k]) {
-                                        ScatterPlot sp = matrizScatterPlots.get(j).get(k);
-                                        XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
-                                        xyd.visualizarItems(sp, 1);
+                while (estado == PLAY && getTActual() < getTFinal()) {
+                    try {
+                        Thread.sleep(paso);
+                    } catch (InterruptedException ex) {
+                    }
+                    synchronized (TarefaPlay.this) {
+                        if (estado == PLAY && getTActual() < getTFinal()) {
+
+                            if (estado == PLAY && getTActual() < getTFinal()) {
+                                int items = numeroItemsAVisualizar(t + paso);
+                                Node<InstancesSimultaneas> nodo = nodoActual;
+                                for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                                    for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                                        if (scatterPlotsVisibles[j][k]) {
+                                            ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+                                            XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+                                            nodo = xyd.visualizarItems(sp, items);
+                                        }
                                     }
                                 }
-                            }
-                            visualizados++;
-                            slider.setValue((int) 1.0 * slider.getMaximum() * visualizados / instances.numInstances());
-                            textField.setText(String.valueOf(visualizados));
-                            textField.setBackground(Color.white);
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException ex) {
+                                nodoActual = nodo;
+                                t = Math.min(t + paso, getTFinal());
+                                visualizados += items;
+                                slider.setValue(slider.getMaximum() * (getTActual() - getTInicial()) / (getTFinal() - getTInicial()));
+                                textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + items));
                             }
                         }
                     }
                 }
-                if (!todoVisualizado()) {
+                if (getTActual() < getTFinal()) {
                     setEstado(FREEZE);
                 } else {
                     setEstado(PAUSE);
                 }
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 Logger.getLogger(ManexadorScatterPlots.class.getName()).log(Level.SEVERE, null, e);
                 throw e;
             }
             return null;
         }
 
-        public synchronized void pause() {
+        public void pause() {
             setEstado(PAUSE);
         }
 
-        public synchronized void freeze() {
+        public void freeze() {
             setEstado(FREEZE);
         }
 
-        public synchronized int getEstado() {
+        public int getEstado() {
             return estado;
         }
 
-        public synchronized void play() {
+        public void play() {
             setEstado(PLAY);
             execute();
         }
     }
 
-    public synchronized void pause() {
+    public void pause() {
         tarefaPlay.pause();
     }
 
-    public synchronized void play() {
+    public void play() {
         tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
         propertyChangeListeners.stream().forEach((p) -> {
             tarefaPlay.addPropertyChangeListener(p);
@@ -225,11 +421,7 @@ public final class ManexadorScatterPlots {
         tarefaPlay.play();
     }
 
-    public synchronized int getVisualizados() {
-        return visualizados;
-    }
-
-    public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField) {
+    public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, int indiceTemporal, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField, int ordeVisualizacion, int paso) {
         int numAtributosNumericos = scatterPlotsVisibles.length;
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
         this.instances = instances;
@@ -248,10 +440,13 @@ public final class ManexadorScatterPlots {
         }
         this.propertyChangeListeners = new ArrayList<>();
         this.tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
-        tarefaPlay.setEstado(PAUSE);
-        this.visualizados = 0;
+        this.tarefaPlay.setEstado(PAUSE);
         this.slider = slider;
+        this.paso = paso;
         this.textField = textField;
+        this.visualizados = 0;
+        this.eixoTemporal = fabricarEixo(instances, indiceTemporal, ordeVisualizacion);
+        this.t = getTInicial();
     }
 
     public class JFrameChartPanel extends JFrame {
@@ -271,31 +466,6 @@ public final class ManexadorScatterPlots {
         }
     }
 
-    private class PuntoConNominal {
-
-        private final int atributoNominal;
-        private final double valorX;
-        private final double valorY;
-
-        public int getAtributoNominal() {
-            return atributoNominal;
-        }
-
-        public double getValorX() {
-            return valorX;
-        }
-
-        public double getValorY() {
-            return valorY;
-        }
-
-        public PuntoConNominal(int atributoNominal, double valorX, double valorY) {
-            this.atributoNominal = atributoNominal;
-            this.valorX = valorX;
-            this.valorY = valorY;
-        }
-    }
-
     class XYDatasetModelo extends XYSeriesCollection {
 
         private Number domainMin;
@@ -307,7 +477,6 @@ public final class ManexadorScatterPlots {
         private final int atributoY;
         private final int atributoX;
         private final int atributoColor;
-        private final PuntoConNominal puntos[];
         private final InstancesComparable atributos;
 
         public int getAtributoY() {
@@ -320,10 +489,6 @@ public final class ManexadorScatterPlots {
 
         public int getAtributoColor() {
             return atributoColor;
-        }
-
-        public PuntoConNominal[] getPuntos() {
-            return puntos;
         }
 
         public Number getDomainMin() {
@@ -368,7 +533,6 @@ public final class ManexadorScatterPlots {
             this.atributoX = atributoX;
             this.atributoY = atributoY;
             this.atributoColor = atributoColor;
-            int numeroInstancias = atributos.numInstances();
             double d = (1.0D / 0.0D);
             double d1 = (-1.0D / 0.0D);
             double d2 = (1.0D / 0.0D);
@@ -379,24 +543,26 @@ public final class ManexadorScatterPlots {
                     addSeries(new XYSeries(i, false));
                 }
             }
-            puntos = new PuntoConNominal[numeroInstancias];
-            for (int j = 0; j < numeroInstancias; j++) {
-                Double d4 = atributos.instance(j).value(atributoX);
-                if (d4 < d) {
-                    d = d4;
+            Node<InstancesSimultaneas> nodo = eixoTemporal.getFirst();
+            while (nodo != null) {
+                for (int i = 0; i < nodo.getObject().size(); i++) {
+                    Double d4 = nodo.getObject().get(i).value(atributoX);
+                    if (d4 < d) {
+                        d = d4;
+                    }
+                    if (d4 > d1) {
+                        d1 = d4;
+                    }
+                    Double d5 = nodo.getObject().get(i).value(atributoY);
+                    if (d5 < d2) {
+                        d2 = d5;
+                    }
+                    if (d5 > d3) {
+                        d3 = d5;
+                    }
+                    getSeries((Comparable) (atributoColor > -1 && Double.compare(nodo.getObject().get(i).value(atributoColor), Double.NaN) != 0 ? (int) nodo.getObject().get(i).value(atributoColor) : -1)).add(d4, d5, false);
                 }
-                if (d4 > d1) {
-                    d1 = d4;
-                }
-                Double d5 = atributos.instance(j).value(atributoY);
-                if (d5 < d2) {
-                    d2 = d5;
-                }
-                if (d5 > d3) {
-                    d3 = d5;
-                }
-                puntos[j] = new PuntoConNominal(atributoColor > -1 && Double.compare(atributos.instance(j).value(atributoColor), Double.NaN) != 0 ? (int) atributos.instance(j).value(atributoColor) : -1, d4, d5);
-                getSeries((Comparable) puntos[j].getAtributoNominal()).add(puntos[j].getValorX(), puntos[j].getValorY(), false);
+                nodo = nodo.getNext();
             }
             try {
                 domainMin = d;
@@ -469,30 +635,47 @@ public final class ManexadorScatterPlots {
             return domainMax;
         }
 
-        public synchronized void visualizarItems(ScatterPlot sp, int numeroItems) {
-            sp.eliminarAnotacions(XYAnnotation.class);
-            for (int a = 0; a < numeroItems; a++) {
-                PuntoConNominal p = puntos[visualizados + a];
-                getSeries((Comparable) p.getAtributoNominal()).add(p.getValorX(), p.getValorY(), false);
+        public synchronized Node<InstancesSimultaneas> visualizarItems(ScatterPlot sp, int numeroItems) {
+            synchronized (tarefaPlay) {
+                sp.eliminarAnotacions(XYAnnotation.class);
+                int e = numeroItems;
+                Node<InstancesSimultaneas> nodo = nodoActual;
+                while (e > 0) {
+                    nodo = nodo.getNext();
+                    for (int i = 0; i < nodo.getObject().size(); i++) {
+                        XYSeries xys = getSeries((Comparable) (atributoColor > -1 && Double.compare(nodo.getObject().get(i).value(atributoColor), Double.NaN) != 0 ? (int) nodo.getObject().get(i).value(atributoColor) : -1));
+                        xys.add(nodo.getObject().get(i).value(atributoX), nodo.getObject().get(i).value(atributoY), false);
+                        e--;
+                    }
+                }
+                sp.pintarEstela();
+                fireDatasetChanged();
+                return nodo;
             }
-            sp.pintarEstela();
-            fireDatasetChanged();
         }
 
-        public synchronized void agocharItems(ScatterPlot sp, int numeroItems) {
-            setNotify(false);
-            sp.eliminarAnotacions(XYAnnotation.class);
-            for (int a = 0; a < numeroItems; a++) {
-                PuntoConNominal xv = puntos[visualizados - a - 1];
-                XYSeries xys = getSeries((Comparable) xv.getAtributoNominal());
-                xys.remove(xys.getItemCount() - 1);
+        public synchronized Node<InstancesSimultaneas> agocharItems(ScatterPlot sp, int numeroItems) {
+            synchronized (tarefaPlay) {
+                setNotify(false);
+                sp.eliminarAnotacions(XYAnnotation.class);
+                int e = numeroItems;
+                Node<InstancesSimultaneas> nodo = nodoActual;
+                while (e > 0) {
+                    for (int i = 0; i < nodo.getObject().size(); i++) {
+                        XYSeries xys = getSeries((Comparable) (atributoColor > -1 && Double.compare(nodo.getObject().get(i).value(atributoColor), Double.NaN) != 0 ? (int) nodo.getObject().get(i).value(atributoColor) : -1));
+                        xys.remove(xys.getItemCount() - 1);
+                        e--;
+                    }
+                    nodo = nodo.getBack();
+                }
+                sp.pintarEstela();
+                setNotify(true);
+                return nodo;
             }
-            sp.pintarEstela();
-            setNotify(true);
         }
     }
 
-    public synchronized void procesarSeleccion(InstancesComparable instances, ArrayList<Integer> indicesInstances) {
+    public void procesarSeleccion(InstancesComparable instances, ArrayList<Integer> indicesInstances) {
         double radioInicial = 15.0;
         double grosorInicial = 1.0;
         double pasoGrosor = 0.0;
@@ -506,7 +689,7 @@ public final class ManexadorScatterPlots {
                 return sp;
             }).map((sp) -> {
                 for (int k = 0; k < indicesInstances.size(); k++) {
-                    if (getVisualizados() > indicesInstances.get(k)) {
+                    if (msInstances[indicesInstances.get(k)] <= getTActual()) {
                         sp.engadirAnotacion(new XYDrawableAnnotation(instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoX()), instances.get(indicesInstances.get(k)).value(sp.getIndiceAtributoY()), radioInicial + k * pasoRadio, radioInicial + k * pasoRadio, new CircleDrawer(obterCoresHSB(k, indicesInstances.size()), new BasicStroke((float) (grosorInicial + k * pasoGrosor)), null)));
                     }
                 }
@@ -517,7 +700,7 @@ public final class ManexadorScatterPlots {
         });
     }
 
-    public synchronized int numColumnasNonVacias() {
+    public int numColumnasNonVacias() {
         int n = 0;
         for (int i = 0; i < matrizScatterPlots.size(); i++) {
             if (!columnaScatterPlotsVacia(i)) {
@@ -527,7 +710,7 @@ public final class ManexadorScatterPlots {
         return n;
     }
 
-    public synchronized int numFilasNonVacias() {
+    public int numFilasNonVacias() {
         int n = 0;
         for (int i = 0; i < matrizScatterPlots.size(); i++) {
             if (!filaScatterPlotsVacia(i)) {
@@ -537,7 +720,7 @@ public final class ManexadorScatterPlots {
         return n;
     }
 
-    public synchronized boolean columnaScatterPlotsVacia(int columna) {
+    public boolean columnaScatterPlotsVacia(int columna) {
         for (boolean[] bb : scatterPlotsVisibles) {
             if (bb[columna]) {
                 return false;
@@ -546,7 +729,7 @@ public final class ManexadorScatterPlots {
         return true;
     }
 
-    public synchronized boolean filaScatterPlotsVacia(int fila) {
+    public boolean filaScatterPlotsVacia(int fila) {
         for (boolean b : scatterPlotsVisibles[fila]) {
             if (b) {
                 return false;
@@ -555,15 +738,18 @@ public final class ManexadorScatterPlots {
         return true;
     }
 
-    public synchronized ScatterPlot getScatterPlot(int i, int j) {
+    public ScatterPlot getScatterPlot(int i, int j) {
         return matrizScatterPlots.get(i).get(j);
     }
 
-    public synchronized void cubrirConScatterPlot(int i, int j, List<Integer> indices, int indiceAtributoNominal) {
+    public void cubrirConScatterPlot(int i, int j, List<Integer> indices, int indiceAtributoNominal) {
         if (scatterPlotsVisibles[i][j]) {
             matrizScatterPlots.get(i).set(j, new ScatterPlot(instances, indices.get(j), indices.get(i), indiceAtributoNominal));
         }
+        t = getTFinal();
         visualizados = instances.numInstances();
+        nodoActual = eixoTemporal.getLast();
+        slider.setValue(100);
     }
 
     public static Color obterCoresHSB(int cor, int totalCores) {
@@ -575,7 +761,7 @@ public final class ManexadorScatterPlots {
         return new Color((int) Math.round(1.0 * r1 + (r2 - r1) * cor / totalCores), (int) Math.round(1.0 * g1 + (g2 - g1) * cor / totalCores), (int) Math.round(1.0 * b1 + (b2 - b1) * cor / totalCores));
     }
 
-    public synchronized int contarJFramesVisibles() {
+    public int contarJFramesVisibles() {
         int c = 0;
         for (ArrayList<ScatterPlot> alsp : matrizScatterPlots) {
             c = alsp.stream().filter((jf) -> (jf != null && jf.getjFrameAmpliado().isVisible())).map((_item) -> 1).reduce(c, Integer::sum);
@@ -631,19 +817,19 @@ public final class ManexadorScatterPlots {
         }
 
         void pintarEstela() {
-            PuntoConNominal[] puntos = ((XYDatasetModelo) chartPanelCela.getChart().getXYPlot().getDataset()).getPuntos();
-            int numPuntos = ((XYDatasetModelo) chartPanelCela.getChart().getXYPlot().getDataset()).obterItemsTotais();
-            Color corEstela = Color.white;
-            Color corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint();
-            Color corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
-            int lonxitudeEstela = 5;
-            PuntoConNominal p, pAnterior;
-            for (int i = numPuntos - 1; i > 0 && i >= numPuntos - lonxitudeEstela; i--) {
-                p = puntos[i];
-                pAnterior = puntos[i - 1];
-                chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(pAnterior.valorX, pAnterior.valorY, p.valorX, p.valorY, new BasicStroke(2.0f), obterCorIntermedia(numPuntos - i - 1, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
-                jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(pAnterior.valorX, pAnterior.valorY, p.valorX, p.valorY, new BasicStroke(2.0f), obterCorIntermedia(numPuntos - i - 1, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
-            }
+            /*PuntoConNominal[] puntos = ((XYDatasetModelo) chartPanelCela.getChart().getXYPlot().getDataset()).getPuntos();
+             int numPuntos = ((XYDatasetModelo) chartPanelCela.getChart().getXYPlot().getDataset()).obterItemsTotais();
+             Color corEstela = Color.white;
+             Color corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint();
+             Color corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
+             int lonxitudeEstela = 5;
+             PuntoConNominal p, pAnterior;
+             for (int i = numPuntos - 1; i > 0 && i >= numPuntos - lonxitudeEstela; i--) {
+             p = puntos[i];
+             pAnterior = puntos[i - 1];
+             chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(pAnterior.valorX, pAnterior.valorY, p.valorX, p.valorY, new BasicStroke(2.0f), obterCorIntermedia(numPuntos - i - 1, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
+             jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(pAnterior.valorX, pAnterior.valorY, p.valorX, p.valorY, new BasicStroke(2.0f), obterCorIntermedia(numPuntos - i - 1, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
+             }*/
         }
 
         public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor) {
@@ -657,16 +843,16 @@ public final class ManexadorScatterPlots {
                 jfreechart1.removeLegend();
                 jfreechart2.removeLegend();
             }
-            ChartFactory.setChartTheme(StandardChartTheme.createDarknessTheme());
-            ChartUtilities.applyCurrentTheme(jfreechart1);
-            ChartUtilities.applyCurrentTheme(jfreechart2);
+            ChartTheme ct = StandardChartTheme.createDarknessTheme();
+            ct.apply(jfreechart1);
+            ct.apply(jfreechart2);
             this.chartPanelCela = new ChartPanelParcheado(jfreechart1);
             ChartPanel chartPanelAmpliado = new ChartPanelParcheado(jfreechart2);
             this.chartPanelCela.getChart().setTitle((String) null);
             this.jFrameAmpliado = new JFrameChartPanel("'" + instances.attribute(indiceAtributoY).name() + "' " + bundle.getString("fronteA") + " '" + instances.attribute(indiceAtributoX).name() + "'", chartPanelAmpliado, indiceAtributoX, indiceAtributoY);
         }
 
-        public synchronized void eliminarAnotacions(Class claseAnotacion) {
+        public void eliminarAnotacions(Class claseAnotacion) {
             XYPlot xyp1 = chartPanelCela.getChart().getXYPlot(), xyp2 = jFrameAmpliado.getChartPanel().getChart().getXYPlot();
             List annotations = xyp1.getAnnotations();
             Iterator it = annotations.iterator();
@@ -679,7 +865,7 @@ public final class ManexadorScatterPlots {
             }
         }
 
-        public synchronized void engadirAnotacion(XYAnnotation a) {
+        public void engadirAnotacion(XYAnnotation a) {
             chartPanelCela.getChart().getXYPlot().addAnnotation(a, false);
             jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(a, false);
         }

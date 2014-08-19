@@ -399,6 +399,9 @@
             </Property>
             <Property name="name" type="java.lang.String" value="jButton5" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton6">
           <Properties>
@@ -407,6 +410,9 @@
             </Property>
             <Property name="name" type="java.lang.String" value="jButton6" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton6ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -419,6 +425,156 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
     </Container>
+    <Container class="javax.swing.JDialog" name="jDialog4">
+      <Properties>
+        <Property name="title" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+          <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jMenuItem22.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="jDialog4" noResource="true"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="jButton7" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton13" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jRadioButton2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jRadioButton3" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jRadioButton4" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jTextField2" min="-2" pref="50" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jRadioButton2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jRadioButton3" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jRadioButton4" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jButton7" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton13" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JRadioButton" name="jRadioButton2">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup2"/>
+            </Property>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jRadioButton2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jRadioButton2" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="jRadioButton3">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup2"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jRadioButton3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jRadioButton3" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="jRadioButton4">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup2"/>
+            </Property>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jRadioButton4.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jRadioButton4" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jTextField2">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="jTextField2" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField2KeyTyped"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel5">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jLabel5.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel6">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jLabel6.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton7">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Aceptar" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jButton7" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton7ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton13">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Cancelar" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="jButton13" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton13ActionPerformed"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup2">
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <Properties>
         <Property name="name" type="java.lang.String" value="jMenuBar1" noResource="true"/>
@@ -722,6 +878,18 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem17ActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem22">
+              <Properties>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jMenuItem22.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="jMenuItem22" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem22ActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu5">
@@ -962,7 +1130,7 @@
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jSlider1MouseReleased"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jSlider1.addChangeListener(new ChangeListener() {&#xd;&#xa;@Override&#xd;&#xa;public void stateChanged(ChangeEvent e) {&#xd;&#xa;      if(pulsarSlider &amp;&amp; e.getSource() instanceof JSlider) {&#xd;&#xa;JSlider s=(JSlider)e.getSource();&#xd;&#xa;mansp.goTo((int)1.0*meuModelo.obterNumInstancias()*s.getValue()/s.getMaximum());&#xd;&#xa;}&#xd;&#xa;    }&#xd;&#xa;});&#xd;&#xa;&#xd;&#xa;jSlider1.addMouseListener(new MouseAdapter() {&#xd;&#xa;         @Override&#xd;&#xa;         public void mousePressed(MouseEvent e) {&#xd;&#xa;            Point p = e.getPoint();&#xd;&#xa;            double percent = p.x / ((double) jSlider1.getWidth());&#xd;&#xa;            int range = jSlider1.getMaximum() - jSlider1.getMinimum();&#xd;&#xa;            double newVal = range * percent;&#xd;&#xa;            int result = (int)(jSlider1.getMinimum() + newVal);&#xd;&#xa;            jSlider1.setValue(result);&#xd;&#xa;         }&#xd;&#xa;      });"/>
+                <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="jSlider1.addChangeListener(new ChangeListener() {&#xd;&#xa;@Override&#xd;&#xa;public void stateChanged(ChangeEvent e) {&#xd;&#xa;      if(pulsarSlider &amp;&amp; e.getSource() instanceof JSlider) {&#xd;&#xa;JSlider s=(JSlider)e.getSource();&#xd;&#xa;mansp.goTo(1.0*s.getValue()/s.getMaximum());&#xd;&#xa;}&#xd;&#xa;    }&#xd;&#xa;});&#xd;&#xa;&#xd;&#xa;jSlider1.addMouseListener(new MouseAdapter() {&#xd;&#xa;         @Override&#xd;&#xa;         public void mousePressed(MouseEvent e) {&#xd;&#xa;            Point p = e.getPoint();&#xd;&#xa;                double percent = p.x / ((double) jSlider1.getWidth());&#xd;&#xa;                int range = jSlider1.getMaximum() - jSlider1.getMinimum();&#xd;&#xa;                double newVal = range * percent;&#xd;&#xa;                int result = (int)(jSlider1.getMinimum() + newVal);&#xd;&#xa;                jSlider1.setValue(result);&#xd;&#xa;         }&#xd;&#xa;      });"/>
                 <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="Vista_jSlider1"/>
               </AuxValues>
             </Component>
@@ -1029,11 +1197,11 @@
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField1">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="name" type="java.lang.String" value="jTextField1" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField1ActionPerformed"/>
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField1KeyTyped"/>
               </Events>
             </Component>
