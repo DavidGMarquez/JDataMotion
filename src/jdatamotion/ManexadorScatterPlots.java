@@ -53,6 +53,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
+import org.jfree.chart.annotations.XYLineAnnotation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -85,9 +86,9 @@ public final class ManexadorScatterPlots {
     private final InstancesComparable instances;
     private final int paso;
     private int t;
-    private Node<InstancesSimultaneas> nodoActual;
-    private int visualizados;
+    private Nodo<InstancesSimultaneas> nodoActual;
     private int msInstances[];
+    private final int lonxitudeEstela;
 
     public int getTInicial() {
         return eixoTemporal.get(0).getObject().getMs();
@@ -129,11 +130,15 @@ public final class ManexadorScatterPlots {
         return msInstances;
     }
 
+    public synchronized void goTo(int toMs) {
+        goTo(1.0 * toMs / getTFinal());
+    }
+
     public synchronized void goTo(double to) {
         synchronized (tarefaPlay) {
-            int numeroItems = 0;
             int toMs = (int) Math.round(to * (getTFinal() - getTInicial()) + getTInicial());
-            Node<InstancesSimultaneas> nodo = nodoActual;
+            Nodo<InstancesSimultaneas> nodo = nodoActual;
+            int numeroItems = 0;
             if (toMs > t) {
                 numeroItems = numeroItemsAVisualizar(toMs);
                 for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
@@ -166,7 +171,7 @@ public final class ManexadorScatterPlots {
 
     private int numeroItemsAVisualizar(int toMs) {
         int n = 0;
-        Node<InstancesSimultaneas> nodo = nodoActual.getNext();
+        Nodo<InstancesSimultaneas> nodo = nodoActual.getNext();
         while (nodo != null && nodo.getObject().getMs() <= toMs) {
             n += nodo.getObject().size();
             nodo = nodo.getNext();
@@ -176,7 +181,7 @@ public final class ManexadorScatterPlots {
 
     private int numeroItemsAAgochar(int toMs) {
         int n = 0;
-        Node<InstancesSimultaneas> nodo = nodoActual;
+        Nodo<InstancesSimultaneas> nodo = nodoActual;
         while (nodo != null && nodo.getObject().getMs() > toMs) {
             n += nodo.getObject().size();
             nodo = nodo.getBack();
@@ -196,17 +201,17 @@ public final class ManexadorScatterPlots {
         goTo(nodoActual.getBack().getObject().getMs());
     }
 
-    class Node<E> {
+    class Nodo<E> {
 
-        private Node<E> next;
-        private Node<E> back;
+        private Nodo<E> next;
+        private Nodo<E> back;
         private final E object;
 
-        public Node<E> getNext() {
+        public Nodo<E> getNext() {
             return next;
         }
 
-        public Node<E> getBack() {
+        public Nodo<E> getBack() {
             return back;
         }
 
@@ -214,21 +219,21 @@ public final class ManexadorScatterPlots {
             return object;
         }
 
-        public Node(E object) {
+        public Nodo(E object) {
             this.object = object;
         }
     }
 
-    private class NodeList<E> extends ArrayList<Node<E>> {
+    private class NodeList<E> extends ArrayList<Nodo<E>> {
 
-        private Node<E> first;
-        private Node<E> last;
+        private Nodo<E> first;
+        private Nodo<E> last;
 
-        public Node<E> getFirst() {
+        public Nodo<E> getFirst() {
             return first;
         }
 
-        public Node<E> getLast() {
+        public Nodo<E> getLast() {
             return last;
         }
 
@@ -237,11 +242,11 @@ public final class ManexadorScatterPlots {
         }
 
         public void addElement(E e) {
-            add(new Node<>(e));
+            add(new Nodo<>(e));
         }
 
         @Override
-        public boolean add(Node<E> e) {
+        public boolean add(Nodo<E> e) {
             if (isEmpty()) {
                 e.back = null;
                 first = e;
@@ -273,7 +278,7 @@ public final class ManexadorScatterPlots {
         }
     }
 
-    private NodeList<InstancesSimultaneas> fabricarEixo(InstancesComparable instances, int indiceTemporal, int ordeVisualizacion) {
+    private NodeList<InstancesSimultaneas> fabricarEixo(InstancesComparable instances, int indiceTemporal, int ordeVisualizacion, int lonxitudeEstela) {
         NodeList<InstancesSimultaneas> eixo = new NodeList<>();
         msInstances = new int[instances.numInstances()];
         Instances ins = instances;
@@ -301,9 +306,9 @@ public final class ManexadorScatterPlots {
                 for (int i = 0; i < insts.numInstances(); i++) {
                     Instance in = (Instance) insts.instance(i);
                     if (!Objects.equals(in.value(1), ultimoIndice)) {
-                        eixo.addElement(new InstancesSimultaneas((i + 1) * paso));
-                        ultimoIndice = in.value(1);
                         j++;
+                        eixo.addElement(new InstancesSimultaneas(j * paso));
+                        ultimoIndice = in.value(1);
                     }
                     eixo.get(eixo.size() - 1).getObject().add(instances.instance((int) in.value(0)));
                     msInstances[(int) in.value(0)] = j * paso;
@@ -314,16 +319,22 @@ public final class ManexadorScatterPlots {
                 atributos.add(new Attribute("indiceInstancesOrixinal"));
                 atributos.add(new Attribute("indiceTemporal"));
                 insts = new Instances("", atributos, ins.numInstances());
+                double max = 0.0;
                 for (int i = 0; i < ins.numInstances(); i++) {
                     insts.add(new DenseInstance(1.0, new double[]{i, ins.get(i).value(indiceTemporal)}));
+                    int indiceTemporalMs = Math.round((float) ins.get(i).value(indiceTemporal) * paso);
+                    if (indiceTemporalMs > max) {
+                        max = indiceTemporalMs;
+                    }
                 }
                 insts.sort(1);
                 ultimoIndice = null;
                 for (int i = 0; i < insts.numInstances(); i++) {
                     Instance in = (Instance) insts.instance(i);
-                    msInstances[(int) in.value(0)] = (int) Math.round((float) in.value(1) * paso);
+                    msInstances[(int) in.value(0)] = (int) (!in.isMissing(1) ? Math.round((float) in.value(1) * paso) : max + paso);
                     if (!Objects.equals(in.value(1), ultimoIndice)) {
-                        eixo.addElement(new InstancesSimultaneas(msInstances[(int) in.value(0)]));
+                        int ms = msInstances[(int) in.value(0)];
+                        eixo.addElement(new InstancesSimultaneas(ms != 0 ? ms : 0));
                         ultimoIndice = in.value(1);
                     }
                     eixo.get(eixo.size() - 1).getObject().add(instances.instance((int) in.value(0)));
@@ -360,7 +371,7 @@ public final class ManexadorScatterPlots {
 
                             if (estado == PLAY && getTActual() < getTFinal()) {
                                 int items = numeroItemsAVisualizar(t + paso);
-                                Node<InstancesSimultaneas> nodo = nodoActual;
+                                Nodo<InstancesSimultaneas> nodo = nodoActual;
                                 for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
                                     for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
                                         if (scatterPlotsVisibles[j][k]) {
@@ -372,7 +383,6 @@ public final class ManexadorScatterPlots {
                                 }
                                 nodoActual = nodo;
                                 t = Math.min(t + paso, getTFinal());
-                                visualizados += items;
                                 slider.setValue(slider.getMaximum() * (getTActual() - getTInicial()) / (getTFinal() - getTInicial()));
                                 textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + items));
                             }
@@ -421,7 +431,7 @@ public final class ManexadorScatterPlots {
         tarefaPlay.play();
     }
 
-    public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, int indiceTemporal, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField, int ordeVisualizacion, int paso) {
+    public ManexadorScatterPlots(InstancesComparable instances, int atributoColor, int indiceTemporal, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField, int ordeVisualizacion, int paso, int lonxitudeEstela) {
         int numAtributosNumericos = scatterPlotsVisibles.length;
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
         this.instances = instances;
@@ -442,10 +452,10 @@ public final class ManexadorScatterPlots {
         this.tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
         this.tarefaPlay.setEstado(PAUSE);
         this.slider = slider;
+        this.lonxitudeEstela = lonxitudeEstela;
         this.paso = paso;
         this.textField = textField;
-        this.visualizados = 0;
-        this.eixoTemporal = fabricarEixo(instances, indiceTemporal, ordeVisualizacion);
+        this.eixoTemporal = fabricarEixo(instances, indiceTemporal, ordeVisualizacion, lonxitudeEstela);
         this.t = getTInicial();
     }
 
@@ -543,7 +553,7 @@ public final class ManexadorScatterPlots {
                     addSeries(new XYSeries(i, false));
                 }
             }
-            Node<InstancesSimultaneas> nodo = eixoTemporal.getFirst();
+            Nodo<InstancesSimultaneas> nodo = eixoTemporal.getFirst();
             while (nodo != null) {
                 for (int i = 0; i < nodo.getObject().size(); i++) {
                     Double d4 = nodo.getObject().get(i).value(atributoX);
@@ -635,11 +645,11 @@ public final class ManexadorScatterPlots {
             return domainMax;
         }
 
-        public synchronized Node<InstancesSimultaneas> visualizarItems(ScatterPlot sp, int numeroItems) {
+        public synchronized Nodo<InstancesSimultaneas> visualizarItems(ScatterPlot sp, int numeroItems) {
             synchronized (tarefaPlay) {
                 sp.eliminarAnotacions(XYAnnotation.class);
                 int e = numeroItems;
-                Node<InstancesSimultaneas> nodo = nodoActual;
+                Nodo<InstancesSimultaneas> nodo = nodoActual;
                 while (e > 0) {
                     nodo = nodo.getNext();
                     for (int i = 0; i < nodo.getObject().size(); i++) {
@@ -648,18 +658,18 @@ public final class ManexadorScatterPlots {
                         e--;
                     }
                 }
-                sp.pintarEstela();
+                sp.pintarEstela(nodo, lonxitudeEstela);
                 fireDatasetChanged();
                 return nodo;
             }
         }
 
-        public synchronized Node<InstancesSimultaneas> agocharItems(ScatterPlot sp, int numeroItems) {
+        public synchronized Nodo<InstancesSimultaneas> agocharItems(ScatterPlot sp, int numeroItems) {
             synchronized (tarefaPlay) {
                 setNotify(false);
                 sp.eliminarAnotacions(XYAnnotation.class);
                 int e = numeroItems;
-                Node<InstancesSimultaneas> nodo = nodoActual;
+                Nodo<InstancesSimultaneas> nodo = nodoActual;
                 while (e > 0) {
                     for (int i = 0; i < nodo.getObject().size(); i++) {
                         XYSeries xys = getSeries((Comparable) (atributoColor > -1 && Double.compare(nodo.getObject().get(i).value(atributoColor), Double.NaN) != 0 ? (int) nodo.getObject().get(i).value(atributoColor) : -1));
@@ -668,7 +678,7 @@ public final class ManexadorScatterPlots {
                     }
                     nodo = nodo.getBack();
                 }
-                sp.pintarEstela();
+                sp.pintarEstela(nodo, lonxitudeEstela);
                 setNotify(true);
                 return nodo;
             }
@@ -747,7 +757,6 @@ public final class ManexadorScatterPlots {
             matrizScatterPlots.get(i).set(j, new ScatterPlot(instances, indices.get(j), indices.get(i), indiceAtributoNominal));
         }
         t = getTFinal();
-        visualizados = instances.numInstances();
         nodoActual = eixoTemporal.getLast();
         slider.setValue(100);
     }
@@ -816,20 +825,30 @@ public final class ManexadorScatterPlots {
             }
         }
 
-        void pintarEstela() {
-            /*PuntoConNominal[] puntos = ((XYDatasetModelo) chartPanelCela.getChart().getXYPlot().getDataset()).getPuntos();
-             int numPuntos = ((XYDatasetModelo) chartPanelCela.getChart().getXYPlot().getDataset()).obterItemsTotais();
-             Color corEstela = Color.white;
-             Color corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint();
-             Color corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
-             int lonxitudeEstela = 5;
-             PuntoConNominal p, pAnterior;
-             for (int i = numPuntos - 1; i > 0 && i >= numPuntos - lonxitudeEstela; i--) {
-             p = puntos[i];
-             pAnterior = puntos[i - 1];
-             chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(pAnterior.valorX, pAnterior.valorY, p.valorX, p.valorY, new BasicStroke(2.0f), obterCorIntermedia(numPuntos - i - 1, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
-             jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(pAnterior.valorX, pAnterior.valorY, p.valorX, p.valorY, new BasicStroke(2.0f), obterCorIntermedia(numPuntos - i - 1, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
-             }*/
+        public void pintarEstela() {
+            pintarEstela(nodoActual, lonxitudeEstela);
+        }
+
+        private synchronized void pintarEstela(Nodo<InstancesSimultaneas> nodo, int lonxitudeEstela) {
+            synchronized (tarefaPlay) {
+                Color corEstela = Color.white, corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint(), corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
+                Nodo<InstancesSimultaneas> nAnterior, nActual = nodo;
+                for (int i = 0; i < lonxitudeEstela; i++) {
+                    nAnterior = nActual.getBack();
+                    if (nAnterior == null) {
+                        break;
+                    }
+                    for (int j = 0; j < nActual.getObject().size(); j++) {
+                        double xAct = nActual.getObject().get(j).value(indiceAtributoX), yAct = nActual.getObject().get(j).value(indiceAtributoY);
+                        for (int k = 0; k < nAnterior.getObject().size(); k++) {
+                            double xAnt = nAnterior.getObject().get(k).value(indiceAtributoX), yAnt = nAnterior.getObject().get(k).value(indiceAtributoY);
+                            chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
+                            jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
+                        }
+                    }
+                    nActual = nAnterior;
+                }
+            }
         }
 
         public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor) {
@@ -837,8 +856,7 @@ public final class ManexadorScatterPlots {
             this.indiceAtributoColor = indiceAtributoColor;
             this.indiceAtributoY = indiceAtributoY;
             XYDatasetModelo xydm = new XYDatasetModelo(instances, indiceAtributoX, indiceAtributoY, indiceAtributoColor);
-            JFreeChart jfreechart1 = createChart(instances, xydm);
-            JFreeChart jfreechart2 = createChart(instances, xydm);
+            JFreeChart jfreechart1 = createChart(instances, xydm), jfreechart2 = createChart(instances, xydm);
             if (indiceAtributoColor < 0) {
                 jfreechart1.removeLegend();
                 jfreechart2.removeLegend();

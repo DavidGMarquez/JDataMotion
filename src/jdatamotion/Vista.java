@@ -149,6 +149,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private boolean pulsarSlider;
     private JTableModelo jTableModelo;
     private int ultimoEstadoReproductor;
+    private int lonxitudeEstela;
     public static ResourceBundle bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", new Locale("en"));
     private static final String ficheiroConfiguracion = "configuracion.properties";
 
@@ -160,6 +161,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         this.pulsarSlider = false;
         this.ordeVisualizacion = ORDE_MODELO;
         this.paso = 100;
+        this.lonxitudeEstela = 5;
         this.columnaTaboaSeleccionada = -1;
         this.scatterPlotsVisibles = new boolean[0][0];
     }
@@ -317,7 +319,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         ArrayList<Integer> indices = meuModelo.obterIndicesAtributosNumericosNoModelo();
         int numAtributosNumericos = indices.size();
         actualizarScatterPlotsVisibles(numAtributosNumericos);
-        mansp = new ManexadorScatterPlots(meuModelo.getInstancesComparable(), meuModelo.getIndiceAtributoNominal(), meuModelo.getIndiceTemporal(), scatterPlotsVisibles, jSlider1, jTextField1, ordeVisualizacion, paso);
+        mansp = new ManexadorScatterPlots(meuModelo.getInstancesComparable(), meuModelo.getIndiceAtributoNominal(), meuModelo.getIndiceTemporal(), scatterPlotsVisibles, jSlider1, jTextField1, ordeVisualizacion, paso, lonxitudeEstela);
         mansp.addPropertyChangeListener(this);
         jPopupMenu1.setVisible(false);
         jPanel4.removeAll();
@@ -706,6 +708,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jLabel6 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel3 = new javax.swing.JLabel();
@@ -1071,6 +1075,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         });
 
+        jLabel7.setText(bundle.getString("Vista.jLabel7.text")); // NOI18N
+        jLabel7.setName("jLabel7"); // NOI18N
+
+        jTextField3.setText(bundle.getString("Vista.jTextField3.text")); // NOI18N
+        jTextField3.setName("jTextField3"); // NOI18N
+
         javax.swing.GroupLayout jDialog4Layout = new javax.swing.GroupLayout(jDialog4.getContentPane());
         jDialog4.getContentPane().setLayout(jDialog4Layout);
         jDialog4Layout.setHorizontalGroup(
@@ -1079,22 +1089,29 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 .addContainerGap()
                 .addGroup(jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDialog4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton13))
-                    .addGroup(jDialog4Layout.createSequentialGroup()
                         .addGroup(jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jRadioButton2)
-                            .addComponent(jRadioButton3)
-                            .addComponent(jRadioButton4)
                             .addGroup(jDialog4Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButton7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel6))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jButton13))
+                            .addGroup(jDialog4Layout.createSequentialGroup()
+                                .addGroup(jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jRadioButton2)
+                                    .addComponent(jRadioButton3)
+                                    .addComponent(jRadioButton4)
+                                    .addGroup(jDialog4Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jDialog4Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jDialog4Layout.setVerticalGroup(
             jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1113,9 +1130,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton7)
                     .addComponent(jButton13))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1903,12 +1924,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         mansp.pause();
-        mansp.goTo(0);
+        mansp.goTo(0.0);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         mansp.pause();
-        mansp.goTo(1);
+        mansp.goTo(1.0);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jSlider1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MouseReleased
@@ -1926,7 +1947,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         if (mansp.getTActual() >= mansp.getTFinal()) {
-            mansp.goTo(0);
+            mansp.goTo(0.0);
         }
         mansp.play();
     }//GEN-LAST:event_jButton8ActionPerformed
@@ -1999,6 +2020,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jRadioButton3.setEnabled(ordeNumericoDisponible);
         jRadioButton4.setEnabled(ordeNumericoDisponible);
         jTextField2.setText(String.valueOf(paso));
+        jTextField3.setText(String.valueOf(lonxitudeEstela));
         jDialog4.setLocation((getWidth() - jDialog4.getPreferredSize().width) / 2, (getHeight() - jDialog4.getPreferredSize().height) / 2);
         jDialog4.pack();
         jDialog4.setVisible(true);
@@ -2015,6 +2037,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         try {
             paso = Integer.parseInt(jTextField2.getText());
+            lonxitudeEstela = Integer.parseInt(jTextField3.getText());
         } catch (NumberFormatException e) {
         }
         pintarMenuVisualizacion();
@@ -2043,6 +2066,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         jDialog3.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    public int getLonxitudeEstela() {
+        return lonxitudeEstela;
+    }
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         jDialog4.dispose();
@@ -3016,6 +3043,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JLabel jLabel4;
     javax.swing.JLabel jLabel5;
     javax.swing.JLabel jLabel6;
+    javax.swing.JLabel jLabel7;
     javax.swing.JLayeredPane jLayeredPane1;
     javax.swing.JMenu jMenu1;
     javax.swing.JMenu jMenu2;
@@ -3081,6 +3109,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JTextField jTextField1;
     javax.swing.JTextField jTextField2;
+    javax.swing.JTextField jTextField3;
     javax.swing.JMenu menuTipo;
     javax.swing.JPanel panelDetallarAtributo;
     javax.swing.JPopupMenu popupConfigurarAtributo;
