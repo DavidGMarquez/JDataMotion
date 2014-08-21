@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="1">
                 <name/>
-                <line>476</line>
+                <line>482</line>
                 <key/>
             </bookmark>
         </file>
@@ -21,9 +21,25 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/idiomas/Bundle.properties</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Vista.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Controlador.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoEliminarDatos.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/test/jdatamotion/TestRF01_02.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/test/jdatamotion/example01.arff</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/filtros/FiltroEliminacionOutliers.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/filtros/FiltroRelleno.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoRestaurar.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/filtros/FiltroLimite.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/filtros/InterfaceFiltro.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoEngadirAtributo.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Vista.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/InstancesComparable.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoEliminarAtributo.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Controlador.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/filtros/FiltroNormalizacion.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/sesions/SesionModelo.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/test/jdatamotion/TestRF03_04.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoMudarTipo.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/filtros/filtrosImportados</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Modelo.java</file>
         </group>
     </open-files>
