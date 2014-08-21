@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Observable;
 import jdatamotion.excepcions.ExcepcionArquivoModificado;
 import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
 import jdatamotion.excepcions.ExcepcionComandoInutil;
 import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
+import jdatamotion.filtros.InterfaceFiltro;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionModelo;
 import jdatamotion.sesions.Sesionizable;
@@ -25,8 +25,6 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
-import weka.core.InstanceComparator;
-import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
@@ -47,6 +45,7 @@ public class Modelo extends Observable implements Sesionizable {
     private String direccionAoFicheiro;
     private byte[] hashCode;
     private int indiceAtributoNominal;
+    private List<InterfaceFiltro> filtros;
 
     public int getIndiceAtributoNominal() {
         return indiceAtributoNominal;
@@ -101,6 +100,7 @@ public class Modelo extends Observable implements Sesionizable {
         instancesComparable = null;
         indiceTemporal = -1;
         indiceAtributoNominal = -1;
+        filtros = new ArrayList<>();
     }
 
     public InstancesComparable getInstancesComparable() {
@@ -313,6 +313,10 @@ public class Modelo extends Observable implements Sesionizable {
         }
     }
 
+    public List<InterfaceFiltro> getFiltros() {
+        return filtros;
+    }
+
     public void exportarFicheiro(String path, String extension) throws IOException {
         switch (extension) {
             case "csv":
@@ -341,6 +345,7 @@ public class Modelo extends Observable implements Sesionizable {
         s.setCabeceiras(cabeceras);
         s.setDireccionAoFicheiro(getDireccionAoFicheiro());
         s.setIndiceTemporal(getIndiceTemporal());
+        s.setFiltros(getFiltros());
         s.setHash(getHashCode());
         s.setIndiceAtributoNominal(getIndiceAtributoNominal());
         return s;
@@ -353,6 +358,7 @@ public class Modelo extends Observable implements Sesionizable {
             throw new ExcepcionArquivoModificado(s.getDireccionAoFicheiro());
         }
         instancesComparable = s.getCabeceiras();
+        filtros = s.getFiltros();
         indiceTemporal = s.getIndiceTemporal();
         hashCode = s.getHash();
         direccionAoFicheiro = s.getDireccionAoFicheiro();
@@ -646,62 +652,6 @@ public class Modelo extends Observable implements Sesionizable {
     public void renomearAtributo(String nome, int indiceAtributoNoModelo) {
         instancesComparable.renameAttribute(indiceAtributoNoModelo, nome);
         setChanged();
-    }
-
-    public class InstancesComparable extends Instances {
-
-        public InstancesComparable(Instances i) {
-            super(i);
-        }
-
-        public InstancesComparable(String relationName, ArrayList<Attribute> aux, int i) {
-            super(relationName, aux, i);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof InstancesComparable == false) {
-                return false;
-            }
-            InstancesComparable is = (InstancesComparable) o;
-            Enumeration e1 = is.enumerateInstances();
-            Enumeration e2 = enumerateInstances();
-            InstanceComparator a = new InstanceComparator();
-            if (!relationName().equals(is.relationName())) {
-                return false;
-            }
-            while (e1.hasMoreElements() || e1.hasMoreElements()) {
-                try {
-                    Instance i1 = (Instance) e1.nextElement();
-                    Instance i2 = (Instance) e2.nextElement();
-                    if (a.compare(i1, i2) != 0) {
-                        return false;
-                    }
-                } catch (NoSuchElementException e) {
-                    return false;
-                }
-            }
-            e1 = is.enumerateAttributes();
-            e2 = enumerateAttributes();
-            while (e1.hasMoreElements() || e1.hasMoreElements()) {
-                try {
-                    Attribute a1 = (Attribute) e1.nextElement();
-                    Attribute a2 = (Attribute) e2.nextElement();
-                    if (!a1.equals(a2)) {
-                        return false;
-                    }
-                } catch (NoSuchElementException e) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            return hash;
-        }
     }
 
 }

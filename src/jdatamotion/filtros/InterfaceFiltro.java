@@ -21,40 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jdatamotion.comandos;
+
+package jdatamotion.filtros;
 
 import jdatamotion.Modelo;
 import jdatamotion.InstancesComparable;
-import jdatamotion.Vista;
 
 /**
  *
  * @author usuario
  */
-public class ComandoMudarTipo extends ComandoDesfacible {
-
-    private final int novoTipo;
-    private final int columnaModelo;
-    private InstancesComparable modeloAntigo;
-    private int indiceAtributoNominalAntigo;
-
-    public ComandoMudarTipo(Modelo modelo, int columnaModelo, int novoTipo) {
-        super(modelo, Vista.bundle.getString("comandoMudarTipo"));
-        this.novoTipo = novoTipo;
-        this.columnaModelo = columnaModelo;
-    }
-
-    @Override
-    public void Desfacer() throws Exception {
-        ((Modelo) getObxectivo()).setIndiceAtributoNominal(indiceAtributoNominalAntigo);
-        ((Modelo) getObxectivo()).setInstancesComparable(modeloAntigo);
-    }
-
-    @Override
-    public void Executar() throws Exception {
-        this.indiceAtributoNominalAntigo = ((Modelo) getObxectivo()).getIndiceAtributoNominal();
-        this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
-        ((Modelo) getObxectivo()).mudarTipo(columnaModelo, novoTipo);
-    }
-
+public interface InterfaceFiltro {
+    
+    public InstancesComparable getFilteredInstances(InstancesComparable instancesComparable);
+    public String getFilterName();
+    
 }

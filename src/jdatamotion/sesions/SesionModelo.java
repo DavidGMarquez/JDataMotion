@@ -23,7 +23,9 @@
  */
 package jdatamotion.sesions;
 
-import jdatamotion.Modelo.InstancesComparable;
+import java.util.List;
+import jdatamotion.InstancesComparable;
+import jdatamotion.filtros.InterfaceFiltro;
 
 /**
  *
@@ -37,6 +39,15 @@ public class SesionModelo extends Sesion {
     private byte[] hash;
     private String nomeRelacion;
     private int indiceAtributoNominal;
+    private List<InterfaceFiltro> filtros;
+
+    public List<InterfaceFiltro> getFiltros() {
+        return filtros;
+    }
+
+    public void setFiltros(List<InterfaceFiltro> filtros) {
+        this.filtros = filtros;
+    }
 
     public void setIndiceAtributoNominal(int indiceAtributoNominal) {
         this.indiceAtributoNominal = indiceAtributoNominal;

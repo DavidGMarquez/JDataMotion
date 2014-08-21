@@ -21,40 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jdatamotion.comandos;
 
-import jdatamotion.Modelo;
+package jdatamotion.filtros;
+
 import jdatamotion.InstancesComparable;
-import jdatamotion.Vista;
 
 /**
  *
  * @author usuario
  */
-public class ComandoMudarTipo extends ComandoDesfacible {
+public class FiltroRelleno implements InterfaceFiltro {
 
-    private final int novoTipo;
-    private final int columnaModelo;
-    private InstancesComparable modeloAntigo;
-    private int indiceAtributoNominalAntigo;
-
-    public ComandoMudarTipo(Modelo modelo, int columnaModelo, int novoTipo) {
-        super(modelo, Vista.bundle.getString("comandoMudarTipo"));
-        this.novoTipo = novoTipo;
-        this.columnaModelo = columnaModelo;
+    public FiltroRelleno() {
     }
 
     @Override
-    public void Desfacer() throws Exception {
-        ((Modelo) getObxectivo()).setIndiceAtributoNominal(indiceAtributoNominalAntigo);
-        ((Modelo) getObxectivo()).setInstancesComparable(modeloAntigo);
+    public InstancesComparable getFilteredInstances(InstancesComparable instancesComparable) {
+        InstancesComparable i=new InstancesComparable(instancesComparable);
+        return i;
     }
 
     @Override
-    public void Executar() throws Exception {
-        this.indiceAtributoNominalAntigo = ((Modelo) getObxectivo()).getIndiceAtributoNominal();
-        this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
-        ((Modelo) getObxectivo()).mudarTipo(columnaModelo, novoTipo);
+    public String getFilterName() {
+       return "Filtro de eliminación de outliers";
     }
-
+    
 }

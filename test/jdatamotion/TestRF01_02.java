@@ -31,7 +31,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jdatamotion.Modelo.InstancesComparable;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -56,7 +55,6 @@ public class TestRF01_02 extends TestCase {
             //modelo.getAtributos().renameAttribute(5, "OTRO NOMBRE ATRIBUTO");
             //Altera o nome da relación
             //modelo.getAtributos().setRelationName("OTRO NOMBRE RELACION");
-            
             InstancesComparable is2 = modelo.getInstancesComparable();
             assertEquals(is1, is2);
         } catch (URISyntaxException ex) {

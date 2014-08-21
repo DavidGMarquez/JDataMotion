@@ -23,8 +23,8 @@
  */
 package jdatamotion.comandos;
 
+import jdatamotion.InstancesComparable;
 import jdatamotion.Modelo;
-import jdatamotion.Modelo.InstancesComparable;
 import jdatamotion.Vista;
 
 /**
@@ -50,7 +50,7 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
 
     @Override
     public void Executar() throws Exception {
-        this.modeloAntigo = ((Modelo) getObxectivo()).new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
+        this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
         this.indiceAtributoTemporalAntigo = ((Modelo) getObxectivo()).getIndiceTemporal();
         if (indiceAtributoNoModelo == ((Modelo) getObxectivo()).getIndiceTemporal()) {
             ((Modelo) getObxectivo()).setIndiceTemporal(-1);

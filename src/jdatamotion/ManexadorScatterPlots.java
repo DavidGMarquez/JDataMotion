@@ -44,7 +44,6 @@ import javax.swing.JFrame;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
-import jdatamotion.Modelo.InstancesComparable;
 import static jdatamotion.Vista.bundle;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
