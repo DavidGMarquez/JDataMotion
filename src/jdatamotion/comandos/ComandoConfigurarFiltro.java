@@ -21,19 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package jdatamotion.filtros;
+package jdatamotion.comandos;
 
 import jdatamotion.Modelo;
-import jdatamotion.InstancesComparable;
+import jdatamotion.Vista;
+import jdatamotion.filtros.IFilter;
 
 /**
  *
  * @author usuario
  */
-public interface InterfaceFiltro {
-    
-    public InstancesComparable getFilteredInstances(InstancesComparable instancesComparable);
-    public String getFilterName();
-    
+public class ComandoConfigurarFiltro extends ComandoDesfacible {
+
+    private final int index;
+    private final IFilter filtroAntigo;
+    private IFilter novoFiltro;
+
+    public ComandoConfigurarFiltro(Modelo modelo, int index) throws CloneNotSupportedException {
+        super(modelo, Vista.bundle.getString("comandoConfigurarFiltro"));
+        this.index = index;
+        this.novoFiltro = null;
+        this.filtroAntigo = modelo.getFiltro(index).clone();
+    }
+
+    @Override
+    public void Desfacer() throws Exception {
+        ((Modelo) getObxectivo()).substituirFiltro(index, filtroAntigo);
+    }
+
+    @Override
+    public void Executar() throws Exception {
+        if (novoFiltro == null) {
+            ((Modelo) getObxectivo()).configurarFiltro(index);
+            this.novoFiltro = ((Modelo) getObxectivo()).getFiltro(index).clone();
+        } else {
+            ((Modelo) getObxectivo()).substituirFiltro(index, novoFiltro);
+        }
+    }
 }

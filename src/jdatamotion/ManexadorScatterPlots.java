@@ -90,6 +90,9 @@ public final class ManexadorScatterPlots {
     private final int lonxitudeEstela;
 
     public int getTInicial() {
+        if (eixoTemporal.isEmpty()) {
+            return 0;
+        }
         return eixoTemporal.get(0).getObject().getMs();
     }
 
@@ -367,24 +370,21 @@ public final class ManexadorScatterPlots {
                     }
                     synchronized (TarefaPlay.this) {
                         if (estado == PLAY && getTActual() < getTFinal()) {
-
-                            if (estado == PLAY && getTActual() < getTFinal()) {
-                                int items = numeroItemsAVisualizar(t + paso);
-                                Nodo<InstancesSimultaneas> nodo = nodoActual;
-                                for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
-                                    for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
-                                        if (scatterPlotsVisibles[j][k]) {
-                                            ScatterPlot sp = matrizScatterPlots.get(j).get(k);
-                                            XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
-                                            nodo = xyd.visualizarItems(sp, items);
-                                        }
+                            int items = numeroItemsAVisualizar(t + paso);
+                            Nodo<InstancesSimultaneas> nodo = nodoActual;
+                            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                                    if (scatterPlotsVisibles[j][k]) {
+                                        ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+                                        XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+                                        nodo = xyd.visualizarItems(sp, items);
                                     }
                                 }
-                                nodoActual = nodo;
-                                t = Math.min(t + paso, getTFinal());
-                                slider.setValue(slider.getMaximum() * (getTActual() - getTInicial()) / (getTFinal() - getTInicial()));
-                                textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + items));
                             }
+                            nodoActual = nodo;
+                            t = Math.min(t + paso, getTFinal());
+                            slider.setValue(slider.getMaximum() * (getTActual() - getTInicial()) / (getTFinal() - getTInicial()));
+                            textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + items));
                         }
                     }
                 }

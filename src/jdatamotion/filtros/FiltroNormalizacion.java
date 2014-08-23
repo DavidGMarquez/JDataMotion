@@ -24,26 +24,45 @@
 
 package jdatamotion.filtros;
 
+import java.util.Enumeration;
 import jdatamotion.InstancesComparable;
+import jdatamotion.Vista;
 
 /**
  *
  * @author usuario
  */
-public class FiltroNormalizacion implements InterfaceFiltro {
+public class FiltroNormalizacion implements IFilter {
 
     public FiltroNormalizacion() {
     }
 
     @Override
-    public InstancesComparable getFilteredInstances(InstancesComparable instancesComparable) {
+    public InstancesComparable filter(InstancesComparable instancesComparable) {
         InstancesComparable i=new InstancesComparable(instancesComparable);
         return i;
     }
 
     @Override
-    public String getFilterName() {
-       return "Filtro de eliminación de outliers";
+    public String toString() {
+       return "Filtro de normalización";
+    }
+    
+    @Override
+    public void configure() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Parameter[] getParameters() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public IFilter clone() throws CloneNotSupportedException {
+        super.clone();
+        FiltroNormalizacion f = new FiltroNormalizacion();
+        return f;
     }
     
 }

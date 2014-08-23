@@ -23,9 +23,12 @@
  */
 package jdatamotion.comandos;
 
-import jdatamotion.Modelo;
+import java.util.List;
 import jdatamotion.InstancesComparable;
+import jdatamotion.Modelo;
 import jdatamotion.Vista;
+import jdatamotion.excepcions.ExcepcionLeve;
+import jdatamotion.filtros.IFilter;
 
 /**
  *
@@ -37,6 +40,7 @@ public class ComandoMudarTipo extends ComandoDesfacible {
     private final int columnaModelo;
     private InstancesComparable modeloAntigo;
     private int indiceAtributoNominalAntigo;
+    private List<IFilter> filtrosAntigos;
 
     public ComandoMudarTipo(Modelo modelo, int columnaModelo, int novoTipo) {
         super(modelo, Vista.bundle.getString("comandoMudarTipo"));
@@ -48,13 +52,19 @@ public class ComandoMudarTipo extends ComandoDesfacible {
     public void Desfacer() throws Exception {
         ((Modelo) getObxectivo()).setIndiceAtributoNominal(indiceAtributoNominalAntigo);
         ((Modelo) getObxectivo()).setInstancesComparable(modeloAntigo);
+        ((Modelo) getObxectivo()).setFiltros(filtrosAntigos);
     }
 
     @Override
     public void Executar() throws Exception {
         this.indiceAtributoNominalAntigo = ((Modelo) getObxectivo()).getIndiceAtributoNominal();
         this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
-        ((Modelo) getObxectivo()).mudarTipo(columnaModelo, novoTipo);
+        this.filtrosAntigos = ((Modelo) getObxectivo()).getFiltros();
+        try {
+            ((Modelo) getObxectivo()).mudarTipo(columnaModelo, novoTipo);
+        } catch (ExcepcionLeve e) {
+        }
+        ((Modelo) getObxectivo()).resetearFiltros();
     }
 
 }

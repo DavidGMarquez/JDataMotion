@@ -13,11 +13,14 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jdatamotion.comandos.Comando;
+import jdatamotion.comandos.ComandoConfigurarFiltro;
 import jdatamotion.comandos.ComandoDesfacible;
 import jdatamotion.comandos.ComandoEliminarAtributo;
 import jdatamotion.comandos.ComandoEliminarDatos;
+import jdatamotion.comandos.ComandoEliminarFiltro;
 import jdatamotion.comandos.ComandoEngadirAtributo;
 import jdatamotion.comandos.ComandoEngadirDatos;
+import jdatamotion.comandos.ComandoEngadirFiltro;
 import jdatamotion.comandos.ComandoExportarFicheiro;
 import jdatamotion.comandos.ComandoImportarFicheiro;
 import jdatamotion.comandos.ComandoMudarDato;
@@ -31,6 +34,7 @@ import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
 import jdatamotion.excepcions.ExcepcionComandoInutil;
 import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
 import jdatamotion.excepcions.ExcepcionLeve;
+import jdatamotion.filtros.IFilter;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionControlador;
 import jdatamotion.sesions.SesionModelo;
@@ -61,6 +65,9 @@ public class Controlador implements Sesionizable {
     public static final int RENOMEAR_ATRIBUTO = 15;
     public static final int ENGADIR_ATRIBUTO = 16;
     public static final int ELIMINAR_ATRIBUTO = 17;
+    public static final int ENGADIR_FILTRO = 18;
+    public static final int ELIMINAR_FILTRO = 19;
+    public static final int CONFIGURAR_FILTRO = 20;
     public static final boolean debug = true;
     private transient Modelo meuModelo;
     private transient Vista minaVista;
@@ -136,6 +143,13 @@ public class Controlador implements Sesionizable {
      * <tr><td>Eliminar
      * atributo</td><td>Controlador.ELIMINAR_ATRIBUTO</td><td>int
      * numColumna</td></tr>
+     * <tr><td>Engadir filtro</td><td>Controlador.ENGADIR_FILTRO</td><td>{int
+     * index, IFilter filtro}</td></tr>
+     * <tr><td>Eliminar filtro</td><td>Controlador.ELIMINAR_FILTRO</td><td>int
+     * index</td></tr>
+     * <tr><td>Configurar
+     * filtro</td><td>Controlador.CONFIGURAR_FILTRO</td><td>int index</td></tr>
+     *
      * </table>
      *
      * @param opcion o tipo de evento
@@ -190,6 +204,15 @@ public class Controlador implements Sesionizable {
                 break;
             case ELIMINAR_ATRIBUTO:
                 eliminarAtributo((int) argumento);
+                break;
+            case ENGADIR_FILTRO:
+                engadirFiltro((int) ((Object[]) argumento)[0], (IFilter) ((Object[]) argumento)[1]);
+                break;
+            case ELIMINAR_FILTRO:
+                eliminarFiltro((int) argumento);
+                break;
+            case CONFIGURAR_FILTRO:
+                configurarFiltro((int) argumento);
                 break;
         }
         meuModelo.update();
@@ -483,6 +506,39 @@ public class Controlador implements Sesionizable {
     private void eliminarAtributo(int i) {
         try {
             xestorComandos.ExecutarComando(new ComandoEliminarAtributo(meuModelo, i));
+        } catch (Exception ex) {
+            minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void engadirFiltro(int i, IFilter iFilter) {
+        try {
+            xestorComandos.ExecutarComando(new ComandoEngadirFiltro(meuModelo, i, iFilter));
+        } catch (Exception ex) {
+            minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void eliminarFiltro(int i) {
+        try {
+            xestorComandos.ExecutarComando(new ComandoEliminarFiltro(meuModelo, i));
+        } catch (Exception ex) {
+            minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void configurarFiltro(int i) {
+        try {
+            xestorComandos.ExecutarComando(new ComandoConfigurarFiltro(meuModelo, i));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {

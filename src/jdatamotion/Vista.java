@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -52,6 +53,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultCellEditor;
@@ -85,6 +87,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.event.TableModelEvent;
@@ -98,7 +101,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import jdatamotion.ManexadorScatterPlots.JFrameChartPanel;
 import jdatamotion.ManexadorScatterPlots.ScatterPlot;
-import jdatamotion.filtros.InterfaceFiltro;
+import jdatamotion.filtros.IFilter;
+import jdatamotion.filtros.Parameter;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionVista;
 import jdatamotion.sesions.Sesionizable;
@@ -322,10 +326,16 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             mansp.pecharJFramesChartPanel();
             mansp.pause();
         }
-        ArrayList<Integer> indices = meuModelo.obterIndicesAtributosNumericosNoModelo();
+        InstancesComparable instanciasFiltradas = meuModelo.getFilteredInstancesComparable();
+        ArrayList<Integer> indices = new ArrayList<>();
+        for (int i = 0; i < instanciasFiltradas.numAttributes(); i++) {
+            if (instanciasFiltradas.attribute(i).isNumeric()) {
+                indices.add(i);
+            }
+        }
         int numAtributosNumericos = indices.size();
         actualizarScatterPlotsVisibles(numAtributosNumericos);
-        mansp = new ManexadorScatterPlots(meuModelo.getInstancesComparable(), meuModelo.getIndiceAtributoNominal(), meuModelo.getIndiceTemporal(), scatterPlotsVisibles, jSlider1, jTextField1, ordeVisualizacion, paso, lonxitudeEstela);
+        mansp = new ManexadorScatterPlots(instanciasFiltradas, meuModelo.getIndiceAtributoNominal(), meuModelo.getIndiceTemporal(), scatterPlotsVisibles, jSlider1, jTextField1, ordeVisualizacion, paso, lonxitudeEstela);
         mansp.addPropertyChangeListener(this);
         jPopupMenu1.setVisible(false);
         jPanel4.removeAll();
@@ -359,7 +369,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                                 ScatterPlot sp = mansp.getScatterPlot(i, j);
                                 int xPos = numFilas + filasVacias - 1 - i, yPos = j - columnasVacias;
                                 if (sp != null) {
-                                    configurarScatterPlot(sp, meuModelo.getInstancesComparable());
+                                    configurarScatterPlot(sp, instanciasFiltradas);
                                     ChartPanel chartPanelCela = sp.getChartPanelCela();
                                     jPanel4.add(chartPanelCela, new TableLayoutConstraints(yPos, xPos));
                                     chartPanelCela.revalidate();
@@ -384,8 +394,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 task.reset();
             }).start();
         }
-        jLabel4.setText("/" + String.valueOf(meuModelo.obterNumInstancias()));
-        jTextField1.setText(String.valueOf(meuModelo.obterNumInstancias()));
+        jLabel4.setText("/" + String.valueOf(instanciasFiltradas.numInstances()));
+        jTextField1.setText(String.valueOf(instanciasFiltradas.numInstances()));
     }
 
     public void engadirScatterPlot(ScatterPlot sp, int j, int i) {
@@ -616,26 +626,79 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private void pintarMenuFiltros() {
         try {
+            jPanel3.removeAll();
             jList1.setModel(new DefaultListModel<>());
             List<String> lines = Files.readAllLines(Paths.get(getClass().getResource("filtros/filtrosImportados").toURI()), Charset.forName("UTF-8"));
             for (String line : lines) {
-                Class c = Class.forName(line);
-                Object object = c.newInstance();
-                if (object instanceof InterfaceFiltro) {
-                    InterfaceFiltro filtro = (InterfaceFiltro) object;
-                    String nomeFiltro = filtro.getFilterName();
-                    DefaultListModel<String> dlm = (DefaultListModel<String>) jList1.getModel();
-                    if (!dlm.contains(nomeFiltro)) {
-                        dlm.addElement(filtro.getFilterName());
+                Class<?> c = Class.forName(line);
+                Object object = null;
+                try {
+                    object = c.getDeclaredConstructor(InstancesComparable.class).newInstance(meuModelo.getInstancesComparable());
+                } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    try {
+                        object = c.getDeclaredConstructor().newInstance();
+                    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex1) {
+                        amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+                        if (Controlador.debug) {
+                            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                }
+                if (object instanceof IFilter) {
+                    IFilter filtro = (IFilter) object;
+                    String nomeFiltro = filtro.toString();
+                    DefaultListModel<IFilter> dlm = (DefaultListModel<IFilter>) jList1.getModel();
+                    boolean valido = true;
+                    for (int i = 0; i < dlm.getSize(); i++) {
+                        if (nomeFiltro.equals(dlm.get(i).toString())) {
+                            valido = false;
+                            break;
+                        }
+                    }
+                    if (valido) {
+                        dlm.addElement(filtro);
                     }
                 }
             }
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IOException | URISyntaxException ex) {
+        } catch (ClassNotFoundException | IOException | URISyntaxException ex) {
             Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
         }
+        int gap = 8;
+        int n = meuModelo.contarFiltros();
+        Box horizontalBox = Box.createHorizontalBox();
+        horizontalBox.add(Box.createGlue());
+        JLabel l = new JLabel();
+        l.setIcon(new ImageIcon(getClass().getResource("imaxes/instanciasOrixinais.jpg")));
+        horizontalBox.add(l);
+        for (int i = 0; i < n; i++) {
+            horizontalBox.add(Box.createHorizontalStrut(gap));
+            l = new JLabel();
+            l.setIcon(new ImageIcon(getClass().getResource("imaxes/frechaFiltros.png")));
+            horizontalBox.add(l);
+            horizontalBox.add(Box.createHorizontalStrut(gap));
+            IFilter f = meuModelo.getFiltro(i);
+            PanelFiltro pf = new PanelFiltro(this, i);
+            pf.setNomeFiltro(f.toString());
+            for (Parameter p : f.getParameters()) {
+                pf.addParameter(p);
+            }
+            horizontalBox.add(pf);
+            if (i == n - 1) {
+                horizontalBox.add(Box.createHorizontalStrut(gap));
+                l = new JLabel();
+                l.setIcon(new ImageIcon(getClass().getResource("imaxes/frechaFiltros.png")));
+                horizontalBox.add(l);
+                horizontalBox.add(Box.createHorizontalStrut(gap));
+                l = new JLabel();
+                l.setIcon(new ImageIcon(getClass().getResource("imaxes/instanciasFiltradas.jpg")));
+                horizontalBox.add(l);
+            }
+        }
+        horizontalBox.add(Box.createGlue());
+        jPanel3.add(horizontalBox);
     }
 
-    private void pintarMenus() {
+    public void pintarMenus() {
         pintarMenuModelo();
         pintarMenuFiltros();
         pintarMenuVisualizacion();
@@ -694,6 +757,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jDialog1 = new javax.swing.JDialog();
         jFileChooser1 = new javax.swing.JFileChooser();
@@ -748,8 +812,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        jPanel9 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jScrollPane7 = new javax.swing.JScrollPane();
         panelDetallarAtributo = new JPanelActualizable();
@@ -762,6 +824,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel2 = new javax.swing.JPanel();
         jScrollPane10 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        jPanel3 = new javax.swing.JPanel();
+        jButton14 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel4 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -1102,7 +1167,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jLabel7.setText(bundle.getString("Vista.jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
-        jTextField3.setText(bundle.getString("Vista.jTextField3.text")); // NOI18N
         jTextField3.setName("jTextField3"); // NOI18N
 
         javax.swing.GroupLayout jDialog4Layout = new javax.swing.GroupLayout(jDialog4.getContentPane());
@@ -1320,23 +1384,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel1.setBackground(new java.awt.Color(255, 232, 198));
         jPanel1.setName("jPanel1"); // NOI18N
 
-        jScrollPane6.setName("jScrollPane6"); // NOI18N
-
-        jPanel9.setName("jPanel9"); // NOI18N
-
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        jScrollPane6.setViewportView(jPanel9);
-
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         jScrollPane7.setName("jScrollPane7"); // NOI18N
@@ -1383,9 +1430,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                    .addComponent(jScrollPane7))
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -1399,17 +1444,14 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane7))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)))
+                        .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -1424,6 +1466,27 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jList1.setName("jList1"); // NOI18N
         jScrollPane10.setViewportView(jList1);
+        jList1.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                jButton14.setEnabled(!jList1.isSelectionEmpty());
+            }
+        });
+
+        jScrollPane11.setMinimumSize(new java.awt.Dimension(400, 100));
+        jScrollPane11.setName("jScrollPane11"); // NOI18N
+
+        jPanel3.setName("jPanel3"); // NOI18N
+        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.X_AXIS));
+        jScrollPane11.setViewportView(jPanel3);
+
+        jButton14.setText(bundle.getString("Vista.jButton14.text")); // NOI18N
+        jButton14.setEnabled(false);
+        jButton14.setName("jButton14"); // NOI18N
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -1431,14 +1494,24 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(772, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton14)
+                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton14)
                 .addContainerGap())
         );
 
@@ -2109,6 +2182,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         jDialog4.dispose();
     }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+        meuControlador.manexarEvento(Controlador.ENGADIR_FILTRO, new Object[]{meuModelo.contarFiltros(), jList1.getSelectedValuesList().get(0)});
+    }//GEN-LAST:event_jButton14ActionPerformed
 
     public JSlider getjSlider1() {
         return jSlider1;
@@ -2960,55 +3037,22 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         public void actualizar() {
             panelDetallarAtributo.removeAll();
-            if (columnaTaboaSeleccionada > -1) {
+            if (columnaTaboaSeleccionada > -1 && meuModelo.obterNumAtributos() > columnaTaboaSeleccionada) {
                 panelDetallarAtributo.add(new JLabel(bundle.getString("nomeAtributo") + ": " + meuModelo.obterNomeAtributo(getColumnaModeloSeleccionada())));
                 panelDetallarAtributo.add(new JLabel(bundle.getString("tipo") + ": " + bundle.getString(meuModelo.obterTipoAtributo(getColumnaModeloSeleccionada()))));
                 panelDetallarAtributo.add(new JLabel(bundle.getString("indiceTemporal") + ": " + (meuModelo.getIndiceTemporal() == getColumnaModeloSeleccionada() ? bundle.getString("si") : bundle.getString("non"))));
                 switch (meuModelo.obterTipoAtributo(getColumnaModeloSeleccionada())) {
                     case "numérico":
-                        int numInstancesNonNaN = 0;
-                        Double dato,
-                         min = null,
-                         max = null,
-                         desvTipica = null,
-                         media = null;
-                        for (int i = 0; i < meuModelo.getInstancesComparable().numInstances(); i++) {
-                            dato = (Double) meuModelo.obterDato(i, getColumnaModeloSeleccionada());
-                            if (Double.compare(dato, Double.NaN) != 0) {
-                                numInstancesNonNaN++;
-                                if (max == null) {
-                                    max = dato;
-                                    min = dato;
-                                    media = dato;
-                                } else {
-                                    if (dato > max) {
-                                        max = dato;
-                                    }
-                                    if (dato < min) {
-                                        min = dato;
-                                    }
-                                    media += dato;
-                                }
-                            }
-                        }
-                        if (media != null) {
-                            media /= numInstancesNonNaN;
-                            numInstancesNonNaN = 0;
-                            desvTipica = 0.0;
-                            for (int i = 0; i < meuModelo.getInstancesComparable().numInstances(); i++) {
-                                dato = (Double) meuModelo.obterDato(i, getColumnaModeloSeleccionada());
-                                if (Double.compare(dato, Double.NaN) != 0) {
-                                    numInstancesNonNaN++;
-                                    desvTipica += Math.pow(dato - media, 2.0);
-                                }
-                            }
-                            desvTipica /= (numInstancesNonNaN - 1);
-                        }
+                        Double max = Modelo.getMaximo(meuModelo.getInstancesComparable(), getColumnaModeloSeleccionada()),
+                         min = Modelo.getMinimo(meuModelo.getInstancesComparable(), getColumnaModeloSeleccionada()),
+                         media = Modelo.getMedia(meuModelo.getInstancesComparable(), getColumnaModeloSeleccionada()),
+                         desvTipica = Modelo.getDesviacionTipica(meuModelo.getInstancesComparable(), getColumnaModeloSeleccionada()),
+                         varianza = Modelo.getVarianza(meuModelo.getInstancesComparable(), getColumnaModeloSeleccionada());
                         panelDetallarAtributo.add(new JLabel(bundle.getString("maximo") + ": " + (max != null ? max : "-")));
                         panelDetallarAtributo.add(new JLabel(bundle.getString("minimo") + ": " + (min != null ? min : "-")));
                         panelDetallarAtributo.add(new JLabel(bundle.getString("media") + ": " + (media != null ? media : "-")));
-                        panelDetallarAtributo.add(new JLabel(bundle.getString("varianza") + ": " + (desvTipica != null && Double.compare(desvTipica, Double.NaN) != 0 ? desvTipica : "-")));
-                        panelDetallarAtributo.add(new JLabel(bundle.getString("desviacionTipica") + ": " + (desvTipica != null && Double.compare(desvTipica, Double.NaN) != 0 ? Math.sqrt(desvTipica) : "-")));
+                        panelDetallarAtributo.add(new JLabel(bundle.getString("varianza") + ": " + (varianza != null && Double.compare(varianza, Double.NaN) != 0 ? varianza : "-")));
+                        panelDetallarAtributo.add(new JLabel(bundle.getString("desviacionTipica") + ": " + (desvTipica != null && Double.compare(desvTipica, Double.NaN) != 0 ? desvTipica : "-")));
                         ChartPanel cp = new ChartPanel(createChartAtributoNumerico(min != null ? min : 0.0, max != null ? max : 0.0, 10));
                         cp.setPreferredSize(new Dimension(0, (int) Math.round(panelDetallarAtributo.getPreferredSize().getWidth() * cp.getPreferredSize().getHeight() / cp.getPreferredSize().getWidth())));
                         panelDetallarAtributo.add(cp);
@@ -3057,6 +3101,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JButton jButton11;
     javax.swing.JButton jButton12;
     javax.swing.JButton jButton13;
+    javax.swing.JButton jButton14;
     javax.swing.JButton jButton2;
     javax.swing.JButton jButton3;
     javax.swing.JButton jButton4;
@@ -3079,7 +3124,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JLabel jLabel6;
     javax.swing.JLabel jLabel7;
     javax.swing.JLayeredPane jLayeredPane1;
-    javax.swing.JList<String> jList1;
+    javax.swing.JList<IFilter> jList1;
     javax.swing.JMenu jMenu1;
     javax.swing.JMenu jMenu2;
     javax.swing.JMenu jMenu3;
@@ -3114,12 +3159,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel10;
     javax.swing.JPanel jPanel2;
+    javax.swing.JPanel jPanel3;
     javax.swing.JPanel jPanel4;
     javax.swing.JPanel jPanel5;
     javax.swing.JPanel jPanel6;
     javax.swing.JPanel jPanel7;
     javax.swing.JPanel jPanel8;
-    javax.swing.JPanel jPanel9;
     javax.swing.JPopupMenu jPopupMenu1;
     javax.swing.JProgressBar jProgressBar1;
     javax.swing.JRadioButton jRadioButton2;
@@ -3127,11 +3172,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JRadioButton jRadioButton4;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane10;
+    javax.swing.JScrollPane jScrollPane11;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
     javax.swing.JScrollPane jScrollPane4;
     javax.swing.JScrollPane jScrollPane5;
-    javax.swing.JScrollPane jScrollPane6;
     javax.swing.JScrollPane jScrollPane7;
     javax.swing.JScrollPane jScrollPane8;
     javax.swing.JScrollPane jScrollPane9;

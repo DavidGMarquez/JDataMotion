@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package jdatamotion.comandos;
 
 import jdatamotion.Modelo;
@@ -32,14 +31,14 @@ import jdatamotion.Vista;
  * @author usuario
  */
 public class ComandoEngadirAtributo extends ComandoDesfacible {
-    
+
     public ComandoEngadirAtributo(Modelo modelo) {
         super(modelo, Vista.bundle.getString("Vista.jMenuItem18.text"));
     }
 
     @Override
     public void Desfacer() throws Exception {
-        ((Modelo) getObxectivo()).eliminarAtributo(((Modelo) getObxectivo()).obterNumAtributos()-1);
+        ((Modelo) getObxectivo()).eliminarAtributo(((Modelo) getObxectivo()).obterNumAtributos() - 1);
     }
 
     @Override

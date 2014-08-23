@@ -23,9 +23,11 @@
  */
 package jdatamotion.comandos;
 
+import java.util.List;
 import jdatamotion.InstancesComparable;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
+import jdatamotion.filtros.IFilter;
 
 /**
  *
@@ -36,6 +38,7 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
     private int indiceAtributoTemporalAntigo;
     private final int indiceAtributoNoModelo;
     private InstancesComparable modeloAntigo;
+    private List<IFilter> filtrosAntigos;
 
     public ComandoEliminarAtributo(Modelo modelo, int indiceAtributoNoModelo) {
         super(modelo, Vista.bundle.getString("Vista.jMenuItem19.text"));
@@ -45,6 +48,7 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
     @Override
     public void Desfacer() throws Exception {
         ((Modelo) getObxectivo()).setIndiceTemporal(indiceAtributoTemporalAntigo);
+        ((Modelo) getObxectivo()).setFiltros(filtrosAntigos);
         ((Modelo) getObxectivo()).setInstancesComparable(modeloAntigo);
     }
 
@@ -52,9 +56,11 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
     public void Executar() throws Exception {
         this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
         this.indiceAtributoTemporalAntigo = ((Modelo) getObxectivo()).getIndiceTemporal();
+        this.filtrosAntigos = ((Modelo) getObxectivo()).getFiltros();
         if (indiceAtributoNoModelo == ((Modelo) getObxectivo()).getIndiceTemporal()) {
             ((Modelo) getObxectivo()).setIndiceTemporal(-1);
         }
         ((Modelo) getObxectivo()).eliminarAtributo(indiceAtributoNoModelo);
+        ((Modelo) getObxectivo()).resetearFiltros();
     }
 }

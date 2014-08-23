@@ -600,9 +600,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField3">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jTextField3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="jTextField3" noResource="true"/>
           </Properties>
         </Component>
@@ -1310,10 +1307,7 @@
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jScrollPane6" pref="267" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane7" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jScrollPane7" min="-2" pref="267" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -1330,20 +1324,15 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jScrollPane3" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Component id="jScrollPane6" min="-2" pref="175" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jScrollPane7" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="filler1" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
-                                              <Component id="jScrollPane5" pref="463" max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                      <Component id="filler1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+                                      <Component id="jScrollPane5" pref="463" max="32767" attributes="0"/>
                                       <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                                       <Component id="filler2" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jScrollPane7" min="-2" pref="300" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -1352,33 +1341,6 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Container class="javax.swing.JScrollPane" name="jScrollPane6">
-                      <Properties>
-                        <Property name="name" type="java.lang.String" value="jScrollPane6" noResource="true"/>
-                      </Properties>
-
-                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                      <SubComponents>
-                        <Container class="javax.swing.JPanel" name="jPanel9">
-                          <Properties>
-                            <Property name="name" type="java.lang.String" value="jPanel9" noResource="true"/>
-                          </Properties>
-
-                          <Layout>
-                            <DimensionLayout dim="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              </Group>
-                            </DimensionLayout>
-                            <DimensionLayout dim="1">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              </Group>
-                            </DimensionLayout>
-                          </Layout>
-                        </Container>
-                      </SubComponents>
-                    </Container>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane3">
                       <Properties>
                         <Property name="name" type="java.lang.String" value="jScrollPane3" noResource="true"/>
@@ -1503,8 +1465,13 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane10" min="-2" pref="151" max="-2" attributes="0"/>
-                          <EmptySpace pref="772" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jButton14" min="-2" max="-2" attributes="0"/>
+                              <Component id="jScrollPane10" min="-2" pref="151" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jScrollPane11" pref="756" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1512,7 +1479,15 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane10" pref="510" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jScrollPane10" pref="481" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="jScrollPane11" min="-2" pref="300" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton14" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1537,12 +1512,46 @@
                         <Property name="name" type="java.lang.String" value="jList1" noResource="true"/>
                       </Properties>
                       <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jList1.getSelectionModel().addListSelectionListener(new ListSelectionListener(){&#xa;        public void valueChanged(ListSelectionEvent event) {&#xa;            jButton14.setEnabled(!jList1.isSelectionEmpty());&#xa;        }&#xa;    });"/>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JList&lt;&gt;()"/>
-                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;IFilter&gt;"/>
                       </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane11">
+                  <Properties>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[400, 100]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="jScrollPane11" noResource="true"/>
+                  </Properties>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Container class="javax.swing.JPanel" name="jPanel3">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jPanel3" noResource="true"/>
+                      </Properties>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
+                        <Property name="axis" type="int" value="0"/>
+                      </Layout>
+                    </Container>
+                  </SubComponents>
+                </Container>
+                <Component class="javax.swing.JButton" name="jButton14">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jButton14.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                    </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="jButton14" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton14ActionPerformed"/>
+                  </Events>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JScrollPane" name="jScrollPane2">

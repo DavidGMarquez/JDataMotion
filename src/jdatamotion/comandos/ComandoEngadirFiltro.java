@@ -21,29 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package jdatamotion.comandos;
 
-package jdatamotion.filtros;
-
-import jdatamotion.InstancesComparable;
+import jdatamotion.Modelo;
+import jdatamotion.Vista;
+import jdatamotion.filtros.IFilter;
 
 /**
  *
  * @author usuario
  */
-public class FiltroRelleno implements InterfaceFiltro {
+public class ComandoEngadirFiltro extends ComandoDesfacible {
 
-    public FiltroRelleno() {
+    private final int index;
+    private final IFilter filtro;
+
+    public ComandoEngadirFiltro(Modelo modelo, int index, IFilter filtro) {
+        super(modelo, Vista.bundle.getString("Vista.jButton14.text"));
+        this.index = index;
+        this.filtro = filtro;
     }
 
     @Override
-    public InstancesComparable getFilteredInstances(InstancesComparable instancesComparable) {
-        InstancesComparable i=new InstancesComparable(instancesComparable);
-        return i;
+    public void Desfacer() throws Exception {
+        ((Modelo) getObxectivo()).eliminarFiltro(index);
     }
 
     @Override
-    public String getFilterName() {
-       return "Filtro de eliminación de outliers";
+    public void Executar() throws Exception {
+        ((Modelo) getObxectivo()).engadirFiltro(index, filtro);
     }
-    
 }
