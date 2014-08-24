@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
@@ -28,6 +29,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
+import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ArffSaver;
 import weka.core.converters.CSVLoader;
@@ -548,6 +550,31 @@ public class Modelo extends Observable implements Sesionizable {
         setChanged();
     }
 
+    public static Double getValorPercentil(InstancesComparable instancesComparable, int percentil, int indiceAtributo) {
+        if (percentil > 100) {
+            return instancesComparable.get(instancesComparable.numInstances() - 1).value(indiceAtributo);
+        }
+        Instances ins = new InstancesComparable(instancesComparable);
+        Iterator<Instance> it = ins.iterator();
+        while (it.hasNext()) {
+            Instance instance = it.next();
+            if (instance.isMissing(indiceAtributo)) {
+                it.remove();
+            }
+        }
+        if (ins.isEmpty()) {
+            return null;
+        }
+        ins.sort(indiceAtributo);
+        Double p, x, d;
+        int e;
+        x = 1.0 * ins.numInstances() * percentil / 100;
+        d = x % 1;
+        e = (int) Math.round(x - d);
+        p = d != 0.0 ? ins.instance(e).value(indiceAtributo) : (ins.instance(e - 1).value(indiceAtributo) + ins.instance(e).value(indiceAtributo)) / 2;
+        return p;
+    }
+
     public static Object obterDato(InstancesComparable instancesComparable, int fila, int columna) {
         Object valor = null;
         switch (instancesComparable.attribute(columna).type()) {
@@ -806,6 +833,13 @@ public class Modelo extends Observable implements Sesionizable {
 
     public void renomearAtributo(String nome, int indiceAtributoNoModelo) {
         instancesComparable.renameAttribute(indiceAtributoNoModelo, nome);
+        setChanged();
+    }
+
+    public void intercambiarFiltros(int indiceA, int indiceB) {
+        IFilter aux = filtros.get(indiceA);
+        filtros.set(indiceA, filtros.get(indiceB));
+        filtros.set(indiceB, aux);
         setChanged();
     }
 

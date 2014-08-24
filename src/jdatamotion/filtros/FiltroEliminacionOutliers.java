@@ -6,7 +6,7 @@
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * to use, copy, modify, mergebundle, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
@@ -61,13 +61,13 @@ public class FiltroEliminacionOutliers implements IFilter {
             return instancesComparable;
         }
         InstancesComparable ins = new InstancesComparable(instancesComparable);
-        Double desvTipica = Modelo.getDesviacionTipica(instancesComparable, indiceAtributoFiltrado), media = Modelo.getMedia(instancesComparable, indiceAtributoFiltrado);
+        Double desvTipica = Modelo.getDesviacionTipica(ins, indiceAtributoFiltrado), media = Modelo.getMedia(ins, indiceAtributoFiltrado);
         Double numDTs = (Double) numeroDeDTs.getValue();
         Iterator<Instance> it = ins.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
-            Double v = instance.value(indiceAtributoFiltrado);
-            if (v < media - numDTs * desvTipica || v > media + numDTs * desvTipica) {
+            Double v = instance.isMissing(indiceAtributoFiltrado) ? null : instance.value(indiceAtributoFiltrado);
+            if (v != null && (v < media - numDTs * desvTipica || v > media + numDTs * desvTipica)) {
                 it.remove();
             }
         }
@@ -99,7 +99,7 @@ public class FiltroEliminacionOutliers implements IFilter {
         myPanel.add(cb);
         myPanel.add(new JLabel(Vista.bundle.getString("numeroDeDTs") + ": "));
         myPanel.add(tf);
-        int result = JOptionPane.showConfirmDialog(null, myPanel, Vista.bundle.getString("Configurar") + " " + toString(), JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(null, myPanel, Vista.bundle.getString("configurar") + " " + toString(), JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             indiceAtributoFiltrado = cb.getSelectedIndex() > 0 ? indicesAtributosNumericos.get(cb.getSelectedIndex() - 1) : null;
             if (indiceAtributoFiltrado != null) {

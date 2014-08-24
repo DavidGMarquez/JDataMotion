@@ -21,12 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package jdatamotion.filtros;
 
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import jdatamotion.InstancesComparable;
+import jdatamotion.Modelo;
 import jdatamotion.Vista;
+import weka.core.Attribute;
+import weka.core.Instance;
 
 /**
  *
@@ -34,35 +42,83 @@ import jdatamotion.Vista;
  */
 public class FiltroNormalizacion implements IFilter {
 
-    public FiltroNormalizacion() {
+    private Integer indiceAtributoFiltrado;
+    private String nomeAtributoFiltrado;
+    private final InstancesComparable atributos;
+
+    public FiltroNormalizacion(InstancesComparable atributos) {
+        this.atributos = atributos;
+        this.indiceAtributoFiltrado = null;
+        this.nomeAtributoFiltrado = null;
     }
 
     @Override
     public InstancesComparable filter(InstancesComparable instancesComparable) {
-        InstancesComparable i=new InstancesComparable(instancesComparable);
-        return i;
+        if (indiceAtributoFiltrado == null) {
+            return instancesComparable;
+        }
+        InstancesComparable ins = new InstancesComparable(instancesComparable);
+        Double desvTipica = Modelo.getDesviacionTipica(ins, indiceAtributoFiltrado), media = Modelo.getMedia(instancesComparable, indiceAtributoFiltrado);
+        Iterator<Instance> it = ins.iterator();
+        while (it.hasNext()) {
+            Instance instance = it.next();
+            Double v = instance.isMissing(indiceAtributoFiltrado) ? null : instance.value(indiceAtributoFiltrado);
+            if (v != null) {
+                Double vInstance = instance.value(indiceAtributoFiltrado);
+                instance.setValue(indiceAtributoFiltrado, (vInstance - media) / desvTipica);
+            }
+        }
+        return ins;
     }
 
     @Override
     public String toString() {
-       return "Filtro de normalización";
+        return "Filtro de normalización";
     }
-    
+
     @Override
     public void configure() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Integer> indicesAtributosNumericos = new ArrayList<>();
+        List<String> nomesAtributos = new ArrayList<>();
+        nomesAtributos.add(Vista.bundle.getString("ningun"));
+        for (int i = 0; i < atributos.numAttributes(); i++) {
+            Attribute at = atributos.attribute(i);
+            if (at.isNumeric()) {
+                nomesAtributos.add(at.name());
+                indicesAtributosNumericos.add(i);
+            }
+        }
+        JPanel myPanel = new JPanel();
+        myPanel.add(new JLabel(Vista.bundle.getString("nomeAtributoFiltrado")));
+        JComboBox cb = new JComboBox<>(nomesAtributos.toArray());
+        cb.setSelectedItem(nomeAtributoFiltrado != null ? nomeAtributoFiltrado : 0);
+        myPanel.add(cb);
+        int result = JOptionPane.showConfirmDialog(null, myPanel, Vista.bundle.getString("configurar") + " " + toString(), JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            indiceAtributoFiltrado = cb.getSelectedIndex() > 0 ? indicesAtributosNumericos.get(cb.getSelectedIndex() - 1) : null;
+            if (indiceAtributoFiltrado != null) {
+                nomeAtributoFiltrado = atributos.attribute(indiceAtributoFiltrado).name();
+            } else {
+                nomeAtributoFiltrado = null;
+            }
+        }
     }
 
     @Override
     public Parameter[] getParameters() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Parameter> params = new ArrayList<>();
+        if (nomeAtributoFiltrado != null) {
+            params.add(new Parameter(Vista.bundle.getString("nomeAtributoFiltrado"), nomeAtributoFiltrado));
+        }
+        return params.toArray(new Parameter[params.size()]);
     }
-    
+
     @Override
     public IFilter clone() throws CloneNotSupportedException {
-        super.clone();
-        FiltroNormalizacion f = new FiltroNormalizacion();
+        FiltroNormalizacion f = new FiltroNormalizacion(atributos);
+        f.indiceAtributoFiltrado = indiceAtributoFiltrado;
+        f.nomeAtributoFiltrado = nomeAtributoFiltrado;
         return f;
     }
-    
+
 }

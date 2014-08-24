@@ -101,6 +101,9 @@ public final class ManexadorScatterPlots {
     }
 
     public int getTFinal() {
+        if (eixoTemporal.isEmpty()) {
+            return 0;
+        }
         return eixoTemporal.getLast().getObject().getMs();
     }
 
@@ -833,19 +836,21 @@ public final class ManexadorScatterPlots {
                 Color corEstela = Color.white, corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint(), corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
                 Nodo<InstancesSimultaneas> nAnterior, nActual = nodo;
                 for (int i = 0; i < lonxitudeEstela; i++) {
-                    nAnterior = nActual.getBack();
-                    if (nAnterior == null) {
-                        break;
-                    }
-                    for (int j = 0; j < nActual.getObject().size(); j++) {
-                        double xAct = nActual.getObject().get(j).value(indiceAtributoX), yAct = nActual.getObject().get(j).value(indiceAtributoY);
-                        for (int k = 0; k < nAnterior.getObject().size(); k++) {
-                            double xAnt = nAnterior.getObject().get(k).value(indiceAtributoX), yAnt = nAnterior.getObject().get(k).value(indiceAtributoY);
-                            chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
-                            jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
+                    if (nActual != null) {
+                        nAnterior = nActual.getBack();
+                        if (nAnterior == null) {
+                            break;
                         }
+                        for (int j = 0; j < nActual.getObject().size(); j++) {
+                            double xAct = nActual.getObject().get(j).value(indiceAtributoX), yAct = nActual.getObject().get(j).value(indiceAtributoY);
+                            for (int k = 0; k < nAnterior.getObject().size(); k++) {
+                                double xAnt = nAnterior.getObject().get(k).value(indiceAtributoX), yAnt = nAnterior.getObject().get(k).value(indiceAtributoY);
+                                chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
+                                jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
+                            }
+                        }
+                        nActual = nAnterior;
                     }
-                    nActual = nAnterior;
                 }
             }
         }

@@ -40,7 +40,7 @@ public class PanelFiltro extends javax.swing.JPanel {
     }
 
     public void addParameter(Parameter p) {
-        stringParameters += "<p>" + p.getName() + ": " + p.getValue().toString() + "</p>";
+        stringParameters += "<p style='line-height:0.5;'>- " + p.getName() + ": " + p.getValue().toString() + "</p>";
         jLabel10.setText("<html>" + stringParameters + "</html>");
     }
 
@@ -53,13 +53,15 @@ public class PanelFiltro extends javax.swing.JPanel {
      * Creates new form panelFiltro
      *
      * @param vista
-     * @param filtro
+     * @param indiceFiltro
      */
     public PanelFiltro(Vista vista, int indiceFiltro) {
         this.minaVista = vista;
         this.indiceFiltro = indiceFiltro;
         this.stringParameters = "";
         initComponents();
+        jButton2.setVisible(indiceFiltro > 0);
+        jButton1.setVisible(indiceFiltro < vista.getModelo().contarFiltros() - 1);
     }
 
     /**
@@ -78,10 +80,12 @@ public class PanelFiltro extends javax.swing.JPanel {
         jPanel12 = new javax.swing.JPanel();
         jButton15 = new javax.swing.JButton();
         jButton16 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(100, 2147483647));
-        setMinimumSize(new java.awt.Dimension(100, 250));
-        setPreferredSize(new java.awt.Dimension(100, 250));
+        setMaximumSize(new java.awt.Dimension(150, 2147483647));
+        setMinimumSize(new java.awt.Dimension(150, 250));
+        setPreferredSize(new java.awt.Dimension(150, 250));
         setLayout(new java.awt.GridBagLayout());
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -102,10 +106,13 @@ public class PanelFiltro extends javax.swing.JPanel {
         jLabel9.setPreferredSize(new java.awt.Dimension(100, 90));
         jLabel9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(jLabel9, gridBagConstraints);
 
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel10.setText(" ");
         jLabel10.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel10.setMaximumSize(new java.awt.Dimension(100, 90));
@@ -114,8 +121,10 @@ public class PanelFiltro extends javax.swing.JPanel {
         jLabel10.setRequestFocusEnabled(false);
         jLabel10.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(jLabel10, gridBagConstraints);
 
         jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/configurarFiltro.jpg"))); // NOI18N
@@ -128,6 +137,11 @@ public class PanelFiltro extends javax.swing.JPanel {
 
         jButton16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/eliminarFiltro.jpg"))); // NOI18N
         jButton16.setPreferredSize(new java.awt.Dimension(20, 20));
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton16ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -148,17 +162,57 @@ public class PanelFiltro extends javax.swing.JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         add(jPanel12, gridBagConstraints);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/intercambiarDereita.gif"))); // NOI18N
+        jButton1.setMaximumSize(new java.awt.Dimension(25, 25));
+        jButton1.setMinimumSize(new java.awt.Dimension(25, 25));
+        jButton1.setPreferredSize(new java.awt.Dimension(25, 25));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        add(jButton1, gridBagConstraints);
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jdatamotion/imaxes/intercambiarEsquerda.gif"))); // NOI18N
+        jButton2.setMaximumSize(new java.awt.Dimension(25, 25));
+        jButton2.setMinimumSize(new java.awt.Dimension(25, 25));
+        jButton2.setPreferredSize(new java.awt.Dimension(25, 25));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        add(jButton2, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
-        minaVista.getMeuControlador().manexarEvento(Controlador.CONFIGURAR_FILTRO, indiceFiltro);
-        minaVista.pintarMenus();
+        minaVista.getControlador().manexarEvento(Controlador.CONFIGURAR_FILTRO, indiceFiltro);
     }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        minaVista.getControlador().manexarEvento(Controlador.ELIMINAR_FILTRO, indiceFiltro);
+    }//GEN-LAST:event_jButton16ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        minaVista.getControlador().manexarEvento(Controlador.INTERCAMBIAR_FILTROS, new Object[]{indiceFiltro, indiceFiltro + 1});
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        minaVista.getControlador().manexarEvento(Controlador.INTERCAMBIAR_FILTROS, new Object[]{indiceFiltro, indiceFiltro - 1});
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

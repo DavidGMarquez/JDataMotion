@@ -45,17 +45,17 @@ public class TestRF03_04 extends TestCase {
         try {
             String pathEntrada = new URI(getClass().getResource("example01.arff").toString()).getPath();
             String pathSaida = new URI(getClass().getResource(".").toString()).getPath() + "temp01.jdm";
-            vista.getMeuControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathEntrada);
-            vista.getMeuControlador().manexarEvento(Controlador.MUDAR_DATO, new Object[]{5, 5, 45.0});
-            vista.getMeuControlador().manexarEvento(Controlador.ELIMINAR_DATOS, new Integer[]{2, 4, 12});
-            Controlador c1 = vista.getMeuControlador();
-            vista.getMeuControlador().manexarEvento(Controlador.GARDAR_SESION, pathSaida);
+            vista.getControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathEntrada);
+            vista.getControlador().manexarEvento(Controlador.MUDAR_DATO, new Object[]{5, 5, 45.0});
+            vista.getControlador().manexarEvento(Controlador.ELIMINAR_DATOS, new Integer[]{2, 4, 12});
+            Controlador c1 = vista.getControlador();
+            vista.getControlador().manexarEvento(Controlador.GARDAR_SESION, pathSaida);
             modelo = new Modelo();
             vista = new Vista();
             vista.inicializar(modelo, false);
-            vista.getMeuControlador().manexarEvento(Controlador.ABRIR_SESION, pathSaida);
-            vista.getMeuControlador().manexarEvento(Controlador.DESFACER, null);
-            vista.getMeuControlador().manexarEvento(Controlador.REFACER, null);
+            vista.getControlador().manexarEvento(Controlador.ABRIR_SESION, pathSaida);
+            vista.getControlador().manexarEvento(Controlador.DESFACER, null);
+            vista.getControlador().manexarEvento(Controlador.REFACER, null);
 
             //Altera o valor do quinto valor da quinta instancia
             //modelo.getAtributos().instance(5).setValue(5, 9.0);
@@ -75,7 +75,7 @@ public class TestRF03_04 extends TestCase {
              }*/
             //Altera o índice do atributo nominal
             //modelo.setIndiceAtributoNominal(-4);
-            Controlador c2 = vista.getMeuControlador();
+            Controlador c2 = vista.getControlador();
             assertEquals(c1, c2);
         } catch (URISyntaxException ex) {
             Logger.getLogger(TestRF03_04.class.getName()).log(Level.SEVERE, null, ex);

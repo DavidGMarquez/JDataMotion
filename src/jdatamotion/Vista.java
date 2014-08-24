@@ -265,11 +265,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
-    public Modelo getMeuModelo() {
+    public Modelo getModelo() {
         return meuModelo;
     }
 
-    public Controlador getMeuControlador() {
+    public Controlador getControlador() {
         return meuControlador;
     }
 
@@ -630,42 +630,45 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jList1.setModel(new DefaultListModel<>());
             List<String> lines = Files.readAllLines(Paths.get(getClass().getResource("filtros/filtrosImportados").toURI()), Charset.forName("UTF-8"));
             for (String line : lines) {
-                Class<?> c = Class.forName(line);
-                Object object = null;
-                try {
-                    object = c.getDeclaredConstructor(InstancesComparable.class).newInstance(meuModelo.getInstancesComparable());
-                } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                if (!line.isEmpty()) {
+                    Class<?> c = Class.forName(line);
+                    Object object = null;
                     try {
-                        object = c.getDeclaredConstructor().newInstance();
-                    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex1) {
-                        amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
-                        if (Controlador.debug) {
-                            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex1);
+                        object = c.getDeclaredConstructor(InstancesComparable.class).newInstance(meuModelo.getInstancesComparable());
+                    } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                        try {
+                            object = c.getDeclaredConstructor().newInstance();
+                        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex1) {
+                            amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+                            if (Controlador.debug) {
+                                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
                         }
                     }
-                }
-                if (object instanceof IFilter) {
-                    IFilter filtro = (IFilter) object;
-                    String nomeFiltro = filtro.toString();
-                    DefaultListModel<IFilter> dlm = (DefaultListModel<IFilter>) jList1.getModel();
-                    boolean valido = true;
-                    for (int i = 0; i < dlm.getSize(); i++) {
-                        if (nomeFiltro.equals(dlm.get(i).toString())) {
-                            valido = false;
-                            break;
+                    if (object instanceof IFilter) {
+                        IFilter filtro = (IFilter) object;
+                        String nomeFiltro = filtro.toString();
+                        DefaultListModel<IFilter> dlm = (DefaultListModel<IFilter>) jList1.getModel();
+                        boolean valido = true;
+                        for (int i = 0; i < dlm.getSize(); i++) {
+                            if (nomeFiltro.equals(dlm.get(i).toString())) {
+                                valido = false;
+                                break;
+                            }
                         }
-                    }
-                    if (valido) {
-                        dlm.addElement(filtro);
+                        if (valido) {
+                            dlm.addElement(filtro);
+                        }
                     }
                 }
             }
         } catch (ClassNotFoundException | IOException | URISyntaxException ex) {
             Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
         }
-        int gap = 8;
+        int gap = 8, padding = 16;
         int n = meuModelo.contarFiltros();
         Box horizontalBox = Box.createHorizontalBox();
+        horizontalBox.add(Box.createHorizontalStrut(padding));
         horizontalBox.add(Box.createGlue());
         JLabel l = new JLabel();
         l.setIcon(new ImageIcon(getClass().getResource("imaxes/instanciasOrixinais.jpg")));
@@ -695,6 +698,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
         horizontalBox.add(Box.createGlue());
+        horizontalBox.add(Box.createHorizontalStrut(padding));
         jPanel3.add(horizontalBox);
     }
 
@@ -757,7 +761,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jDialog1 = new javax.swing.JDialog();
         jFileChooser1 = new javax.swing.JFileChooser();

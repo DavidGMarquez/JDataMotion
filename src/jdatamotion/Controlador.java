@@ -23,6 +23,7 @@ import jdatamotion.comandos.ComandoEngadirDatos;
 import jdatamotion.comandos.ComandoEngadirFiltro;
 import jdatamotion.comandos.ComandoExportarFicheiro;
 import jdatamotion.comandos.ComandoImportarFicheiro;
+import jdatamotion.comandos.ComandoIntercambiarFiltros;
 import jdatamotion.comandos.ComandoMudarDato;
 import jdatamotion.comandos.ComandoMudarIndiceTemporal;
 import jdatamotion.comandos.ComandoMudarNomeRelacion;
@@ -68,7 +69,9 @@ public class Controlador implements Sesionizable {
     public static final int ENGADIR_FILTRO = 18;
     public static final int ELIMINAR_FILTRO = 19;
     public static final int CONFIGURAR_FILTRO = 20;
-    public static final boolean debug = true;
+    public static final int INTERCAMBIAR_FILTROS = 21;
+
+    public static final boolean debug = false;
     private transient Modelo meuModelo;
     private transient Vista minaVista;
     private XestorComandos xestorComandos;
@@ -149,6 +152,9 @@ public class Controlador implements Sesionizable {
      * index</td></tr>
      * <tr><td>Configurar
      * filtro</td><td>Controlador.CONFIGURAR_FILTRO</td><td>int index</td></tr>
+     * <tr><td>Intercambiar
+     * filtros</td><td>Controlador.INTERCAMBIAR_FILTROS</td><td>{int
+     * indiceFiltroA, int indiceFiltroB}</td></tr>
      *
      * </table>
      *
@@ -213,6 +219,9 @@ public class Controlador implements Sesionizable {
                 break;
             case CONFIGURAR_FILTRO:
                 configurarFiltro((int) argumento);
+                break;
+            case INTERCAMBIAR_FILTROS:
+                intercambiarFiltros((int) ((Object[]) argumento)[0], (int) ((Object[]) argumento)[1]);
                 break;
         }
         meuModelo.update();
@@ -308,11 +317,11 @@ public class Controlador implements Sesionizable {
         }
     }
 
-    public Modelo getMeuModelo() {
+    public Modelo getModelo() {
         return meuModelo;
     }
 
-    public Vista getMinaVista() {
+    public Vista getVista() {
         return minaVista;
     }
 
@@ -410,7 +419,7 @@ public class Controlador implements Sesionizable {
             return false;
         }
         Controlador m = (Controlador) o;
-        return m.getMeuModelo().equals(getMeuModelo()) && m.getXestorComandos().equals(getXestorComandos());
+        return m.getModelo().equals(getModelo()) && m.getXestorComandos().equals(getXestorComandos());
     }
 
     @Override
@@ -539,6 +548,17 @@ public class Controlador implements Sesionizable {
     private void configurarFiltro(int i) {
         try {
             xestorComandos.ExecutarComando(new ComandoConfigurarFiltro(meuModelo, i));
+        } catch (Exception ex) {
+            minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void intercambiarFiltros(int indiceFiltroA, int indiceFiltroB) {
+        try {
+            xestorComandos.ExecutarComando(new ComandoIntercambiarFiltros(meuModelo, indiceFiltroA, indiceFiltroB));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {

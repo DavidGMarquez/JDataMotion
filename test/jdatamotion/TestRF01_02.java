@@ -44,10 +44,10 @@ public class TestRF01_02 extends TestCase {
         try {
             String pathEntrada = new URI(getClass().getResource("example01.arff").toString()).getPath();
             String pathSaida = new URI(getClass().getResource(".").toString()).getPath() + "temp01.arff";
-            vista.getMeuControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathEntrada);
+            vista.getControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathEntrada);
             InstancesComparable is1 = modelo.getInstancesComparable();
-            vista.getMeuControlador().manexarEvento(Controlador.EXPORTAR_FICHEIRO, new Object[]{"arff", pathSaida});
-            vista.getMeuControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathSaida);
+            vista.getControlador().manexarEvento(Controlador.EXPORTAR_FICHEIRO, new Object[]{"arff", pathSaida});
+            vista.getControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathSaida);
 
             //Altera o valor do quinto valor da quinta instancia
             //modelo.getAtributos().instance(5).setValue(5, 9.0);
