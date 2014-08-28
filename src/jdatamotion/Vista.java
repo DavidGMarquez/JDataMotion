@@ -35,10 +35,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -106,6 +102,7 @@ import jdatamotion.filtros.Parameter;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionVista;
 import jdatamotion.sesions.Sesionizable;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
@@ -628,7 +625,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         try {
             jPanel3.removeAll();
             jList1.setModel(new DefaultListModel<>());
-            List<String> lines = Files.readAllLines(Paths.get(getClass().getResource("filtros/filtrosImportados").toURI()), Charset.forName("UTF-8"));
+            List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("filtros/filtrosImportados"));
             for (String line : lines) {
                 if (!line.isEmpty()) {
                     Class<?> c = Class.forName(line);
@@ -662,7 +659,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     }
                 }
             }
-        } catch (ClassNotFoundException | IOException | URISyntaxException ex) {
+        } catch (ClassNotFoundException | IOException ex) {
             Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
         }
         int gap = 8, padding = 16;
@@ -857,7 +854,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jMenuItem15 = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         jMenuItem21 = new javax.swing.JMenuItem();
-        jMenu7 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem16 = new javax.swing.JMenuItem();
         jMenuItem17 = new javax.swing.JMenuItem();
@@ -1779,10 +1775,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jMenu4.add(jMenuItem21);
 
         jMenuBar1.add(jMenu4);
-
-        jMenu7.setText(bundle.getString("Vista.jMenu7.text")); // NOI18N
-        jMenu7.setName("jMenu7"); // NOI18N
-        jMenuBar1.add(jMenu7);
 
         jMenu8.setText(bundle.getString("Vista.jMenu8.text")); // NOI18N
         jMenu8.setName("jMenu8"); // NOI18N
@@ -3134,7 +3126,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JMenu jMenu4;
     javax.swing.JMenu jMenu5;
     javax.swing.JMenu jMenu6;
-    javax.swing.JMenu jMenu7;
     javax.swing.JMenu jMenu8;
     javax.swing.JMenuBar jMenuBar1;
     javax.swing.JMenuItem jMenuItem1;

@@ -1,0 +1,73 @@
+\chapter{Introdución}
+\hyphenation{In-te-re-se}
+
+Na actual sociedade da información, onde a cantidade de datos que se manexan aumenta día a día de xeito exponencial, a minería de datos convértese nunha ferramenta fundamental para poder explotalos de maneira eficaz, co fin último de xerar coñecemento a partir dos mesmos.
+
+Para visualizar estes datos unha das técnicas máis utilizadas son os diagramas de dispersión ou scatterplots. Estes permítennos analizar os datos e atopar con facilidade relacións entre as distintas variables, como a correlación entre elas, a distribución dos puntos no plano, a tendencia dos datos recollidos ou outras características que sería complicado extraer a partir dun simple listado, posiblemente desordenado, de tuplas de información. Non obstante, os scatterplots restrínxennos a unha perspectiva estática do problema. En moitos deses problemas imos encontrar unha compoñente dinámica intrínseca como é o tempo. Con este proxecto pretendemos dotar a esta representación da súa perspectiva dinámica, para amosar os datos engadindo outro punto de vista que enriqueza a información extraida.
+
+A ferramenta pretende etiquetar cada punto dun scatterplot cun valor de significado temporal, de tal xeito que este puidese ser empregado en funcións de reprodución. Este valor numérico podería referenciar dende o momento de captación da tupla que a contén, ata unha ordenación dos datos atendendo á súa prioridade ou relevancia. A utilidade de unha ferramenta como esta xa foi validada no campo da electrocardiografía, pero sen ningunha dúbida haberá moitos outros ámbitos que poderán sacar proveito da análise de datos desde unha perspectiva dinámica.
+
+\section{Obxectivos xerais}
+
+A motivación principal deste proxecto é o desenrolo dunha ferramenta capaz de visualizar a modo de filme a evolución dun conxunto de datos ao longo dunha magnitude como sería o tempo, ademais de permitir o preprocesado ou manipulación deses datos. Sendo máis específicos, este proxecto busca a realización da análise, deseño e implementación dunha aplicación que consiga: 
+
+\begin{itemize}
+\item Facilitarlle ao usuario o procesado de volumes de datos dun tamaño significativo. 
+\item Posibilitar o traballo con formatos de arquivo CSV ou ARFF. 
+\item Dispor das funcionalidades necesarias para manipular os datos. 
+\item Ser capaz de amosar os datos en forma de scatterplots, con funcións de reprodución básicas. Tamén se debe posibilitar a configuración desta reprodución por parte do usuario. 
+\item Aplicar filtros nos datos cos que se traballa.
+\item Interaccionar co usuario por medio dunha interface simple e amigable coa que se sinta identificado.
+\end{itemize} 
+
+Así mesmo, outros obxectivos colaterais son:
+
+\begin{itemize}
+\item Aplicar nun caso real a ferramenta JDataMotion, para apreciar a súa utilidade.
+\item Finalizar o desenvolvemento do proxecto antes do día 8 de Setembro de 2014
+\end{itemize} 
+
+\section{Relación da documentación}
+
+Esta memoria plasma o proceso de desenvolvemento do proxecto JDataMotion, que persegue os obxectivos citados no apartado anterior.
+
+Os distintos capítulos repártense do modo que segue:
+
+\begin{description}
+\item[Capítulo 1. Introdución:] composta por obxectivos xerais, relación da documentación que conforma a memoria, descrición do sistema (métodos, técnicas ou arquitecturas utilizadas e xustificación da súa elección).
+\item[Capítulo 2. Planificación e presupostos:] inclúe a estimación do costo (presuposto) e dos recursos necesarios para desenvolver este proxecto, xunto coa planificación temporal do mesmo e a división en fases e tarefas.
+\item[Capítulo 3. Especificación de requisitos:] inclúe a especificación do Sistema, xunto coa información que este debe almacenar e as interfaces con outros Sistemas, sexan hardware ou software, e outros requisitos (rendemento, seguridade, etc).
+\item[Capítulo 4. Deseño:] rexistra como se realiza o Sistema, a división deste en diferentes compoñentes e a comunicación entre eles. Así mesmo, neste apartado determínase o equipamento hardware e software necesario.
+\item[Capítulo 5. Exemplos.]
+\item[Capítulo 6. Conclusións e posibles ampliacións.]
+\item[Apéndice A. Manuais técnicos:] incluirase toda a información precisa para aquelas persoas que se vaian a encargar do desenvolvemento e/ou modificación do Sistema.
+\item[Apéndice B. Manuais de usuario:] incluirán toda a información precisa para aquelas persoas que utilicen o Sistema: instalación, utilización, configuración, mensaxes de erro, etc.
+\item[Apéndice C. Licenza.]
+\item[Bibliografía]
+\end{description} 
+
+\section{Descrición do sistema}
+
+A ferramenta JDataMotion desenvolverase integramente na linguaxe de programación Java, posto que necesitamos unha linguaxe orientada a obxectos que axilice o desenvolvemento do software, favoreza a reutilización de código e facilite o deseño dunha interface gráfica. Dentro do paradigma orientado a obxectos, Java é unha solución razoable que ademais conferiría á nosa aplicación bastantes opcións á hora de representar os scatterplots, grazas ás librerías de terceiros que fornecen esta funcionalidade. Por outra banda, podemos usar a librería gráfica Swing para a implementación da interface.
+ 
+A nivel funcional, JDataMotion busca estender coa perspectiva dinámica as posibilidades do software de Weka\cite{weka}. En base a isto, intentaremos adaptar algunhas das súas funcionalidades e incluso botaremos man da súa interface de programación (API), sobre todo na parte do modelo da aplicación.
+ 
+O seu funcionamento parte dun arquivo dado en formato CSV ou ARFF que se deberá importar nun primeiro momento, ou ben dunha sesión (en formato JDM) gardada durante un experimento anterior. Botarase man das librerías facilitadas pola ferramenta Weka\cite{weka} para a importación, exportación e almacenamento do modelo de datos. 
+
+Os tipos de datos dos atributos poderán ser configurados de acordo ás seguintes etiquetas propias do estándar que proporciona o formato ARFF\cite{arff}: nominal, numérico, string ou data. A maiores, tamén se poderá especificar que un atributo numérico actúe como índice temporal para ser utilizado na reprodución. Así mesmo, permítese a inserción, eliminación e modificación dos datos.
+
+Poderanse engadir filtros configurables aos datos que se están a procesar. Os filtros representaranse nunha secuencia, e permitirase a adición, desprazamento ou eliminación de filtros nela. Tamén se facilitará unha interface pública para que calquera desenvolvedor poida aplicar no seu experimento filtros personalizados, sempre que implementen esa interface.
+
+De acordo coa ferramenta Weka\cite{weka}, para a visualización de datos seguirase un esquema matricial, de xeito que para cada par de atributos numéricos, exista unha cela dentro de esa matriz para representalos baixo a forma dun scatterplot, de tal forma que os scatterplots dentro da matriz estarán ordenados por filas e columnas segundo o atributo que representen en cada eixo. Para a creación de scatterplots escolleise JFreeChart\cite{jfreechart}, debido ás súas prestacións\cite{jfreechart}\cite{introduction_to_jfreechart}:
+
+\begin{itemize}
+\item É unha solución desenvolvida en código aberto, e distribuído baixo licencia pública LGPL.
+\item A interface de programación (API) está extensamente documentada, o cal facilita a aprendizaxe do seu uso.
+\item Da soporte moitos tipos de gráficas, non só scatterplots, o cal será útil á hora de amosar histogramas para resumir variables.
+\item As gráficas xa implementan funcións de zoom e reposicionamento (automáticos e manuais), así como unha gran serie de opcións de personalización (cores, liñas, puntos, etc.) ou incluso a posibilidade de exportar a nosa imaxe en formato PNG ou JPEG.
+\item Permite a creación de gráficas dinámicas, isto é, permite engadir en tempo de execución puntos ás gráficas, o cal constituirá o punto de partida para desenvolver as funcións de reprodución.
+\end{itemize} 
+ 
+Ademáis, a reprodución dinámica dos datos deberá ser configurable. Poderase sinalar un atributo nominal para que os seus valores se representen con puntos de cor e forma diferente e ampliar un scatterplot nunha nova ventá, así como facer zoom e reposicionar a ventá de cada scatterplot. 
+
+O usuario poderá exportar o seu traballo en calquera momento baixo un novo ficheiro de formato ARFF ou CSV, ou ben gardar a sesión (JDM) para retomala máis adiante. 

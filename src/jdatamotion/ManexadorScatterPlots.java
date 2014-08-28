@@ -140,38 +140,36 @@ public final class ManexadorScatterPlots {
     }
 
     public synchronized void goTo(double to) {
-        synchronized (tarefaPlay) {
-            int toMs = (int) Math.round(to * (getTFinal() - getTInicial()) + getTInicial());
-            Nodo<InstancesSimultaneas> nodo = nodoActual;
-            int numeroItems = 0;
-            if (toMs > t) {
-                numeroItems = numeroItemsAVisualizar(toMs);
-                for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
-                    for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
-                        if (scatterPlotsVisibles[j][k]) {
-                            ScatterPlot sp = matrizScatterPlots.get(j).get(k);
-                            XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
-                            nodo = xyd.visualizarItems(sp, numeroItems);
-                        }
-                    }
-                }
-            } else if (toMs < t) {
-                numeroItems = -numeroItemsAAgochar(toMs);
-                for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
-                    for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
-                        if (scatterPlotsVisibles[j][k]) {
-                            ScatterPlot sp = matrizScatterPlots.get(j).get(k);
-                            XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
-                            nodo = xyd.agocharItems(sp, -numeroItems);
-                        }
+        int toMs = (int) Math.round(to * (getTFinal() - getTInicial()) + getTInicial());
+        Nodo<InstancesSimultaneas> nodo = nodoActual;
+        int numeroItems = 0;
+        if (toMs > t) {
+            numeroItems = numeroItemsAVisualizar(toMs);
+            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                    if (scatterPlotsVisibles[j][k]) {
+                        ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+                        XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+                        nodo = xyd.visualizarItems(sp, numeroItems);
                     }
                 }
             }
-            textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + numeroItems));
-            slider.setValue((int) Math.round(to * slider.getMaximum()));
-            nodoActual = nodo;
-            t = (int) Math.round(getTInicial() + to * (getTFinal() - getTInicial()));
+        } else if (toMs < t) {
+            numeroItems = -numeroItemsAAgochar(toMs);
+            for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+                for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+                    if (scatterPlotsVisibles[j][k]) {
+                        ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+                        XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+                        nodo = xyd.agocharItems(sp, -numeroItems);
+                    }
+                }
+            }
         }
+        textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + numeroItems));
+        slider.setValue((int) Math.round(to * slider.getMaximum()));
+        nodoActual = nodo;
+        t = (int) Math.round(getTInicial() + to * (getTFinal() - getTInicial()));
     }
 
     private int numeroItemsAVisualizar(int toMs) {
@@ -371,7 +369,7 @@ public final class ManexadorScatterPlots {
                         Thread.sleep(paso);
                     } catch (InterruptedException ex) {
                     }
-                    synchronized (TarefaPlay.this) {
+                    synchronized (ManexadorScatterPlots.this) {
                         if (estado == PLAY && getTActual() < getTFinal()) {
                             int items = numeroItemsAVisualizar(t + paso);
                             Nodo<InstancesSimultaneas> nodo = nodoActual;
@@ -648,42 +646,38 @@ public final class ManexadorScatterPlots {
         }
 
         public synchronized Nodo<InstancesSimultaneas> visualizarItems(ScatterPlot sp, int numeroItems) {
-            synchronized (tarefaPlay) {
-                sp.eliminarAnotacions(XYAnnotation.class);
-                int e = numeroItems;
-                Nodo<InstancesSimultaneas> nodo = nodoActual;
-                while (e > 0) {
-                    nodo = nodo.getNext();
-                    for (int i = 0; i < nodo.getObject().size(); i++) {
-                        XYSeries xys = getSeries((Comparable) (atributoColor > -1 && Double.compare(nodo.getObject().get(i).value(atributoColor), Double.NaN) != 0 ? (int) nodo.getObject().get(i).value(atributoColor) : -1));
-                        xys.add(nodo.getObject().get(i).value(atributoX), nodo.getObject().get(i).value(atributoY), false);
-                        e--;
-                    }
+            sp.eliminarAnotacions(XYAnnotation.class);
+            int e = numeroItems;
+            Nodo<InstancesSimultaneas> nodo = nodoActual;
+            while (e > 0) {
+                nodo = nodo.getNext();
+                for (int i = 0; i < nodo.getObject().size(); i++) {
+                    XYSeries xys = getSeries((Comparable) (atributoColor > -1 && Double.compare(nodo.getObject().get(i).value(atributoColor), Double.NaN) != 0 ? (int) nodo.getObject().get(i).value(atributoColor) : -1));
+                    xys.add(nodo.getObject().get(i).value(atributoX), nodo.getObject().get(i).value(atributoY), false);
+                    e--;
                 }
-                sp.pintarEstela(nodo, lonxitudeEstela);
-                fireDatasetChanged();
-                return nodo;
             }
+            sp.pintarEstela(nodo, lonxitudeEstela);
+            fireDatasetChanged();
+            return nodo;
         }
 
         public synchronized Nodo<InstancesSimultaneas> agocharItems(ScatterPlot sp, int numeroItems) {
-            synchronized (tarefaPlay) {
-                setNotify(false);
-                sp.eliminarAnotacions(XYAnnotation.class);
-                int e = numeroItems;
-                Nodo<InstancesSimultaneas> nodo = nodoActual;
-                while (e > 0) {
-                    for (int i = 0; i < nodo.getObject().size(); i++) {
-                        XYSeries xys = getSeries((Comparable) (atributoColor > -1 && Double.compare(nodo.getObject().get(i).value(atributoColor), Double.NaN) != 0 ? (int) nodo.getObject().get(i).value(atributoColor) : -1));
-                        xys.remove(xys.getItemCount() - 1);
-                        e--;
-                    }
-                    nodo = nodo.getBack();
+            setNotify(false);
+            sp.eliminarAnotacions(XYAnnotation.class);
+            int e = numeroItems;
+            Nodo<InstancesSimultaneas> nodo = nodoActual;
+            while (e > 0) {
+                for (int i = 0; i < nodo.getObject().size(); i++) {
+                    XYSeries xys = getSeries((Comparable) (atributoColor > -1 && Double.compare(nodo.getObject().get(i).value(atributoColor), Double.NaN) != 0 ? (int) nodo.getObject().get(i).value(atributoColor) : -1));
+                    xys.remove(xys.getItemCount() - 1);
+                    e--;
                 }
-                sp.pintarEstela(nodo, lonxitudeEstela);
-                setNotify(true);
-                return nodo;
+                nodo = nodo.getBack();
             }
+            sp.pintarEstela(nodo, lonxitudeEstela);
+            setNotify(true);
+            return nodo;
         }
     }
 
@@ -832,25 +826,23 @@ public final class ManexadorScatterPlots {
         }
 
         private synchronized void pintarEstela(Nodo<InstancesSimultaneas> nodo, int lonxitudeEstela) {
-            synchronized (tarefaPlay) {
-                Color corEstela = Color.white, corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint(), corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
-                Nodo<InstancesSimultaneas> nAnterior, nActual = nodo;
-                for (int i = 0; i < lonxitudeEstela; i++) {
-                    if (nActual != null) {
-                        nAnterior = nActual.getBack();
-                        if (nAnterior == null) {
-                            break;
-                        }
-                        for (int j = 0; j < nActual.getObject().size(); j++) {
-                            double xAct = nActual.getObject().get(j).value(indiceAtributoX), yAct = nActual.getObject().get(j).value(indiceAtributoY);
-                            for (int k = 0; k < nAnterior.getObject().size(); k++) {
-                                double xAnt = nAnterior.getObject().get(k).value(indiceAtributoX), yAnt = nAnterior.getObject().get(k).value(indiceAtributoY);
-                                chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
-                                jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
-                            }
-                        }
-                        nActual = nAnterior;
+            Color corEstela = Color.white, corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint(), corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
+            Nodo<InstancesSimultaneas> nAnterior, nActual = nodo;
+            for (int i = 0; i < lonxitudeEstela; i++) {
+                if (nActual != null) {
+                    nAnterior = nActual.getBack();
+                    if (nAnterior == null) {
+                        break;
                     }
+                    for (int j = 0; j < nActual.getObject().size(); j++) {
+                        double xAct = nActual.getObject().get(j).value(indiceAtributoX), yAct = nActual.getObject().get(j).value(indiceAtributoY);
+                        for (int k = 0; k < nAnterior.getObject().size(); k++) {
+                            double xAnt = nAnterior.getObject().get(k).value(indiceAtributoX), yAnt = nAnterior.getObject().get(k).value(indiceAtributoY);
+                            chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
+                            jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
+                        }
+                    }
+                    nActual = nAnterior;
                 }
             }
         }
