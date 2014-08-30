@@ -1,11 +1,172 @@
 \chapter{Planificación e presupostos}
 
-Planificación e presupostos: debe incluír a estimación do costo (presuposto) e dos 
-recursos necesarios para efectuar a implantación do Traballo, xunto coa planificación 
-temporal do mesmo e a división en fases e tarefas. Recoméndase diferenciar os costos relativos a persoal dos relativos a outros gastos como instalacións e equipos.
+Neste capítulo comentaremos distintos aspectos relacionados coa planificación dun proxecto. Falaremos, por exemplo, da xestión de riscos que conleva o desenrolo do software, así coma os métodos de continxencia, prevención ou minimización que seguiremos en caso da incidencia dos mesmos. Cos riscos expostos, abordaremos a metodoloxía de desenvolvemento máis axeitada para o proxecto, de acordo tamén cos obxectivos anteriormente plasmados. Seguiremos coa planificación temporal do proxecto e finalizaremos coa estimación de custo e prazos, así como a xestión da configuración. 
 
-A estimación dos custos de desenrolo do proxecto amósase no cadro \ref{tab:custosLabel}. Para ela, consideramos a adquisición dun novo equipo informático. As horas de traballo neste caso non van ter un valor económico asociado, como consecuencia de que este proxecto pertenza a un Traballo de Fin de Grao, pois as horas do traballo do alumno correspóndense coas que este debe cumprimentar para a obtención do título. Para o consumo eléctrico tivemos en conta o prezo do kWh en España\cite{preciokWh_espana} e fixemos unha estimación\cite{energyusecalculator} do consumo en Watios dun equipo informático, que a plena potencia pode traballar a 120 vatios. Considerando que o desenrolo  do traballo durará 401.25 horas, necesitaremos 120 W * 401.25 h = 48150 Wh = 48,15 kWh. Ademais, tratarase de buscar solucións de código aberto ás distintas necesidades de módulos adicionais que vaian xurdindo, polo que o custo económico destas solucións vai ser nulo.
+\section{Xestión de riscos}
 
+Na fase de planificación dun proxecto hai que sopesar os distintos riscos aos que estará exposto o seu desenvolvemento, cuantificalos e deseñar estratexias para a súa aparición. Algúns dos riscos nun Traballo de Fin de Grao poden ter graves consecuencias na liña base do proxecto debido á inexperiencia do seu autor, polo que fronte á falta de experiencia hai que esforzarse en mellorar a planificación.
+
+No análise de riscos valoraremos a probabilidade de aparición e a súa gravidade, para a continuación deseñar unha medida de continxencia, prevención ou minimización. A escala de valoración da probabilidade e da gravidade vai ser:
+
+\begin{itemize}
+\item Moi baixa
+\item Baixa
+\item Media
+\item Alta
+\item Moi alta
+\end{itemize} 
+
+Os riscos considerados son os seguintes:
+
+\begin{itemize}
+
+\item \textbf{Risco 01}
+\begin{description}
+\item[Nome:] Cambios no alcance durante o desenvolvemento
+\item[Descrición:] A lista inicial de requisitos funcionais que se captará nas primeiras reunións cos titores vai sufrir modificacións, incluso co proxecto en etapas avanzadas de desenrolo. A súa probabilidade duplícase pola dobre titularidade do Traballo de Fin de Grao.
+\item[Probabilidade:] Moi alta
+\item[Gravidade:] Alta
+\item[Medidas de minimización:] Botaremos man da folgura temporal do proxecto (marxe de tempo dispoñible para eventualidades). Os cambios razoaranse cos titores, presentando a lista de requisitos actual e valorando a parte da folgura que consumirían ditos cambios. Tamén se tratará de ter reunións de avaliación cos titores cunha alta frecuencia, para así detectar o antes posible calquera cambio nos requisitos, se ben pode acontecer que se propoñan cambios sobre as primeiras etapas cando o proxecto se atopa en etapas avanzadas.
+\end{description}
+
+\item \textbf{Risco 02}
+\begin{description}
+\item[Nome:] Confrontación de opinións entre os distintos titores
+\item[Descrición:] Un cambio ou opinión dun titor contradí á do outro.
+\item[Probabilidade:] Moi alta
+\item[Gravidade:] Media
+\item[Medidas de prevención:] Trataremos de citarnos cos dous titores á vez, de xeito que calquera dualidade de opinións se resolva de xeito presencial. Nestes casos o risco non será considerado como acontecido.
+\item[Medidas de minimziación:] Cando as reunións non se podan realizar cos dous titores á vez, informarase ao outro o antes posible das decisións, acordos ou cambios prantexados, así poderemos coñecer a súa opinión antes de obrar en consecuencia. Intentarase que toda esta comunicación externa ás reunións se realice por correo electrónico, e tratarase de incluír a todos os participantes (menos ao propio emisor) no grupo de destinatarios das mensaxes. Ademais, deste xeito quedará rexistrada a resposta e evitarase o repudio.
+\end{description}
+
+\item \textbf{Risco 03}
+\begin{description}
+\item[Nome:] Imprecisión á hora de fixar entregables
+\item[Descrición:] A inexperiencia do alumno manifestarase xa nas primeiras entregas programadas. Ao non ter traballado previamente en proxectos desta índole, resultará complicado estimar os prazos de entrega nas primeiras fases do proxecto, tanto por exceso como por defecto.
+\item[Probabilidade:] Alta
+\item[Gravidade:] Media
+\item[Medidas de minimización:] Intentaremos especificar entregas dun contido menor e máis frecuentes, sobre todo nas primeiras fases, para que sexa máis doado comezar a estimar correctamente os prazos de entrega.
+\end{description}
+
+\item \textbf{Risco 04}
+\begin{description}
+\item[Nome:] Imposibilidade de reunirse cun dos titores
+\item[Descrición:] Un dos titores non pode acudir a algunha reunión proposta, nin estará nos seguintes 5 días.
+\item[Probabilidade:] Alta
+\item[Gravidade:] Baixa
+\item[Medidas de minimización:] Desenvolverase a reunión co titor dispoñible, sendo mester, de acordo co Risco 02, informar das conclusións sacadas ao outro titor por medio do correo electrónico en canto remate a reunión.
+\end{description}
+
+\item \textbf{Risco 05}
+\begin{description}
+\item[Nome:] Imposibilidade de reunirse con ningún dos dous titores
+\item[Descrición:] Ningún dos titores está dispoñible para unha reunión, nin estará nos seguintes 5 días.
+\item[Probabilidade:] Media
+\item[Gravidade:] Media
+\item[Medidas de minimización:] Tratarase de programar unha videoconferencia con polo menos un dos dous titores. No caso dun só titor, abordaranse as medidas adoptadas para o Risco 4. Se isto non fose posible, continuaríase traballando no seguinte entregable ata que algún dos titores volvese estar dispoñible.
+\end{description}
+
+\item \textbf{Risco 06}
+\begin{description}
+\item[Nome:] Descoñecemento ou inexperiencia coas solucións
+\item[Descrición:] O alumno non coñece as posibilidades que teñen as ferramentas das que dispón (librarías, módulos, solucións, etc.).
+\item[Probabilidade:] Alta
+\item[Gravidade:] Media
+\item[Medidas de prevención:] Adicarase un tempo prudencial, nas primeiras fases, a revisar as APIs e a documentación en xeral das librerías, proxectos de terceiros e demais ferramentas que se van empregar, para ser conscientes de como poden solucionar as nosas necesidades.
+\end{description}
+
+\item \textbf{Risco 07}
+\begin{description}
+\item[Nome:] Mala escalabilidade do sistema
+\item[Descrición:] O noso sistema escala mal con entradas de datos de gran tamaño.
+\item[Probabilidade:] Alta
+\item[Gravidade:] Media
+\item[Medidas de minimización:] Programaremos prazos de tempo maiores para entregas nas que a escalabilidade poida ser un problema (visualización, carga de datos, etc.) para mellorar este aspecto. Se non é viable reducir máis a latencia, procederase a aliviala mellorando a usabilidade do sistema (por exemplo, empregando barras de progreso).
+\end{description}
+
+\item \textbf{Risco 08}
+\begin{description}
+\item[Nome:] Imposibilidade de finalizar o proxecto en tempo
+\item[Descrición:] A folgura está esgotada, e o cumprimento do prazo de entrega vese ameazado.
+\item[Probabilidade:] Media
+\item[Gravidade:] Moi alta
+\item[Medidas de prevención:] Evitaremos na medida do posible recorrer á folgura, e trataremos de seguir a planificación do xeito máis estrito que podamos.
+\item[Medidas de minimización:] Poremos en coñecemento aos titores do estado do proxecto e dos seus prazos, para discutir a modificación ou eliminación dalgúns ítems da especificación.
+\end{description}
+
+\end{itemize}
+
+\section{Metodoloxía de desenvolvemento}
+
+A elección da metodoloxía de traballo é un paso importante na planificación de calquera proxecto, xa que a posteriori influirá en varios aspectos deste: a xestión dos seus riscos, a súa tolerancia a cambios externos, a confianza na súa validez, etc. Hai dous enfoques fundamentais: as metodoloxías estritas e as metodoloxías áxiles. As primeiras esixen unha planificación estrita, practicamente inmutable e necesariamente realista de todo o plan de traballo, e son boas cando o conxunto de requisitos é fixo e moi concreto. As segundas, pola contra, son flexibles e adáptanse ben a cada situación, pois nelas asúmese que se van producir variabilidades nos requisitos.
+
+Sopesando as circunstancias nas que se desenvolve un Traballo de Fin de Grao, onde a experiencia do alumno é practicamente nula no que respecta a xestión de proxectos, e tendo en consideración dous clientes (titores) aos que atender, semella que deberíamos adoptar unha metodoloxía de traballo que se adapte ás necesidades de cambios que vaian xurdindo, e que consiga en cada entrega recibir certo 'feedback' por parte dos titores, de forma que tras cada iteración podamos ter a seguridade da correspondencia entre o proxecto e o modelo mental de quen o especificou. É dicir, necesitamos unha metodoloxía áxil.
+
+Dentro do compendio de metodoloxías áxiles existentes, decantarémonos pola metodoloxía Scrum\cite{scrum}, pois enfoca todas as súas avaliacións sobre entregas parciais, pero funcionais, para facilitarlle ao receptor do proxecto a valoración do mesmo. Necesítase, polo tanto, unha gran implicación do cliente no proxecto, algo que se pode conseguir dada a dualidade da titoría (é máis doado que haxa un titor dispoñible para realizar a reunión). Por outra banda, os requisitos que constitúen as distintas entregas deben estar priorizados para que o proxecto poida avanzar cun carácter incremental, e ditas entregas deben resultar usables para o cliente.
+
+Scrum define unha serie de ferramentas e de regras, idóneas para levar a cabo o desenrolo de proxectos que buscan unha metodoloxía áxil. Os preceptos básicos deste modelo son:
+
+\begin{itemize}
+\item Adoptar unha estratexia de desenrolo incremental, no canto da planificación e execución completa do produto (é dicir, no canto dunha metodoloxía estrita).
+\item Basear a calidade do resultado máis no coñecemento das persoas que o especificaron ca na calidade dos procesos empregados.
+\item Solapamento das fases de desenrolo (análise, deseño, implementación e probas) no canto da sucesión secuencial que nos ofrecen metodoloxías como a cascada.
+\end{itemize} 
+
+A metodoloxía Scrum comeza cunha captación de requisitos en reunión co cliente, da cal se extrae un Backlog, é dicir, unha lista ordenada por prioridade de requisitos funcionais (RFs). Ademais, Scrum define o sprint como unidade elemental de tempo de traballo. Un sprint dura entre 1 e 4 semanas, aínda que nós trataremos de manter a súa duración en 2 ou incluso 1 semanas para maximizar a supervisión e xestionar ben os riscos, sobre todo nas etapas iniciais.
+
+Ao término de cada reunión co cliente, revísase o Backlog e incorpórase un certo número de RFs a un novo sprint, o cal dará comezo en canto remate a reunión. Para o remate dese novo sprint (dentro dunha semana no noso caso) terase programada a seguinte reunión, na que se valorará o sprint finalizado e se accederá ao Backlog para acordar o seguinte sprint, e así sucesivamente. A valoración do sprint en cada reunión realízase presentando a lista de RFs de dito sprint, e demostrando ante o receptor do proxecto que cada un dos ítems ou tarefas do sprint funciona correctamente.
+
+Para regular o desenvolvemento desa metodoloxía pódese botar man de diversas ferramentas, de entre as cales nós escollemos Acunote\cite{acunote} para o noso proxecto. Acunote é unha aplicación web especialmente deseñada para a xestión da metodoloxía Scrum. Ten varios plans de prezos, pero nós empregaremos o gratuíto porque as nosas necesidades restrínxense a un equipo de persoal pequeno (o alumno e os dous titores). Entre as prestacións desta ferramenta, sacarémoslle maior proveito ás seguintes:
+
+\begin{description}
+\item[Wiki:] Empregarémola para engadir contido visible ao resto de membros do grupo.
+\item[Lista de sprints:] Amosa os sprints en 3 grupos: sprints pasados, sprints presentes e sprints futuros. Ao abrir un sprint visualízanse os ítems ou tarefas (requisitos funcionais no noso caso) que o compoñen. Accederemos a este apartado na maioría dos casos para crear novos sprints.
+\item[Sprint actual:] Visualiza os RFs do sprint actual. A medida que se vaian completando requisitos funcionais, accederase a esta lapela para cambiar o estado do requisito en cuestión. Os estados posibles son:
+\begin{itemize}
+\item Non comezado (por defecto)
+\item En progreso
+\item Reaberto
+\item Bloqueado
+\item Completado
+\item Verificado
+\item Duplicado
+\item Non se vai realizar
+\end{itemize}
+\item[Backlog:] Contén todos os ítems (requisitos funcionais) pendentes de ser asignados a un sprint. Este lista cumprimentarase ao principio, cos requisitos funcionais captados e ordenados por prioridade, e logo accederase a ela á hora de asignar RFs aos novos sprints. Na extracción de RFs débese respectar a orde dos mesmos dentro da lista, collendo sempre un número de ítems determinado da parte superior. Estes ítems desaparecerán do Backlog en canto sexan asignados.
+\item[Tarefas:] Mostra todos os ítems especificados, independentemente de que fosen asignados a un sprint ou non.
+\end{description} 
+
+\section{Planificación temporal}
+
+A metodoloxía Scrum caracterízase como ben dixemos polo solapamento das fases que nun modelo en cascada estarían ben separadas. As primeiras semanas de traballo estarán adicadas á análise para a captación inicial de requisitos, pero nas sucesivas iteracións ou sprints poderán realizarse en paralelo análise, deseño, implementación e probas. Esta é unha das licencias que outorga o emprego das metodoloxías áxiles. De todos xeitos, aínda dentro da variabilidade destas metodoloxías, podemos dividir a vida do proxecto en unha serie de fases fundamentais:
+\begin{description}
+\item[Inicio:] Constitúe o primeiro sprint (Sprint 00) da planificación, e durará dúas semanas. Nesta fase programaranse reunións cos titores para realizar a captación de requisitos funcionais (análise de requisitos), e ordenaranse estes por prioridade, dando lugar ao Backlog. Tamén se definirá a especificación de cada requisito e se deseñarán as proba que os verifiquen.
+\item[Desenrolo:] Abrangue dende o Sprint 01 ata o Sprint 11, ambos inclusive (20 semanas en total). Nesta fase elaborarase o produto de acordo cos requisitos
+\item[Documentación:] Abrangue 5 semanas de traballo. Nesta fase recompilarase toda a documentación xerada nas fases anteriores, e confeccionarase a memoria e máis a presentación, que constituirán os entregables do Traballo de Fin de Grao.
+\end{description}
+
+A continuación e en base ao especificado no anteproxecto, exporemos na Figura \ref{gantt} o Diagrama de Gantt que ilustra a planificación temporal das fases
+
+\begin{figure}
+\centering
+\includegraphics[width=10cm]{figuras/logo_usc} %TODO
+\caption{Diagrama de Gantt}
+\label{gantt}
+\end{figure}
+
+\section{Xestión da configuración}
+
+Todo proxecto ten elementos de interese para incluír na xestión da configuración. Estes elementos caracterízanse porque son candidatos a sufrir cambios que poden ameazar o correcto desenvolvemento do proxecto. A xestión da configuración trata de manter a integridade do proxecto perante a estes cambios. O noso deber é identificar que obxectos do proxecto (sexan entregables ou resultados parciais do mesmo) merecen a súa inclusión na xestión da configuración, e por outra parte, temos que especificar que ferramentas empregaremos para dar soporte a esta característica.
+
+Para este caso consideraremos ao código fonte do proxecto (e máis das súas probas) e á documentación como elementos de configuración, que se corresponden coas carpetas 'src', 'test' e 'doc' respectivamente. O código fonte é o sustento do noso proxecto, e os cambios no seu contido veranse directamente reflexados no produto a entregar, polo que é mester incluír este elemento na xestión da configuración. Tamén incluiremos o código fonte das probas porque debemos respectar a integridade entre estas e o propio proxecto. Por outra parte, a documentación sufrirá cambios de xeito paralelo ao código, e evolucionará da man deste ao longo da vida do proxecto (rexistrará a súa especificación de requisitos, o seu deseño, etc.), así que tamén debe ser un elemento a considerar en aras de preservar a integridade do proxecto. En resumo, faremos seguimento de cambios dos tres directorios ('src', 'test' e 'doc'), e para iso botaremos man do software GitHub\cite{github}.
+
+Github é unha forxa para darlle aloxamento a distintos tipos de proxectos, por medio do sistema de control de versións Git. Para aloxar o noso proxecto crearemos un repositorio local e outro remoto, chamando a ambos 'JDataMotion', e outorgándolle ao remoto permisos de lectura e escritura para o alumno e permisos de lectura (ou de escritura tamén, opcionalmente) para os titores. Deste xeito estes poderán descargar a última versión do proxecto en calquera momento, mentres que o alumno poderá ir facendo '{\it pushes}' cada certo tempo cos cambios implementados.
+
+O proxecto conten moitos máis elementos, pero non podemos consideralos a todos aptos para a xestión de configuración por diversos motivos: as librarías empregadas (directorio 'lib') non cambian (e no caso de querer actualizar algunha, asúmese que non deben xurdir problemas de integridade gracias á compatibilidade entre versións), e os ficheiros de código obxecto e de distribución ('build' e 'dist') dependen directamente do código fonte (que xa é un elemento de configuración), pois xéranse como resultado da súa compilación.
+
+\section{Análise de custos}
+
+A estimación dos custos de desenrolo do proxecto amósase no Cadro \ref{tab:custosLabel}. Para ela, consideramos a adquisición dun novo equipo informático. As horas de traballo neste caso non van ter un valor económico asociado, como consecuencia de que este proxecto pertenza a un Traballo de Fin de Grao, pois as horas do traballo do alumno correspóndense coas que este debe cumprimentar para a obtención do título. Para o consumo eléctrico tivemos en conta o prezo do kWh en España\cite{preciokWh_espana} e fixemos unha estimación\cite{energyusecalculator} do consumo en Watios dun equipo informático, que a plena potencia pode traballar a 120 vatios. Considerando que o desenrolo  do traballo durará 401.25 horas, necesitaremos 120 W * 401.25 h = 48150 Wh = 48,15 kWh. Ademais, tratarase de buscar solucións de código aberto ás distintas necesidades de módulos adicionais que vaian xurdindo, polo que o custo económico destas soluciónsboh, de
 % Table generated by Excel2LaTeX from sheet 'Hoja1'
 \begin{table}[htbp]
   \centering
