@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  30 AUG 2014 06:21
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  1 SEP 2014 06:21
 entering extended mode
 **traballo.tex
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.tex
@@ -507,81 +507,68 @@ Overfull \hbox (3.0252pt too wide) in paragraph at lines 84--85
  []
 
 [8] [9] [10]
-File: figuras/logo_usc.eps Graphic file (type eps)
- <figuras/logo_usc.eps>
-Underfull \vbox (badness 1107) has occurred while \output is active []
-
- [11]
-[12]
-Overfull \hbox (54.77896pt too wide) in paragraph at lines 169--183
-[]\OT1/cmr/m/n/12 A es-ti-ma-cion dos cus-tos de des-en-ro-lo do pro-xec-to am
-osa-se no Ca-dro 2.1Custostable.2.1[].
- []
-
-) [13] [14
+File: figuras/gantt.eps Graphic file (type eps)
+ <figuras/gantt.eps> [11] [12]
+File: figuras/edt.eps Graphic file (type eps)
+ <figuras/edt.eps> [13] [14])
+[15] [16
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap3.tex
 Cap\'{\i }tulo 3.
-[15
+[17
 
 
-] [16] [17] [18] [19] [20] [21] [22] [23]
+] [18] [19] [20] [21] [22] [23] [24] [25]
 Overfull \hbox (16.8665pt too wide) in paragraph at lines 175--176
 \OT1/cmr/m/n/12 que o en-fo-ca se adap-te dinami-ca-men-te ao con-xun-to de da
 -tos re-pre-sen-ta-dos (movendo-
  []
 
-[24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34]) [35] [36
+[26] [27] [28] [29] [30] [31] [32] [33] [34] [35] [36]) [37] [38
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap4.tex
 Cap\'{\i }tulo 4.
-) [37
+) [39
 
 
-] [38
+] [40
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/exemplos.tex
 Cap\'{\i }tulo 5.
-
-Overfull \hbox (53.14417pt too wide) in paragraph at lines 11--12
-[]\OT1/cmr/m/n/12 As ecua-cio-nes se po-den re-fe-ren-ciar: ecua-cion (5.1Un e
-xem-plo de sec-cionequation.5.1.1[]). 
- []
-
-[39
+[41
 
 
 ]
 File: figuras/figura01.eps Graphic file (type eps)
  <figuras/figura01.eps>
 
-LaTeX Warning: Citation `cuda' on page 40 undefined on input line 48.
+LaTeX Warning: Citation `cuda' on page 42 undefined on input line 48.
 
 
-LaTeX Warning: Citation `cdma' on page 40 undefined on input line 48.
+LaTeX Warning: Citation `cdma' on page 42 undefined on input line 48.
 
 
-LaTeX Warning: Citation `gonzalez' on page 40 undefined on input line 48.
+LaTeX Warning: Citation `gonzalez' on page 42 undefined on input line 48.
 
 
-LaTeX Warning: Citation `patricia' on page 40 undefined on input line 48.
+LaTeX Warning: Citation `patricia' on page 42 undefined on input line 48.
 
 
-LaTeX Warning: Citation `cuda' on page 40 undefined on input line 48.
+LaTeX Warning: Citation `cuda' on page 42 undefined on input line 48.
 
 
-LaTeX Warning: Citation `gonzalez' on page 40 undefined on input line 48.
+LaTeX Warning: Citation `gonzalez' on page 42 undefined on input line 48.
 
 
 Underfull \vbox (badness 1769) has occurred while \output is active []
 
- [40]
+ [42]
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2014/03/04 1.5c listings language file
 )
@@ -612,30 +599,21 @@ Overfull \hbox (53.36043pt too wide) in paragraph at lines 97--98
 [][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[41]) [42]
+[43]) [44]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/conclusions.te
 x
 Cap\'{\i }tulo 6.
-) [43
-
-
-
-
-] [44
-
-
-]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.tex
-Ap\'endice A.
 ) [45
+
+
 
 
 ] [46
 
 
 ]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.tex
-Ap\'endice B.
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.tex
+Ap\'endice A.
 ) [47
 
 
@@ -643,12 +621,21 @@ Ap\'endice B.
 
 
 ]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.tex
-Ap\'endice C.
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.tex
+Ap\'endice B.
 ) [49
 
 
 ] [50
+
+
+]
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.tex
+Ap\'endice C.
+) [51
+
+
+] [52
 
 
 ]
@@ -669,7 +656,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 17--18
 []\OT1/cmr/m/n/12 Electricity usa-ge of a Lap-top or No-te-bo-ok. Si-tio web
  []
 
-) [51
+) [53
 
 
 ] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.aux
@@ -698,17 +685,14 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 3829 strings out of 493922
- 53869 string characters out of 3147299
- 130155 words of memory out of 3000000
- 6963 multiletter control sequences out of 15000+200000
+ 3826 strings out of 493922
+ 53811 string characters out of 3147299
+ 128697 words of memory out of 3000000
+ 6958 multiletter control sequences out of 15000+200000
  13266 words of font info for 51 fonts, out of 3000000 for 9000
  842 hyphenation exceptions out of 8191
- 29i,9n,51p,1039b,1299s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 29i,8n,51p,1057b,1299s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on traballo.dvi (65 pages, 84252 bytes).
+Output written on traballo.dvi (67 pages, 85836 bytes).

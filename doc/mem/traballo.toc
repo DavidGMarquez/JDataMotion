@@ -7,26 +7,10 @@
 \contentsline {section}{\numberline {2.1}Xesti\IeC {\'o}n de riscos}{5}
 \contentsline {section}{\numberline {2.2}Metodolox\IeC {\'\i }a de desenvolvemento}{9}
 \contentsline {section}{\numberline {2.3}Planificaci\IeC {\'o}n temporal}{11}
-\contentsline {section}{\numberline {2.4}Xesti\IeC {\'o}n da configuraci\IeC {\'o}n}{12}
-\contentsline {section}{\numberline {2.5}An\IeC {\'a}lise de custos}{13}
-\contentsline {chapter}{\numberline {3}Especificaci\IeC {\'o}n de requisitos}{15}
-\contentsline {section}{\numberline {3.1}Requisitos funcionais}{15}
-\contentsline {subsubsection}{T\IeC {\'\i }tulo}{15}
-\contentsline {subsubsection}{Descripci\IeC {\'o}n}{15}
-\contentsline {subsubsection}{Casos de uso relacionados}{15}
-\contentsline {subsubsection}{Importancia}{15}
-\contentsline {subsubsection}{T\IeC {\'\i }tulo}{15}
-\contentsline {subsubsection}{Descripci\IeC {\'o}n}{16}
-\contentsline {subsubsection}{Casos de uso relacionados}{16}
-\contentsline {subsubsection}{Importancia}{16}
-\contentsline {subsubsection}{T\IeC {\'\i }tulo}{16}
-\contentsline {subsubsection}{Descripci\IeC {\'o}n}{16}
-\contentsline {subsubsection}{Casos de uso relacionados}{16}
-\contentsline {subsubsection}{Importancia}{16}
-\contentsline {subsubsection}{T\IeC {\'\i }tulo}{16}
-\contentsline {subsubsection}{Descripci\IeC {\'o}n}{17}
-\contentsline {subsubsection}{Casos de uso relacionados}{17}
-\contentsline {subsubsection}{Importancia}{17}
+\contentsline {section}{\numberline {2.4}Xesti\IeC {\'o}n da configuraci\IeC {\'o}n}{13}
+\contentsline {section}{\numberline {2.5}An\IeC {\'a}lise de custos}{15}
+\contentsline {chapter}{\numberline {3}Especificaci\IeC {\'o}n de requisitos}{17}
+\contentsline {section}{\numberline {3.1}Requisitos funcionais}{17}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{17}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{17}
 \contentsline {subsubsection}{Casos de uso relacionados}{17}
@@ -40,15 +24,15 @@
 \contentsline {subsubsection}{Casos de uso relacionados}{18}
 \contentsline {subsubsection}{Importancia}{18}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{18}
-\contentsline {subsubsection}{Descripci\IeC {\'o}n}{18}
-\contentsline {subsubsection}{Casos de uso relacionados}{19}
-\contentsline {subsubsection}{Importancia}{19}
-\contentsline {subsubsection}{T\IeC {\'\i }tulo}{19}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{19}
 \contentsline {subsubsection}{Casos de uso relacionados}{19}
 \contentsline {subsubsection}{Importancia}{19}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{19}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{19}
+\contentsline {subsubsection}{Casos de uso relacionados}{19}
+\contentsline {subsubsection}{Importancia}{19}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{19}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{20}
 \contentsline {subsubsection}{Casos de uso relacionados}{20}
 \contentsline {subsubsection}{Importancia}{20}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{20}
@@ -145,51 +129,67 @@
 \contentsline {subsubsection}{Importancia}{31}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{31}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{31}
-\contentsline {subsubsection}{Importancia}{31}
-\contentsline {subsubsection}{T\IeC {\'\i }tulo}{32}
-\contentsline {subsubsection}{Descripci\IeC {\'o}n}{32}
 \contentsline {subsubsection}{Casos de uso relacionados}{32}
 \contentsline {subsubsection}{Importancia}{32}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{32}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{32}
 \contentsline {subsubsection}{Casos de uso relacionados}{32}
 \contentsline {subsubsection}{Importancia}{32}
-\contentsline {section}{\numberline {3.2}Requisitos de calidade}{33}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{32}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{32}
+\contentsline {subsubsection}{Casos de uso relacionados}{33}
+\contentsline {subsubsection}{Importancia}{33}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{33}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{33}
 \contentsline {subsubsection}{Casos de uso relacionados}{33}
 \contentsline {subsubsection}{Importancia}{33}
-\contentsline {section}{\numberline {3.3}Requisitos de dese\IeC {\~n}o}{33}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{33}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{33}
-\contentsline {subsubsection}{Casos de uso relacionados}{34}
-\contentsline {subsubsection}{Importancia}{34}
-\contentsline {section}{\numberline {3.4}Requisitos non funcionais}{34}
+\contentsline {subsubsection}{Importancia}{33}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{34}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{34}
 \contentsline {subsubsection}{Casos de uso relacionados}{34}
 \contentsline {subsubsection}{Importancia}{34}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{34}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{34}
-\contentsline {subsubsection}{Casos de uso relacionados}{35}
-\contentsline {subsubsection}{Importancia}{35}
+\contentsline {subsubsection}{Casos de uso relacionados}{34}
+\contentsline {subsubsection}{Importancia}{34}
+\contentsline {section}{\numberline {3.2}Requisitos de calidade}{35}
 \contentsline {subsubsection}{T\IeC {\'\i }tulo}{35}
 \contentsline {subsubsection}{Descripci\IeC {\'o}n}{35}
 \contentsline {subsubsection}{Casos de uso relacionados}{35}
 \contentsline {subsubsection}{Importancia}{35}
-\contentsline {chapter}{\numberline {4}Dese\IeC {\~n}o}{37}
-\contentsline {chapter}{\numberline {5}Exemplos}{39}
-\contentsline {section}{\numberline {5.1}Un exemplo de secci\IeC {\'o}n}{39}
-\contentsline {subsection}{\numberline {5.1.1}Un exemplo de subsecci\IeC {\'o}n}{39}
-\contentsline {subsection}{\numberline {5.1.2}Otro exemplo de subsecci\IeC {\'o}n}{39}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{39}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{40}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{40}
-\contentsline {section}{\numberline {5.2}Exemplos de figuras e cadros}{40}
-\contentsline {section}{\numberline {5.3}Exemplos de referencias \IeC {\'a} bibliograf\IeC {\'\i }a}{41}
-\contentsline {section}{\numberline {5.4}Exemplos de enumeraci\IeC {\'o}ns}{41}
-\contentsline {chapter}{\numberline {6}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{43}
-\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{45}
-\contentsline {chapter}{\numberline {B}Manuais de usuario}{47}
-\contentsline {chapter}{\numberline {C}Licenza}{49}
-\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{51}
+\contentsline {section}{\numberline {3.3}Requisitos de dese\IeC {\~n}o}{35}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{35}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{35}
+\contentsline {subsubsection}{Casos de uso relacionados}{36}
+\contentsline {subsubsection}{Importancia}{36}
+\contentsline {section}{\numberline {3.4}Requisitos non funcionais}{36}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{36}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{36}
+\contentsline {subsubsection}{Casos de uso relacionados}{36}
+\contentsline {subsubsection}{Importancia}{36}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{36}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{36}
+\contentsline {subsubsection}{Casos de uso relacionados}{37}
+\contentsline {subsubsection}{Importancia}{37}
+\contentsline {subsubsection}{T\IeC {\'\i }tulo}{37}
+\contentsline {subsubsection}{Descripci\IeC {\'o}n}{37}
+\contentsline {subsubsection}{Casos de uso relacionados}{37}
+\contentsline {subsubsection}{Importancia}{37}
+\contentsline {chapter}{\numberline {4}Dese\IeC {\~n}o}{39}
+\contentsline {chapter}{\numberline {5}Exemplos}{41}
+\contentsline {section}{\numberline {5.1}Un exemplo de secci\IeC {\'o}n}{41}
+\contentsline {subsection}{\numberline {5.1.1}Un exemplo de subsecci\IeC {\'o}n}{41}
+\contentsline {subsection}{\numberline {5.1.2}Otro exemplo de subsecci\IeC {\'o}n}{41}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{41}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{42}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{42}
+\contentsline {section}{\numberline {5.2}Exemplos de figuras e cadros}{42}
+\contentsline {section}{\numberline {5.3}Exemplos de referencias \IeC {\'a} bibliograf\IeC {\'\i }a}{43}
+\contentsline {section}{\numberline {5.4}Exemplos de enumeraci\IeC {\'o}ns}{43}
+\contentsline {chapter}{\numberline {6}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{45}
+\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{47}
+\contentsline {chapter}{\numberline {B}Manuais de usuario}{49}
+\contentsline {chapter}{\numberline {C}Licenza}{51}
+\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{53}
