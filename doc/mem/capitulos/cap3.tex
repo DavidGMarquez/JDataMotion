@@ -1,383 +1,539 @@
-\chapter{Especificación de requisitos}
+\chapter{Análise de requisitos}
+
+A extracción dos requisitos dun proxecto é unha fase fundamental na realización de calquera proxecto, pois inflúe non só nas propias tarefas a desenvolver para a súa implementación, se non tamén na valoración do produto final e da súa calidade. A obtención de requisitos adóitase facer durante ou tras unha reunión co cliente.
+
+\section{Casos de uso}
+
+Os casos de uso empréganse para modelar e representar nun primeiro momento cómo se vai realizar a interacción entre o sistema e os usuarios del, tamén coñecidos como actores. Os casos de uso constitúen as posibilidades das que dispón cada actor. Este análise resulta especialmente útil en entornas orientadas a usuarios con distinta prioridade (un administrador, un usuario invitado, un usuario rexistrado, un usuario prémium, etc.) nas que cada un deses actores ten acceso a uns casos de uso específicos (por exemplo, moitas aplicacións web). Por tanto, a riqueza dos diagramas de casos de uso radica na variedade de tipos de usuario (actores). A nosa aplicación non necesita facer distinción algunha entre os tipos de usuario que poden facer uso dela. Todos van dispor das mesmas funcionalidades. En conclusión, o diagrama de casos de uso non aportaría ningunha información nova, así que será omitido.
 
 \section{Requisitos funcionais}
 
 \subsection*{RF01}
-
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Importar arquivos con datos para o experimento
-
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir cargar do sistema de arquivos un ficheiro que conteña unha secuencia de datos (nun formato axeitado segundo o RNF02) para ser utilizados no experimento.
-
-\subsubsection{Casos de uso relacionados}
-
-\subsubsection{Importancia}
+\item[Casos de uso relacionados] \hfill \\
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF02}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Exportar datos
-\subsubsection{Descripción}
-A aplicación debe permitir almacear nun arquivo o conxunto de datos do arquivo actual (tendo en conta filtrados, modificacións, datos engadidos ou eliminados...). Os arquivos de saída deben respetar o RNF02.
-\subsubsection{Casos de uso relacionados}
+\item[Descrición] \hfill \\
+A aplicación debe permitir almacenar nun arquivo o conxunto de datos do arquivo actual (tendo en conta filtrados, modificacións, datos engadidos ou eliminados...). Os arquivos de saída deben respectar o RNF02.
 \subsubsection{Importancia}
 Esencial
+\end{description}
 
 \subsection*{RF03}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Gardar sesión
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir gardar en disco a sesión (ou experimento) actual tal e como está no momento de executar esta acción.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF04}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Abrir sesión
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir restaurar unha sesión (ou experimento) gardada anteriormente, de xeito que se atope exactamente igual ca no momento en que se gardou.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF05}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Representar os datos en forma de táboa
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe ser capaz de amosar os datos segundo unha táboa na que figuren cabeceiras, tipos, valores...
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF06}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Insertar datos no experimento actual
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir a inserción dinámica de datos no experimento actual.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF07}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Modificar datos no experimento actual
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir a modificación dinámica de datos no experimento actual.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF08}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Eliminar datos no experimento actual
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir a eliminación dinámica de datos no experimento actual.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF09}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Asignar tipos aos atributos dun arquivo importado
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir especificar os tipos de atributos presentes no arquivo importado. Por exemplo, os datos cuantitativos poderían ser enteiros ou reais, mentras que os cualitativos serían algo distinto (mesmamente strings).
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF10}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Sinalar identificación temporal
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir sinalar unha columna que exprese o orde ou a temporalidade dunha tupla, ou ben definir esta columna manualmente.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF11}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Representar graficamente mediante scatterplot
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe ser capaz de representar gráficamente (mediante scatterplots) o conxunto de parámetros de entrada. Concretamente, débense poder representar ata 4 parámetros por cada scatterplot (ordeadas, abscisas, cor e forma dos puntos). A cor e a forma representan valores discretos, pero ademáis a forma pode representar valores continuos no caso dun degradado. Todos os scatterplots estarán englobados dentro do ``menú de visualización'', que cumprirá co RNF06.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF12}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Engadir scatterplots ao menú de visualización
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir engadir dinámicamente novos scatterplots dentro do menú de visualización.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF13}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Eliminar un scatterplot do menú de visualización
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir eliminar un scatterplot do menú de visualización.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF14}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Configurar un scatterplot do menú de visualización
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir especificar para cada scatterplot do menú de visualización a tupla de atributos a comparar. Tamén se debe poder elixir dende o eixo de representación para cada atributo como a cor ou forma dos puntos. Ademáis tense que dispoñer da opción especificar numéricamente a posición x0 e y0 na que comeza a ventá de visualización, e o ancho e alto desta ventá, o cal constitúe implícitamente un xeito de situar a ventá de visualización, de facer zoom sobre ela e no caso da relación ancho/alto, mesmo de establecer escalas distintas para cada eixo. Esto último podería omitirse, en beneficio dun comportamento dinámico e por defecto da ventá de visualización, que se adaptaría para englobar a todos os puntos representados.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF15}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Detallar punto seleccionado dentro do scatterplot
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 Cada punto (non difuminado completamente) dos scatterplots pode ser seleccionado para ver nun apartado os seus detalles (todos os seus atributos, marca temporal...).
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF16}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Resaltar punto en scatterplots
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 Cada punto seleccionalo dentro dun scatterplot resaltarase tanto nel coma en todos os demáis scatterplots (que plasmarán outras proxeccións do mesmo punto).
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF17}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Desprazar a ventá de visualización por arrastre de cada scatterplot (reposicionar)
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 Para cada scatterplot poderemos usar unha ferramenta ``man'' para desprazar a ventá polo scatterplot.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF18}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Facer zoom in e zoom out en cada scatterplot (escalar)
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 Para cada scatterplot poderemos usar unha ferramenta de Zoom in e outra de Zoom out para facer zoom do scatterplot. O zoom aumentará ou diminuirá a razón de X1.2
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF19}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Escalar e reposicionar dinámicamente
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 Para cada scatterplot poderemos seleccionar que a ventá de visualización que o enfoca se adapte dinámicamente ao conxunto de datos representados (movéndose, afastándose, aproximándose... para englobar todos os datos).
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF20}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Reproducir a secuencia de datos (Play)
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe de permitir que a visualización dos scatterplots poida basarse na variable temporal (ou de orde) para reproducir a secuencia de datos, amosando os datos de cada scatterplot baixo unha secuencia de vídeo. Nesta secuencia engadiríase á visualización en cada instante a tupla de atributos asociada a esa marca temporal. 
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF21}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Difuminar puntos ao longo da reprodución
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir difuminar os puntos xa representados a través do avance temporal.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF22}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Representar estela
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe de permitir que cada novo punto ploteado se ligue ao último representado no scaterplott por medio dunha liña recta.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF23}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Difuminar estela ao longo da reprodución
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir difuminar as estelas xa representadas a través do avance temporal.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF24}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Configurar a reprodución da secuencia de datos
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe de permitir que a visualización dos scatterplots sexa configurable en canto a tempo transcurrido entre marcas temporais cando estas sexan de orde, que a velocidade do Play sexa x1, x2 ou x4 ou que se reproduza cara adiante ou cara atrás. Ademáis débese poder especificar o número de marcas temporais que durará o difuminado dos puntos que se ploteen, de xeito que durante ese intervalo cada punto se vaia difuminando ata desaparecer. Pode ser  0 para que os puntos non se difuminen. A aplicación tamén debe permitir especificar o número de marcas temporais que durará o difuminado das estelas que se ploteen, de xeito que durante ese intervalo cada estela xa debuxada se vaia difuminando ata desaparecer. Pode ser 0 para que as estelas non se difuminen.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF25}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Rebobinado e avance rápido da reprodución (Rewind, FastForward)
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir avanzar e retroceder a alta velocidade (X8) a reprodución.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF26}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Pausar a reprodución (Pause)
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir parar a reprodución na marca de tempo na que se atope ao executar esta acción, mantendo as visualizacións para ese momento.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF27}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Ir a un determinado instante dentro do intervalo temporal da reprodución (GoTo)
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir situarse directamente sobre un instante de tempo, mantendo a reprodución pausada sobre esa marca temporal, e visualizando os scatterplots tal e como deben estar nese momento.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF28}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Insertar filtros para os datos do experimento
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir engadir unha serie de filtros que se aplicarán de xeito secuencial sobre a secuencia de datos coa que se esté a traballar. Chamarémoslle "secuencia de filtros" a esta secuencia.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF29}
-\subsubsection{Título}
-Gardar unha subsecuencia de filtros do experimento
-\subsubsection{Descripción}
-A aplicación debe permitir gardar unha subsecuencia de filtros dentro dos que se estén aplicando sobre o experimento. Esta subsecuencia pode comprender tanto un só filtro como a secuencia de filtros enteira.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\begin{description}
+\item[Título] \hfill \\
+Eliminar un filtro para os datos do experimento
+\item[Descrición] \hfill \\
+A aplicación debe permitir eliminar un determinado filtro dentro da secuencia de filtros.
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF30}
-\subsubsection{Título}
-Cargar unha secuencia de filtros para o experimento
-\subsubsection{Descripción}
-A aplicación debe permitir cargar do sistema de arquivos unha secuencia de filtros que se engadirá á cabeza da secuencia de filtros (a cal pode estar vacía). Esta secuencia tamén pode estar composta por un só filtro.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\begin{description}
+\item[Título] \hfill \\
+Configurar filtros para os datos do experimento
+\item[Descrición] \hfill \\
+A aplicación debe permitir seleccionar un determinado filtro dentro da secuencia de filtros para modificar a regla de filtrado implícita.
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF31}
-\subsubsection{Título}
-Eliminar un filtro para os datos do experimento
-\subsubsection{Descripción}
-A aplicación debe permitir eliminar un determinado filtro dentro da secuencia de filtros.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\begin{description}
+\item[Título] \hfill \\
+Gardar unha subsecuencia de filtros do experimento
+\item[Descrición] \hfill \\
+A aplicación debe permitir gardar unha subsecuencia de filtros dentro dos que se estén aplicando sobre o experimento. Esta subsecuencia pode comprender tanto un só filtro como a secuencia de filtros enteira.
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF32}
-\subsubsection{Título}
-Configurar filtros para os datos do experimento
-\subsubsection{Descripción}
-A aplicación debe permitir seleccionar un determinado filtro dentro da secuencia de filtros para modificar a regla de filtrado implícita.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\begin{description}
+\item[Título] \hfill \\
+Cargar unha secuencia de filtros para o experimento
+\item[Descrición] \hfill \\
+A aplicación debe permitir cargar do sistema de arquivos unha secuencia de filtros que se engadirá á cabeza da secuencia de filtros (a cal pode estar vacía). Esta secuencia tamén pode estar composta por un só filtro.
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF33}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Mover os filtros dentro da secuencia de filtros
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir desprazar un filtro dentro da secuencia de filtros do experimento, de xeito que o orde de aplicación dos filtros varíe. O desprazamento realizarase insertando o filtro en cuestión nunha nova posición.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF34}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Calcular distancia entre dous puntos do plano
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir o cálculo da distancia entre dous puntos do plano.
 \subsubsection{Importancia}
 Esencial
+\end{description}
 
 \subsection*{RF35}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Configurar a fórmula para achar distancia entre dous puntos do plano
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir a introdución da fórmula que se desexe para calcular a distancia entre dous puntos
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RF36}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Configurar o menú de visualización
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe permitir cambiar os parámetros de visualización dos scatterplots que compoñen o menú de visualización, por exemplo, a cor das estelas, do fondo, dos eixos... ou a fonte, tamaño de letra...
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Optativa
+\end{description}
 
 \section{Requisitos de calidade}
 
 \subsection*{RC01}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Latencia mínima para o procesamento
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe responder nun tempo razoable ás operacións executadas polo usuario, e intentar que esa latencia escale de xeito controlado ao aumentar a talla dos parámetros.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \section{Requisitos de deseño}
 
 \subsection*{RD01}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Modularidade no deseño dos filtros
-\subsubsection{Descripción}
-A aplicación debe facilitar unha interface para a inclusión e uso de filtros personalizados (.jar) no proxecto.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Descrición] \hfill \\
+A aplicación debe facilitar unha interface para a inclusión e uso de filtros personalizados por parte de calquera desenvolvedor de software que a implemente dentro do proxecto.
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \section{Requisitos non funcionais}
 
 \subsection*{RNF01}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Formatos de entrada admitidos ao importar e exportar arquivos
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 A aplicación debe estar preparada para importar e exportar arquivos en distintos formatos, como son o CSV e ARFF.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RNF02}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Relación programa-sesión
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 Cada instancia do programa debe traballar cunha única sesión (experimento).
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
 \subsection*{RNF03}
-\subsubsection{Título}
+\begin{description}
+\item[Título] \hfill \\
 Representación matricial dos scatterplots
-\subsubsection{Descripción}
+\item[Descrición] \hfill \\
 Os scatterplots represéntanse de xeito matricial, facendo que cada parámetro dentro dun eixo sexa enfrentado a cada un dos demáis do outro eixo, e en cada punto desa dupla se sitúe o scatterplot que compara ambos parámetros. Deste xeito, os scatterplots non son acumulables: se temos un que representa X fronte a Y, non podemos engadir outro que represente X fronte a Y, pois ocuparían ambos a misma cela dentro da matriz de scatterplots.
-\subsubsection{Casos de uso relacionados}
-\subsubsection{Importancia}
+\item[Importancia] \hfill \\
 Esencial
+\end{description}
 
+\subsection*{RNF04}
+\begin{description}
+\item[Título] \hfill \\
+Entrega dentro de prazo
+\item[Descrición] \hfill \\
+Débese entregar unha versión funcional e documentada antes do día 8 de Setembro de 2014, ás 14:00 horas, pois é o momento no que remata o prazo de entrega.
+\item[Importancia] \hfill \\
+Esencial
+\end{description}
 
+\section{RFs dos sprints}
+
+Aínda que xa foron especificados para o Esquema de Descomposición do Traballo (EDT) do apartado de planificación (véxase Figura \ref{edt}), imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprints. Cómpre lembrar que para o EDT, en cada sprint da fase de Desenvolvemento e Inicio considerábamos como tarefas aos requisitos funcionais a implementar nela.
+
+\subsection*{Sprint 01}
+\begin{description}
+\item[Nome:] Interacción co sistema de ficheiros
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 17/02/2014
+\item[Finalización:] 24/02/2014
+\item[RFs a implementar:] RF01, RF02, RF03, RF04
+\end{description}
+
+\subsection*{Sprint 02}
+\begin{description}
+\item[Nome:] Manipulación de datos
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 24/02/2014
+\item[Finalización:] 10/03/2014
+\item[RFs a implementar:] RF05, RF06, RF07, RF08
+\end{description}
+
+\subsection*{Sprint 03}
+\begin{description}
+\item[Nome:] Preprocesado
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 10/03/2014
+\item[Finalización:] 24/03/2014
+\item[RFs a implementar:] RF09, RF10
+\end{description}
+
+\subsection*{Sprint 04}
+\begin{description}
+\item[Nome:] Visualización dos datos
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 24/03/2014
+\item[Finalización:] 14/04/2014
+\item[RFs a implementar:] RF11, RF12, RF13, RF14
+\end{description}
+
+\subsection*{Sprint 05}
+\begin{description}
+\item[Nome:] Ferramentas de visualización
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 14/04/2014
+\item[Finalización:] 28/04/2014
+\item[RFs a implementar:] RF15, RF16, RF17, RF18, RF19
+\end{description}
+
+\subsection*{Sprint 06}
+\begin{description}
+\item[Nome:] Reprodución
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 28/04/2014
+\item[Finalización:] 05/05/2014
+\item[RFs a implementar:] RF20
+\end{description}
+
+\subsection*{Sprint 07}
+\begin{description}
+\item[Nome:] Configuración da reprodución
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 05/05/2014
+\item[Finalización:] 19/05/2014
+\item[RFs a implementar:] RF21, RF22, RF23, RF24
+\end{description}
+
+\subsection*{Sprint 08}
+\begin{description}
+\item[Nome:] Funcións de reprodución
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 19/05/2014
+\item[Finalización:] 02/06/2014
+\item[RFs a implementar:] RF25, RF26, RF27
+\end{description}
+
+\subsection*{Sprint 09}
+\begin{description}
+\item[Nome:] Filtros
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 02/06/2014
+\item[Finalización:] 16/06/2014
+\item[RFs a implementar:] RF28, RF29, RF30
+\end{description}
+
+\subsection*{Sprint 10}
+\begin{description}
+\item[Nome:] Xestionar filtros
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 16/06/2014
+\item[Finalización:] 30/06/2014
+\item[RFs a implementar:] RF31, RF32, RF33
+\end{description}
+
+\subsection*{Sprint 11}
+\begin{description}
+\item[Nome:] Outras funcións de visualización
+\item[Fase:] Desenvolvemento
+\item[Comezo:] 30/06/2014
+\item[Finalización:] 07/07/2014
+\item[RFs a implementar:] RF34, RF35, RF36
+\end{description}
