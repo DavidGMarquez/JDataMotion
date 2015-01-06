@@ -23,7 +23,10 @@
  */
 package jdatamotion;
 
+import java.util.Arrays;
 import jdatamotion.filtros.Parameter;
+import jdatamotion.filtros.StringParameter;
+import weka.core.Attribute;
 
 /**
  *
@@ -40,8 +43,12 @@ public class PanelFiltro extends javax.swing.JPanel {
     }
 
     public void addParameter(Parameter p) {
-        stringParameters += "<p style='line-height:0.5;'>- " + p.getName() + ": " + p.getValue().toString() + "</p>";
+        stringParameters += "<p style='line-height:0.5;'>- " + p.getName() + ": " + (p.getValue() != null ? p.getValue().toString() : "?") + "</p>";
         jLabel10.setText("<html>" + stringParameters + "</html>");
+    }
+
+    public void addAtributoFiltrado(Attribute atributo) {
+        addParameter(new StringParameter(Vista.bundle.getString("atributo"), atributo != null ? atributo.name() : "?"));
     }
 
     public void removeParameters() {
@@ -191,8 +198,12 @@ public class PanelFiltro extends javax.swing.JPanel {
         add(jButton2, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+    private Parameter[] obterConfiguracionFiltro(int indiceFiltro) {
+        return minaVista.obterConfiguracionFiltro(indiceFiltro);
+    }
+
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
-        minaVista.getControlador().manexarEvento(Controlador.CONFIGURAR_FILTRO, indiceFiltro);
+        minaVista.getControlador().manexarEvento(Controlador.CONFIGURAR_FILTRO, new Object[]{indiceFiltro, obterConfiguracionFiltro(indiceFiltro)});
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed

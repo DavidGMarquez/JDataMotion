@@ -23,50 +23,38 @@
  */
 package jdatamotion.filtros;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import jdatamotion.InstancesComparable;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import weka.core.Attribute;
 import weka.core.Instance;
 
 /**
  *
  * @author usuario
  */
-public class FiltroEliminacionOutliers implements IFilter {
+public class FiltroEliminacionOutliers extends AbstractFilter {
 
-    private Integer indiceAtributoFiltrado;
-    private Parameter numeroDeDTs;
-    private String nomeAtributoFiltrado;
-    private final InstancesComparable atributos;
+    private static final String NUMERO_DE_DTS = Vista.bundle.getString("numeroDeDTs");
 
     public FiltroEliminacionOutliers(InstancesComparable atributos) {
-        this.atributos = atributos;
-        this.indiceAtributoFiltrado = null;
-        this.numeroDeDTs = null;
-        this.nomeAtributoFiltrado = null;
+        super(atributos, new Parameter[]{
+            new DoubleParameter(NUMERO_DE_DTS)
+        });
     }
 
     @Override
     public InstancesComparable filter(InstancesComparable instancesComparable) {
-        if (indiceAtributoFiltrado == null || numeroDeDTs == null) {
+        if (getIndiceAtributoFiltrado() == null || getParameter(NUMERO_DE_DTS) == null) {
             return instancesComparable;
         }
         InstancesComparable ins = new InstancesComparable(instancesComparable);
-        Double desvTipica = Modelo.getDesviacionTipica(ins, indiceAtributoFiltrado), media = Modelo.getMedia(ins, indiceAtributoFiltrado);
-        Double numDTs = (Double) numeroDeDTs.getValue();
+        Double desvTipica = Modelo.getDesviacionTipica(ins, getIndiceAtributoFiltrado()), media = Modelo.getMedia(ins, getIndiceAtributoFiltrado());
+        Double numDTs = (Double) getParameter(NUMERO_DE_DTS).getValue();
         Iterator<Instance> it = ins.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
-            Double v = instance.isMissing(indiceAtributoFiltrado) ? null : instance.value(indiceAtributoFiltrado);
+            Double v = instance.isMissing(getIndiceAtributoFiltrado()) ? null : instance.value(getIndiceAtributoFiltrado());
             if (v != null && (v < media - numDTs * desvTipica || v > media + numDTs * desvTipica)) {
                 it.remove();
             }
@@ -78,62 +66,4 @@ public class FiltroEliminacionOutliers implements IFilter {
     public String toString() {
         return "Filtro de eliminación de outliers";
     }
-
-    @Override
-    public void configure() {
-        List<Integer> indicesAtributosNumericos = new ArrayList<>();
-        List<String> nomesAtributos = new ArrayList<>();
-        nomesAtributos.add(Vista.bundle.getString("ningun"));
-        for (int i = 0; i < atributos.numAttributes(); i++) {
-            Attribute at = atributos.attribute(i);
-            if (at.isNumeric()) {
-                nomesAtributos.add(at.name());
-                indicesAtributosNumericos.add(i);
-            }
-        }
-        JTextField tf = new JTextField(numeroDeDTs != null ? String.valueOf(numeroDeDTs.getValue()) : "", 5);
-        JPanel myPanel = new JPanel();
-        myPanel.add(new JLabel(Vista.bundle.getString("nomeAtributoFiltrado")));
-        JComboBox cb = new JComboBox<>(nomesAtributos.toArray());
-        cb.setSelectedItem(nomeAtributoFiltrado != null ? nomeAtributoFiltrado : 0);
-        myPanel.add(cb);
-        myPanel.add(new JLabel(Vista.bundle.getString("numeroDeDTs") + ": "));
-        myPanel.add(tf);
-        int result = JOptionPane.showConfirmDialog(null, myPanel, Vista.bundle.getString("configurar") + " " + toString(), JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            indiceAtributoFiltrado = cb.getSelectedIndex() > 0 ? indicesAtributosNumericos.get(cb.getSelectedIndex() - 1) : null;
-            if (indiceAtributoFiltrado != null) {
-                nomeAtributoFiltrado = atributos.attribute(indiceAtributoFiltrado).name();
-            } else {
-                nomeAtributoFiltrado = null;
-            }
-            try {
-                numeroDeDTs = new Parameter(Vista.bundle.getString("numeroDeDTs"), Double.parseDouble(tf.getText()));
-            } catch (NumberFormatException e) {
-                numeroDeDTs = null;
-            }
-        }
-    }
-
-    @Override
-    public Parameter[] getParameters() {
-        List<Parameter> params = new ArrayList<>();
-        if (numeroDeDTs != null) {
-            params.add(numeroDeDTs);
-        }
-        if (nomeAtributoFiltrado != null) {
-            params.add(new Parameter(Vista.bundle.getString("nomeAtributoFiltrado"), nomeAtributoFiltrado));
-        }
-        return params.toArray(new Parameter[params.size()]);
-    }
-
-    @Override
-    public IFilter clone() throws CloneNotSupportedException {
-        FiltroEliminacionOutliers f = new FiltroEliminacionOutliers(atributos);
-        f.indiceAtributoFiltrado = indiceAtributoFiltrado;
-        f.numeroDeDTs = numeroDeDTs;
-        f.nomeAtributoFiltrado = nomeAtributoFiltrado;
-        return f;
-    }
-
 }

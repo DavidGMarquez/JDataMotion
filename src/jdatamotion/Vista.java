@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -53,6 +54,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -72,6 +74,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -97,8 +100,10 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import jdatamotion.ManexadorScatterPlots.JFrameChartPanel;
 import jdatamotion.ManexadorScatterPlots.ScatterPlot;
-import jdatamotion.filtros.IFilter;
+import jdatamotion.filtros.AbstractFilter;
+import jdatamotion.filtros.DoubleParameter;
 import jdatamotion.filtros.Parameter;
+import jdatamotion.filtros.StringParameter;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionVista;
 import jdatamotion.sesions.Sesionizable;
@@ -157,7 +162,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private JTableModelo jTableModelo;
     private int ultimoEstadoReproductor;
     private int lonxitudeEstela;
-    public static ResourceBundle bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", new Locale("en"));
+    public static ResourceBundle bundle;
     private static final String ficheiroConfiguracion = "configuracion.properties";
 
     public static ResourceBundle getBundle() {
@@ -246,6 +251,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", Locale.getDefault());
         reset();
         initComponents();
         this.task = new TarefaProgreso();
@@ -442,6 +448,49 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
         return c;
+    }
+
+    Parameter[] obterConfiguracionFiltro(int indiceFiltro) {
+        Parameter[] configuracion = meuModelo.getFiltro(indiceFiltro).getParameters();
+        int numP = configuracion.length;
+        JLabel[] jLabels = new JLabel[numP];
+        JComponent[] jComponents = new JComponent[numP];
+        JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        for (int i = 0; i < numP; i++) {
+            Parameter p = configuracion[i];
+            jLabels[i] = new JLabel(p.getName() + ": ");
+            if (p instanceof DoubleParameter) {
+                DoubleParameter dp = (DoubleParameter) p;
+                jComponents[i] = new JTextField(dp.getValue() != null ? Double.toString(dp.getValue()) : "", 5);
+            } else if (p instanceof StringParameter) {
+                StringParameter sp = (StringParameter) p;
+                JComboBox jcb = new JComboBox(new DefaultComboBoxModel(ArrayUtils.addAll(new Object[]{null}, sp.getOptions())));
+                jcb.setSelectedItem(sp.getValue());
+                jComponents[i] = jcb;
+            }
+            jPanel.add(jLabels[i]);
+            jPanel.add(jComponents[i]);
+            if (i < numP - 1) {
+                jPanel.add(Box.createHorizontalStrut(15));
+            }
+        }
+        int result = JOptionPane.showConfirmDialog(this, jPanel, bundle.getString("configuracionFiltro") + " - " + meuModelo.getFiltro(indiceFiltro).toString(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            for (int i = 0; i < numP; i++) {
+                Parameter p = configuracion[i];
+                try {
+                    if (p instanceof DoubleParameter) {
+                        String t = ((JTextField) jComponents[i]).getText();
+                        p.setValue(!"".equals(t) ? Double.parseDouble(t) : null);
+                    } else if (p instanceof StringParameter) {
+                        p.setValue(((JComboBox) jComponents[i]).getSelectedItem());
+                    }
+                } catch (NumberFormatException e) {
+                }
+            }
+            System.out.println("");
+        }
+        return configuracion;
     }
 
     public class TarefaProgreso extends SwingWorker<Void, Void> {
@@ -642,10 +691,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                             }
                         }
                     }
-                    if (object instanceof IFilter) {
-                        IFilter filtro = (IFilter) object;
+                    if (object instanceof AbstractFilter) {
+                        AbstractFilter filtro = (AbstractFilter) object;
                         String nomeFiltro = filtro.toString();
-                        DefaultListModel<IFilter> dlm = (DefaultListModel<IFilter>) jList1.getModel();
+                        DefaultListModel<AbstractFilter> dlm = (DefaultListModel<AbstractFilter>) jList1.getModel();
                         boolean valido = true;
                         for (int i = 0; i < dlm.getSize(); i++) {
                             if (nomeFiltro.equals(dlm.get(i).toString())) {
@@ -676,12 +725,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             l.setIcon(new ImageIcon(getClass().getResource("imaxes/frechaFiltros.png")));
             horizontalBox.add(l);
             horizontalBox.add(Box.createHorizontalStrut(gap));
-            IFilter f = meuModelo.getFiltro(i);
+            AbstractFilter f = meuModelo.getFiltro(i);
             PanelFiltro pf = new PanelFiltro(this, i);
             pf.setNomeFiltro(f.toString());
             for (Parameter p : f.getParameters()) {
                 pf.addParameter(p);
             }
+            pf.addAtributoFiltrado(f.getIndiceAtributoFiltrado() != null ? meuModelo.getInstancesComparable().attribute(f.getIndiceAtributoFiltrado()) : null);
             horizontalBox.add(pf);
             if (i == n - 1) {
                 horizontalBox.add(Box.createHorizontalStrut(gap));
@@ -962,7 +1012,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog2.setMinimumSize(new java.awt.Dimension(500, 500));
         jDialog2.setModal(true);
         jDialog2.setName("jDialog2"); // NOI18N
-        jDialog2.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jButton1.setText(bundle.getString("Aceptar")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
@@ -3012,7 +3061,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
         for (int i = 0; i < reconto.length; i++) {
-            dataset.addValue(reconto[i], -1, i > 0 ? meuModelo.getInstancesComparable().attribute(getColumnaModeloSeleccionada()).value(i - 1) : bundle.getString("senDefinir"));
+            dataset.addValue((Number) reconto[i], -1, i > 0 ? meuModelo.getInstancesComparable().attribute(getColumnaModeloSeleccionada()).value(i - 1) : bundle.getString("senDefinir"));
         }
         JFreeChart chart = ChartFactory.createBarChart(null, null, null, dataset, PlotOrientation.VERTICAL, false, false, false);
         chart.setBackgroundPaint(new Color(230, 230, 230));
@@ -3119,7 +3168,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JLabel jLabel6;
     javax.swing.JLabel jLabel7;
     javax.swing.JLayeredPane jLayeredPane1;
-    javax.swing.JList<IFilter> jList1;
+    javax.swing.JList<AbstractFilter> jList1;
     javax.swing.JMenu jMenu1;
     javax.swing.JMenu jMenu2;
     javax.swing.JMenu jMenu3;

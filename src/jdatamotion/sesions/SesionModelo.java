@@ -23,9 +23,7 @@
  */
 package jdatamotion.sesions;
 
-import java.util.List;
 import jdatamotion.InstancesComparable;
-import jdatamotion.filtros.IFilter;
 
 /**
  *

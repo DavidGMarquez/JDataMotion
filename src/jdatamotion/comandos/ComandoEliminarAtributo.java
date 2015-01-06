@@ -27,7 +27,7 @@ import java.util.List;
 import jdatamotion.InstancesComparable;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import jdatamotion.filtros.IFilter;
+import jdatamotion.filtros.AbstractFilter;
 
 /**
  *
@@ -38,7 +38,7 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
     private int indiceAtributoTemporalAntigo;
     private final int indiceAtributoNoModelo;
     private InstancesComparable modeloAntigo;
-    private List<IFilter> filtrosAntigos;
+    private List<AbstractFilter> filtrosAntigos;
 
     public ComandoEliminarAtributo(Modelo modelo, int indiceAtributoNoModelo) {
         super(modelo, Vista.bundle.getString("Vista.jMenuItem19.text"));

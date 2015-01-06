@@ -25,7 +25,7 @@ package jdatamotion.comandos;
 
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import jdatamotion.filtros.IFilter;
+import jdatamotion.filtros.AbstractFilter;
 
 /**
  *
@@ -34,9 +34,9 @@ import jdatamotion.filtros.IFilter;
 public class ComandoEngadirFiltro extends ComandoDesfacible {
 
     private final int index;
-    private final IFilter filtro;
+    private final AbstractFilter filtro;
 
-    public ComandoEngadirFiltro(Modelo modelo, int index, IFilter filtro) {
+    public ComandoEngadirFiltro(Modelo modelo, int index, AbstractFilter filtro) {
         super(modelo, Vista.bundle.getString("Vista.jButton14.text"));
         this.index = index;
         this.filtro = filtro;

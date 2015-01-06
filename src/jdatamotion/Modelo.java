@@ -20,7 +20,8 @@ import jdatamotion.excepcions.ExcepcionArquivoModificado;
 import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
 import jdatamotion.excepcions.ExcepcionComandoInutil;
 import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
-import jdatamotion.filtros.IFilter;
+import jdatamotion.filtros.AbstractFilter;
+import jdatamotion.filtros.Parameter;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionModelo;
 import jdatamotion.sesions.Sesionizable;
@@ -50,7 +51,7 @@ public class Modelo extends Observable implements Sesionizable {
     private String direccionAoFicheiro;
     private byte[] hashCode;
     private int indiceAtributoNominal;
-    private List<IFilter> filtros;
+    private List<AbstractFilter> filtros;
 
     public int getIndiceAtributoNominal() {
         return indiceAtributoNominal;
@@ -255,13 +256,13 @@ public class Modelo extends Observable implements Sesionizable {
         return digest.digest();
     }
 
-    public void setFiltros(List<IFilter> filtros) {
+    public void setFiltros(List<AbstractFilter> filtros) {
         this.filtros = filtros;
         setChanged();
     }
 
     public void resetearFiltros() {
-        List<IFilter> filtrosAux = new ArrayList<>();
+        List<AbstractFilter> filtrosAux = new ArrayList<>();
         filtros.stream().map((filtro) -> {
             Object object = null;
             Class<?> c = filtro.getClass();
@@ -278,7 +279,7 @@ public class Modelo extends Observable implements Sesionizable {
             }
             return object;
         }).forEach((object) -> {
-            filtrosAux.add((IFilter) object);
+            filtrosAux.add((AbstractFilter) object);
         });
         filtros = filtrosAux;
         setChanged();
@@ -289,7 +290,7 @@ public class Modelo extends Observable implements Sesionizable {
         clearChanged();
     }
 
-    public List<IFilter> getFiltros() {
+    public List<AbstractFilter> getFiltros() {
         return filtros;
     }
 
@@ -444,8 +445,8 @@ public class Modelo extends Observable implements Sesionizable {
         return varianza != null ? Math.sqrt(varianza) : null;
     }
 
-    public void configurarFiltro(int index) {
-        filtros.get(index).configure();
+    public void configurarFiltro(int index, Parameter[] parametros) {
+        filtros.get(index).setParameters(parametros);
         setChanged();
     }
 
@@ -454,17 +455,17 @@ public class Modelo extends Observable implements Sesionizable {
         setChanged();
     }
 
-    public void engadirFiltro(int index, IFilter filtro) {
+    public void engadirFiltro(int index, AbstractFilter filtro) {
         filtros.add(index, filtro);
         setChanged();
     }
 
-    public void substituirFiltro(int index, IFilter filtro) {
+    public void substituirFiltro(int index, AbstractFilter filtro) {
         filtros.set(index, filtro);
         setChanged();
     }
 
-    public IFilter getFiltro(int index) {
+    public AbstractFilter getFiltro(int index) {
         return filtros.get(index);
     }
 
@@ -837,7 +838,7 @@ public class Modelo extends Observable implements Sesionizable {
     }
 
     public void intercambiarFiltros(int indiceA, int indiceB) {
-        IFilter aux = filtros.get(indiceA);
+        AbstractFilter aux = filtros.get(indiceA);
         filtros.set(indiceA, filtros.get(indiceB));
         filtros.set(indiceB, aux);
         setChanged();

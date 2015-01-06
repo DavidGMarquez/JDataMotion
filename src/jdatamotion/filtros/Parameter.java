@@ -21,19 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package jdatamotion.filtros;
+
+import java.io.Serializable;
 
 /**
  *
  * @author usuario
+ * @param <T>
  */
-public class Parameter {
-    
-    private String name;
-    private Object value;
+public abstract class Parameter<T> implements Serializable {
 
-    public Parameter(String name, Object value) {
+    private String name;
+    private T value;
+
+    public abstract boolean isValid(T value);
+
+    public Parameter(String name, T value) {
         this.name = name;
         this.value = value;
     }
@@ -42,7 +46,7 @@ public class Parameter {
         return name;
     }
 
-    public Object getValue() {
+    public T getValue() {
         return value;
     }
 
@@ -50,8 +54,10 @@ public class Parameter {
         this.name = name;
     }
 
-    public void setValue(Object value) {
-        this.value = value;
+    public void setValue(T value) {
+        if (isValid(value)) {
+            this.value = value;
+        }
     }
-    
+
 }

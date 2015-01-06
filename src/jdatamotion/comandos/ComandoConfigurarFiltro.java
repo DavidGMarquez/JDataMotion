@@ -25,7 +25,7 @@ package jdatamotion.comandos;
 
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import jdatamotion.filtros.IFilter;
+import jdatamotion.filtros.Parameter;
 
 /**
  *
@@ -34,28 +34,23 @@ import jdatamotion.filtros.IFilter;
 public class ComandoConfigurarFiltro extends ComandoDesfacible {
 
     private final int index;
-    private final IFilter filtroAntigo;
-    private IFilter novoFiltro;
+    private final Parameter[] parametrosAntigos;
+    private final Parameter[] parametrosNovos;
 
-    public ComandoConfigurarFiltro(Modelo modelo, int index) throws CloneNotSupportedException {
+    public ComandoConfigurarFiltro(Modelo modelo, int index, Parameter[] parametrosNovos) throws CloneNotSupportedException {
         super(modelo, Vista.bundle.getString("comandoConfigurarFiltro"));
         this.index = index;
-        this.novoFiltro = null;
-        this.filtroAntigo = modelo.getFiltro(index).clone();
+        this.parametrosNovos = parametrosNovos;
+        this.parametrosAntigos = modelo.getFiltro(index).getParameters();
     }
 
     @Override
     public void Desfacer() throws Exception {
-        ((Modelo) getObxectivo()).substituirFiltro(index, filtroAntigo);
+        ((Modelo) getObxectivo()).configurarFiltro(index, parametrosAntigos);
     }
 
     @Override
     public void Executar() throws Exception {
-        if (novoFiltro == null) {
-            ((Modelo) getObxectivo()).configurarFiltro(index);
-            this.novoFiltro = ((Modelo) getObxectivo()).getFiltro(index).clone();
-        } else {
-            ((Modelo) getObxectivo()).substituirFiltro(index, novoFiltro);
-        }
+        ((Modelo) getObxectivo()).configurarFiltro(index, parametrosNovos);
     }
 }

@@ -28,7 +28,7 @@ import jdatamotion.InstancesComparable;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
 import jdatamotion.excepcions.ExcepcionLeve;
-import jdatamotion.filtros.IFilter;
+import jdatamotion.filtros.AbstractFilter;
 
 /**
  *
@@ -40,7 +40,7 @@ public class ComandoMudarTipo extends ComandoDesfacible {
     private final int columnaModelo;
     private InstancesComparable modeloAntigo;
     private int indiceAtributoNominalAntigo;
-    private List<IFilter> filtrosAntigos;
+    private List<AbstractFilter> filtrosAntigos;
 
     public ComandoMudarTipo(Modelo modelo, int columnaModelo, int novoTipo) {
         super(modelo, Vista.bundle.getString("comandoMudarTipo"));
