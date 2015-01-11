@@ -45,8 +45,8 @@ public class FiltroLimite extends AbstractFilter {
 
     private static final String VALOR = Vista.bundle.getString("valor");
 
-    public FiltroLimite(InstancesComparable atributos) {
-        super(atributos, new Parameter[]{
+    public FiltroLimite() {
+        super(new Parameter[]{
             new StringParameter(TIPO_LIMITE, new String[]{LIMITE_VALOR, LIMITE_PERCENTIL}),
             new StringParameter(TIPO_COTA, new String[]{COTA_SUPERIOR, COTA_INFERIOR}),
             new DoubleParameter(VALOR)
@@ -55,7 +55,7 @@ public class FiltroLimite extends AbstractFilter {
 
     @Override
     public InstancesComparable filter(InstancesComparable instancesComparable) {
-        if (getIndiceAtributoFiltrado() == null || getParameter(VALOR) == null) {
+        if (!estaTodoConfigurado() || !instancesComparable.attribute(getIndiceAtributoFiltrado()).isNumeric()) {
             return instancesComparable;
         }
         InstancesComparable ins = new InstancesComparable(instancesComparable);

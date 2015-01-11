@@ -34,22 +34,32 @@ import jdatamotion.InstancesComparable;
 public abstract class AbstractFilter implements Serializable {
 
     private Integer indiceAtributoFiltrado;
-    private final InstancesComparable instancias;
     private HashMap<String, Parameter> parametersMap;
 
-    public AbstractFilter(InstancesComparable instancias, Integer indiceAtributoFiltrado, Parameter[] parameters) {
+    public AbstractFilter(Integer indiceAtributoFiltrado, Parameter[] parameters) {
         parametersMap = new HashMap<>();
-        this.instancias = instancias;
         this.indiceAtributoFiltrado = indiceAtributoFiltrado;
         setParameters(parameters);
     }
 
-    public AbstractFilter(InstancesComparable instancias) {
-        this(instancias, null, null);
+    public boolean estaConfiguradoIndiceAtributoFiltrado() {
+        return indiceAtributoFiltrado != null;
     }
 
-    public AbstractFilter(InstancesComparable instancias, Parameter[] parameters) {
-        this(instancias, null, parameters);
+    public boolean estanConfiguradosParametros() {
+        return parametersMap.values().stream().noneMatch((p) -> (p.getValue() == null));
+    }
+
+    public boolean estaTodoConfigurado() {
+        return estaConfiguradoIndiceAtributoFiltrado() && estanConfiguradosParametros();
+    }
+
+    public AbstractFilter(InstancesComparable instancias) {
+        this(null, null);
+    }
+
+    public AbstractFilter(Parameter[] parameters) {
+        this(null, parameters);
     }
 
     public final void setIndiceAtributoFiltrado(Integer indiceAtributoFiltrado) {

@@ -464,31 +464,35 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 jComponents[i] = new JTextField(dp.getValue() != null ? Double.toString(dp.getValue()) : "", 5);
             } else if (p instanceof StringParameter) {
                 StringParameter sp = (StringParameter) p;
-                JComboBox jcb = new JComboBox(new DefaultComboBoxModel(ArrayUtils.addAll(new Object[]{null}, sp.getOptions())));
+                JComboBox jcb = new JComboBox<>(new DefaultComboBoxModel<>(ArrayUtils.addAll(new String[]{null}, sp.getOptions())));
                 jcb.setSelectedItem(sp.getValue());
                 jComponents[i] = jcb;
             }
             jPanel.add(jLabels[i]);
             jPanel.add(jComponents[i]);
-            if (i < numP - 1) {
-                jPanel.add(Box.createHorizontalStrut(15));
-            }
+            jPanel.add(Box.createHorizontalStrut(15));
         }
+        jPanel.add(new JLabel(bundle.getString("atributo") + " :"));
+        JComboBox jcb = new JComboBox<>(new DefaultComboBoxModel<>(ArrayUtils.addAll(new String[]{null}, meuModelo.getNomesAtributos())));
+        jcb.setSelectedItem(meuModelo.getFiltro(indiceFiltro).getIndiceAtributoFiltrado() != null ? meuModelo.getInstancesComparable().attribute(meuModelo.getFiltro(indiceFiltro).getIndiceAtributoFiltrado()).name() : null);
+        jPanel.add(jcb);
         int result = JOptionPane.showConfirmDialog(this, jPanel, bundle.getString("configuracionFiltro") + " - " + meuModelo.getFiltro(indiceFiltro).toString(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             for (int i = 0; i < numP; i++) {
                 Parameter p = configuracion[i];
                 try {
                     if (p instanceof DoubleParameter) {
+                        DoubleParameter dp = (DoubleParameter) p;
                         String t = ((JTextField) jComponents[i]).getText();
-                        p.setValue(!"".equals(t) ? Double.parseDouble(t) : null);
+                        dp.setValue(!"".equals(t) ? Double.parseDouble(t) : null);
                     } else if (p instanceof StringParameter) {
-                        p.setValue(((JComboBox) jComponents[i]).getSelectedItem());
+                        StringParameter sp = (StringParameter) p;
+                        sp.setValue((String) ((JComboBox) jComponents[i]).getSelectedItem());
                     }
                 } catch (NumberFormatException e) {
                 }
             }
-            System.out.println("");
+            meuModelo.getFiltro(indiceFiltro).setIndiceAtributoFiltrado(jcb.getSelectedItem() != null ? meuModelo.getIndiceAtributo((String) jcb.getSelectedItem()) : null);
         }
         return configuracion;
     }
@@ -1012,6 +1016,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog2.setMinimumSize(new java.awt.Dimension(500, 500));
         jDialog2.setModal(true);
         jDialog2.setName("jDialog2"); // NOI18N
+        jDialog2.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jButton1.setText(bundle.getString("Aceptar")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N

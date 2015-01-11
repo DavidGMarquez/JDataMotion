@@ -34,13 +34,13 @@ import weka.core.Instance;
  */
 public class FiltroNormalizacion extends AbstractFilter {
 
-    public FiltroNormalizacion(InstancesComparable atributos) {
-        super(atributos);
+    public FiltroNormalizacion() {
+        super(new Parameter[]{});
     }
 
     @Override
     public InstancesComparable filter(InstancesComparable instancesComparable) {
-        if (getIndiceAtributoFiltrado() == null) {
+        if (!estaTodoConfigurado() || !instancesComparable.attribute(getIndiceAtributoFiltrado()).isNumeric()) {
             return instancesComparable;
         }
         InstancesComparable ins = new InstancesComparable(instancesComparable);

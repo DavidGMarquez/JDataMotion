@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.security.MessageDigest;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -14,8 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jdatamotion.excepcions.ExcepcionArquivoModificado;
 import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
 import jdatamotion.excepcions.ExcepcionComandoInutil;
@@ -78,6 +75,31 @@ public class Modelo extends Observable implements Sesionizable {
         this.indiceAtributoNominal = indiceAtributoNominal;
     }
 
+    public String[] getNomesAtributos() {
+        String[] ats = new String[obterNumAtributos()];
+        for (int i = 0; i < ats.length; i++) {
+            ats[i] = instancesComparable.attribute(i).name();
+        }
+        return ats;
+    }
+
+    public Integer getIndiceAtributo(String nome) {
+        for (int i = 0; i < instancesComparable.numAttributes(); i++) {
+            if (instancesComparable.attribute(i).name().equals(nome)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public Attribute[] getAtributos() {
+        Attribute[] ats = new Attribute[obterNumAtributos()];
+        for (int i = 0; i < ats.length; i++) {
+            ats[i] = instancesComparable.attribute(i);
+        }
+        return ats;
+    }
+
     private boolean contenSoValoresPositivos(int indiceAtributo) {
         if (!instancesComparable.attribute(indiceAtributo).isNumeric()) {
             return false;
@@ -110,6 +132,13 @@ public class Modelo extends Observable implements Sesionizable {
             ins = getFiltro(i).filter(ins);
         }
         return ins;
+    }
+
+    public void desconfigurarAtributoFiltros() {
+        filtros.stream().forEach((f) -> {
+            f.setIndiceAtributoFiltrado(null);
+        });
+        setChanged();
     }
 
     public InstancesComparable getInstancesComparable() {
@@ -261,30 +290,6 @@ public class Modelo extends Observable implements Sesionizable {
         setChanged();
     }
 
-    public void resetearFiltros() {
-        List<AbstractFilter> filtrosAux = new ArrayList<>();
-        filtros.stream().map((filtro) -> {
-            Object object = null;
-            Class<?> c = filtro.getClass();
-            try {
-                object = c.getDeclaredConstructor(InstancesComparable.class).newInstance(instancesComparable);
-            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                try {
-                    object = c.getDeclaredConstructor().newInstance();
-                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex1) {
-                    if (Controlador.debug) {
-                        Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex1);
-                    }
-                }
-            }
-            return object;
-        }).forEach((object) -> {
-            filtrosAux.add((AbstractFilter) object);
-        });
-        filtros = filtrosAux;
-        setChanged();
-    }
-
     public void update() {
         notifyObservers();
         clearChanged();
@@ -319,6 +324,7 @@ public class Modelo extends Observable implements Sesionizable {
         hashCode = resumirFicheiroSHA1(new File(url));
         indiceTemporal = -1;
         indiceAtributoNominal = -1;
+        filtros = new ArrayList<>();
         String extension = "";
         int j = url.lastIndexOf('.');
         if (j >= 0) {
@@ -477,13 +483,13 @@ public class Modelo extends Observable implements Sesionizable {
         switch (extension) {
             case "csv":
                 CSVSaver saverCSV = new CSVSaver();
-                saverCSV.setInstances(instancesComparable);
+                saverCSV.setInstances(getFilteredInstancesComparable());
                 saverCSV.setFile(new File(path));
                 saverCSV.writeBatch();
                 break;
             case "arff":
                 ArffSaver saverARFF = new ArffSaver();
-                saverARFF.setInstances(instancesComparable);
+                saverARFF.setInstances(getFilteredInstancesComparable());
                 saverARFF.setFile(new File(path));
                 saverARFF.writeBatch();
                 break;

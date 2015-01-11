@@ -37,15 +37,15 @@ public class FiltroEliminacionOutliers extends AbstractFilter {
 
     private static final String NUMERO_DE_DTS = Vista.bundle.getString("numeroDeDTs");
 
-    public FiltroEliminacionOutliers(InstancesComparable atributos) {
-        super(atributos, new Parameter[]{
+    public FiltroEliminacionOutliers() {
+        super(new Parameter[]{
             new DoubleParameter(NUMERO_DE_DTS)
         });
     }
 
     @Override
     public InstancesComparable filter(InstancesComparable instancesComparable) {
-        if (getIndiceAtributoFiltrado() == null || getParameter(NUMERO_DE_DTS) == null) {
+        if (!estaTodoConfigurado() || !instancesComparable.attribute(getIndiceAtributoFiltrado()).isNumeric()) {
             return instancesComparable;
         }
         InstancesComparable ins = new InstancesComparable(instancesComparable);

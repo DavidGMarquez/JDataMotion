@@ -61,6 +61,6 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
             ((Modelo) getObxectivo()).setIndiceTemporal(-1);
         }
         ((Modelo) getObxectivo()).eliminarAtributo(indiceAtributoNoModelo);
-        ((Modelo) getObxectivo()).resetearFiltros();
+        ((Modelo) getObxectivo()).desconfigurarAtributoFiltros();
     }
 }

@@ -64,7 +64,7 @@ public class ComandoMudarTipo extends ComandoDesfacible {
             ((Modelo) getObxectivo()).mudarTipo(columnaModelo, novoTipo);
         } catch (ExcepcionLeve e) {
         }
-        ((Modelo) getObxectivo()).resetearFiltros();
+        ((Modelo) getObxectivo()).desconfigurarAtributoFiltros();
     }
 
 }

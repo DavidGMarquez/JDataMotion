@@ -36,15 +36,15 @@ public class FiltroRecheo extends AbstractFilter {
 
     private static final String VALOR = Vista.bundle.getString("valor");
 
-    public FiltroRecheo(InstancesComparable atributos) {
-        super(atributos, new Parameter[]{
+    public FiltroRecheo() {
+        super(new Parameter[]{
             new DoubleParameter(VALOR)
         });
     }
 
     @Override
     public InstancesComparable filter(InstancesComparable instancesComparable) {
-        if (getIndiceAtributoFiltrado() == null || getParameter(VALOR) == null) {
+        if (!estaTodoConfigurado() || !instancesComparable.attribute(getIndiceAtributoFiltrado()).isNumeric()) {
             return instancesComparable;
         }
         InstancesComparable ins = new InstancesComparable(instancesComparable);
