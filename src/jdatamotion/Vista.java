@@ -721,14 +721,27 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         Box horizontalBox = Box.createHorizontalBox();
         horizontalBox.add(Box.createHorizontalStrut(padding));
         horizontalBox.add(Box.createGlue());
-        JLabel l = new JLabel();
-        l.setIcon(new ImageIcon(getClass().getResource("imaxes/instanciasOrixinais.jpg")));
-        horizontalBox.add(l);
+        JButton b = new JButton();
+        b.setIcon(new ImageIcon(getClass().getResource("imaxes/instanciasOrixinais.jpg")));
+        horizontalBox.add(b);
         for (int i = 0; i < n; i++) {
             horizontalBox.add(Box.createHorizontalStrut(gap));
-            l = new JLabel();
-            l.setIcon(new ImageIcon(getClass().getResource(i > 0 ? "imaxes/frechaFiltrosModeloParcial.png" : "imaxes/frechaFiltros.png")));
-            horizontalBox.add(l);
+            if (i > 0) {
+                JPanel p = new JPanel();
+                p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+                JLabel l = new JLabel();
+                l.setIcon(new ImageIcon(getClass().getResource("imaxes/frechaFiltros.png")));
+                p.add(l);
+                b = new JButton();
+                b.setPreferredSize(new Dimension(30, 20));
+                b.setIcon(imageToIcon(new ImageIcon(getClass().getResource("imaxes/instanciasFiltradas.jpg")).getImage().getScaledInstance(jLabel4.getPreferredSize().width, jLabel4.getPreferredSize().height, Image.SCALE_SMOOTH)));
+                p.add(b);
+                horizontalBox.add(p);
+            } else {
+                JLabel l = new JLabel();
+                l.setIcon(new ImageIcon(getClass().getResource("imaxes/frechaFiltros.png")));
+                horizontalBox.add(l);
+            }
             horizontalBox.add(Box.createHorizontalStrut(gap));
             AbstractFilter f = meuModelo.getFiltro(i);
             PanelFiltro pf = new PanelFiltro(this, i);
@@ -740,13 +753,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             horizontalBox.add(pf);
             if (i == n - 1) {
                 horizontalBox.add(Box.createHorizontalStrut(gap));
-                l = new JLabel();
+                JLabel l = new JLabel();
                 l.setIcon(new ImageIcon(getClass().getResource("imaxes/frechaFiltros.png")));
                 horizontalBox.add(l);
                 horizontalBox.add(Box.createHorizontalStrut(gap));
-                l = new JLabel();
-                l.setIcon(new ImageIcon(getClass().getResource("imaxes/instanciasFiltradas.jpg")));
-                horizontalBox.add(l);
+                b = new JButton();
+                b.setIcon(new ImageIcon(getClass().getResource("imaxes/instanciasFiltradas.jpg")));
+                horizontalBox.add(b);
             }
         }
         horizontalBox.add(Box.createGlue());
@@ -758,6 +771,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         pintarMenuModelo();
         pintarMenuFiltros();
         pintarMenuVisualizacion();
+    }
+
+    private Icon imageToIcon(Image image) {
+        ImageIcon imgIcon = new ImageIcon(image);
+        Icon iconReturn = (Icon) imgIcon;
+        return iconReturn;
     }
 
     public void actualizarPilas() {

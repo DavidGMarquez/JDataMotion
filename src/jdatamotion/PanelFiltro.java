@@ -112,9 +112,8 @@ public class PanelFiltro extends javax.swing.JPanel {
         jLabel9.setPreferredSize(new java.awt.Dimension(100, 90));
         jLabel9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(jLabel9, gridBagConstraints);
 
@@ -127,9 +126,8 @@ public class PanelFiltro extends javax.swing.JPanel {
         jLabel10.setRequestFocusEnabled(false);
         jLabel10.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(jLabel10, gridBagConstraints);
 
