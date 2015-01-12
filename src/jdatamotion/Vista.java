@@ -71,6 +71,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTable;
@@ -726,7 +727,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         for (int i = 0; i < n; i++) {
             horizontalBox.add(Box.createHorizontalStrut(gap));
             l = new JLabel();
-            l.setIcon(new ImageIcon(getClass().getResource("imaxes/frechaFiltros.png")));
+            l.setIcon(new ImageIcon(getClass().getResource(i > 0 ? "imaxes/frechaFiltrosModeloParcial.png" : "imaxes/frechaFiltros.png")));
             horizontalBox.add(l);
             horizontalBox.add(Box.createHorizontalStrut(gap));
             AbstractFilter f = meuModelo.getFiltro(i);
@@ -851,6 +852,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jLabel7 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        jFrameModeloParcial = new javax.swing.JFrame();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        jPanel11 = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel3 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
@@ -1278,6 +1283,48 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     .addComponent(jButton7)
                     .addComponent(jButton13))
                 .addContainerGap())
+        );
+
+        jFrameModeloParcial.setName("jFrameModeloParcial"); // NOI18N
+
+        jScrollPane6.setName("jScrollPane6"); // NOI18N
+
+        jScrollPane5.getVerticalScrollBar().setModel(jScrollPane3.getVerticalScrollBar().getModel());
+        jScrollPane12.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane12.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane12.setHorizontalScrollBar(null);
+        jScrollPane12.setName("jScrollPane12"); // NOI18N
+
+        jPanel11.setMinimumSize(new java.awt.Dimension(250, 0));
+        jPanel11.setName("jPanel11"); // NOI18N
+        jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane12.setViewportView(jPanel11);
+
+        javax.swing.GroupLayout jFrameModeloParcialLayout = new javax.swing.GroupLayout(jFrameModeloParcial.getContentPane());
+        jFrameModeloParcial.getContentPane().setLayout(jFrameModeloParcialLayout);
+        jFrameModeloParcialLayout.setHorizontalGroup(
+            jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(352, 352, 352)))
+        );
+        jFrameModeloParcialLayout.setVerticalGroup(
+            jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameModeloParcialLayout.createSequentialGroup()
+                    .addGap(36, 36, 36)
+                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -2691,6 +2738,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     class JTableModelo extends JTable {
 
+        private final JPanel columnaNumerais;
+        private final JScrollPane taboa;
+
         public void finalizarEdicions() {
             TableCellEditor ce = getCellEditor();
             if (ce != null) {
@@ -2765,14 +2815,16 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
 
-        public JTableModelo() {
+        public JTableModelo(JPanel columnaNumerais, JScrollPane taboa) {
             super();
+            this.columnaNumerais = columnaNumerais;
+            this.taboa = taboa;
         }
 
         public void actualizar() {
             resaltarColumnaSeleccionada();
             actualizarTaboaConModelo();
-            jPanel10.removeAll();
+            columnaNumerais.removeAll();
             String data[][] = new String[meuModelo.obterNumInstancias()][1];
             for (int i = 0; i < data.length; i++) {
                 data[i][0] = String.valueOf(i + 1);
@@ -2787,7 +2839,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 }
             });
             tablaIndices.setFillsViewportHeight(true);
-            jPanel10.add(tablaIndices);
+            columnaNumerais.add(tablaIndices);
             tablaIndices.getColumnModel().getColumn(0).setPreferredWidth(0);
             DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
             renderer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -2870,7 +2922,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             setModel(new TableModelPanelModelo(meuModelo.obterArrayListNomesAtributos(), meuModelo.obterArrayListStringDatos(false)));
             setFillsViewportHeight(true);
             configurarColumnas();
-            jScrollPane3.setViewportView(this);
+            taboa.setViewportView(this);
             getModel().addTableModelListener((TableModelEvent e) -> {
                 int fila = e.getFirstRow(), columna = e.getColumn();
                 Object o = getModel().getValueAt(fila, columna);
@@ -3020,7 +3072,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }
 
     public void inicializarPaneis() {
-        jTableModelo = new JTableModelo();
+        jTableModelo = new JTableModelo(jPanel10, jScrollPane3);
         jTableModelo.inicializar();
     }
 
@@ -3165,6 +3217,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JDialog jDialog3;
     javax.swing.JDialog jDialog4;
     javax.swing.JFileChooser jFileChooser1;
+    javax.swing.JFrame jFrameModeloParcial;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel3;
@@ -3206,6 +3259,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JMenuItem jMenuItem9;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel10;
+    javax.swing.JPanel jPanel11;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
     javax.swing.JPanel jPanel4;
@@ -3221,10 +3275,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane10;
     javax.swing.JScrollPane jScrollPane11;
+    javax.swing.JScrollPane jScrollPane12;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
     javax.swing.JScrollPane jScrollPane4;
     javax.swing.JScrollPane jScrollPane5;
+    javax.swing.JScrollPane jScrollPane6;
     javax.swing.JScrollPane jScrollPane7;
     javax.swing.JScrollPane jScrollPane8;
     javax.swing.JScrollPane jScrollPane9;

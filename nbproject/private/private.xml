@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="1">
                 <name/>
-                <line>542</line>
+                <line>543</line>
                 <key/>
             </bookmark>
         </file>
@@ -22,7 +22,6 @@
         <group>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/idiomas/Bundle.properties</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoExportarFicheiro.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoImportarFicheiro.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/filtros/FiltroEliminacionOutliers.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoEliminarFiltro.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/filtros/FiltroRecheo.java</file>

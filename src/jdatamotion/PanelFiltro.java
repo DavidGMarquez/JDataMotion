@@ -23,7 +23,6 @@
  */
 package jdatamotion;
 
-import java.util.Arrays;
 import jdatamotion.filtros.Parameter;
 import jdatamotion.filtros.StringParameter;
 import weka.core.Attribute;
