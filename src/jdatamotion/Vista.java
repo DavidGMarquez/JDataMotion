@@ -677,6 +677,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private void pintarMenuFiltros() {
         try {
+            jFrameModeloParcial.dispose();
             jPanel3.removeAll();
             jList1.setModel(new DefaultListModel<>());
             List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("filtros/filtrosImportados"));
@@ -722,6 +723,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         horizontalBox.add(Box.createHorizontalStrut(padding));
         horizontalBox.add(Box.createGlue());
         JButton b = new JButton();
+        b.addActionListener((ActionEvent e) -> {
+            jTableModelo = new JTableModelo(jPanel11, jScrollPane6, meuModelo);
+            jTableModelo.inicializar();
+            jFrameModeloParcial.setTitle(meuModelo.getInstancesComparable().relationName() + " - " + bundle.getString("modeloInicial"));
+            jFrameModeloParcial.pack();
+            jFrameModeloParcial.setVisible(true);
+        });
         b.setIcon(new ImageIcon(getClass().getResource("imaxes/instanciasOrixinais.jpg")));
         horizontalBox.add(b);
         for (int i = 0; i < n; i++) {
@@ -733,6 +741,21 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 l.setIcon(new ImageIcon(getClass().getResource("imaxes/frechaFiltros.png")));
                 p.add(l);
                 b = new JButton();
+                final int a = i;
+                b.addActionListener((ActionEvent e) -> {
+                    ArrayList<AbstractFilter> filtrosParciais = new ArrayList<>();
+                    for (int j = 0; j < a; j++) {
+                        filtrosParciais.add(meuModelo.getFiltro(j));
+                    }
+                    Modelo modeloParcial = new Modelo(meuModelo);
+                    modeloParcial.setFiltros(filtrosParciais);
+                    modeloParcial.setInstancesComparable(modeloParcial.getFilteredInstancesComparable());
+                    jTableModelo = new JTableModelo(jPanel11, jScrollPane6, modeloParcial);
+                    jTableModelo.inicializar();
+                    jFrameModeloParcial.setTitle(meuModelo.getInstancesComparable().relationName() + " - " + bundle.getString("modeloParcial") + " (" + a + "/" + n + ")");
+                    jFrameModeloParcial.pack();
+                    jFrameModeloParcial.setVisible(true);
+                });
                 b.setPreferredSize(new Dimension(30, 20));
                 b.setIcon(imageToIcon(new ImageIcon(getClass().getResource("imaxes/instanciasFiltradas.jpg")).getImage().getScaledInstance(jLabel4.getPreferredSize().width, jLabel4.getPreferredSize().height, Image.SCALE_SMOOTH)));
                 p.add(b);
@@ -758,6 +781,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 horizontalBox.add(l);
                 horizontalBox.add(Box.createHorizontalStrut(gap));
                 b = new JButton();
+                b.addActionListener((ActionEvent e) -> {
+                    Modelo modeloParcial = new Modelo(meuModelo);
+                    modeloParcial.setInstancesComparable(modeloParcial.getFilteredInstancesComparable());
+                    jTableModelo = new JTableModelo(jPanel11, jScrollPane6, modeloParcial);
+                    jTableModelo.inicializar();
+                    jFrameModeloParcial.setTitle(meuModelo.getInstancesComparable().relationName() + " - " + bundle.getString("modeloFinal"));
+                    jFrameModeloParcial.pack();
+                    jFrameModeloParcial.setVisible(true);
+                });
                 b.setIcon(new ImageIcon(getClass().getResource("imaxes/instanciasFiltradas.jpg")));
                 horizontalBox.add(b);
             }
@@ -945,6 +977,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jMenuItem6 = new javax.swing.JMenuItem();
 
         jDialog1.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jDialog1.setLocationByPlatform(true);
         jDialog1.setModal(true);
         jDialog1.setName("jDialog1"); // NOI18N
 
@@ -1037,6 +1070,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jDialog2.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jDialog2.setTitle(bundle.getString("Vista.jMenuItem16.text")); // NOI18N
+        jDialog2.setLocationByPlatform(true);
         jDialog2.setMinimumSize(new java.awt.Dimension(500, 500));
         jDialog2.setModal(true);
         jDialog2.setName("jDialog2"); // NOI18N
@@ -1147,6 +1181,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jDialog3.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jDialog3.setTitle(bundle.getString("Vista.jMenuItem17.text")); // NOI18N
+        jDialog3.setLocationByPlatform(true);
         jDialog3.setModal(true);
         jDialog3.setName("jDialog3"); // NOI18N
 
@@ -1197,6 +1232,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPopupMenu1.setName("jPopupMenu1"); // NOI18N
 
         jDialog4.setTitle(bundle.getString("Vista.jMenuItem22.text")); // NOI18N
+        jDialog4.setLocationByPlatform(true);
         jDialog4.setName("jDialog4"); // NOI18N
 
         buttonGroup2.add(jRadioButton2);
@@ -1304,7 +1340,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 .addContainerGap())
         );
 
+        jFrameModeloParcial.setLocationByPlatform(true);
+        jFrameModeloParcial.setMinimumSize(new java.awt.Dimension(500, 350));
         jFrameModeloParcial.setName("jFrameModeloParcial"); // NOI18N
+        jFrameModeloParcial.setPreferredSize(new java.awt.Dimension(500, 350));
 
         jScrollPane6.setName("jScrollPane6"); // NOI18N
 
@@ -1325,7 +1364,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
+                .addComponent(jScrollPane6)
                 .addContainerGap())
             .addGroup(jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
@@ -1337,18 +1376,19 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                .addComponent(jScrollPane6)
                 .addContainerGap())
             .addGroup(jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameModeloParcialLayout.createSequentialGroup()
                     .addGap(36, 36, 36)
-                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                    .addComponent(jScrollPane12)
                     .addContainerGap()))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JDataMotion");
         setIconImage(new ImageIcon(getClass().getResource("imaxes/favicon.png")).getImage());
+        setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(600, 300));
         setName("Form"); // NOI18N
 
@@ -2424,6 +2464,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }
 
     public void reiniciarAplicacion() {
+        jFrameModeloParcial.dispose();
         if (mansp != null) {
             mansp.pecharJFramesChartPanel();
         }
@@ -2759,6 +2800,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         private final JPanel columnaNumerais;
         private final JScrollPane taboa;
+        private final Modelo modelo;
 
         public void finalizarEdicions() {
             TableCellEditor ce = getCellEditor();
@@ -2786,7 +2828,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
 
         private void actualizarTaboaConModelo() {
-            int numFilasTaboa = ((TableModelPanelModelo) getModel()).getRowCount(), numFilasModelo = meuModelo.obterNumInstancias(), numColumnasTaboa = getColumnModel().getColumnCount(), numColumnasModelo = meuModelo.obterNumAtributos();
+            int numFilasTaboa = ((TableModelPanelModelo) getModel()).getRowCount(), numFilasModelo = modelo.obterNumInstancias(), numColumnasTaboa = getColumnModel().getColumnCount(), numColumnasModelo = modelo.obterNumAtributos();
             if (numFilasTaboa > numFilasModelo) {
                 for (int i = numFilasTaboa - 1; i >= numFilasModelo; i--) {
                     ((TableModelPanelModelo) getModel()).removeRow(i);
@@ -2794,7 +2836,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             } else if (numFilasTaboa < numFilasModelo) {
                 for (int i = numFilasModelo - 1; i >= numFilasTaboa; i--) {
                     ArrayList<Object> arrayList = new ArrayList<>();
-                    for (int j = 0; j < meuModelo.obterNumAtributos(); j++) {
+                    for (int j = 0; j < modelo.obterNumAtributos(); j++) {
                         arrayList.add("");
                     }
                     ((TableModelPanelModelo) getModel()).addRow(arrayList);
@@ -2804,8 +2846,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 int indiceModeloEliminar = -1, indiceTaboaEliminar = -1;
                 for (int j = 0; j < getColumnModel().getColumnCount(); j++) {
                     boolean disponible = false;
-                    for (int i = 0; !disponible && i < meuModelo.getInstancesComparable().numAttributes(); i++) {
-                        if (meuModelo.getInstancesComparable().attribute(i).name() == getColumnModel().getColumn(j).getHeaderValue()) {
+                    for (int i = 0; !disponible && i < modelo.getInstancesComparable().numAttributes(); i++) {
+                        if (modelo.getInstancesComparable().attribute(i).name() == getColumnModel().getColumn(j).getHeaderValue()) {
                             disponible = true;
                             break;
                         }
@@ -2825,7 +2867,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 }
             } else if (numColumnasTaboa < numColumnasModelo) {
                 for (int i = numColumnasModelo - 1; i >= numColumnasTaboa; i--) {
-                    ((TableModelPanelModelo) getModel()).getAtributos().add(meuModelo.getInstancesComparable().attribute(i).name());
+                    ((TableModelPanelModelo) getModel()).getAtributos().add(modelo.getInstancesComparable().attribute(i).name());
                     ((TableModelPanelModelo) getModel()).getDatos().stream().forEach((alo) -> {
                         alo.add("");
                     });
@@ -2834,17 +2876,18 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
 
-        public JTableModelo(JPanel columnaNumerais, JScrollPane taboa) {
+        public JTableModelo(JPanel columnaNumerais, JScrollPane taboa, Modelo modelo) {
             super();
             this.columnaNumerais = columnaNumerais;
             this.taboa = taboa;
+            this.modelo = modelo;
         }
 
         public void actualizar() {
             resaltarColumnaSeleccionada();
             actualizarTaboaConModelo();
             columnaNumerais.removeAll();
-            String data[][] = new String[meuModelo.obterNumInstancias()][1];
+            String data[][] = new String[modelo.obterNumInstancias()][1];
             for (int i = 0; i < data.length; i++) {
                 data[i][0] = String.valueOf(i + 1);
             }
@@ -2866,17 +2909,17 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             tablaIndices.setBackground(Color.LIGHT_GRAY);
             for (int j = 0; j < getColumnModel().getColumnCount(); j++) {
                 int columnaModelo = getColumnModel().getColumn(j).getModelIndex();
-                String nomeCabeceira = meuModelo.obterNomeAtributo(columnaModelo);
-                if (meuModelo.getIndiceTemporal() == columnaModelo) {
+                String nomeCabeceira = modelo.obterNomeAtributo(columnaModelo);
+                if (modelo.getIndiceTemporal() == columnaModelo) {
                     nomeCabeceira = "<html><b style='white-space:nowrap;overflow:hidden;'>" + nomeCabeceira + " (" + bundle.getString("IT") + ")</b></html>";
                 }
                 getColumnModel().getColumn(j).setHeaderValue(nomeCabeceira);
                 for (int i = 0; i < getRowCount(); i++) {
-                    ((TableModelPanelModelo) getModel()).setValueNoFiring(meuModelo.obterStringDato(i, columnaModelo, false), i, columnaModelo);
+                    ((TableModelPanelModelo) getModel()).setValueNoFiring(modelo.obterStringDato(i, columnaModelo, false), i, columnaModelo);
                 }
-                if (meuModelo.obterArrayListAtributos().get(columnaModelo).type() == Attribute.NOMINAL) {
+                if (modelo.obterArrayListAtributos().get(columnaModelo).type() == Attribute.NOMINAL) {
                     ArrayList<String> valoresNominais = new ArrayList<>();
-                    Enumeration e = meuModelo.getInstancesComparable().attribute(columnaModelo).enumerateValues();
+                    Enumeration e = modelo.getInstancesComparable().attribute(columnaModelo).enumerateValues();
                     while (e.hasMoreElements()) {
                         String el = (String) e.nextElement();
                         valoresNominais.add(el);
@@ -2938,7 +2981,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         public void inicializar() {
             removeAll();
-            setModel(new TableModelPanelModelo(meuModelo.obterArrayListNomesAtributos(), meuModelo.obterArrayListStringDatos(false)));
+            setModel(new TableModelPanelModelo(modelo.obterArrayListNomesAtributos(), modelo.obterArrayListStringDatos(false)));
             setFillsViewportHeight(true);
             configurarColumnas();
             taboa.setViewportView(this);
@@ -2953,13 +2996,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     columnaTaboaSeleccionada = columnAtPoint(e.getPoint());
                     resaltarColumnaSeleccionada();
                     if (SwingUtilities.isRightMouseButton(e)) {
-                        botonIndiceTemporal.setSelected(meuModelo.getIndiceTemporal() == getColumnaModeloSeleccionada());
+                        botonIndiceTemporal.setSelected(modelo.getIndiceTemporal() == getColumnaModeloSeleccionada());
                         popupConfigurarAtributo.show(e.getComponent(), e.getX(), e.getY());
                         botonOcultarColumna.setSelected(!getTableHeader().isVisible());
                         for (Component c : menuTipo.getMenuComponents()) {
                             ((JRadioButtonMenuItem) c).setSelected(false);
                         }
-                        switch (meuModelo.obterTipoAtributo(getColumnaModeloSeleccionada())) {
+                        switch (modelo.obterTipoAtributo(getColumnaModeloSeleccionada())) {
                             case "numérico":
                                 botonNumerico.setSelected(true);
                                 break;
@@ -3091,7 +3134,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }
 
     public void inicializarPaneis() {
-        jTableModelo = new JTableModelo(jPanel10, jScrollPane3);
+        jTableModelo = new JTableModelo(jPanel10, jScrollPane3, meuModelo);
         jTableModelo.inicializar();
     }
 

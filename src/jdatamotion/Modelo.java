@@ -22,6 +22,7 @@ import jdatamotion.filtros.Parameter;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionModelo;
 import jdatamotion.sesions.Sesionizable;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import weka.core.Attribute;
@@ -119,11 +120,21 @@ public class Modelo extends Observable implements Sesionizable {
     }
 
     public Modelo() {
+        this(null, -1, null, null, -1, new ArrayList<>());
+    }
+
+    Modelo(InstancesComparable instancesComparable, int indiceTemporal, String direccionAoFicheiro, byte[] hashCode, int indiceAtributoNominal, List<AbstractFilter> filtros) {
         super();
-        instancesComparable = null;
-        indiceTemporal = -1;
-        indiceAtributoNominal = -1;
-        filtros = new ArrayList<>();
+        this.instancesComparable = instancesComparable;
+        this.indiceTemporal = indiceTemporal;
+        this.direccionAoFicheiro = direccionAoFicheiro;
+        this.hashCode = hashCode;
+        this.indiceAtributoNominal = indiceAtributoNominal;
+        this.filtros = filtros;
+    }
+
+    Modelo(Modelo modelo) {
+        this(new InstancesComparable(modelo.instancesComparable), modelo.indiceTemporal, modelo.direccionAoFicheiro, ArrayUtils.clone(modelo.hashCode), modelo.indiceAtributoNominal, new ArrayList<>(modelo.filtros));
     }
 
     public InstancesComparable getFilteredInstancesComparable() {
