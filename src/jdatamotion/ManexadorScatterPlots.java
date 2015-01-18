@@ -362,6 +362,7 @@ public final class ManexadorScatterPlots {
         }
 
         @Override
+        @SuppressWarnings("SleepWhileInLoop")
         protected Void doInBackground() {
             try {
                 while (estado == PLAY && getTActual() < getTFinal()) {
