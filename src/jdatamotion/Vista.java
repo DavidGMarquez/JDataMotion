@@ -51,6 +51,7 @@ import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.Box.Filler;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultCellEditor;
@@ -727,7 +728,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         horizontalBox.add(Box.createGlue());
         JButton b = new JButton();
         b.addActionListener((ActionEvent e) -> {
-            JTableModelo jtm = new JTableModelo(jScrollPane12, jScrollPane6, meuModelo, (JPanelActualizable) panelDetallarAtributo, false);
+            JTableModelo jtm = new JTableModelo(jPanel12, jScrollPane13, meuModelo, (JPanelActualizable) panelDetallarAtributo, false, 0, filler4);
             jtm.inicializar();
             jFrameModeloParcial.setTitle(meuModelo.getInstancesComparable().relationName() + " - " + bundle.getString("modeloInicial"));
             jFrameModeloParcial.pack();
@@ -753,7 +754,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     Modelo modeloParcial = new Modelo(meuModelo);
                     modeloParcial.setFiltros(filtrosParciais);
                     modeloParcial.setInstancesComparable(modeloParcial.getFilteredInstancesComparable());
-                    JTableModelo jtm = new JTableModelo(jScrollPane12, jScrollPane6, modeloParcial, (JPanelActualizable) panelDetallarAtributo, false);
+                    JTableModelo jtm = new JTableModelo(jPanel12, jScrollPane13, modeloParcial, (JPanelActualizable) panelDetallarAtributo, false, 0, filler4);
                     jtm.inicializar();
                     jFrameModeloParcial.setTitle(meuModelo.getInstancesComparable().relationName() + " - " + bundle.getString("modeloParcial") + " (" + a + "/" + n + ")");
                     jFrameModeloParcial.pack();
@@ -787,7 +788,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 b.addActionListener((ActionEvent e) -> {
                     Modelo modeloParcial = new Modelo(meuModelo);
                     modeloParcial.setInstancesComparable(modeloParcial.getFilteredInstancesComparable());
-                    JTableModelo jtm = new JTableModelo(jScrollPane12, jScrollPane6, modeloParcial, (JPanelActualizable) panelDetallarAtributo, false);
+                    JTableModelo jtm = new JTableModelo(jPanel12, jScrollPane13, modeloParcial, (JPanelActualizable) panelDetallarAtributo, false, 0, filler4);
                     jtm.inicializar();
                     jFrameModeloParcial.setTitle(meuModelo.getInstancesComparable().relationName() + " - " + bundle.getString("modeloFinal"));
                     jFrameModeloParcial.pack();
@@ -907,10 +908,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jTextField3 = new javax.swing.JTextField();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jFrameModeloParcial = new javax.swing.JFrame();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        jScrollPane12 = new javax.swing.JScrollPane();
-        jPanel11 = new javax.swing.JPanel();
         panelDetallarAtributo = new JPanelActualizable();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        jPanel12 = new javax.swing.JPanel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 25), new java.awt.Dimension(0, 25), new java.awt.Dimension(0, 25));
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 18));
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel3 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
@@ -932,6 +935,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
+        jScrollPane5.getVerticalScrollBar().setModel(jScrollPane3.getVerticalScrollBar().getModel());
         jPanel10 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 25), new java.awt.Dimension(0, 25), new java.awt.Dimension(0, 25));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 18));
@@ -1078,6 +1082,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog2.setMinimumSize(new java.awt.Dimension(500, 500));
         jDialog2.setModal(true);
         jDialog2.setName("jDialog2"); // NOI18N
+        jDialog2.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jButton1.setText(bundle.getString("Aceptar")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
@@ -1346,55 +1351,59 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jFrameModeloParcial.setLocationByPlatform(true);
         jFrameModeloParcial.setMinimumSize(new java.awt.Dimension(600, 350));
         jFrameModeloParcial.setName("jFrameModeloParcial"); // NOI18N
-        jFrameModeloParcial.setPreferredSize(new java.awt.Dimension(600, 350));
-
-        jScrollPane6.setName("jScrollPane6"); // NOI18N
-
-        jScrollPane12.getVerticalScrollBar().setModel(jScrollPane6.getVerticalScrollBar().getModel());
-        jScrollPane12.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane12.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        jScrollPane12.setHorizontalScrollBar(null);
-        jScrollPane12.setName("jScrollPane12"); // NOI18N
-
-        jPanel11.setMinimumSize(new java.awt.Dimension(250, 0));
-        jPanel11.setName("jPanel11"); // NOI18N
-        jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane12.setViewportView(jPanel11);
 
         panelDetallarAtributo.setName("panelDetallarAtributo"); // NOI18N
         panelDetallarAtributo.setLayout(new javax.swing.BoxLayout(panelDetallarAtributo, javax.swing.BoxLayout.Y_AXIS));
+
+        jScrollPane13.setName("jScrollPane13"); // NOI18N
+
+        jScrollPane14.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane14.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane14.setHorizontalScrollBar(null);
+        jScrollPane14.setName("jScrollPane14"); // NOI18N
+        jScrollPane14.getVerticalScrollBar().setModel(jScrollPane13.getVerticalScrollBar().getModel());
+
+        jPanel12.setMinimumSize(new java.awt.Dimension(250, 0));
+        jPanel12.setName("jPanel12"); // NOI18N
+        jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane14.setViewportView(jPanel12);
+
+        filler3.setName("filler3"); // NOI18N
+
+        filler4.setName("filler4"); // NOI18N
 
         javax.swing.GroupLayout jFrameModeloParcialLayout = new javax.swing.GroupLayout(jFrameModeloParcial.getContentPane());
         jFrameModeloParcial.getContentPane().setLayout(jFrameModeloParcialLayout);
         jFrameModeloParcialLayout.setHorizontalGroup(
             jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelDetallarAtributo, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(352, 352, 352)))
         );
         jFrameModeloParcialLayout.setVerticalGroup(
             jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameModeloParcialLayout.createSequentialGroup()
+            .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane6)
+                    .addComponent(jScrollPane13)
                     .addGroup(jFrameModeloParcialLayout.createSequentialGroup()
                         .addComponent(panelDetallarAtributo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 28, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameModeloParcialLayout.createSequentialGroup()
+                        .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(jFrameModeloParcialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameModeloParcialLayout.createSequentialGroup()
-                    .addGap(36, 36, 36)
-                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
-                    .addContainerGap()))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1568,7 +1577,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jLabel2.setName("jLabel2"); // NOI18N
 
-        jScrollPane5.getVerticalScrollBar().setModel(jScrollPane3.getVerticalScrollBar().getModel());
         jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane5.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         jScrollPane5.setHorizontalScrollBar(null);
@@ -2810,14 +2818,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     class JTableModelo extends JTable {
 
-        final JScrollPane columnaNumerais;
+        final JPanel columnaNumerais;
         final boolean editable;
         final JPanelActualizable panelDetallarAtributo;
         final JScrollPane taboa;
         final Modelo modelo;
         int columnaTaboaSeleccionada;
+        Filler filler;
 
-        public JScrollPane getColumnaNumerais() {
+        public JPanel getColumnaNumerais() {
             return columnaNumerais;
         }
 
@@ -2907,13 +2916,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
 
-        public JTableModelo(JScrollPane columnaNumerais, JScrollPane taboa, Modelo modelo, JPanelActualizable panelDetallarAtributo, boolean editable) {
+        public JTableModelo(JPanel columnaNumerais, JScrollPane taboa, Modelo modelo, JPanelActualizable panelDetallarAtributo, boolean editable, int columnaTaboaSeleccionada, Filler filler) {
             super();
             this.columnaNumerais = columnaNumerais;
+            this.filler = filler;
             this.taboa = taboa;
             this.modelo = modelo;
             this.panelDetallarAtributo = panelDetallarAtributo;
             this.editable = editable;
+            this.columnaTaboaSeleccionada = columnaTaboaSeleccionada;
         }
 
         public void actualizar() {
@@ -3076,6 +3087,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     response = ((JViewport) getParent()).getWidth() > getPreferredSize().width;
                 }
             }
+            filler.setPreferredSize(response ? filler.getMinimumSize() : filler.getMaximumSize());
             return response;
         }
 
@@ -3116,13 +3128,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     actualizar();
                 }
             });
+            resaltarColumnaSeleccionada();
+            actualizar();
         }
     }
 
     class JTableModeloMenu extends JTableModelo {
 
-        public JTableModeloMenu(JScrollPane columnaNumerais, JScrollPane taboa, Modelo modelo, JPanelActualizable panelDetallarAtributo) {
-            super(columnaNumerais, taboa, modelo, panelDetallarAtributo, true);
+        public JTableModeloMenu(JPanel columnaNumerais, JScrollPane taboa, Modelo modelo, JPanelActualizable panelDetallarAtributo, int columnaTaboaSeleccionada, Filler filler) {
+            super(columnaNumerais, taboa, modelo, panelDetallarAtributo, true, columnaTaboaSeleccionada, filler);
         }
 
         @Override
@@ -3130,13 +3144,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             super.resaltarColumnaSeleccionada();
             activarBorrarAtributo(columnaTaboaSeleccionada > -1);
             activarRenomearAtributo(columnaTaboaSeleccionada > -1);
-        }
-
-        @Override
-        public boolean getScrollableTracksViewportWidth() {
-            boolean response = super.getScrollableTracksViewportWidth();
-            filler2.setPreferredSize(response ? filler2.getMinimumSize() : filler2.getMaximumSize());
-            return response;
         }
 
         @Override
@@ -3195,7 +3202,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }
 
     public void inicializarPaneis() {
-        jTableModelo = new JTableModeloMenu(jScrollPane5, jScrollPane3, meuModelo, (JPanelActualizable) jPanel15);
+        jTableModelo = new JTableModeloMenu(jPanel10, jScrollPane3, meuModelo, (JPanelActualizable) jPanel15, 0, filler2);
         jTableModelo.inicializar();
     }
 
@@ -3320,6 +3327,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.ButtonGroup buttonGroup2;
     javax.swing.Box.Filler filler1;
     javax.swing.Box.Filler filler2;
+    javax.swing.Box.Filler filler3;
+    javax.swing.Box.Filler filler4;
     javax.swing.JButton jButton1;
     javax.swing.JButton jButton10;
     javax.swing.JButton jButton11;
@@ -3382,7 +3391,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JMenuItem jMenuItem9;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel10;
-    javax.swing.JPanel jPanel11;
+    javax.swing.JPanel jPanel12;
     javax.swing.JPanel jPanel15;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
@@ -3399,12 +3408,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane10;
     javax.swing.JScrollPane jScrollPane11;
-    javax.swing.JScrollPane jScrollPane12;
+    javax.swing.JScrollPane jScrollPane13;
+    javax.swing.JScrollPane jScrollPane14;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JScrollPane jScrollPane3;
     javax.swing.JScrollPane jScrollPane4;
     javax.swing.JScrollPane jScrollPane5;
-    javax.swing.JScrollPane jScrollPane6;
     javax.swing.JScrollPane jScrollPane7;
     javax.swing.JScrollPane jScrollPane8;
     javax.swing.JScrollPane jScrollPane9;
