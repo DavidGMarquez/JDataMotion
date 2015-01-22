@@ -35,10 +35,28 @@ public abstract class AbstractFilter implements Serializable {
 
     private Integer indiceAtributoFiltrado;
     private HashMap<String, Parameter> parametersMap;
+    private boolean seleccionado;
+
+    public HashMap<String, Parameter> getParametersMap() {
+        return parametersMap;
+    }
+
+    public void setParametersMap(HashMap<String, Parameter> parametersMap) {
+        this.parametersMap = parametersMap;
+    }
+
+    public boolean isSeleccionado() {
+        return seleccionado;
+    }
+
+    public void setSeleccionado(boolean seleccionado) {
+        this.seleccionado = seleccionado;
+    }
 
     public AbstractFilter(Integer indiceAtributoFiltrado, Parameter[] parameters) {
         parametersMap = new HashMap<>();
         this.indiceAtributoFiltrado = indiceAtributoFiltrado;
+        this.seleccionado = false;
         setParameters(parameters);
     }
 

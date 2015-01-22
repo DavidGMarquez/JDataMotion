@@ -25,7 +25,6 @@ package jdatamotion.comandos;
 
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import jdatamotion.comandos.Comando;
 
 /**
  *

@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -22,7 +23,9 @@ import jdatamotion.comandos.ComandoEngadirAtributo;
 import jdatamotion.comandos.ComandoEngadirDatos;
 import jdatamotion.comandos.ComandoEngadirFiltro;
 import jdatamotion.comandos.ComandoExportarFicheiro;
+import jdatamotion.comandos.ComandoExportarFiltros;
 import jdatamotion.comandos.ComandoImportarFicheiro;
+import jdatamotion.comandos.ComandoImportarFiltros;
 import jdatamotion.comandos.ComandoIntercambiarFiltros;
 import jdatamotion.comandos.ComandoMudarDato;
 import jdatamotion.comandos.ComandoMudarIndiceTemporal;
@@ -71,6 +74,8 @@ public class Controlador implements Sesionizable {
     public static final int ELIMINAR_FILTRO = 19;
     public static final int CONFIGURAR_FILTRO = 20;
     public static final int INTERCAMBIAR_FILTROS = 21;
+    public static final int IMPORTAR_FILTROS = 22;
+    public static final int EXPORTAR_FILTROS = 23;
 
     public static final boolean debug = true;
     private transient Modelo meuModelo;
@@ -156,6 +161,10 @@ public class Controlador implements Sesionizable {
      * Parameter[] configuracion}</td></tr>
      * <tr><td>Intercambiar filtros</td><td>Controlador.INTERCAMBIAR_FILTROS
      * </td><td>{int indiceFiltroA, int indiceFiltroB}</td></tr>
+     * <tr><td>Importar filtros</td><td>Controlador.IMPORTAR_FILTROS
+     * </td><td>String url</td></tr>
+     * <tr><td>Exportar filtros</td><td>Controlador.EXPORTAR_FILTROS
+     * </td><td>{String url, Integer[] indicesFiltros}</td></tr>
      * </table>
      *
      * @param opcion o tipo de evento
@@ -222,6 +231,15 @@ public class Controlador implements Sesionizable {
                 break;
             case INTERCAMBIAR_FILTROS:
                 intercambiarFiltros((int) ((Object[]) argumento)[0], (int) ((Object[]) argumento)[1]);
+                break;
+            case IMPORTAR_FILTROS:
+                importarFiltros((String) argumento);
+                break;
+            case EXPORTAR_FILTROS:
+                System.out.println(argumento);
+                System.out.println(((Object[]) argumento)[0]);
+                System.out.println(((Object[]) argumento)[1]);
+                exportarFiltros((String) ((Object[]) argumento)[0], (Integer[]) ((Object[]) argumento)[1]);
                 break;
         }
         meuModelo.update();
@@ -559,6 +577,28 @@ public class Controlador implements Sesionizable {
     private void intercambiarFiltros(int indiceFiltroA, int indiceFiltroB) {
         try {
             xestorComandos.ExecutarComando(new ComandoIntercambiarFiltros(meuModelo, indiceFiltroA, indiceFiltroB));
+        } catch (Exception ex) {
+            minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void importarFiltros(String url) {
+        try {
+            xestorComandos.ExecutarComando(new ComandoImportarFiltros(meuModelo, url));
+        } catch (Exception ex) {
+            minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void exportarFiltros(String url, Integer[] indicesFiltros) {
+        try {
+            xestorComandos.ExecutarComando(new ComandoExportarFiltros(meuModelo, url, indicesFiltros));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {

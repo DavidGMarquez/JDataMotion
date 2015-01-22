@@ -41,6 +41,14 @@ public class PanelFiltro extends javax.swing.JPanel {
         jLabel9.setText("<html><p style='text-align:center;'>" + nomeFiltro + "</p></html>");
     }
 
+    public boolean isFiltroSeleccionado() {
+        return jCheckBox1.isSelected();
+    }
+
+    public void setFiltroSeleccionado(boolean seleccionado) {
+        jCheckBox1.setSelected(seleccionado);
+    }
+
     public void addParameter(Parameter p) {
         stringParameters += "<p style='line-height:0.5;'>- " + p.getName() + ": " + (p.getValue() != null ? p.getValue().toString() : "?") + "</p>";
         jLabel10.setText("<html>" + stringParameters + "</html>");
@@ -48,6 +56,10 @@ public class PanelFiltro extends javax.swing.JPanel {
 
     public void addAtributoFiltrado(Attribute atributo) {
         addParameter(new StringParameter(Vista.bundle.getString("atributo"), atributo != null ? atributo.name() : "?"));
+    }
+
+    public void setIcon(String url) {
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource(url)));
     }
 
     public void removeParameters() {
@@ -194,12 +206,6 @@ public class PanelFiltro extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         add(jButton2, gridBagConstraints);
-
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -226,17 +232,13 @@ public class PanelFiltro extends javax.swing.JPanel {
         minaVista.getControlador().manexarEvento(Controlador.INTERCAMBIAR_FILTROS, new Object[]{indiceFiltro, indiceFiltro - 1});
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
+    javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

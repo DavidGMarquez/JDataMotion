@@ -147,10 +147,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     public static final int ORDE_INDICE_TEMPORAL_NUMERICO_PONDERADO = 2;
     public static final int ORDE_INDICE_TEMPORAL_HORA = 3;
 
-    private static final int EXPLORADOR_ABRIR_FICHEIRO = 0;
+    private static final int EXPLORADOR_IMPORTAR_FICHEIRO = 0;
     private static final int EXPLORADOR_ABRIR_SESION = 1;
     private static final int EXPLORADOR_GARDAR_SESION = 2;
-    private static final int EXPLORADOR_GARDAR_FICHEIRO = 3;
+    private static final int EXPLORADOR_EXPORTAR_FICHEIRO = 3;
+    private static final int EXPLORADOR_IMPORTAR_FILTROS = 4;
+    private static final int EXPLORADOR_EXPORTAR_FILTROS = 5;
 
     private transient Modelo meuModelo;
     private int ordeVisualizacion;
@@ -621,7 +623,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                             }
                             jPopupMenu1.show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
                             mansp.procesarSeleccion(instances, indicesInstancesPuntos);
-
                         }
                     }
                 });
@@ -772,9 +773,31 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             horizontalBox.add(Box.createHorizontalStrut(gap));
             AbstractFilter f = meuModelo.getFiltro(i);
             PanelFiltro pf = new PanelFiltro(this, i);
+            if (!f.estaTodoConfigurado()) {
+                pf.setIcon("/jdatamotion/imaxes/filtroAviso.png");
+                pf.setToolTipText(bundle.getString("filtroAviso"));
+            }
             pf.setNomeFiltro(f.toString());
+            pf.setFiltroSeleccionado(f.isSeleccionado());
+            pf.jCheckBox1.addActionListener((ActionEvent e) -> {
+                f.setSeleccionado(pf.jCheckBox1.isSelected());
+                jMenuItem24.setEnabled(false);
+                for (int i1 = 0; i1 < n; i1++) {
+                    if (meuModelo.getFiltro(i1).isSeleccionado()) {
+                        jMenuItem24.setEnabled(true);
+                        break;
+                    }
+                }
+            });
             for (Parameter p : f.getParameters()) {
                 pf.addParameter(p);
+            }
+            jMenuItem24.setEnabled(false);
+            for (int i1 = 0; i1 < n; i1++) {
+                if (meuModelo.getFiltro(i1).isSeleccionado()) {
+                    jMenuItem24.setEnabled(true);
+                    break;
+                }
             }
             pf.addAtributoFiltrado(f.getIndiceAtributoFiltrado() != null ? meuModelo.getInstancesComparable().attribute(f.getIndiceAtributoFiltrado()) : null);
             horizontalBox.add(pf);
@@ -847,6 +870,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jMenuItem18.setEnabled(true);
             jMenuItem21.setEnabled(true);
             jMenuItem22.setEnabled(true);
+            jMenuItem23.setEnabled(true);
             jMenu4.setEnabled(true);
             jTabbedPane1.setEnabled(true);
             jTabbedPane1.setSelectedIndex(0);
@@ -972,6 +996,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jMenuItem15 = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         jMenuItem21 = new javax.swing.JMenuItem();
+        jMenu7 = new javax.swing.JMenu();
+        jMenuItem23 = new javax.swing.JMenuItem();
+        jMenuItem24 = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem16 = new javax.swing.JMenuItem();
         jMenuItem17 = new javax.swing.JMenuItem();
@@ -1956,6 +1983,31 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jMenuBar1.add(jMenu4);
 
+        jMenu7.setText(bundle.getString("Vista.jMenu7.text")); // NOI18N
+        jMenu7.setName("jMenu7"); // NOI18N
+
+        jMenuItem23.setText(bundle.getString("Vista.jMenuItem23.text")); // NOI18N
+        jMenuItem23.setEnabled(false);
+        jMenuItem23.setName("jMenuItem23"); // NOI18N
+        jMenuItem23.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem23ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem23);
+
+        jMenuItem24.setText(bundle.getString("Vista.jMenuItem24.text")); // NOI18N
+        jMenuItem24.setEnabled(false);
+        jMenuItem24.setName("jMenuItem24"); // NOI18N
+        jMenuItem24.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem24ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem24);
+
+        jMenuBar1.add(jMenu7);
+
         jMenu8.setText(bundle.getString("Vista.jMenu8.text")); // NOI18N
         jMenu8.setName("jMenu8"); // NOI18N
 
@@ -2096,11 +2148,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        abrirExploradorFicheiros(EXPLORADOR_ABRIR_FICHEIRO);
+        abrirExploradorFicheiros(EXPLORADOR_IMPORTAR_FICHEIRO);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        abrirExploradorFicheiros(EXPLORADOR_GARDAR_FICHEIRO);
+        abrirExploradorFicheiros(EXPLORADOR_EXPORTAR_FICHEIRO);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -2362,6 +2414,14 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         meuControlador.manexarEvento(Controlador.ENGADIR_FILTRO, new Object[]{meuModelo.contarFiltros(), jList1.getSelectedValuesList().get(0)});
     }//GEN-LAST:event_jButton14ActionPerformed
 
+    private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
+        abrirExploradorFicheiros(EXPLORADOR_IMPORTAR_FILTROS);
+    }//GEN-LAST:event_jMenuItem23ActionPerformed
+
+    private void jMenuItem24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem24ActionPerformed
+        abrirExploradorFicheiros(EXPLORADOR_EXPORTAR_FILTROS);
+    }//GEN-LAST:event_jMenuItem24ActionPerformed
+
     public JSlider getjSlider1() {
         return jSlider1;
     }
@@ -2589,14 +2649,20 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             case EXPLORADOR_ABRIR_SESION:
                 configurarJFileChooserAbrir(Controlador.ABRIR_SESION);
                 break;
-            case EXPLORADOR_ABRIR_FICHEIRO:
+            case EXPLORADOR_IMPORTAR_FICHEIRO:
                 configurarJFileChooserAbrir(Controlador.IMPORTAR_FICHEIRO);
                 break;
-            case EXPLORADOR_GARDAR_FICHEIRO:
+            case EXPLORADOR_EXPORTAR_FICHEIRO:
                 configurarJFileChooserGardar(Controlador.EXPORTAR_FICHEIRO);
                 break;
             case EXPLORADOR_GARDAR_SESION:
                 configurarJFileChooserGardar(Controlador.GARDAR_SESION);
+                break;
+            case EXPLORADOR_EXPORTAR_FILTROS:
+                configurarJFileChooserGardar(Controlador.EXPORTAR_FILTROS);
+                break;
+            case EXPLORADOR_IMPORTAR_FILTROS:
+                configurarJFileChooserAbrir(Controlador.IMPORTAR_FILTROS);
                 break;
         }
         jDialog1.setVisible(true);
@@ -2644,7 +2710,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jFileChooser1.setDialogType(JFileChooser.OPEN_DIALOG);
         switch (eventoParaControlador) {
             case Controlador.ABRIR_SESION:
-                ext.add(new FiltroExtension(bundle.getString("formatoSesion") + " (*.jdm)", new String[]{"jdm"}));
+                ext.add(new FiltroExtension(bundle.getString("formatoSesion") + " (*.jdms)", new String[]{"jdms"}));
                 ext.add(new FiltroExtension(bundle.getString("todosOsFicheiros") + " (*.*)", null));
                 definirExtensions(ext);
                 jDialog1.setTitle(bundle.getString("Vista.jMenuItem3.text"));
@@ -2655,6 +2721,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 ext.add(new FiltroExtension(bundle.getString("todosOsFicheiros") + " (*.*)", null));
                 definirExtensions(ext);
                 jDialog1.setTitle(bundle.getString("Vista.jMenuItem1.text"));
+                jFileChooser1.setApproveButtonText(bundle.getString("importar"));
+                break;
+            case Controlador.IMPORTAR_FILTROS:
+                ext.add(new FiltroExtension(bundle.getString("formatoFiltros") + " (*.jdmf)", new String[]{"jdmf"}));
+                ext.add(new FiltroExtension(bundle.getString("todosOsFicheiros") + " (*.*)", null));
+                definirExtensions(ext);
+                jDialog1.setTitle(bundle.getString("Vista.jMenuItem23.text"));
                 jFileChooser1.setApproveButtonText(bundle.getString("importar"));
                 break;
         }
@@ -2699,10 +2772,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jFileChooser1.setDialogType(JFileChooser.SAVE_DIALOG);
         switch (eventoParaControlador) {
             case Controlador.GARDAR_SESION:
-                ext.add(new FiltroExtension(bundle.getString("formatoSesion") + " (*.jdm)", new String[]{"jdm"}));
+                ext.add(new FiltroExtension(bundle.getString("formatoSesion") + " (*.jdms)", new String[]{"jdms"}));
                 definirExtensions(ext);
                 jDialog1.setTitle(bundle.getString("Vista.jMenuItem4.text"));
-                jFileChooser1.setSelectedFile(new File(bundle.getString("SenTitulo") + ".jdm"));
+                jFileChooser1.setSelectedFile(new File(bundle.getString("SenTitulo") + ".jdms"));
                 jFileChooser1.addActionListener((ActionEvent e) -> {
                     boolean pecharEGardar = true;
                     File f = jFileChooser1.getSelectedFile();
@@ -2767,6 +2840,45 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         case "CancelSelection":
                             jDialog1.dispose();
                             break;
+                    }
+                });
+                jFileChooser1.setApproveButtonText(bundle.getString("exportar"));
+                break;
+            case Controlador.EXPORTAR_FILTROS:
+                ext.add(new FiltroExtension(bundle.getString("formatoFiltros") + " (*.jdmf)", new String[]{"jdmf"}));
+                definirExtensions(ext);
+                jDialog1.setTitle(bundle.getString("Vista.jMenuItem24.text"));
+                jFileChooser1.setSelectedFile(new File(bundle.getString("SenTitulo") + ".jdmf"));
+                jFileChooser1.addActionListener((ActionEvent e) -> {
+                    boolean pecharEGardar = true;
+                    File f = jFileChooser1.getSelectedFile();
+                    if (f.exists() && jFileChooser1.getDialogType() == javax.swing.JFileChooser.SAVE_DIALOG && "ApproveSelection".equals(e.getActionCommand())) {
+                        int result = JOptionPane.showConfirmDialog(jDialog1, bundle.getString("confirmacionSobrescritura"), bundle.getString("errorFicheiroXaExistenteTitulo"), JOptionPane.YES_NO_CANCEL_OPTION);
+                        switch (result) {
+                            case JOptionPane.YES_OPTION:
+                                break;
+                            case JOptionPane.CANCEL_OPTION:
+                            case JOptionPane.NO_OPTION:
+                            case JOptionPane.CLOSED_OPTION:
+                                pecharEGardar = false;
+                                break;
+                        }
+                    }
+                    if (pecharEGardar) {
+                        jDialog1.dispose();
+                        List<Integer> indicesFiltros = new ArrayList<>();
+                        for (int i = 0; i < meuModelo.getFiltros().size(); i++) {
+                            if (meuModelo.getFiltros().get(i).isSeleccionado()) {
+                                indicesFiltros.add(i);
+                            }
+                        }
+                        if (JFileChooser.APPROVE_SELECTION.equals(e.getActionCommand())) {
+                            meuControlador.manexarEvento(
+                                    Controlador.EXPORTAR_FILTROS,
+                                    new Object[]{
+                                        jFileChooser1.getSelectedFile().getAbsolutePath(),
+                                        indicesFiltros.toArray(new Integer[indicesFiltros.size()])});
+                        }
                     }
                 });
                 jFileChooser1.setApproveButtonText(bundle.getString("exportar"));
@@ -3365,6 +3477,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JMenu jMenu4;
     javax.swing.JMenu jMenu5;
     javax.swing.JMenu jMenu6;
+    javax.swing.JMenu jMenu7;
     javax.swing.JMenu jMenu8;
     javax.swing.JMenuBar jMenuBar1;
     javax.swing.JMenuItem jMenuItem1;
@@ -3382,6 +3495,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JMenuItem jMenuItem20;
     javax.swing.JMenuItem jMenuItem21;
     javax.swing.JMenuItem jMenuItem22;
+    javax.swing.JMenuItem jMenuItem23;
+    javax.swing.JMenuItem jMenuItem24;
     javax.swing.JMenuItem jMenuItem3;
     javax.swing.JMenuItem jMenuItem4;
     javax.swing.JMenuItem jMenuItem5;

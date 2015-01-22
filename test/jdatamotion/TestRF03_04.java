@@ -44,7 +44,7 @@ public class TestRF03_04 extends TestCase {
         vista.inicializar(modelo, false);
         try {
             String pathEntrada = new URI(getClass().getResource("example01.arff").toString()).getPath();
-            String pathSaida = new URI(getClass().getResource(".").toString()).getPath() + "temp01.jdm";
+            String pathSaida = new URI(getClass().getResource(".").toString()).getPath() + "temp01.jdms";
             vista.getControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathEntrada);
             vista.getControlador().manexarEvento(Controlador.MUDAR_DATO, new Object[]{5, 5, 45.0});
             vista.getControlador().manexarEvento(Controlador.ELIMINAR_DATOS, new Integer[]{2, 4, 12});
