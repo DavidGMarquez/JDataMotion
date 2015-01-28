@@ -117,6 +117,10 @@ import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.event.ChartChangeEvent;
+import org.jfree.chart.event.ChartChangeListener;
+import org.jfree.chart.event.PlotChangeEvent;
+import org.jfree.chart.event.PlotChangeListener;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -167,6 +171,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private int lonxitudeEstela;
     public static ResourceBundle bundle;
     private final String ficheiroConfiguracion = "configuracion.properties";
+    private boolean notifyGUIChanges;
 
     public static ResourceBundle getBundle() {
         return bundle;
@@ -392,6 +397,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         filasVacias++;
                     }
                 }
+                sincronizarGUIScatterplots();
                 setCursor(Cursor.getDefaultCursor());
                 jLabel3.setText("");
                 activarPanelReproduccion(true);
@@ -402,6 +408,67 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         jLabel4.setText("/" + String.valueOf(instanciasFiltradas.numInstances()));
         jTextField1.setText(String.valueOf(instanciasFiltradas.numInstances()));
+    }
+
+    private void sincronizarGUIScatterplots() {
+        final int numScatterplots = mansp.getNumScatterplots();
+        notifyGUIChanges = true;
+
+        PlotChangeListener plotChangeListener = (PlotChangeEvent event) -> {
+            if (notifyGUIChanges) {
+                notifyGUIChanges = false;
+                XYPlot ePlot = (XYPlot) event.getPlot();
+                for (int i = 0; i < numScatterplots; i++) {
+                    for (int j = 0; j < numScatterplots; j++) {
+                        for (XYPlot p : new XYPlot[]{(XYPlot) mansp.getScatterPlot(i, j).getChartPanelCela().getChart().getPlot(), (XYPlot) mansp.getScatterPlot(i, j).getJFrameAmpliado().getChartPanel().getChart().getPlot()}) {
+                            p.setBackgroundImage(ePlot.getBackgroundImage());
+                            p.setBackgroundImageAlignment(ePlot.getBackgroundImageAlignment());
+                            p.setBackgroundImageAlpha(ePlot.getBackgroundImageAlpha());
+                            p.setBackgroundPaint(ePlot.getBackgroundPaint());
+                            p.setForegroundAlpha(ePlot.getForegroundAlpha());
+                            p.setBackgroundAlpha(ePlot.getBackgroundAlpha());
+                        }
+                    }
+                }
+                notifyGUIChanges = true;
+            }
+        };
+
+        ChartChangeListener chartChangeListener = (ChartChangeEvent event) -> {
+            if (notifyGUIChanges) {
+                notifyGUIChanges = false;
+                JFreeChart eChart = event.getChart();
+                for (int i = 0; i < numScatterplots; i++) {
+                    for (int j = 0; j < numScatterplots; j++) {
+                        for (JFreeChart c : new JFreeChart[]{mansp.getScatterPlot(i, j).getChartPanelCela().getChart(), mansp.getScatterPlot(i, j).getJFrameAmpliado().getChartPanel().getChart()}) {
+                            if (eChart != null) {
+                                c.setRenderingHints(eChart.getRenderingHints());
+                                c.setBorderVisible(eChart.isBorderVisible());
+                                c.setBorderStroke(eChart.getBorderStroke());
+                                c.setBorderPaint(eChart.getBorderPaint());
+                                c.setAntiAlias(eChart.getAntiAlias());
+                                c.setBackgroundPaint(eChart.getBackgroundPaint());
+                                c.setBackgroundImage(eChart.getBackgroundImage());
+                                c.setBackgroundImageAlignment(eChart.getBackgroundImageAlignment());
+                                c.setBackgroundImageAlpha(eChart.getBackgroundImageAlpha());
+                                c.setPadding(eChart.getPadding());
+                            }
+                        }
+                    }
+                }
+                notifyGUIChanges = true;
+            }
+        };
+
+        for (int i = 0; i < numScatterplots; i++) {
+            for (int j = 0; j < numScatterplots; j++) {
+                mansp.getScatterPlot(i, j).getChartPanelCela().getChart().addChangeListener(chartChangeListener);
+                mansp.getScatterPlot(i, j).getJFrameAmpliado().getChartPanel().getChart().addChangeListener(chartChangeListener);
+
+                mansp.getScatterPlot(i, j).getChartPanelCela().getChart().getPlot().addChangeListener(plotChangeListener);
+                mansp.getScatterPlot(i, j).getJFrameAmpliado().getChartPanel().getChart().getPlot().addChangeListener(plotChangeListener);
+            }
+        }
     }
 
     public void engadirScatterPlot(ScatterPlot sp, int j, int i) {
@@ -415,7 +482,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             clickmeButton.setAction(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JFrameChartPanel jfa = sp.getjFrameAmpliado();
+                    JFrameChartPanel jfa = sp.getJFrameAmpliado();
                     if (!jfa.isVisible()) {
                         jfa.setLocation(getX() + 20 * (mansp.contarJFramesVisibles() + 1), getY() + 20 * (mansp.contarJFramesVisibles() + 1));
                         jfa.setVisible(true);
@@ -555,11 +622,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private void configurarScatterPlot(ScatterPlot sp, InstancesComparable instances) {
         configurarChartPanel(sp.getChartPanelCela(), instances, sp.getIndiceAtributoX(), sp.getIndiceAtributoY());
-        configurarChartPanel(sp.getjFrameAmpliado().getChartPanel(), instances, sp.getIndiceAtributoX(), sp.getIndiceAtributoY());
+        configurarChartPanel(sp.getJFrameAmpliado().getChartPanel(), instances, sp.getIndiceAtributoX(), sp.getIndiceAtributoY());
         ChartPanel chartPanelCela = sp.getChartPanelCela();
         chartPanelCela.setLayout(new GridBagLayout());
         JButton clickmeButton = new JButton();
-        final JFrameChartPanel jfa = sp.getjFrameAmpliado();
+        final JFrameChartPanel jfa = sp.getJFrameAmpliado();
         clickmeButton.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2552,9 +2619,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         JDataMotion.main(null);
     }
 
-    class VerticalLabelUI extends BasicLabelUI {
+    static class VerticalLabelUI extends BasicLabelUI {
 
-        {
+        static {
             labelUI = new VerticalLabelUI(false);
         }
 
