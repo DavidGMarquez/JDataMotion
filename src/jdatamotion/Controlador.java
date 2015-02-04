@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -77,7 +76,7 @@ public class Controlador implements Sesionizable {
     public static final int IMPORTAR_FILTROS = 22;
     public static final int EXPORTAR_FILTROS = 23;
 
-    public static final boolean debug = true;
+    public static final boolean debug = false;
     private transient Modelo meuModelo;
     private transient Vista minaVista;
     private XestorComandos xestorComandos;

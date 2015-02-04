@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="1">
                 <name/>
-                <line>482</line>
+                <line>454</line>
                 <key/>
             </bookmark>
         </file>
@@ -20,23 +20,14 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/idiomas/Bundle.properties</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoExportarFicheiro.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoImportarFicheiro.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoEngadirFiltro.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoIntercambiarFiltros.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoEngadirDatos.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoEliminarFiltro.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/doc/mem/capitulos/introducion.tex</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/filtros/AbstractFilter.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoImportarFiltros.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/JDataMotion.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Vista.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/InstancesComparable.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/PanelFiltro.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoMudarDato.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Controlador.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/test/jdatamotion/TestRF03_04.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/comandos/ComandoExportarFiltros.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/default_config.properties</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/JTableModelo.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Modelo.java</file>
         </group>
     </open-files>

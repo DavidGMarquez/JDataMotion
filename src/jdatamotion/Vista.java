@@ -33,6 +33,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -117,10 +119,6 @@ import org.jfree.chart.ChartMouseListener;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.event.ChartChangeEvent;
-import org.jfree.chart.event.ChartChangeListener;
-import org.jfree.chart.event.PlotChangeEvent;
-import org.jfree.chart.event.PlotChangeListener;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -171,6 +169,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private int lonxitudeEstela;
     public static ResourceBundle bundle;
     private final String ficheiroConfiguracion = "configuracion.properties";
+    private final String ficheiroConfiguracionPorDefecto = "/jdatamotion/default_config.properties";
+    private Properties propiedades;
     private boolean notifyGUIChanges;
 
     public static ResourceBundle getBundle() {
@@ -238,32 +238,76 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 }
             }
         }
-        Properties configFile = new Properties();
+        propiedades = leerPropiedades(ficheiroConfiguracionPorDefecto);
         try {
-            configFile.load(new FileInputStream(ficheiroConfiguracion));
-            if (configFile.getProperty("locale") != null) {
-                Locale.setDefault(new Locale(configFile.getProperty("locale")));
-            }
-        } catch (FileNotFoundException ex1) {
-            try {
-                new File(ficheiroConfiguracion).createNewFile();
-                FileInputStream is = new FileInputStream(ficheiroConfiguracion);
-                configFile.load(is);
-                configFile.setProperty("locale", Locale.getDefault().toString());
-                configFile.store(new FileOutputStream(ficheiroConfiguracion), null);
-            } catch (IOException ex) {
-                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (IOException ex) {
-            if (Controlador.debug) {
-                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            anadirPropiedades(propiedades, ficheiroConfiguracion);
+        } catch (FileNotFoundException ex) {
+            iniciarPropiedades(ficheiroConfiguracion);
         }
+        Locale.setDefault(new Locale(propiedades.getProperty("locale")));
         bundle = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", Locale.getDefault());
         reset();
         initComponents();
         this.task = new TarefaProgreso();
         this.jPanel8.setVisible(false);
+    }
+
+    private synchronized void iniciarPropiedades(String url) {
+        escribirPropiedades(new Properties(), url);
+    }
+
+    @SuppressWarnings("null")
+    static synchronized void anadirPropiedades(Properties propiedades, String url) throws FileNotFoundException {
+        InputStream input = new FileInputStream(url);
+        try {
+            propiedades.load(input);
+        } catch (IOException ex) {
+            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
+    private static synchronized void escribirPropiedades(Properties propiedades, String url) {
+        OutputStream outputStream = null;
+        try {
+            propiedades.store(new FileOutputStream(new File(url)), null);
+        } catch (IOException ex) {
+            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
+    static synchronized Properties leerPropiedades(String url) {
+        Properties prop = new Properties();
+        InputStream input = null;
+        try {
+            prop.load(url.charAt(0) != '/' ? new FileInputStream(url) : Vista.class.getResourceAsStream(url));
+        } catch (IOException ex) {
+            Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return prop;
     }
 
     public void inicializar(Modelo modelo, boolean visualizar) {
@@ -397,7 +441,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         filasVacias++;
                     }
                 }
-                sincronizarGUIScatterplots();
                 setCursor(Cursor.getDefaultCursor());
                 jLabel3.setText("");
                 activarPanelReproduccion(true);
@@ -408,67 +451,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         jLabel4.setText("/" + String.valueOf(instanciasFiltradas.numInstances()));
         jTextField1.setText(String.valueOf(instanciasFiltradas.numInstances()));
-    }
-
-    private void sincronizarGUIScatterplots() {
-        final int numScatterplots = mansp.getNumScatterplots();
-        notifyGUIChanges = true;
-
-        PlotChangeListener plotChangeListener = (PlotChangeEvent event) -> {
-            if (notifyGUIChanges) {
-                notifyGUIChanges = false;
-                XYPlot ePlot = (XYPlot) event.getPlot();
-                for (int i = 0; i < numScatterplots; i++) {
-                    for (int j = 0; j < numScatterplots; j++) {
-                        for (XYPlot p : new XYPlot[]{(XYPlot) mansp.getScatterPlot(i, j).getChartPanelCela().getChart().getPlot(), (XYPlot) mansp.getScatterPlot(i, j).getJFrameAmpliado().getChartPanel().getChart().getPlot()}) {
-                            p.setBackgroundImage(ePlot.getBackgroundImage());
-                            p.setBackgroundImageAlignment(ePlot.getBackgroundImageAlignment());
-                            p.setBackgroundImageAlpha(ePlot.getBackgroundImageAlpha());
-                            p.setBackgroundPaint(ePlot.getBackgroundPaint());
-                            p.setForegroundAlpha(ePlot.getForegroundAlpha());
-                            p.setBackgroundAlpha(ePlot.getBackgroundAlpha());
-                        }
-                    }
-                }
-                notifyGUIChanges = true;
-            }
-        };
-
-        ChartChangeListener chartChangeListener = (ChartChangeEvent event) -> {
-            if (notifyGUIChanges) {
-                notifyGUIChanges = false;
-                JFreeChart eChart = event.getChart();
-                for (int i = 0; i < numScatterplots; i++) {
-                    for (int j = 0; j < numScatterplots; j++) {
-                        for (JFreeChart c : new JFreeChart[]{mansp.getScatterPlot(i, j).getChartPanelCela().getChart(), mansp.getScatterPlot(i, j).getJFrameAmpliado().getChartPanel().getChart()}) {
-                            if (eChart != null) {
-                                c.setRenderingHints(eChart.getRenderingHints());
-                                c.setBorderVisible(eChart.isBorderVisible());
-                                c.setBorderStroke(eChart.getBorderStroke());
-                                c.setBorderPaint(eChart.getBorderPaint());
-                                c.setAntiAlias(eChart.getAntiAlias());
-                                c.setBackgroundPaint(eChart.getBackgroundPaint());
-                                c.setBackgroundImage(eChart.getBackgroundImage());
-                                c.setBackgroundImageAlignment(eChart.getBackgroundImageAlignment());
-                                c.setBackgroundImageAlpha(eChart.getBackgroundImageAlpha());
-                                c.setPadding(eChart.getPadding());
-                            }
-                        }
-                    }
-                }
-                notifyGUIChanges = true;
-            }
-        };
-
-        for (int i = 0; i < numScatterplots; i++) {
-            for (int j = 0; j < numScatterplots; j++) {
-                mansp.getScatterPlot(i, j).getChartPanelCela().getChart().addChangeListener(chartChangeListener);
-                mansp.getScatterPlot(i, j).getJFrameAmpliado().getChartPanel().getChart().addChangeListener(chartChangeListener);
-
-                mansp.getScatterPlot(i, j).getChartPanelCela().getChart().getPlot().addChangeListener(plotChangeListener);
-                mansp.getScatterPlot(i, j).getJFrameAmpliado().getChartPanel().getChart().getPlot().addChangeListener(plotChangeListener);
-            }
-        }
     }
 
     public void engadirScatterPlot(ScatterPlot sp, int j, int i) {
@@ -2684,20 +2666,21 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
+    private void gravarPropiedade(String nomePropiedade, String valorPropiedade, String url) {
+        Properties p = leerPropiedades(url);
+        p.put(nomePropiedade, valorPropiedade);
+        escribirPropiedades(p, ficheiroConfiguracion);
+    }
+
+    private void gravarEscribirPropiedade(Properties propiedades, String nomePropiedade, String valorPropiedade, String url) {
+        propiedades.put(nomePropiedade, valorPropiedade);
+        gravarPropiedade(nomePropiedade, valorPropiedade, url);
+    }
+
     private void mudarIdioma(String locale) {
         if (JOptionPane.showConfirmDialog(this, bundle.getString("confirmacionMudarIdioma"), bundle.getString("confirmacionMudarIdiomaTitulo"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            try {
-                Properties configFile = new Properties();
-                FileInputStream is = new FileInputStream(ficheiroConfiguracion);
-                configFile.load(is);
-                configFile.setProperty("locale", locale);
-                configFile.store(new FileOutputStream(ficheiroConfiguracion), null);
-                reiniciarAplicacion();
-            } catch (IOException ex) {
-                if (Controlador.debug) {
-                    Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            gravarPropiedade("locale", locale, ficheiroConfiguracion);
+            reiniciarAplicacion();
         }
     }
 
