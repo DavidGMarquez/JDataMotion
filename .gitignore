@@ -1,4 +1,4 @@
-/JDataMotion/build
-/JDataMotion/dist
-/JDataMotion/store
+/build/
+/store/
 /dist/
+/configuracion.properties

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  4 SEP 2014 07:00
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  8 FEB 2015 05:58
 entering extended mode
 **traballo.tex
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.tex
@@ -381,9 +381,6 @@ Package: enumitem 2011/09/28 v3.5.2 Customized lists
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/titulo.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/certificacion.
 aux)
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/agradecementos
-.aux)
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/resumo.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/introducion.au
 x) (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap2.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap3.aux)
@@ -395,41 +392,44 @@ x)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/bibliografia.a
-ux))
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
+ux)
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/glosario.aux))
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
 \c@lstlisting=\count100
-
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/titulo.tex
 File: figuras/logo_usc.eps Graphic file (type eps)
 
 <figuras/logo_usc.eps>
-LaTeX Font Info:    Try loading font information for U+msa on input line 19.
+LaTeX Font Info:    Try loading font information for U+msa on input line 17.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 19.
+LaTeX Font Info:    Try loading font information for U+msb on input line 17.
  ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+lasy on input line 19.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 17.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ulasy.fd"
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
-) [1
+)) [1
 
 
-]) [2]
+] [2
+
+
+]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/certificacion.
 tex
 File: figuras/logo_usc.eps Graphic file (type eps)
@@ -442,157 +442,159 @@ r-ta-men-to de Electroni-ca e Compu-
 )
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <13.13947> not available
-(Font)              size <12> substituted on input line 36.
+(Font)              size <12> substituted on input line 35.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/sc' in size <13.13947> not available
-(Font)              size <12> substituted on input line 36.
+(Font)              size <12> substituted on input line 35.
 
 [1
-
-
 
 ] [2
 
 
-]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/agradecementos
-.tex) [3
-
-
-] [4
-
-
-]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/resumo.tex)
-[5
-
-
-] [6
-
-
 ] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.toc
-[7
+[3
 
 ])
 \tf@toc=\write3
- [8] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.lof)
+ [4] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.lof)
 \tf@lof=\write4
 
-[9
+[5
 
-] [10
+] [6
 
 ] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.lot)
 \tf@lot=\write5
 
-[11] [12
+[7] [8
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/introducion.te
 x
 Cap\'{\i }tulo 1.
+[1
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [1
+] [2]) [3] [4
 
 
 ]
-Overfull \hbox (3.61798pt too wide) in paragraph at lines 39--40
-[]\OT1/cmr/m/n/12 inclue a es-pe-ci-fi-ca-cion do Sis-
- []
-
-[2] [3]) [4]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap2.tex
 Cap\'{\i }tulo 2.
 [5
 
 
-
-
-] [6] [7] [8] [9] [10]
-Overfull \hbox (8.34502pt too wide) in paragraph at lines 143--144
-[]\OT1/cmr/m/n/12 Constitue o pri-mei-ro sprint (Sprint 00) da pla-ni-fi-ca-ci
-on, e du-rara duas
+] [6]
+Overfull \hbox (0.41412pt too wide) in paragraph at lines 47--48
+[]\OT1/cmr/m/n/12 Desenvolverase a reunion co ti-tor dis-po~nible,
  []
 
-[11]
-File: figuras/gantt.eps Graphic file (type eps)
- <figuras/gantt.eps>
-File: figuras/edt.eps Graphic file (type eps)
- <figuras/edt.eps>
-Underfull \vbox (badness 10000) has occurred while \output is active []
+[7] [8] [9] [10] [11]
 
- [12]
-[13]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+! Package inputenc Error: Unicode char \u8:€ not set up for use with LaTeX.
 
- [14])
-[15] [16
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.144 ...or de software en España é de 26740 €
+                                                  /ano. Se un ano ten 249 d�...
 
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
 
-]
+) [12]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap3.tex
 Cap\'{\i }tulo 3.
+[13
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [17
+
+
+] [14] [15] [16] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27]
+[28]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 515.
+
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 515.
+File: figuras/gantt.eps Graphic file (type eps)
+
+<figuras/gantt.eps>
+File: figuras/edt.eps Graphic file (type eps)
+ <figuras/edt.eps>) [29] [30] [31] [32
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 17--18
-
- []
-
-[18] [19] [20] [21] [22] [23] [24]
-Underfull \vbox (badness 1077) has occurred while \output is active []
-
- [25]
-[26] [27] [28] [29] [30] [31] [32] [33]) [34]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap4.tex
 Cap\'{\i }tulo 4.
-) [35
+) [33
 
 
-
-
-] [36
+] [34
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/exemplos.tex
 Cap\'{\i }tulo 5.
-[37
+[35
 
 
 ]
+
+LaTeX Warning: File `figuras/figura01.eps' not found on input line 30.
+
+
+! LaTeX Error: File `figuras/figura01.eps' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.30 ...raphics[width=15cm]{figuras/figura01.eps}}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: Cannot determine size of graphic in figuras/figura01.eps (no Bou
+ndingBox).
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.30 ...raphics[width=15cm]{figuras/figura01.eps}}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
 File: figuras/figura01.eps Graphic file (type eps)
- <figuras/figura01.eps>
+<figuras/figura01.eps>
 
-LaTeX Warning: Citation `cuda' on page 38 undefined on input line 48.
-
-
-LaTeX Warning: Citation `cdma' on page 38 undefined on input line 48.
+LaTeX Warning: Citation `cuda' on page 36 undefined on input line 48.
 
 
-LaTeX Warning: Citation `gonzalez' on page 38 undefined on input line 48.
+LaTeX Warning: Citation `cdma' on page 36 undefined on input line 48.
 
 
-LaTeX Warning: Citation `patricia' on page 38 undefined on input line 48.
+LaTeX Warning: Citation `gonzalez' on page 36 undefined on input line 48.
 
 
-LaTeX Warning: Citation `cuda' on page 38 undefined on input line 48.
+LaTeX Warning: Citation `patricia' on page 36 undefined on input line 48.
 
 
-LaTeX Warning: Citation `gonzalez' on page 38 undefined on input line 48.
+LaTeX Warning: Citation `cuda' on page 36 undefined on input line 48.
 
 
-Underfull \vbox (badness 1769) has occurred while \output is active []
+LaTeX Warning: Citation `gonzalez' on page 36 undefined on input line 48.
 
- [38]
-("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
+[36] [37] ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2014/03/04 1.5c listings language file
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
@@ -605,13 +607,6 @@ File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 81.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 83.
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 83.
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 85.
 
@@ -622,21 +617,30 @@ Overfull \hbox (53.36043pt too wide) in paragraph at lines 97--98
 [][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[39]) [40]
+) [38]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/conclusions.te
 x
 Cap\'{\i }tulo 6.
+) [39
+
+
+
+
+] [40
+
+
+]
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.tex
+Ap\'endice A.
 ) [41
-
-
 
 
 ] [42
 
 
 ]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.tex
-Ap\'endice A.
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.tex
+Ap\'endice B.
 ) [43
 
 
@@ -644,21 +648,12 @@ Ap\'endice A.
 
 
 ]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.tex
-Ap\'endice B.
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.tex
+Ap\'endice C.
 ) [45
 
 
 ] [46
-
-
-]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.tex
-Ap\'endice C.
-) [47
-
-
-] [48
 
 
 ]
@@ -675,20 +670,67 @@ Underfull \hbox (badness 10000) in paragraph at lines 15--16
  []
 
 
+Overfull \hbox (21.83139pt too wide) in paragraph at lines 15--16
+\OT1/cmr/m/it/12 http://www.endesaonline.com/es/empresas/dual/empresas/4/precio
+s/index.asp\OT1/cmr/m/n/12 . 
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 17--18
 []\OT1/cmr/m/n/12 Electricity usa-ge of a Lap-top or No-te-bo-ok. Si-tio web
  []
 
-) [49
+! Missing $ inserted.
+<inserted text> 
+                $
+l.25 ...www.ctr.unican.es/asignaturas/is1/IEEE830_
+                                                  esp.pdf}.
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+l.25 ...unican.es/asignaturas/is1/IEEE830_esp.pdf}
+                                                  .
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.26 
+     
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.26 
+     
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+) [47
 
 
-] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.aux
+] [48
+
+
+]
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/glosario.tex
+[49
+
+
+]) [50] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.aux
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/titulo.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/certificacion.
 aux)
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/agradecementos
-.aux)
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/resumo.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/introducion.au
 x) (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap2.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap3.aux)
@@ -700,7 +742,8 @@ x)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/bibliografia.a
-ux))
+ux)
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/glosario.aux))
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.13947pt have occurred.
@@ -710,12 +753,12 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 4242 strings out of 493922
- 60488 string characters out of 3147299
- 137005 words of memory out of 3000000
+ 4235 strings out of 493922
+ 59983 string characters out of 3147299
+ 134050 words of memory out of 3000000
  7366 multiletter control sequences out of 15000+200000
  13266 words of font info for 51 fonts, out of 3000000 for 9000
  842 hyphenation exceptions out of 8191
- 29i,8n,51p,1057b,1299s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 29i,8n,51p,1444b,1299s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on traballo.dvi (63 pages, 91228 bytes).
+Output written on traballo.dvi (60 pages, 85452 bytes).

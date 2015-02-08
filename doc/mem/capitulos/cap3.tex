@@ -1,10 +1,10 @@
 \chapter{Análise de requisitos}
 
-A extracción dos requisitos dun proxecto é unha fase fundamental na realización de calquera proxecto, pois inflúe non só nas propias tarefas a desenvolver para a súa implementación, se non tamén na valoración do produto final e da súa calidade. A obtención de requisitos adóitase facer durante ou tras unha reunión co cliente.
+A extracción dos requisitos dun proxecto é unha fase fundamental na realización de calquera proxecto, pois inflúe non só nas propias tarefas a desenvolver para a súa implementación, se non tamén na valoración do produto final e da súa calidade. O proceso desta etapa pódese revisar na norma IEEE-STD-830-1998 \cite{ieee-std-830-1998}. A obtención de requisitos adóitase facer durante ou tras unha reunión cos clientes.
 
-\section{Casos de uso}
+Durante a reunión cos clientes foron xurdindo requisitos ou condicións necesarias para o produto. Estes requisitos foron rexistrados para posteriormente seren ordenados e clasificados segundo certos criterios que se amosan a continuación.
 
-Os casos de uso empréganse para modelar e representar nun primeiro momento cómo se vai realizar a interacción entre o sistema e os usuarios del, tamén coñecidos como actores. Os casos de uso constitúen as posibilidades das que dispón cada actor. Este análise resulta especialmente útil en entornas orientadas a usuarios con distinta prioridade (un administrador, un usuario invitado, un usuario rexistrado, un usuario prémium, etc.) nas que cada un deses actores ten acceso a uns casos de uso específicos (por exemplo, moitas aplicacións web). Por tanto, a riqueza dos diagramas de casos de uso radica na variedade de tipos de usuario (actores). A nosa aplicación non necesita facer distinción algunha entre os tipos de usuario que poden facer uso dela. Todos van dispor das mesmas funcionalidades. En conclusión, o diagrama de casos de uso non aportaría ningunha información nova, así que será omitido.
+Os casos de uso empréganse para modelar e representar cómo se vai realizar a interacción entre o sistema e os usuarios del, tamén coñecidos como actores. Os casos de uso constitúen as posibilidades das que dispón cada actor. Esta análise resulta especialmente útil en entornas orientadas a usuarios con distinta prioridade (un administrador, un usuario invitado, un usuario rexistrado, un usuario prémium, etc.) nas que cada un deses actores ten acceso a uns casos de uso específicos (por exemplo, moitas aplicacións web). Por tanto, a riqueza dos diagramas de casos de uso radica na variedade de tipos de usuario (actores). A nosa aplicación non necesita facer distinción algunha entre os tipos de usuario que poden facer uso dela. Todos van dispor das mesmas funcionalidades. Un escenario de caso de uso podería comezar cun traballador do ámbito médico-sanitario que dispón nun csv (exportado por outra aplicación, por exemplo) de certas medicións relacionadas cun paciente seu ao longo do seu seguimento. O traballador (usuario do sistema) podería importar o arquivo dentro do JDataMotion e obter unha táboa editable cos datos contidos, aplicar filtros para eliminar os datos atípicos das medicións do paciente e normalizar algunhas variables. Cos datos xa preprocesados, poderá reproducilos para ver o seu comportamento ao longo do tempo e a evolución do paciente.
 
 \section{Requisitos funcionais}
 
@@ -13,8 +13,7 @@ Os casos de uso empréganse para modelar e representar nun primeiro momento cóm
 \item[Título] \hfill \\
 Importar arquivos con datos para o experimento
 \item[Descrición] \hfill \\
-A aplicación debe permitir cargar do sistema de arquivos un ficheiro que conteña unha secuencia de datos (nun formato axeitado segundo o RNF02) para ser utilizados no experimento.
-\item[Casos de uso relacionados] \hfill \\
+A aplicación debe permitir cargar do sistema de arquivos un ficheiro que conteña unha secuencia de datos (nun formato axeitado segundo o RNF01) para ser utilizados no experimento.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -24,7 +23,7 @@ Esencial
 \item[Título] \hfill \\
 Exportar datos
 \item[Descrición] \hfill \\
-A aplicación debe permitir almacenar nun arquivo o conxunto de datos do arquivo actual (tendo en conta filtrados, modificacións, datos engadidos ou eliminados...). Os arquivos de saída deben respectar o RNF02.
+A aplicación debe permitir almacenar nun arquivo o conxunto de datos do experimento actual (tendo en conta filtrados, modificacións, datos engadidos ou eliminados...). Os arquivos de saída deberán respectar o RNF01 en canto a formato de almacenamento.
 \subsubsection{Importancia}
 Esencial
 \end{description}
@@ -54,7 +53,7 @@ Esencial
 \item[Título] \hfill \\
 Representar os datos en forma de táboa
 \item[Descrición] \hfill \\
-A aplicación debe ser capaz de amosar os datos segundo unha táboa na que figuren cabeceiras, tipos, valores...
+A aplicación debe ser capaz de amosar os datos segundo unha táboa na que figuren cabeceiras, tipos, valores, etc.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -94,7 +93,7 @@ Esencial
 \item[Título] \hfill \\
 Asignar tipos aos atributos dun arquivo importado
 \item[Descrición] \hfill \\
-A aplicación debe permitir especificar os tipos de atributos presentes no arquivo importado. Por exemplo, os datos cuantitativos poderían ser enteiros ou reais, mentras que os cualitativos serían algo distinto (mesmamente strings).
+A aplicación debe permitir especificar os tipos de atributos presentes no arquivo importado. Por exemplo, os datos cuantitativos poderían ser enteiros ou reais, mentres que os cualitativos serían algo distinto (mesmamente strings).
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -112,9 +111,9 @@ Esencial
 \subsection*{RF11}
 \begin{description}
 \item[Título] \hfill \\
-Representar graficamente mediante scatterplot
+Representar os datos graficamente mediante diagrama de dispersión
 \item[Descrición] \hfill \\
-A aplicación debe ser capaz de representar gráficamente (mediante scatterplots) o conxunto de parámetros de entrada. Concretamente, débense poder representar ata 4 parámetros por cada scatterplot (ordeadas, abscisas, cor e forma dos puntos). A cor e a forma representan valores discretos, pero ademáis a forma pode representar valores continuos no caso dun degradado. Todos os scatterplots estarán englobados dentro do ``menú de visualización'', que cumprirá co RNF06.
+A aplicación debe ser capaz de representar graficamente (mediante diagrama de dispersión) o conxunto de parámetros de entrada. Concretamente, débense poder representar ata 3 parámetros por cada diagrama de dispersión (ordeadas, abscisas e cor e forma dos puntos). Todos os diagramas de dispersión estarán englobados dentro do ``menú de visualización'', que cumprirá co RNF06.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -122,9 +121,9 @@ Esencial
 \subsection*{RF12}
 \begin{description}
 \item[Título] \hfill \\
-Engadir scatterplots ao menú de visualización
+Engadir diagramas de dispersión ao menú de visualización
 \item[Descrición] \hfill \\
-A aplicación debe permitir engadir dinámicamente novos scatterplots dentro do menú de visualización.
+A aplicación debe permitir engadir dinámicamente novos diagramas de dispersión dentro do menú de visualización.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -132,9 +131,9 @@ Esencial
 \subsection*{RF13}
 \begin{description}
 \item[Título] \hfill \\
-Eliminar un scatterplot do menú de visualización
+Eliminar un diagrama de dispersión do menú de visualización
 \item[Descrición] \hfill \\
-A aplicación debe permitir eliminar un scatterplot do menú de visualización.
+A aplicación debe permitir eliminar un diagrama de dispersión do menú de visualización.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -142,9 +141,9 @@ Esencial
 \subsection*{RF14}
 \begin{description}
 \item[Título] \hfill \\
-Configurar un scatterplot do menú de visualización
+Configurar diagramas de dispersión do menú de visualización
 \item[Descrición] \hfill \\
-A aplicación debe permitir especificar para cada scatterplot do menú de visualización a tupla de atributos a comparar. Tamén se debe poder elixir dende o eixo de representación para cada atributo como a cor ou forma dos puntos. Ademáis tense que dispoñer da opción especificar numéricamente a posición x0 e y0 na que comeza a ventá de visualización, e o ancho e alto desta ventá, o cal constitúe implícitamente un xeito de situar a ventá de visualización, de facer zoom sobre ela e no caso da relación ancho/alto, mesmo de establecer escalas distintas para cada eixo. Esto último podería omitirse, en beneficio dun comportamento dinámico e por defecto da ventá de visualización, que se adaptaría para englobar a todos os puntos representados.
+A aplicación debe permitir especificar para os diagramas de dispersión do menú de visualización a súa configuración, respecto a que parámetros se representarán en cada un dos eixos ou si as cores e formas dos puntos se desexan usar para representar algún atributo nominal.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -152,9 +151,9 @@ Esencial
 \subsection*{RF15}
 \begin{description}
 \item[Título] \hfill \\
-Detallar punto seleccionado dentro do scatterplot
+Detallar punto seleccionado dentro do diagrama de dispersión
 \item[Descrición] \hfill \\
-Cada punto (non difuminado completamente) dos scatterplots pode ser seleccionado para ver nun apartado os seus detalles (todos os seus atributos, marca temporal...).
+Cada punto dos diagramas de dispersión pode ser seleccionado para ver nun apartado os seus detalles (todos os seus atributos).
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -162,9 +161,9 @@ Esencial
 \subsection*{RF16}
 \begin{description}
 \item[Título] \hfill \\
-Resaltar punto en scatterplots
+Resaltar punto en diagramas de dispersión
 \item[Descrición] \hfill \\
-Cada punto seleccionalo dentro dun scatterplot resaltarase tanto nel coma en todos os demáis scatterplots (que plasmarán outras proxeccións do mesmo punto).
+Cada punto seleccionalo dentro dun diagrama de dispersión resaltarase tanto nel coma en todos os demais diagramas de dispersión (que plasmarán outras proxeccións do mesmo punto).
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -172,9 +171,9 @@ Esencial
 \subsection*{RF17}
 \begin{description}
 \item[Título] \hfill \\
-Desprazar a ventá de visualización por arrastre de cada scatterplot (reposicionar)
+Desprazar a ventá de visualización por arrastre de cada diagrama de dispersión
 \item[Descrición] \hfill \\
-Para cada scatterplot poderemos usar unha ferramenta ``man'' para desprazar a ventá polo scatterplot.
+Para cada diagrama de dispersión poderemos usar unha ferramenta ``man'' para desprazar a ventá polo diagrama de dispersión.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -182,9 +181,9 @@ Esencial
 \subsection*{RF18}
 \begin{description}
 \item[Título] \hfill \\
-Facer zoom in e zoom out en cada scatterplot (escalar)
+Escalar a ventá de visualización de cada diagrama de dispersión
 \item[Descrición] \hfill \\
-Para cada scatterplot poderemos usar unha ferramenta de Zoom in e outra de Zoom out para facer zoom do scatterplot. O zoom aumentará ou diminuirá a razón de X1.2
+Para cada diagrama de dispersión poderemos usar unha ferramenta de escalado da ventá para facer zoom no diagrama de dispersión.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -192,9 +191,9 @@ Esencial
 \subsection*{RF19}
 \begin{description}
 \item[Título] \hfill \\
-Escalar e reposicionar dinámicamente
+Escalar e reposicionar dinamicamente
 \item[Descrición] \hfill \\
-Para cada scatterplot poderemos seleccionar que a ventá de visualización que o enfoca se adapte dinámicamente ao conxunto de datos representados (movéndose, afastándose, aproximándose... para englobar todos os datos).
+Para cada diagrama de dispersión permitirase que a ventá de visualización que o enfoca se adapte dinamicamente ao conxunto de datos representados (movéndose, afastándose e aproximándose para englobar todos os datos).
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -202,9 +201,9 @@ Esencial
 \subsection*{RF20}
 \begin{description}
 \item[Título] \hfill \\
-Reproducir a secuencia de datos (Play)
+Reproducir a secuencia de datos
 \item[Descrición] \hfill \\
-A aplicación debe de permitir que a visualización dos scatterplots poida basarse na variable temporal (ou de orde) para reproducir a secuencia de datos, amosando os datos de cada scatterplot baixo unha secuencia de vídeo. Nesta secuencia engadiríase á visualización en cada instante a tupla de atributos asociada a esa marca temporal. 
+A aplicación debe de permitir que a visualización dos diagramas de dispersión poida basearse na variable temporal (ou de orde) para reproducir a secuencia de datos, amosando os datos de cada diagrama de dispersión baixo unha secuencia de vídeo. Nesta secuencia engadiríase á visualización en cada instante a tupla de atributos asociada a esa marca temporal. 
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -212,24 +211,14 @@ Esencial
 \subsection*{RF21}
 \begin{description}
 \item[Título] \hfill \\
-Difuminar puntos ao longo da reprodución
+Representar estela
 \item[Descrición] \hfill \\
-A aplicación debe permitir difuminar os puntos xa representados a través do avance temporal.
+A aplicación debe de permitir que cada novo punto pintado se ligue ao último representado no diagrama de dispersión por medio dunha liña recta.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
 
 \subsection*{RF22}
-\begin{description}
-\item[Título] \hfill \\
-Representar estela
-\item[Descrición] \hfill \\
-A aplicación debe de permitir que cada novo punto ploteado se ligue ao último representado no scaterplott por medio dunha liña recta.
-\item[Importancia] \hfill \\
-Esencial
-\end{description}
-
-\subsection*{RF23}
 \begin{description}
 \item[Título] \hfill \\
 Difuminar estela ao longo da reprodución
@@ -239,12 +228,22 @@ A aplicación debe permitir difuminar as estelas xa representadas a través do a
 Esencial
 \end{description}
 
-\subsection*{RF24}
+\subsection*{RF23}
 \begin{description}
 \item[Título] \hfill \\
 Configurar a reprodución da secuencia de datos
 \item[Descrición] \hfill \\
-A aplicación debe de permitir que a visualización dos scatterplots sexa configurable en canto a tempo transcurrido entre marcas temporais cando estas sexan de orde, que a velocidade do Play sexa x1, x2 ou x4 ou que se reproduza cara adiante ou cara atrás. Ademáis débese poder especificar o número de marcas temporais que durará o difuminado dos puntos que se ploteen, de xeito que durante ese intervalo cada punto se vaia difuminando ata desaparecer. Pode ser  0 para que os puntos non se difuminen. A aplicación tamén debe permitir especificar o número de marcas temporais que durará o difuminado das estelas que se ploteen, de xeito que durante ese intervalo cada estela xa debuxada se vaia difuminando ata desaparecer. Pode ser 0 para que as estelas non se difuminen.
+A aplicación debe de permitir que a visualización dos diagramas de dispersión sexa configurable en canto a tempo transcorrido entre marcas temporais. Para a reprodución usando marcas temporais ponderadas, este tempo representará a separación entre as dúas marcas temporais mais próximas (tempo mínimo). Ademáis débese poder especificar o número de marcas temporais que durará o difuminado dos puntos que se ploteen, de xeito que durante ese intervalo cada punto se vaia difuminando ata desaparecer. Pode ser igual a 0 para que os puntos non se difuminen.
+\item[Importancia] \hfill \\
+Esencial
+\end{description}
+
+\subsection*{RF24}
+\begin{description}
+\item[Título] \hfill \\
+Pausar a reprodución
+\item[Descrición] \hfill \\
+A aplicación debe permitir parar a reprodución na marca de tempo na que se atope ao executar esta acción, mantendo as visualizacións para ese momento.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -252,9 +251,9 @@ Esencial
 \subsection*{RF25}
 \begin{description}
 \item[Título] \hfill \\
-Rebobinado e avance rápido da reprodución (Rewind, FastForward)
+Ir a un determinado instante dentro do intervalo temporal da reprodución (GoTo)
 \item[Descrición] \hfill \\
-A aplicación debe permitir avanzar e retroceder a alta velocidade (X8) a reprodución.
+A aplicación debe permitir situarse directamente sobre un instante de tempo, mantendo a reprodución pausada sobre esa marca temporal, e visualizando os diagramas de dispersión tal e como deben estar nese momento.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -262,34 +261,14 @@ Esencial
 \subsection*{RF26}
 \begin{description}
 \item[Título] \hfill \\
-Pausar a reprodución (Pause)
+Insertar filtros para os datos do experimento
 \item[Descrición] \hfill \\
-A aplicación debe permitir parar a reprodución na marca de tempo na que se atope ao executar esta acción, mantendo as visualizacións para ese momento.
+A aplicación debe permitir engadir unha serie de filtros que se aplicarán de xeito secuencial sobre a secuencia de datos coa que se esté a traballar. Chamarémoslle ``secuencia de filtros'' a esta secuencia.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
 
 \subsection*{RF27}
-\begin{description}
-\item[Título] \hfill \\
-Ir a un determinado instante dentro do intervalo temporal da reprodución (GoTo)
-\item[Descrición] \hfill \\
-A aplicación debe permitir situarse directamente sobre un instante de tempo, mantendo a reprodución pausada sobre esa marca temporal, e visualizando os scatterplots tal e como deben estar nese momento.
-\item[Importancia] \hfill \\
-Esencial
-\end{description}
-
-\subsection*{RF28}
-\begin{description}
-\item[Título] \hfill \\
-Insertar filtros para os datos do experimento
-\item[Descrición] \hfill \\
-A aplicación debe permitir engadir unha serie de filtros que se aplicarán de xeito secuencial sobre a secuencia de datos coa que se esté a traballar. Chamarémoslle "secuencia de filtros" a esta secuencia.
-\item[Importancia] \hfill \\
-Esencial
-\end{description}
-
-\subsection*{RF29}
 \begin{description}
 \item[Título] \hfill \\
 Eliminar un filtro para os datos do experimento
@@ -299,7 +278,7 @@ A aplicación debe permitir eliminar un determinado filtro dentro da secuencia d
 Esencial
 \end{description}
 
-\subsection*{RF30}
+\subsection*{RF28}
 \begin{description}
 \item[Título] \hfill \\
 Configurar filtros para os datos do experimento
@@ -309,12 +288,32 @@ A aplicación debe permitir seleccionar un determinado filtro dentro da secuenci
 Esencial
 \end{description}
 
+\subsection*{RF29}
+\begin{description}
+\item[Título] \hfill \\
+Gardar unha secuencia de filtros do experimento
+\item[Descrición] \hfill \\
+A aplicación debe permitir gardar unha secuencia de filtros, non necesariamente correlativos, dentro dos que se estean aplicando sobre o experimento. Esta secuencia pode comprender tanto un só filtro como a secuencia de filtros enteira.
+\item[Importancia] \hfill \\
+Esencial
+\end{description}
+
+\subsection*{RF30}
+\begin{description}
+\item[Título] \hfill \\
+Cargar unha secuencia de filtros para o experimento
+\item[Descrición] \hfill \\
+A aplicación debe permitir cargar do sistema de arquivos unha secuencia de filtros que se engadirá á cabeza da secuencia de filtros (a cal pode estar baleira). Esta secuencia tamén pode estar composta por un só filtro.
+\item[Importancia] \hfill \\
+Esencial
+\end{description}
+
 \subsection*{RF31}
 \begin{description}
 \item[Título] \hfill \\
-Gardar unha subsecuencia de filtros do experimento
+Mover os filtros dentro da secuencia de filtros
 \item[Descrición] \hfill \\
-A aplicación debe permitir gardar unha subsecuencia de filtros dentro dos que se estén aplicando sobre o experimento. Esta subsecuencia pode comprender tanto un só filtro como a secuencia de filtros enteira.
+A aplicación debe permitir desprazar un filtro dentro da secuencia de filtros do experimento, de xeito que o orde de aplicación dos filtros varíe. O desprazamento realizarase inserindo o filtro en cuestión nunha nova posición.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -322,49 +321,9 @@ Esencial
 \subsection*{RF32}
 \begin{description}
 \item[Título] \hfill \\
-Cargar unha secuencia de filtros para o experimento
-\item[Descrición] \hfill \\
-A aplicación debe permitir cargar do sistema de arquivos unha secuencia de filtros que se engadirá á cabeza da secuencia de filtros (a cal pode estar vacía). Esta secuencia tamén pode estar composta por un só filtro.
-\item[Importancia] \hfill \\
-Esencial
-\end{description}
-
-\subsection*{RF33}
-\begin{description}
-\item[Título] \hfill \\
-Mover os filtros dentro da secuencia de filtros
-\item[Descrición] \hfill \\
-A aplicación debe permitir desprazar un filtro dentro da secuencia de filtros do experimento, de xeito que o orde de aplicación dos filtros varíe. O desprazamento realizarase insertando o filtro en cuestión nunha nova posición.
-\item[Importancia] \hfill \\
-Esencial
-\end{description}
-
-\subsection*{RF34}
-\begin{description}
-\item[Título] \hfill \\
-Calcular distancia entre dous puntos do plano
-\item[Descrición] \hfill \\
-A aplicación debe permitir o cálculo da distancia entre dous puntos do plano.
-\subsubsection{Importancia}
-Esencial
-\end{description}
-
-\subsection*{RF35}
-\begin{description}
-\item[Título] \hfill \\
-Configurar a fórmula para achar distancia entre dous puntos do plano
-\item[Descrición] \hfill \\
-A aplicación debe permitir a introdución da fórmula que se desexe para calcular a distancia entre dous puntos
-\item[Importancia] \hfill \\
-Esencial
-\end{description}
-
-\subsection*{RF36}
-\begin{description}
-\item[Título] \hfill \\
 Configurar o menú de visualización
 \item[Descrición] \hfill \\
-A aplicación debe permitir cambiar os parámetros de visualización dos scatterplots que compoñen o menú de visualización, por exemplo, a cor das estelas, do fondo, dos eixos... ou a fonte, tamaño de letra...
+A aplicación debe permitir cambiar os parámetros de visualización dos diagramas de dispersión que compoñen o menú de visualización, por exemplo, a cor das etiquetas e lendas, do fondo, dos eixos... ou a fonte, tamaño de letra...
 \item[Importancia] \hfill \\
 Optativa
 \end{description}
@@ -418,9 +377,9 @@ Esencial
 \subsection*{RNF03}
 \begin{description}
 \item[Título] \hfill \\
-Representación matricial dos scatterplots
+Implementación en Java
 \item[Descrición] \hfill \\
-Os scatterplots represéntanse de xeito matricial, facendo que cada parámetro dentro dun eixo sexa enfrentado a cada un dos demáis do outro eixo, e en cada punto desa dupla se sitúe o scatterplot que compara ambos parámetros. Deste xeito, os scatterplots non son acumulables: se temos un que representa X fronte a Y, non podemos engadir outro que represente X fronte a Y, pois ocuparían ambos a misma cela dentro da matriz de scatterplots.
+O software tense que desenvolver na linguaxe de programación Java.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
@@ -428,16 +387,26 @@ Esencial
 \subsection*{RNF04}
 \begin{description}
 \item[Título] \hfill \\
+Representación matricial dos diagramas de dispersión
+\item[Descrición] \hfill \\
+Os diagramas de dispersión represéntanse de xeito matricial, facendo que cada parámetro dentro dun eixo sexa enfrontado a cada un dos demais do outro eixo, e en cada punto desa dupla se sitúe o diagrama de dispersión que compara ambos parámetros. Deste xeito, os diagramas de dispersión non son acumulables: se temos un que representa X (abscisas) fronte a Y (ordenadas), non podemos engadir outro que represente X (abscisas) fronte a Y (ordenadas), pois ocuparían ambos a mesma cela dentro da matriz de diagramas de dispersión.
+\item[Importancia] \hfill \\
+Esencial
+\end{description}
+
+\subsection*{RNF05}
+\begin{description}
+\item[Título] \hfill \\
 Entrega dentro de prazo
 \item[Descrición] \hfill \\
-Débese entregar unha versión funcional e documentada antes do día 8 de Setembro de 2014, ás 14:00 horas, pois é o momento no que remata o prazo de entrega.
+Débese entregar unha versión funcional e documentada antes do día 13 de Febreiro de 2014, ás 14:00 horas, pois é o momento no que remata o prazo de entrega.
 \item[Importancia] \hfill \\
 Esencial
 \end{description}
 
 \section{RFs dos sprints}
 
-Aínda que xa foron especificados para o Esquema de Descomposición do Traballo (EDT) do apartado de planificación (véxase Figura \ref{edt}), imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprints. Cómpre lembrar que para o EDT, en cada sprint da fase de Desenvolvemento e Inicio considerábamos como tarefas aos requisitos funcionais a implementar nela.
+Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprints ao longo da fase de Desenvolvemento, asignando uns prazos aproximados de traballo sobre uns conxunto de RFs relacionados entre si.
 
 \subsection*{Sprint 01}
 \begin{description}
@@ -499,7 +468,7 @@ Aínda que xa foron especificados para o Esquema de Descomposición do Traballo 
 \item[Fase:] Desenvolvemento
 \item[Comezo:] 05/05/2014
 \item[Finalización:] 19/05/2014
-\item[RFs a implementar:] RF21, RF22, RF23, RF24
+\item[RFs a implementar:] RF21, RF22, RF23
 \end{description}
 
 \subsection*{Sprint 08}
@@ -508,7 +477,7 @@ Aínda que xa foron especificados para o Esquema de Descomposición do Traballo 
 \item[Fase:] Desenvolvemento
 \item[Comezo:] 19/05/2014
 \item[Finalización:] 02/06/2014
-\item[RFs a implementar:] RF25, RF26, RF27
+\item[RFs a implementar:] RF24, RF25
 \end{description}
 
 \subsection*{Sprint 09}
@@ -517,7 +486,7 @@ Aínda que xa foron especificados para o Esquema de Descomposición do Traballo 
 \item[Fase:] Desenvolvemento
 \item[Comezo:] 02/06/2014
 \item[Finalización:] 16/06/2014
-\item[RFs a implementar:] RF28, RF29, RF30
+\item[RFs a implementar:] RF26, RF27, RF28
 \end{description}
 
 \subsection*{Sprint 10}
@@ -526,7 +495,7 @@ Aínda que xa foron especificados para o Esquema de Descomposición do Traballo 
 \item[Fase:] Desenvolvemento
 \item[Comezo:] 16/06/2014
 \item[Finalización:] 30/06/2014
-\item[RFs a implementar:] RF31, RF32, RF33
+\item[RFs a implementar:] RF29, RF30, RF31
 \end{description}
 
 \subsection*{Sprint 11}
@@ -535,5 +504,42 @@ Aínda que xa foron especificados para o Esquema de Descomposición do Traballo 
 \item[Fase:] Desenvolvemento
 \item[Comezo:] 30/06/2014
 \item[Finalización:] 07/07/2014
-\item[RFs a implementar:] RF34, RF35, RF36
+\item[RFs a implementar:] RF32
 \end{description}
+
+A partir da planificación temporal de grupos de RFs en común podemos estimar con certa confianza a duración total do proxecto, polo menos na súa fase de desenvolvemento. Faltarían dúas fases máis por considerar:
+
+\begin{itemize}
+\item Fase de inicio, previa á execución dos sprints, duraría un prazo de 2 semanas e constaría das seguintes tarefas:
+\begin{itemize}
+\item Lectura da especificación e documentación
+\item Reunión cos directores do proxecto
+\item Redacción do anteproxecto
+\end{itemize} 
+\item Fase de documentación, posterior á execución dos sprints, duraría un prazo de 5 semanas e constaría das seguintes tarefas:
+\begin{itemize}
+\item Revisión e documentación do código
+\item Compilación de documentos cos sprints
+\item Redacción da memoria
+\item Redacción dun manual de usuario
+\item Reunión co director para revisión
+\end{itemize}
+\end{itemize} 
+
+Agora que temos as estimacións da fase de inicio, da fase de documentación e da fase de desenvolvemento (cos seus sprints estimados) podemos realizar un diagrama de Gantt do proxecto (figura \ref{gantt}) para establecer a liña base do mesmo:
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/gantt}
+\caption{Diagrama de Gantt}
+\label{gantt}
+\end{figure}
+
+Considerando que coñecemos as tarefas da fase de inicio e da fase de documentación, así como os sprints da fase de desenvolvemento e incluso os RFs a desenvolver dentro de cada un deles, podemos plasmar todas estas tarefas nun Esquema de Descomposición do Traballo ou EDT (figura \ref{edt}). Isto implica que os RFs (ou máis ben o seu desenvolvemento) van ter a consideración de tarefas a partir de agora no noso proxecto.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/edt}
+\caption{Esquema de Descomposición do Traballo (EDT)}
+\label{edt}
+\end{figure}
