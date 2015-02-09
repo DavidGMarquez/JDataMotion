@@ -4,7 +4,16 @@ A extracción dos requisitos dun proxecto é unha fase fundamental na realizaci�
 
 Durante a reunión cos clientes foron xurdindo requisitos ou condicións necesarias para o produto. Estes requisitos foron rexistrados para posteriormente seren ordenados e clasificados segundo certos criterios que se amosan a continuación.
 
-Os casos de uso empréganse para modelar e representar cómo se vai realizar a interacción entre o sistema e os usuarios del, tamén coñecidos como actores. Os casos de uso constitúen as posibilidades das que dispón cada actor. Esta análise resulta especialmente útil en entornas orientadas a usuarios con distinta prioridade (un administrador, un usuario invitado, un usuario rexistrado, un usuario prémium, etc.) nas que cada un deses actores ten acceso a uns casos de uso específicos (por exemplo, moitas aplicacións web). Por tanto, a riqueza dos diagramas de casos de uso radica na variedade de tipos de usuario (actores). A nosa aplicación non necesita facer distinción algunha entre os tipos de usuario que poden facer uso dela. Todos van dispor das mesmas funcionalidades. Un escenario de caso de uso podería comezar cun traballador do ámbito médico-sanitario que dispón nun csv (exportado por outra aplicación, por exemplo) de certas medicións relacionadas cun paciente seu ao longo do seu seguimento. O traballador (usuario do sistema) podería importar o arquivo dentro do JDataMotion e obter unha táboa editable cos datos contidos, aplicar filtros para eliminar os datos atípicos das medicións do paciente e normalizar algunhas variables. Cos datos xa preprocesados, poderá reproducilos para ver o seu comportamento ao longo do tempo e a evolución do paciente.
+Os casos de uso empréganse para modelar e representar cómo se vai realizar a interacción entre o sistema e os usuarios del, tamén coñecidos como actores. Os casos de uso constitúen as posibilidades das que dispón cada actor. Esta análise resulta especialmente útil en entornas orientadas a usuarios con distinta prioridade (un administrador, un usuario invitado, un usuario rexistrado, un usuario prémium, etc.) nas que cada un deses actores ten acceso a uns casos de uso específicos (por exemplo, moitas aplicacións web). Por tanto, a riqueza dos diagramas de casos de uso radica na variedade de tipos de usuario (actores). A nosa aplicación non necesita facer distinción algunha entre os tipos de usuario que poden facer uso dela. Todos van dispor das mesmas funcionalidades. De todas formas, o diagrama de casos de uso pódese apreciar na figura \ref{casosUso}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/casosUso}
+\caption{Diagrama de casos de uso}
+\label{casosUso}
+\end{figure}
+
+Un escenario de caso de uso podería comezar cun traballador do ámbito médico-sanitario que dispón nun csv (exportado por outra aplicación, por exemplo) de certas medicións relacionadas cun paciente seu ao longo do seu seguimento. O traballador (usuario do sistema) podería importar o arquivo dentro do JDataMotion e obter unha táboa editable cos datos contidos, aplicar filtros para eliminar os datos atípicos das medicións do paciente e normalizar algunhas variables. Cos datos xa preprocesados, poderá reproducilos para ver o seu comportamento ao longo do tempo e a evolución do paciente. Finalmente, gardará os datos filtrados baixo un novo csv.
 
 \section{Requisitos funcionais}
 
@@ -251,7 +260,7 @@ Esencial
 \subsection*{RF25}
 \begin{description}
 \item[Título] \hfill \\
-Ir a un determinado instante dentro do intervalo temporal da reprodución (GoTo)
+Ir a un determinado instante dentro do intervalo temporal da reprodución
 \item[Descrición] \hfill \\
 A aplicación debe permitir situarse directamente sobre un instante de tempo, mantendo a reprodución pausada sobre esa marca temporal, e visualizando os diagramas de dispersión tal e como deben estar nese momento.
 \item[Importancia] \hfill \\
@@ -357,7 +366,7 @@ Esencial
 \subsection*{RNF01}
 \begin{description}
 \item[Título] \hfill \\
-Formatos de entrada admitidos ao importar e exportar arquivos
+Formatos de arquivo admitidos ao importar e exportar arquivos
 \item[Descrición] \hfill \\
 A aplicación debe estar preparada para importar e exportar arquivos en distintos formatos, como son o CSV e ARFF.
 \item[Importancia] \hfill \\
@@ -543,3 +552,139 @@ Considerando que coñecemos as tarefas da fase de inicio e da fase de documentac
 \caption{Esquema de Descomposición do Traballo (EDT)}
 \label{edt}
 \end{figure}
+
+\chapter{Análise de tecnoloxías}
+
+Chegados a este punto, temos un conxunto de tarefas especificadas e delimitadas no tempo que se van realizar, así que agora abordaremos as tecnoloxías (ferramentas e técnicas) que imos utilizar para levalas a cabo.
+
+\section{Arquitectura}
+
+Nesta sección imos comentar a arquitectura sobre a que estará cimentada o noso proxecto. É importante considerar á hora de elixila que a nosa aplicación non só debe funcionar correctamente con ela, se non que ademais debe facilitar a súa mellora e evolución ao longo do tempo, ou o que é o mesmo, debe permitir a súa escalabilidade.
+
+Na especificación deste proxecto e na captura de requisitos falouse do JDataMotion como unha ferramenta que permite visualizar dinamicamente conxuntos de datos que o usuario aporta. Esta premisa xa nos permite entrever que o modelo de datos non ten necesidade de ser extraido da máquina do cliente. Pódese traballar sobre ela de xeito local e obter resultados (visuais, ou un novo ficheiro de información procesada) sen necesidade de interactuar con sistemas externos (o que sería a computación distribuída). A arquitectura elixida será, segundo estas premisas, a dunha aplicación de escritorio.
+
+\section{Tecnoloxías}
+
+A partir do paradigma de computación que escollemos hai que elixir un conxunto de tecnoloxías que non só sexan compatibles con ela, se non que ademais permitan desenvolver satisfactoriamente os RFs pactados.
+
+\subsection{Ferramentas de deseño}
+
+\subsubsection{UML}
+
+UML (Unified Modeling Language) é un estándar de modelado perfectamente aplicable ao un entorno de desenvolvemento de software. Baséase na especificación e documentación dos compoñentes do sistema a diferentes niveis, dentro da fase de deseño do sistema. Nós empregaremos este estándar mediante 3 tipos de diagramas:
+
+\begin{description}
+\item[Diagramas de casos de uso:] Na figura \ref{casosUso} xa presentamos o diagrama de casos de uso do sistema.
+\item[Diagrama de clases:] Este tipo de diagrama presenta as clases que subxacen baixo o sistema, xunto cos seus métodos, atributos e interrelacións.
+\item[Diagramas de secuencia:] Estes diagramas plasman a interacción entre os compoñentes (ou obxectos) do sistema durante escenarios concretos da execución da aplicación. Neles amósase o intercambio de información e o fluxo de control entre compoñentes.
+\end{description} 
+
+\subsection{Ferramentas de desenvolvemento}
+
+A única imposición a nivel de desenvolvemento dada pola especificación do anteproxecto é perfectamente válida coas premisas tomadas ata agora: o sistema debe ser implementado na linguaxe de programación Java.
+
+\subsubsection{Java}
+
+Java é unha linguaxe de programación de propósito xeral, é dicir, contén librarías e soporte para diversos propósitos: acceso a base de datos, comunicación entre máquinas, cálculo matemático, procesamento de imaxes, etc. Tamén é unha linguaxe concorrente, pois contén fornecemento para fíos de execución que van dan lugar, entre outras moitas vantaxes, á posibilidade de crear unha interface gráfica como a que imos necesitar.
+
+Outras vantaxes que Java nos ofrece implicitamente son as seguintes:
+
+\begin{itemize}
+\item Java é multiplataforma, é dicir, o código que se programa compílase unha soa vez para ser empregado en calquera sistema, sen importar a súa especificación (sistema operativo, arquitectura do computador, etc.).
+\item O colector de lixo, que nos permite abstraernos do proceso de liberación de recursos na memoria. Este sistema localiza e libera automaticamente na memoria aqueles obxectos que deixaron de ser referenciados (e polo tanto xa non vai volver a empregar o programa).
+\end{itemize} 
+
+Java é unha das linguaxes máis populares para practicar a programación orientada a obxectos. Este paradigma, que traballa con clases e obxectos para modelar entidades reais como van ser as táboas, os filtros e por suposto os diagramas de dispersión, está particularmente ben adaptado para traballar coas interfaces gráficas. Outras vantaxes da programación orientada a obxectos das que nos imos beneficiar son a herdanza, o encapsulamento e o polimorfismo.
+
+Para o noso proxecto, a versión de Java que imos empregar vai ser a 8, en calquera das súas actualizacións (1.8.X, sendo X calquer valor). Para a execución do JDataMotion deberemos ter instalada unha versión igual ou superior da máquina virtual de Java, que podemos descargar dende o sitio web oficial \cite{java}.
+
+\subsubsection{JFreeChart}
+
+Na especificación do proxecto tamén se deixa caer unha decisión que afectará significativamente ao desenvolvemento do proxecto cerca das últimas tarefas deste (sprints asociados a visualización dos datos) e é o de elixir unha libraría gráfica axeitada para as nosas necesidades á hora de representar os diagramas de dispersión.
+
+Facendo un balance das principais solucións que existen actualmente na web, obtivemos:
+
+\begin{itemize}
+\item JFreeChart
+\item JZY3D
+\item Project Waterloo
+\item GRAL
+\item JChart2D
+\item JenSoft Java Chart API
+\item JRobin
+\end{itemize} 
+
+Deste conxunto saleu como mellor posicionado o proxecto JFreeChart \cite{jfreechart} de acordo ás seguintes características:
+
+\begin{itemize}
+\item É a solución que conta cun soporte máis activo. JFreeChart parecía ser o único proxecto no momento de tomar esta decisión que seguía sacando novas versións, actualizacións e parches. A solución JZY3D, sendo a segunda máis recente, non sacou unha nova versión dende o 2013, e no caso de JRobin a última versión é do 2011. Tendo en conta que Java 8 foi liberado en Marzo do 2014, parece ser que só JFreeChart se fixo eco da aparición da nova versión da máquina virtual, e polo tanto é a única librería que lle estará sacando partido a estas melloras.
+\item Non só é unha solución de software libre, senón que ademais é de código aberto. Isto será determinante á hora de acceder aos métodos e clases da librería, pois deberemos sobrescribir algúns para que se adecúen ao noso proxecto. De todos xeitos, as demais solucións presentadas tamén debían reunir esta característica á hora de ser elixidas.
+\item A documentación de JFreeChart é moi completa, os Javadocs da súa interface de programación de aplicacións (API) explican perfectamente a funcionalidade da librería, co que se reducen os custes temporais de aprendizaxe.
+\item O seu deseño favorece a herdanza de clases en beneficio das necesidades do noso proxecto.
+\item Incorpora as funcións de configuración gráfica necesarias no que atinxe aos diagramas de dispersión. Por medio de menús contextuais, cada diagrama de dispersión pode fixar a cor de fondo, títulos e eixos, ou a fonte e tamaño de letra das etiquetas por exemplo. Tamén pode exportar en distintos formatos de imaxe o diagrama en cuestión, copialo ao portapapeis.
+\item Permite a adición dinámica de puntos ao diagrama de dispersión. Isto será clave no proceso de reprodución dos datos.
+\item Incorpora as funcións de axuste da ventá de visualización para os diagramas de dispersión. Cada vez que creemos un diagrama de dispersión, este xa contará coa posibilidade de ser desprazado ou escalado dentro da súa ventá de visualización. Ademais tamén mellora a inserción dinámica de puntos no diagrama, pois cada vez que un punto se engade ao diagrama, a ventá reposiciónase para seguir abarcando todos os puntos.
+\end{itemize} 
+
+\subsubsection{JCommon}
+
+JCommon é unha librería da cal depende JFreeChart. Temos que acoplala ao proxecto, pero non imos ter necesidade de utilizala directamente.
+
+\subsubsection{Formatos de arquivo}
+
+No RNF01 fálase de dous tipos de arquivo de entrada e saída: ``csv'' e ``arff''.
+
+O formato csv (comma-separated values) de arquivos almacena os datos dun xeito tabular simple. A primeira liña dun arquivo csv contén separados por N-1 comas os N nomes dos atributos ou columnas da táboa (se segue o estándar). A continuación, cada nova liña conterá tamén N-1 comas para separar os N valores que toma esa entrada para cada atributo. Un valor nulo represéntase deixando baleiro o oco correspondente.
+
+O formato arff \bibitem{arff} é un formato de arquivo que contén a mesma información ca o csv, pero a maiores especifica o tipo de valores que se admiten para cada atributo, e tamén o nome da relación. A estrutura desta información é a seguinte:
+
+\begin{description}
+\item[@RELATION <nome da relación>] só unha vez en cada arquivo, sinala o nome da relación contida no ficheiro.
+\item[@ATTRIBUTE <nome dun atributo> <tipo do atributo>] incluirase unha entrada coma esta por cada atributo da relacion. O tipo do atributo pode ser un dos seguintes:
+\begin{itemize}
+\item numeric (atributo numérico)
+\item \textless valor nominal 1, valor nominal 2, valor nominal 3, ...\textgreater (atributo nominal, é dicir, que só pode tomar un dos valores nominais especificados na lista)
+\item string (calquera cadea de caracteres)
+\item date [\textless formato de data\textgreater ] (data no formato dado)
+\end{itemize} 
+\item[@DATA \textbackslash n \textless entrada 1 \textbackslash n entrada 2 \textbackslash n entrada 3 \textbackslash n ...\textgreater] despois de poñer a cláusula @DATA, engadirase unha nova liña para cada entrada. En cada entrada figurarán separados por comas os valores que esta toma para cada atributo (igual ca nos csv). Cada un desos valores asóciase ao atributo declarado na mesma posición.
+\item[\% \textless calquera liña de texto \textgreater] os comentarios comezan co símbolo '\%' e abranguen a liña enteira. Poden ir intercalados en calquera zona do ficheiro.
+\end{description} 
+
+\subsubsection{Weka}
+
+A raíz da documentación atopada sobre o formato arff vimos mencionado varias veces o término Weka. Weka (Waikato Environment for Knowledge Analysis) é unha plataforma de software libre para o aprendizaxe automático e a minería de datos, desenvolvido en Java pola Universidade de Waikato. Esta universidade precisamente creou o formato arff para Weka.
+
+O software de Weka pódese obterse a través do seu sitio web \cite{weka}. A apariencia do programa tras importar un arquivo arff pódese observar na figura \ref{weka}, e na figura \ref{wekaDiagramas} podemos observar como Weka plasma os datos do arquivo baixo unha matriz de diagramas de dispersión. Como se pode ver, Weka xa realiza as funcións de importación e visualización dos datos.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/weka}
+\caption{Software Weka}
+\label{weka}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/wekaDiagramas}
+\caption{Diagramas de dispersión en Weka}
+\label{wekaDiagramas}
+\end{figure}
+
+Podemos extraer de Weka non só ideas para a interface do JDataMotion e das súas funcionalidades, se non que ademais, gracias a que Weka é un proxecto de código aberto, poderemos reutilizar o proxecto como unha libraría mais, utilizando os métodos e clases públicas que ofrece a súa interface de programación (API) para implementar facilmente a importación dos datos desde arquivo. A visualización dos datos tamén podería ser reutilizada, pero os diagramas de dispersión de Weka son estáticos, e a súa solución de visualización non vai servir para o JDataMotion. Weka non implementa a reprodución da visualización que JDataMotion busca.
+
+\subsubsection{Swing}
+
+Swing é unha libraría gráfica expresamente deseñada para Java. Inclúe unha serie de elementos (coñecidos como ``widgets'') para facilitar a confección da interface gráfica a calquera desenvolvedor. Ao igual que Java, Swing é independente da plataforma, e ademáis posibilita en gran medida e extensión de clases, ou widgets, para adaptalos ás necesidades de calquera interface gráfica.
+
+\subsubsection{NetBeans IDE}
+
+NetBeans IDE é un entorno de desenvolvemento integrado, especialmente deseñado para programar sistemas en linguaxe Java, aínda que tamén da soporte a moitos outros linguaxes de programación. En NetBeans poderemos programar con facilidade as clases que logo o IDE compilará e executará. Tamén facilitará as labores de adxuntar librarías e dependencias, e dará fornecemento ao deseño da interface por medio dun lenzo e unha paleta de ``widgets'' propios de Swing, o cal reducirá o tempo que tardemos en aprender a manexar a libraría Swing.
+
+\subsection{Ferramentas de validación}
+
+A validación é un proceso que permite contrastar os resultados da implementación do sistema fronte aos requisitos (funcionais, non funcionais, de deseño, de calidade, etc) que inicialmente se esperaban dela.
+
+\subsubsection{JUnit}
+
+JUnit \cite{junit} é un compendio de librarías para aplicacións Java destinadas a realizar probas unitarias do sistema no que se inclúen. Contén un conxunto de clases que actúan sobre as clases e métodos do sistema orixinal, validando a súa resposta ante certos parámetros de entrada.

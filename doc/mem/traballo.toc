@@ -1,33 +1,48 @@
 \select@language {galician}
-\contentsline {chapter}{\numberline {1}Introduci\IeC {\'o}n}{1}
-\contentsline {section}{\numberline {1.1}Obxectivos xerais}{1}
-\contentsline {section}{\numberline {1.2}Relaci\IeC {\'o}n da documentaci\IeC {\'o}n}{2}
-\contentsline {chapter}{\numberline {2}Xesti\IeC {\'o}n do proxecto}{5}
-\contentsline {section}{\numberline {2.1}Xesti\IeC {\'o}n de riscos}{5}
-\contentsline {section}{\numberline {2.2}Metodolox\IeC {\'\i }a de desenvolvemento}{8}
-\contentsline {section}{\numberline {2.3}Planificaci\IeC {\'o}n temporal}{10}
-\contentsline {section}{\numberline {2.4}Xesti\IeC {\'o}n da configuraci\IeC {\'o}n}{11}
-\contentsline {section}{\numberline {2.5}An\IeC {\'a}lise de custos}{12}
-\contentsline {chapter}{\numberline {3}An\IeC {\'a}lise de requisitos}{13}
-\contentsline {section}{\numberline {3.1}Requisitos funcionais}{14}
-\contentsline {subsubsection}{Importancia}{14}
-\contentsline {section}{\numberline {3.2}Requisitos de calidade}{24}
-\contentsline {section}{\numberline {3.3}Requisitos de dese\IeC {\~n}o}{24}
-\contentsline {section}{\numberline {3.4}Requisitos non funcionais}{24}
-\contentsline {section}{\numberline {3.5}RFs dos sprints}{26}
-\contentsline {chapter}{\numberline {4}Dese\IeC {\~n}o}{33}
-\contentsline {chapter}{\numberline {5}Exemplos}{35}
-\contentsline {section}{\numberline {5.1}Un exemplo de secci\IeC {\'o}n}{35}
-\contentsline {subsection}{\numberline {5.1.1}Un exemplo de subsecci\IeC {\'o}n}{35}
-\contentsline {subsection}{\numberline {5.1.2}Otro exemplo de subsecci\IeC {\'o}n}{35}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{35}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{36}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{36}
-\contentsline {section}{\numberline {5.2}Exemplos de figuras e cadros}{36}
-\contentsline {section}{\numberline {5.3}Exemplos de referencias \IeC {\'a} bibliograf\IeC {\'\i }a}{36}
-\contentsline {section}{\numberline {5.4}Exemplos de enumeraci\IeC {\'o}ns}{36}
-\contentsline {chapter}{\numberline {6}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{39}
-\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{41}
-\contentsline {chapter}{\numberline {B}Manuais de usuario}{43}
-\contentsline {chapter}{\numberline {C}Licenza}{45}
-\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{47}
+\contentsline {chapter}{\numberline {1}Introduci\IeC {\'o}n}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Obxectivos xerais}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}Relaci\IeC {\'o}n da documentaci\IeC {\'o}n}{2}{section.1.2}
+\contentsline {chapter}{\numberline {2}Xesti\IeC {\'o}n do proxecto}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Xesti\IeC {\'o}n de riscos}{5}{section.2.1}
+\contentsline {section}{\numberline {2.2}Metodolox\IeC {\'\i }a de desenvolvemento}{8}{section.2.2}
+\contentsline {section}{\numberline {2.3}Planificaci\IeC {\'o}n temporal}{10}{section.2.3}
+\contentsline {section}{\numberline {2.4}Xesti\IeC {\'o}n da configuraci\IeC {\'o}n}{11}{section.2.4}
+\contentsline {section}{\numberline {2.5}An\IeC {\'a}lise de custos}{12}{section.2.5}
+\contentsline {chapter}{\numberline {3}An\IeC {\'a}lise de requisitos}{13}{chapter.3}
+\contentsline {section}{\numberline {3.1}Requisitos funcionais}{15}{section.3.1}
+\contentsline {subsubsection}{Importancia}{15}{section*.6}
+\contentsline {section}{\numberline {3.2}Requisitos de calidade}{25}{section.3.2}
+\contentsline {section}{\numberline {3.3}Requisitos de dese\IeC {\~n}o}{25}{section.3.3}
+\contentsline {section}{\numberline {3.4}Requisitos non funcionais}{25}{section.3.4}
+\contentsline {section}{\numberline {3.5}RFs dos sprints}{27}{section.3.5}
+\contentsline {chapter}{\numberline {4}An\IeC {\'a}lise de tecnolox\IeC {\'\i }as}{33}{chapter.4}
+\contentsline {section}{\numberline {4.1}Arquitectura}{33}{section.4.1}
+\contentsline {section}{\numberline {4.2}Tecnolox\IeC {\'\i }as}{33}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Ferramentas de dese\IeC {\~n}o}{34}{subsection.4.2.1}
+\contentsline {subsubsection}{UML}{34}{section*.55}
+\contentsline {subsection}{\numberline {4.2.2}Ferramentas de desenvolvemento}{34}{subsection.4.2.2}
+\contentsline {subsubsection}{Java}{34}{section*.56}
+\contentsline {subsubsection}{JFreeChart}{35}{section*.57}
+\contentsline {subsubsection}{JCommon}{36}{section*.58}
+\contentsline {subsubsection}{Formatos de arquivo}{36}{section*.59}
+\contentsline {subsubsection}{Weka}{37}{section*.60}
+\contentsline {subsubsection}{Swing}{38}{section*.61}
+\contentsline {subsubsection}{NetBeans IDE}{39}{section*.62}
+\contentsline {subsection}{\numberline {4.2.3}Ferramentas de validaci\IeC {\'o}n}{39}{subsection.4.2.3}
+\contentsline {subsubsection}{JUnit}{40}{section*.63}
+\contentsline {chapter}{\numberline {5}Dese\IeC {\~n}o}{41}{chapter.5}
+\contentsline {chapter}{\numberline {6}Exemplos}{43}{chapter.6}
+\contentsline {section}{\numberline {6.1}Un exemplo de secci\IeC {\'o}n}{43}{section.6.1}
+\contentsline {subsection}{\numberline {6.1.1}Un exemplo de subsecci\IeC {\'o}n}{43}{subsection.6.1.1}
+\contentsline {subsection}{\numberline {6.1.2}Otro exemplo de subsecci\IeC {\'o}n}{43}{subsection.6.1.2}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{43}{section*.64}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{44}{section*.65}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{44}{section*.66}
+\contentsline {section}{\numberline {6.2}Exemplos de figuras e cadros}{44}{section.6.2}
+\contentsline {section}{\numberline {6.3}Exemplos de referencias \IeC {\'a} bibliograf\IeC {\'\i }a}{44}{section.6.3}
+\contentsline {section}{\numberline {6.4}Exemplos de enumeraci\IeC {\'o}ns}{44}{section.6.4}
+\contentsline {chapter}{\numberline {7}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{47}{chapter.7}
+\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{49}{appendix.Alph1}
+\contentsline {chapter}{\numberline {B}Manuais de usuario}{51}{appendix.Alph2}
+\contentsline {chapter}{\numberline {C}Licenza}{53}{appendix.Alph3}
+\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{55}{appendix.Alph3}
