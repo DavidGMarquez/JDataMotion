@@ -334,14 +334,6 @@ public class Controlador implements Sesionizable {
         }
     }
 
-    public Modelo getModelo() {
-        return meuModelo;
-    }
-
-    public Vista getVista() {
-        return minaVista;
-    }
-
     private void exportarFicheiro(String path, String extension) {
         try {
             xestorComandos.ExecutarComando(new ComandoExportarFicheiro(meuModelo, path, extension));
@@ -436,7 +428,7 @@ public class Controlador implements Sesionizable {
             return false;
         }
         Controlador m = (Controlador) o;
-        return m.getModelo().equals(getModelo()) && m.getXestorComandos().equals(getXestorComandos());
+        return m.meuModelo.equals(meuModelo) && m.getXestorComandos().equals(getXestorComandos());
     }
 
     @Override
@@ -469,7 +461,7 @@ public class Controlador implements Sesionizable {
 
     private void restaurar() {
         try {
-            xestorComandos.ExecutarComando(new ComandoRestaurar(this));
+            xestorComandos.ExecutarComando(new ComandoRestaurar(meuModelo));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
         }

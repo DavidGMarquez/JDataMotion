@@ -23,8 +23,8 @@
  */
 package jdatamotion.comandos;
 
-import jdatamotion.Controlador;
 import jdatamotion.InstancesComparable;
+import jdatamotion.Modelo;
 import jdatamotion.Vista;
 
 /**
@@ -35,18 +35,18 @@ public class ComandoRestaurar extends ComandoDesfacible {
 
     private InstancesComparable datosAntigos;
 
-    public ComandoRestaurar(Controlador controlador) {
-        super(controlador, Vista.bundle.getString("Vista.jMenuItem10.text"));
+    public ComandoRestaurar(Modelo modelo) {
+        super(modelo, Vista.bundle.getString("Vista.jMenuItem10.text"));
     }
 
     @Override
     public void Desfacer() throws Exception {
-        ((Controlador) getObxectivo()).getModelo().setInstancesComparable(datosAntigos);
+        ((Modelo) getObxectivo()).setInstancesComparable(datosAntigos);
     }
 
     @Override
     public void Executar() throws Exception {
-        this.datosAntigos = new InstancesComparable(((Controlador) getObxectivo()).getModelo().getInstancesComparable());
-        ((Controlador) getObxectivo()).getModelo().restaurar();
+        this.datosAntigos = new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
+        ((Modelo) getObxectivo()).restaurar();
     }
 }

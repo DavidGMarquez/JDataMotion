@@ -31,18 +31,19 @@
 \contentsline {subsection}{\numberline {4.2.3}Ferramentas de validaci\IeC {\'o}n}{39}{subsection.4.2.3}
 \contentsline {subsubsection}{JUnit}{40}{section*.63}
 \contentsline {chapter}{\numberline {5}Dese\IeC {\~n}o}{41}{chapter.5}
-\contentsline {chapter}{\numberline {6}Exemplos}{43}{chapter.6}
-\contentsline {section}{\numberline {6.1}Un exemplo de secci\IeC {\'o}n}{43}{section.6.1}
-\contentsline {subsection}{\numberline {6.1.1}Un exemplo de subsecci\IeC {\'o}n}{43}{subsection.6.1.1}
-\contentsline {subsection}{\numberline {6.1.2}Otro exemplo de subsecci\IeC {\'o}n}{43}{subsection.6.1.2}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{43}{section*.64}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{44}{section*.65}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{44}{section*.66}
-\contentsline {section}{\numberline {6.2}Exemplos de figuras e cadros}{44}{section.6.2}
-\contentsline {section}{\numberline {6.3}Exemplos de referencias \IeC {\'a} bibliograf\IeC {\'\i }a}{44}{section.6.3}
-\contentsline {section}{\numberline {6.4}Exemplos de enumeraci\IeC {\'o}ns}{44}{section.6.4}
-\contentsline {chapter}{\numberline {7}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{47}{chapter.7}
-\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{49}{appendix.Alph1}
-\contentsline {chapter}{\numberline {B}Manuais de usuario}{51}{appendix.Alph2}
-\contentsline {chapter}{\numberline {C}Licenza}{53}{appendix.Alph3}
-\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{55}{appendix.Alph3}
+\contentsline {section}{\numberline {5.1}Estrutura do dese\IeC {\~n}o}{41}{section.5.1}
+\contentsline {chapter}{\numberline {6}Exemplos}{45}{chapter.6}
+\contentsline {section}{\numberline {6.1}Un exemplo de secci\IeC {\'o}n}{45}{section.6.1}
+\contentsline {subsection}{\numberline {6.1.1}Un exemplo de subsecci\IeC {\'o}n}{45}{subsection.6.1.1}
+\contentsline {subsection}{\numberline {6.1.2}Otro exemplo de subsecci\IeC {\'o}n}{45}{subsection.6.1.2}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{45}{section*.64}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{46}{section*.65}
+\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{46}{section*.66}
+\contentsline {section}{\numberline {6.2}Exemplos de figuras e cadros}{46}{section.6.2}
+\contentsline {section}{\numberline {6.3}Exemplos de referencias \IeC {\'a} bibliograf\IeC {\'\i }a}{46}{section.6.3}
+\contentsline {section}{\numberline {6.4}Exemplos de enumeraci\IeC {\'o}ns}{46}{section.6.4}
+\contentsline {chapter}{\numberline {7}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{49}{chapter.7}
+\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{51}{appendix.Alph1}
+\contentsline {chapter}{\numberline {B}Manuais de usuario}{53}{appendix.Alph2}
+\contentsline {chapter}{\numberline {C}Licenza}{55}{appendix.Alph3}
+\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{57}{appendix.Alph3}
