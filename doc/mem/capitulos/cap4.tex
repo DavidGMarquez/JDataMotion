@@ -50,4 +50,8 @@ A asociación dos patróns Modelo-Vista-Controlador e Observer baixo esta forma 
 \label{MVC-observer}
 \end{figure}
 
-Probablemente a diferencia máis destacable que podemos atopar entre este diagrama e o diagrama que correspondería coa nosa aplicación sería que no noso caso só a Vista implementará a interface \textit{Observer}. O Controlador no noso proxecto non ten que actuar de ningún xeito especial ante os cambios do Modelo, xa que de feito el é o responsable directo deses cambios, e non necesita ser notificado das súas propias accións.
+Probablemente a diferencia máis destacable que podemos atopar entre este diagrama e o diagrama que correspondería coa nosa aplicación sería que no noso caso só a Vista implementará a interface \textit{Observer}. O Controlador no noso proxecto non actuará de observador, pois non ten que recibir notificacións ante os cambios do Modelo, xa que de feito el é o responsable directo deses cambios, e non necesita ser notificado das súas propias accións.
+
+\section{Interface gráfica}
+
+Nesta sección configuraremos o deseño da interface gráfica. A Vista é a clase encargada de darlle soporte, delegando certas funcións en clases propias asociadas ou internas.
