@@ -45,8 +45,8 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import static jdatamotion.Vista.bundle;
-import jdatamotion.utilidadesDiagrama.ChartEditorManagerConfigurable;
-import jdatamotion.utilidadesDiagrama.DefaultChartEditorConfigurable;
+import jdatamotion.charteditors.ChartEditorManagerConfigurable;
+import jdatamotion.charteditors.DefaultChartEditorConfigurable;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartTheme;
@@ -56,7 +56,6 @@ import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYDrawableAnnotation;
 import org.jfree.chart.annotations.XYLineAnnotation;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.editor.ChartEditor;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.Range;
@@ -73,7 +72,7 @@ import weka.core.Instances;
  * @author usuario
  */
 public final class ManexadorScatterPlots {
-    
+
     public static final int PLAY = 0;
     public static final int PAUSE = 1;
     public static final int FREEZE = 2;
@@ -92,41 +91,41 @@ public final class ManexadorScatterPlots {
     private int msInstances[];
     private final int lonxitudeEstela;
     private final Vista vista;
-    
+
     public synchronized int getTInicial() {
         if (eixoTemporal.isEmpty()) {
             return 0;
         }
         return eixoTemporal.get(0).getObject().getMs();
     }
-    
+
     public synchronized int getTActual() {
         return t;
     }
-    
+
     public synchronized int getTFinal() {
         if (eixoTemporal.isEmpty()) {
             return 0;
         }
         return eixoTemporal.getLast().getObject().getMs();
     }
-    
+
     public synchronized int getNumSeries() {
         return numSeries;
     }
-    
+
     public synchronized int getNumItems() {
         return instances.numInstances();
     }
-    
+
     public synchronized void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
         this.propertyChangeListeners.add(propertyChangeListener);
     }
-    
+
     public synchronized int getEstado() {
         return tarefaPlay.getEstado();
     }
-    
+
     public synchronized void pecharJFramesChartPanel() {
         matrizScatterPlots.stream().filter((alsp) -> (alsp != null)).forEach((alsp) -> {
             alsp.stream().filter((sp) -> (sp != null)).forEach((sp) -> {
@@ -134,15 +133,15 @@ public final class ManexadorScatterPlots {
             });
         });
     }
-    
+
     public synchronized int[] getMsInstances() {
         return msInstances;
     }
-    
+
     public synchronized void goTo(int toMs) {
         goTo(1.0 * toMs / getTFinal());
     }
-    
+
     public synchronized void goTo(double to) {
         int toMs = (int) Math.round(to * (getTFinal() - getTInicial()) + getTInicial());
         Nodo<InstancesSimultaneas> nodo = nodoActual;
@@ -175,7 +174,7 @@ public final class ManexadorScatterPlots {
         nodoActual = nodo;
         t = (int) Math.round(getTInicial() + to * (getTFinal() - getTInicial()));
     }
-    
+
     private synchronized int numeroItemsAVisualizar(int toMs) {
         int n = 0;
         Nodo<InstancesSimultaneas> nodo = nodoActual.getNext();
@@ -185,7 +184,7 @@ public final class ManexadorScatterPlots {
         }
         return n;
     }
-    
+
     private synchronized int numeroItemsAAgochar(int toMs) {
         int n = 0;
         Nodo<InstancesSimultaneas> nodo = nodoActual;
@@ -195,63 +194,63 @@ public final class ManexadorScatterPlots {
         }
         return n;
     }
-    
+
     public synchronized void freeze() {
         tarefaPlay.freeze();
     }
-    
+
     synchronized void goToNext() {
         goTo(nodoActual.getNext().getObject().getMs());
     }
-    
+
     synchronized void goToBefore() {
         goTo(nodoActual.getBack().getObject().getMs());
     }
-    
+
     class Nodo<E> {
-        
+
         private Nodo<E> next;
         private Nodo<E> back;
         private final E object;
-        
+
         public Nodo<E> getNext() {
             return next;
         }
-        
+
         public Nodo<E> getBack() {
             return back;
         }
-        
+
         public E getObject() {
             return object;
         }
-        
+
         public Nodo(E object) {
             this.object = object;
         }
     }
-    
+
     private class NodeList<E> extends ArrayList<Nodo<E>> {
-        
+
         private Nodo<E> first;
         private Nodo<E> last;
-        
+
         public Nodo<E> getFirst() {
             return first;
         }
-        
+
         public Nodo<E> getLast() {
             return last;
         }
-        
+
         public NodeList() {
             super();
         }
-        
+
         public void addElement(E e) {
             add(new Nodo<>(e));
         }
-        
+
         @Override
         public boolean add(Nodo<E> e) {
             if (isEmpty()) {
@@ -266,25 +265,25 @@ public final class ManexadorScatterPlots {
             return super.add(e);
         }
     }
-    
+
     class InstancesSimultaneas extends ArrayList<Instance> {
-        
+
         private Integer ms;
-        
+
         public Integer getMs() {
             return this.ms;
         }
-        
+
         public InstancesSimultaneas(Integer ms) {
             super();
             this.ms = ms;
         }
-        
+
         public void setMs(Integer ms) {
             this.ms = ms;
         }
     }
-    
+
     synchronized private NodeList<InstancesSimultaneas> fabricarEixo(InstancesComparable instances, int indiceTemporal, int ordeVisualizacion, int lonxitudeEstela) {
         NodeList<InstancesSimultaneas> eixo = new NodeList<>();
         msInstances = new int[instances.numInstances()];
@@ -350,21 +349,21 @@ public final class ManexadorScatterPlots {
         }
         return eixo;
     }
-    
+
     final class TarefaPlay extends SwingWorker<Void, Void> {
-        
+
         private int estado;
-        
+
         public TarefaPlay(ArrayList<ArrayList<ScatterPlot>> alsp, boolean[][] scatterPlotsVisibles) {
             super();
             setEstado(PAUSE);
         }
-        
+
         public void setEstado(int estado) {
             firePropertyChange("estadoReproductor", this.estado, estado);
             this.estado = estado;
         }
-        
+
         @Override
         @SuppressWarnings("SleepWhileInLoop")
         protected Void doInBackground() {
@@ -405,29 +404,29 @@ public final class ManexadorScatterPlots {
             }
             return null;
         }
-        
+
         public void pause() {
             setEstado(PAUSE);
         }
-        
+
         public void freeze() {
             setEstado(FREEZE);
         }
-        
+
         public int getEstado() {
             return estado;
         }
-        
+
         public void play() {
             setEstado(PLAY);
             execute();
         }
     }
-    
+
     synchronized public void pause() {
         tarefaPlay.pause();
     }
-    
+
     synchronized public void play() {
         tarefaPlay = new TarefaPlay(matrizScatterPlots, scatterPlotsVisibles);
         propertyChangeListeners.stream().forEach((p) -> {
@@ -435,7 +434,7 @@ public final class ManexadorScatterPlots {
         });
         tarefaPlay.play();
     }
-    
+
     public ManexadorScatterPlots(Vista vista, InstancesComparable instances, int atributoColor, int indiceTemporal, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField, int ordeVisualizacion, int paso, int lonxitudeEstela) {
         int numAtributosNumericos = scatterPlotsVisibles.length;
         this.vista = vista;
@@ -464,15 +463,15 @@ public final class ManexadorScatterPlots {
         this.eixoTemporal = fabricarEixo(instances, indiceTemporal, ordeVisualizacion, lonxitudeEstela);
         this.t = getTInicial();
     }
-    
+
     public class JFrameChartPanel extends JFrame {
-        
+
         private final ChartPanel chartPanel;
-        
+
         public ChartPanel getChartPanel() {
             return chartPanel;
         }
-        
+
         public JFrameChartPanel(String title, ChartPanel chartPanel, int indiceI, int indiceJ) {
             super();
             this.chartPanel = chartPanel;
@@ -481,9 +480,9 @@ public final class ManexadorScatterPlots {
             setSize(600, 400);
         }
     }
-    
+
     class XYDatasetModelo extends XYSeriesCollection {
-        
+
         private Number domainMin;
         private Number domainMax;
         private Number rangeMin;
@@ -494,31 +493,31 @@ public final class ManexadorScatterPlots {
         private final int atributoX;
         private final int atributoColor;
         private final InstancesComparable atributos;
-        
+
         public int getAtributoY() {
             return atributoY;
         }
-        
+
         public int getAtributoX() {
             return atributoX;
         }
-        
+
         public int getAtributoColor() {
             return atributoColor;
         }
-        
+
         public Number getDomainMin() {
             return domainMin;
         }
-        
+
         public Number getDomainMax() {
             return domainMax;
         }
-        
+
         public Number getRangeMin() {
             return rangeMin;
         }
-        
+
         @Override
         public Comparable<String> getSeriesKey(int i) {
             if (atributoColor < 0) {
@@ -526,15 +525,15 @@ public final class ManexadorScatterPlots {
             }
             return i > 0 ? atributos.attribute(atributoColor).value(i - 1) : bundle.getString("senDefinir");
         }
-        
+
         public Number getRangeMax() {
             return rangeMax;
         }
-        
+
         public Range getRange() {
             return range;
         }
-        
+
         public int obterItemsTotais() {
             int r = 0;
             for (int j = 0; j < getSeriesCount(); j++) {
@@ -542,7 +541,7 @@ public final class ManexadorScatterPlots {
             }
             return r;
         }
-        
+
         public XYDatasetModelo(InstancesComparable atributos, int atributoX, int atributoY, int atributoColor) {
             super();
             this.atributos = atributos;
@@ -591,66 +590,66 @@ public final class ManexadorScatterPlots {
             } catch (IllegalArgumentException e) {
             }
         }
-        
+
         public double getDomainLowerBound() {
             return domainMin.doubleValue();
         }
-        
+
         @Override
         public double getDomainLowerBound(boolean flag) {
             return domainMin.doubleValue();
         }
-        
+
         public double getDomainUpperBound() {
             return domainMax.doubleValue();
         }
-        
+
         @Override
         public double getDomainUpperBound(boolean flag) {
             return domainMax.doubleValue();
         }
-        
+
         public Range getDomainBounds() {
             return domainRange;
         }
-        
+
         @Override
         public Range getDomainBounds(boolean flag) {
             return domainRange;
         }
-        
+
         public Range getDomainRange() {
             return domainRange;
         }
-        
+
         public double getRangeLowerBound() {
             return rangeMin.doubleValue();
         }
-        
+
         public double getRangeUpperBound() {
             return rangeMax.doubleValue();
         }
-        
+
         public Range getValueRange() {
             return range;
         }
-        
+
         public Number getMinimumDomainValue() {
             return domainMin;
         }
-        
+
         public Number getMaximumDomainValue() {
             return domainMax;
         }
-        
+
         public Number getMinimumRangeValue() {
             return domainMin;
         }
-        
+
         public Number getMaximumRangeValue() {
             return domainMax;
         }
-        
+
         public synchronized Nodo<InstancesSimultaneas> visualizarItems(ScatterPlot sp, int numeroItems) {
             sp.eliminarAnotacions(XYAnnotation.class);
             int e = numeroItems;
@@ -667,7 +666,7 @@ public final class ManexadorScatterPlots {
             fireDatasetChanged();
             return nodo;
         }
-        
+
         public synchronized Nodo<InstancesSimultaneas> agocharItems(ScatterPlot sp, int numeroItems) {
             setNotify(false);
             sp.eliminarAnotacions(XYAnnotation.class);
@@ -686,7 +685,7 @@ public final class ManexadorScatterPlots {
             return nodo;
         }
     }
-    
+
     public synchronized void procesarSeleccion(InstancesComparable instances, ArrayList<Integer> indicesInstances) {
         double radioInicial = 15.0;
         double grosorInicial = 1.0;
@@ -713,7 +712,7 @@ public final class ManexadorScatterPlots {
             });
         });
     }
-    
+
     public synchronized int numColumnasNonVacias() {
         int n = 0;
         for (int i = 0; i < matrizScatterPlots.size(); i++) {
@@ -723,7 +722,7 @@ public final class ManexadorScatterPlots {
         }
         return n;
     }
-    
+
     public synchronized int numFilasNonVacias() {
         int n = 0;
         for (int i = 0; i < matrizScatterPlots.size(); i++) {
@@ -733,7 +732,7 @@ public final class ManexadorScatterPlots {
         }
         return n;
     }
-    
+
     public synchronized boolean columnaScatterPlotsVacia(int columna) {
         for (boolean[] bb : scatterPlotsVisibles) {
             if (bb[columna]) {
@@ -742,7 +741,7 @@ public final class ManexadorScatterPlots {
         }
         return true;
     }
-    
+
     public synchronized boolean filaScatterPlotsVacia(int fila) {
         for (boolean b : scatterPlotsVisibles[fila]) {
             if (b) {
@@ -751,48 +750,56 @@ public final class ManexadorScatterPlots {
         }
         return true;
     }
-    
+
     public synchronized ScatterPlot getScatterPlot(int i, int j) {
         return matrizScatterPlots.get(i).get(j);
     }
-    
+
     public synchronized int getNumScatterplots() {
         return matrizScatterPlots.size();
     }
-    
+
     public synchronized void cubrirConScatterPlot(int i, int j, List<Integer> indices, int indiceAtributoNominal) {
         if (scatterPlotsVisibles[i][j]) {
             matrizScatterPlots.get(i).set(j, new ScatterPlot(instances, indices.get(j), indices.get(i), indiceAtributoNominal));
+            aplicarConfiguracionGraficaScatterPlot(matrizScatterPlots.get(i).get(j));
         }
         t = getTFinal();
         nodoActual = eixoTemporal.getLast();
         slider.setValue(100);
     }
-    
+
     public static Color obterCoresHSB(int cor, int totalCores) {
         return Color.getHSBColor((float) cor / totalCores, (float) 0.9, (float) 0.9);
     }
-    
+
     public static Color obterCorIntermedia(int cor, int totalCores, Color cor1, Color cor2) {
         int r1 = cor1.getRed(), g1 = cor1.getGreen(), b1 = cor1.getBlue(), r2 = cor2.getRed(), g2 = cor2.getGreen(), b2 = cor2.getBlue();
         return new Color((int) Math.round(1.0 * r1 + (r2 - r1) * cor / totalCores), (int) Math.round(1.0 * g1 + (g2 - g1) * cor / totalCores), (int) Math.round(1.0 * b1 + (b2 - b1) * cor / totalCores));
     }
-    
+
     public void aplicarConfiguracionGraficaScatterPlots() {
         int r = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[0]), g = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[1]), b = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[2]);
         Color bg = new Color(r, g, b);
         vista.setScatterPlotsBackground(bg);
-        for (ArrayList<ScatterPlot> alsp : matrizScatterPlots) {
-            for (ScatterPlot sp : alsp) {
-                if (sp != null) {
-                    for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
-                        jf.setBackgroundPaint(bg);
-                    }
+        matrizScatterPlots.stream().forEach((alsp) -> {
+            alsp.stream().filter((sp) -> (sp != null)).forEach((sp) -> {
+                for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
+                    jf.setBackgroundPaint(bg);
                 }
-            }
+            });
+        });
+    }
+
+    public void aplicarConfiguracionGraficaScatterPlot(ScatterPlot sp) {
+        int r = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[0]), g = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[1]), b = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[2]);
+        Color bg = new Color(r, g, b);
+        vista.setScatterPlotsBackground(bg);
+        for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
+            jf.setBackgroundPaint(bg);
         }
     }
-    
+
     public synchronized int contarJFramesVisibles() {
         int c = 0;
         for (ArrayList<ScatterPlot> alsp : matrizScatterPlots) {
@@ -800,33 +807,33 @@ public final class ManexadorScatterPlots {
         }
         return c;
     }
-    
+
     public class ScatterPlot implements Serializable {
-        
+
         private final int indiceAtributoX;
         private final int indiceAtributoY;
         private final int indiceAtributoColor;
         private ChartPanel chartPanelCela;
         private final JFrameChartPanel jFrameAmpliado;
-        
+
         public void setChartPanelCela(ChartPanel meuChartPanel) {
             this.chartPanelCela = meuChartPanel;
         }
-        
+
         public JFrameChartPanel getJFrameAmpliado() {
             return jFrameAmpliado;
         }
-        
+
         public int getIndiceAtributoColor() {
             return indiceAtributoColor;
         }
-        
+
         private class ChartPanelConfigurable extends ChartPanel {
-            
+
             public ChartPanelConfigurable(JFreeChart chart) {
                 super(chart);
             }
-            
+
             @Override
             public void doEditChartProperties() {
                 DefaultChartEditorConfigurable editor = (DefaultChartEditorConfigurable) ChartEditorManagerConfigurable.getChartEditor(getChart());
@@ -834,17 +841,17 @@ public final class ManexadorScatterPlots {
                     vista.grabarEscribirConfiguracionGraficaScatterPlots(editor);
                 }
             }
-            
+
             @Override
-            public void paintComponent(Graphics g) {
+            public synchronized void paintComponent(Graphics g) {
                 super.paintComponent(g);
             }
         }
-        
+
         public void pintarEstela() {
             pintarEstela(nodoActual, lonxitudeEstela);
         }
-        
+
         private synchronized void pintarEstela(Nodo<InstancesSimultaneas> nodo, int lonxitudeEstela) {
             Color corEstela = Color.white, corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint(), corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
             Nodo<InstancesSimultaneas> nAnterior, nActual = nodo;
@@ -866,7 +873,7 @@ public final class ManexadorScatterPlots {
                 }
             }
         }
-        
+
         public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor) {
             this.indiceAtributoX = indiceAtributoX;
             this.indiceAtributoColor = indiceAtributoColor;
@@ -885,7 +892,7 @@ public final class ManexadorScatterPlots {
             this.chartPanelCela.getChart().setTitle((String) null);
             this.jFrameAmpliado = new JFrameChartPanel("'" + instances.attribute(indiceAtributoY).name() + "' " + bundle.getString("fronteA") + " '" + instances.attribute(indiceAtributoX).name() + "'", chartPanelAmpliado, indiceAtributoX, indiceAtributoY);
         }
-        
+
         public void eliminarAnotacions(Class claseAnotacion) {
             XYPlot xyp1 = chartPanelCela.getChart().getXYPlot(), xyp2 = jFrameAmpliado.getChartPanel().getChart().getXYPlot();
             List annotations = xyp1.getAnnotations();
@@ -898,12 +905,12 @@ public final class ManexadorScatterPlots {
                 }
             }
         }
-        
+
         public void engadirAnotacion(XYAnnotation a) {
             chartPanelCela.getChart().getXYPlot().addAnnotation(a, false);
             jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(a, false);
         }
-        
+
         private JFreeChart createChart(InstancesComparable instances, XYDatasetModelo xydataset) {
             JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + Vista.getBundle().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, false, false);
             XYPlot xyplot = (XYPlot) jfreechart.getPlot();
@@ -919,32 +926,32 @@ public final class ManexadorScatterPlots {
             numberaxis.setAutoRangeIncludesZero(false);
             return jfreechart;
         }
-        
+
         public int getIndiceAtributoX() {
             return indiceAtributoX;
         }
-        
+
         public int getIndiceAtributoY() {
             return indiceAtributoY;
         }
-        
+
         public ChartPanel getChartPanelCela() {
             return chartPanelCela;
         }
     }
-    
+
     class CircleDrawer implements Drawable {
-        
+
         private final Paint outlinePaint;
         private final Stroke outlineStroke;
         private final Paint fillPaint;
-        
+
         public CircleDrawer(Paint paint, Stroke stroke, Paint paint1) {
             outlinePaint = paint;
             outlineStroke = stroke;
             fillPaint = paint1;
         }
-        
+
         @Override
         public void draw(Graphics2D graphics2d, Rectangle2D rectangle2d) {
             java.awt.geom.Ellipse2D.Double double1 = new java.awt.geom.Ellipse2D.Double(
@@ -971,5 +978,5 @@ public final class ManexadorScatterPlots {
             graphics2d.draw(double3);
         }
     }
-    
+
 }

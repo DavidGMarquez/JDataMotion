@@ -21,34 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jdatamotion.utilidadesDiagrama;
+package jdatamotion.charteditors;
 
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.editor.ChartEditor;
-import org.jfree.chart.editor.ChartEditorFactory;
+import java.awt.BorderLayout;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import org.jfree.chart.editor.PaletteSample;
+import org.jfree.chart.plot.ColorPalette;
+import org.jfree.chart.plot.RainbowPalette;
 
 /**
  *
  * @author usuario
  */
-public class DefaultChartEditorFactoryConfigurable implements ChartEditorFactory {
+class PaletteChooserPanelConfigurable extends JPanel {
 
     /**
-     * Creates a new instance.
+     * A combo for selecting the stroke.
      */
-    public DefaultChartEditorFactoryConfigurable() {
+    private JComboBox selector;
+
+    /**
+     * Constructor.
+     *
+     * @param current the current palette sample.
+     * @param available an array of 'available' palette samples.
+     */
+    @SuppressWarnings("unchecked")
+    public PaletteChooserPanelConfigurable(PaletteSample current,
+            PaletteSample[] available) {
+        setLayout(new BorderLayout());
+        this.selector = new JComboBox<>(available);
+        this.selector.setSelectedItem(current);
+        this.selector.setRenderer(new PaletteSample(new RainbowPalette()));
+        add(this.selector);
     }
 
     /**
-     * Returns a new instance of a {@link ChartEditor}.
+     * Returns the selected palette.
      *
-     * @param chart the chart.
-     *
-     * @return A chart editor for the given chart.
+     * @return The selected palette.
      */
-    @Override
-    public ChartEditor createEditor(JFreeChart chart) {
-        return new DefaultChartEditorConfigurable(chart);
+    public ColorPalette getSelectedPalette() {
+        PaletteSample sample = (PaletteSample) this.selector.getSelectedItem();
+        return sample.getPalette();
     }
-
 }

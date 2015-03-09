@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jdatamotion.utilidadesDiagrama;
+package jdatamotion.charteditors;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;

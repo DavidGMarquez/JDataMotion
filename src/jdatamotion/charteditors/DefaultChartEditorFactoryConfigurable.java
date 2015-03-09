@@ -21,58 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jdatamotion.utilidadesDiagrama;
+package jdatamotion.charteditors;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.editor.ChartEditor;
 import org.jfree.chart.editor.ChartEditorFactory;
-import org.jfree.chart.util.ParamChecks;
 
 /**
  *
  * @author usuario
  */
-public class ChartEditorManagerConfigurable {
+public class DefaultChartEditorFactoryConfigurable implements ChartEditorFactory {
 
     /**
-     * This factory creates new {@link ChartEditor} instances as required.
+     * Creates a new instance.
      */
-    static ChartEditorFactory factory = new DefaultChartEditorFactoryConfigurable();
-
-    /**
-     * Private constructor prevents instantiation.
-     */
-    private ChartEditorManagerConfigurable() {
-        // nothing to do
+    public DefaultChartEditorFactoryConfigurable() {
     }
 
     /**
-     * Returns the current factory.
-     *
-     * @return The current factory (never <code>null</code>).
-     */
-    public static ChartEditorFactory getChartEditorFactory() {
-        return factory;
-    }
-
-    /**
-     * Sets the chart editor factory.
-     *
-     * @param f the new factory (<code>null</code> not permitted).
-     */
-    public static void setChartEditorFactory(ChartEditorFactory f) {
-        ParamChecks.nullNotPermitted(f, "f");
-        factory = f;
-    }
-
-    /**
-     * Returns a component that can be used to edit the given chart.
+     * Returns a new instance of a {@link ChartEditor}.
      *
      * @param chart the chart.
      *
-     * @return The chart editor.
+     * @return A chart editor for the given chart.
      */
-    public static ChartEditor getChartEditor(JFreeChart chart) {
-        return factory.createEditor(chart);
+    @Override
+    public ChartEditor createEditor(JFreeChart chart) {
+        return new DefaultChartEditorConfigurable(chart);
     }
+
 }

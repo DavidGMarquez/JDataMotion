@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jdatamotion.utilidadesDiagrama;
+package jdatamotion.charteditors;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -267,7 +267,7 @@ class DefaultPlotEditorConfigurable extends JPanel implements ActionListener {
                     : ORIENTATION_HORIZONTAL;
             interior.add(new JLabel(localizationResources.getString(
                     "Orientation")));
-            this.orientationCombo = new JComboBox(orientationNames);
+            this.orientationCombo = new JComboBox<>(orientationNames);
             this.orientationCombo.setSelectedIndex(index);
             this.orientationCombo.setActionCommand("Orientation");
             this.orientationCombo.addActionListener(this);
