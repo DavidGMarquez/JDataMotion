@@ -779,14 +779,10 @@ public final class ManexadorScatterPlots {
     }
 
     public void aplicarConfiguracionGraficaScatterPlots() {
-        int r = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[0]), g = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[1]), b = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[2]);
-        Color bg = new Color(r, g, b);
-        vista.setScatterPlotsBackground(bg);
+        vista.setScatterPlotsBackground();
         matrizScatterPlots.stream().forEach((alsp) -> {
             alsp.stream().filter((sp) -> (sp != null)).forEach((sp) -> {
-                for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
-                    jf.setBackgroundPaint(bg);
-                }
+                aplicarConfiguracionGraficaScatterPlot(sp);
             });
         });
     }
@@ -794,9 +790,11 @@ public final class ManexadorScatterPlots {
     public void aplicarConfiguracionGraficaScatterPlot(ScatterPlot sp) {
         int r = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[0]), g = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[1]), b = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[2]);
         Color bg = new Color(r, g, b);
-        vista.setScatterPlotsBackground(bg);
         for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
             jf.setBackgroundPaint(bg);
+            if (jf.getLegend() != null) {
+                jf.getLegend().setBackgroundPaint(bg);
+            }
         }
     }
 
@@ -891,6 +889,11 @@ public final class ManexadorScatterPlots {
             ChartPanel chartPanelAmpliado = new ChartPanelConfigurable(jfreechart2);
             this.chartPanelCela.getChart().setTitle((String) null);
             this.jFrameAmpliado = new JFrameChartPanel("'" + instances.attribute(indiceAtributoY).name() + "' " + bundle.getString("fronteA") + " '" + instances.attribute(indiceAtributoX).name() + "'", chartPanelAmpliado, indiceAtributoX, indiceAtributoY);
+            for (JFreeChart jf : new JFreeChart[]{this.jFrameAmpliado.getChartPanel().getChart(), this.chartPanelCela.getChart()}) {
+                if (jf.getLegend() != null) {
+                    jf.getLegend().setBorder(0, 0, 0, 0);
+                }
+            }
         }
 
         public void eliminarAnotacions(Class claseAnotacion) {
