@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  10 FEB 2015 01:31
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  20 MAR 2015 21:29
 entering extended mode
 **traballo.tex
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.tex
@@ -771,7 +771,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 ! Undefined control sequence.
 \MakeUppercase ...ppercaseUnsupportedInPdfStrings 
                                                   
-l.44 ...de enumeraci\IeC {\'o}ns}{46}{section.6.4}
+l.37 ...ibles ampliaci\IeC {\'o}ns}{47}{chapter.6}
                                                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -781,67 +781,67 @@ and I'll forget about whatever was undefined.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 44.
+(hyperref)                removing `\<let>-command' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 44.
+(hyperref)                removing `\@tempdima' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\divide' on input line 44.
+(hyperref)                removing `\divide' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 44.
+(hyperref)                removing `\@tempdima' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\multiply' on input line 44.
+(hyperref)                removing `\multiply' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 44.
+(hyperref)                removing `\@tempdima' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 44.
+(hyperref)                removing `\<def>-command' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\f@size' on input line 44.
+(hyperref)                removing `\f@size' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\hbox' on input line 44.
+(hyperref)                removing `\hbox' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 44.
+(hyperref)                removing `\<def>-command' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\tf@size' on input line 44.
+(hyperref)                removing `\tf@size' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 44.
+(hyperref)                removing `\<def>-command' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\sf@size' on input line 44.
+(hyperref)                removing `\sf@size' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 44.
+(hyperref)                removing `\<def>-command' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\ssf@size' on input line 44.
+(hyperref)                removing `\ssf@size' on input line 37.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 44.
+(hyperref)                removing `\<let>-command' on input line 37.
 
 [3
 
@@ -1276,36 +1276,96 @@ or  <return>  to continue without it.
 ) [12]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap3.tex
 Cap\'{\i }tulo 3.
+[13
+
+
+
+
+]
 File: figuras/casosUso.eps Graphic file (type eps)
-<figuras/casosUso.eps> [13
+ <figuras/casosUso.eps>
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
+ [14]
+! Undefined control sequence.
+l.40 \subsubsubsection
+                      {Importancia}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-
-
-] [14] [15] [16] [17] [18] [19] [20] [21] [22]
-[23] [24] [25] [26] [27] [28] [29]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 524.
+[15] [16] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 528.
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 524.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 528.
+ [29]
 File: figuras/gantt.eps Graphic file (type eps)
- <figuras/gantt.eps>
+
+<figuras/gantt.eps>
 File: figuras/edt.eps Graphic file (type eps)
+ <figuras/edt.eps>
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-<figuras/edt.eps> [30] [31] [32]
-Cap\'{\i }tulo 4.
-[33
+ [30]
+[31]
+! Undefined control sequence.
+l.576 \subsubsubsection
+                       {UML}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
-]
-Overfull \hbox (0.82791pt too wide) in paragraph at lines 579--580
+[32]
+Overfull \hbox (0.82791pt too wide) in paragraph at lines 583--584
 []\OT1/cmr/m/n/12 Estes dia-gra-mas plas-man a in-ter-ac-cion en-tre os com-
  []
 
-[34] [35] [36]
+! Undefined control sequence.
+l.590 \subsubsubsection
+                       {Java}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.605 \subsubsubsection
+                       {JFreeChart}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[33] [34]
+! Undefined control sequence.
+l.633 \subsubsubsection
+                       {JCommon}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.637 \subsubsubsection
+                       {Formatos de arquivo}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
 
 ! LaTeX Error: Lonely \item--perhaps a missing list environment.
 
@@ -1313,21 +1373,21 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.639 O formato arff \bibitem{arff}
+l.643 O formato arff \bibitem{arff}
                                     é un formato de arquivo que contén a m...
 
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-Underfull \hbox (badness 10000) detected at line 639
+Underfull \hbox (badness 10000) detected at line 643
 [][]
  []
 
 ! Undefined control sequence.
 <argument> \@listctr 
                      
-l.639 O formato arff \bibitem{arff}
+l.643 O formato arff \bibitem{arff}
                                     é un formato de arquivo que contén a m...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1338,14 +1398,14 @@ and I'll forget about whatever was undefined.
 ! You can't use `\relax' after \the.
 <recently read> \c@ 
                     
-l.639 O formato arff \bibitem{arff}
+l.643 O formato arff \bibitem{arff}
                                     é un formato de arquivo que contén a m...
 I'm forgetting what you said and using zero instead.
 
 ! Undefined control sequence.
 <argument> @RELATION \textlessnome 
                                    da relación\textgreater 
-l.642 ...N \textlessnome da relación\textgreater]
+l.646 ...N \textlessnome da relación\textgreater]
                                                    só unha vez en cada arqu...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1353,18 +1413,18 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 642.
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 646.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omlcmr.fd"
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/bx/n' in size <12> not available
-(Font)              Font shape `OML/cmm/b/it' tried instead on input line 642.
+(Font)              Font shape `OML/cmm/b/it' tried instead on input line 646.
 
 ! Undefined control sequence.
 <argument> @ATTRIBUTE \textlessnome 
                                     dun atributo\textgreater \textlesstipo d...
-l.643 ...er \textlesstipo do atributo\textgreater]
+l.647 ...er \textlesstipo do atributo\textgreater]
                                                    incluirase unha entrada c...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1375,7 +1435,7 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 <argument> ... atributo\textgreater \textlesstipo 
                                                   do atributo\textgreater 
-l.643 ...er \textlesstipo do atributo\textgreater]
+l.647 ...er \textlesstipo do atributo\textgreater]
                                                    incluirase unha entrada c...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1384,42 +1444,81 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 646.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 650.
+[35]
 LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 650.
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 654.
 
-Overfull \hbox (19.05588pt too wide) in paragraph at lines 650--651
+Overfull \hbox (19.05588pt too wide) in paragraph at lines 654--655
 []\OT1/cmr/m/n/12 despois de po~ner
  []
 
 
-Overfull \hbox (7.07532pt too wide) in paragraph at lines 651--652
+Overfull \hbox (7.07532pt too wide) in paragraph at lines 655--656
 []\OT1/cmr/m/n/12 os co-men-ta-rios co-me-zan co smbo-lo '%' e abran-
  []
 
-[37]
-File: figuras/weka.eps Graphic file (type eps)
- <figuras/weka.eps>
-File: figuras/wekaDiagramas.eps Graphic file (type eps)
- <figuras/wekaDiagramas.eps> [38])
-Underfull \vbox (badness 3407) has occurred while \output is active []
+! Undefined control sequence.
+l.658 \subsubsubsection
+                       {Weka}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
- [39]
-[40] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap4.tex
-Cap\'{\i }tulo 5.
-[41
+File: figuras/weka.eps Graphic file (type eps)
+<figuras/weka.eps>
+File: figuras/wekaDiagramas.eps Graphic file (type eps)
+ <figuras/wekaDiagramas.eps>
+! Undefined control sequence.
+l.680 \subsubsubsection
+                       {Swing}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.684 \subsubsubsection
+                       {NetBeans IDE}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[36] [37]
+! Undefined control sequence.
+l.692 \subsubsubsection
+                       {JUnit}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+) [38]
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap4.tex
+Cap\'{\i }tulo 4.
+
+Package hyperref Warning: Difference (2) between bookmark levels is greater 
+(hyperref)                than one, level fixed on input line 5.
+
+[39
 
 
 
 
 ]
 File: figuras/MVC.eps Graphic file (type eps)
- <figuras/MVC.eps> [42] [43]
+ <figuras/MVC.eps> [40] [41]
 File: figuras/MVC-observer.eps Graphic file (type eps)
- <figuras/MVC-observer.eps>) [44]
+ <figuras/MVC-observer.eps>) [42]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/exemplos.tex
-Cap\'{\i }tulo 6.
-[45
+Cap\'{\i }tulo 5.
+[43
 
 
 
@@ -1456,24 +1555,24 @@ If that doesn't work, type  X <return>  to quit.
 File: figuras/figura01.eps Graphic file (type eps)
 <figuras/figura01.eps>
 
-LaTeX Warning: Citation `cuda' on page 46 undefined on input line 48.
+LaTeX Warning: Citation `cuda' on page 44 undefined on input line 48.
 
 
-LaTeX Warning: Citation `cdma' on page 46 undefined on input line 48.
+LaTeX Warning: Citation `cdma' on page 44 undefined on input line 48.
 
 
-LaTeX Warning: Citation `gonzalez' on page 46 undefined on input line 48.
+LaTeX Warning: Citation `gonzalez' on page 44 undefined on input line 48.
 
 
-LaTeX Warning: Citation `patricia' on page 46 undefined on input line 48.
+LaTeX Warning: Citation `patricia' on page 44 undefined on input line 48.
 
 
-LaTeX Warning: Citation `cuda' on page 46 undefined on input line 48.
+LaTeX Warning: Citation `cuda' on page 44 undefined on input line 48.
 
 
-LaTeX Warning: Citation `gonzalez' on page 46 undefined on input line 48.
+LaTeX Warning: Citation `gonzalez' on page 44 undefined on input line 48.
 
-[46] [47] ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
+[44] [45] ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2014/03/04 1.5c listings language file
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
@@ -1489,21 +1588,30 @@ Overfull \hbox (53.36043pt too wide) in paragraph at lines 97--98
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-) [48]
+) [46]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/conclusions.te
 x
-Cap\'{\i }tulo 7.
+Cap\'{\i }tulo 6.
+) [47
+
+
+
+
+] [48
+
+
+]
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.tex
+Ap\'endice A.
 ) [49
-
-
 
 
 ] [50
 
 
 ]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.tex
-Ap\'endice A.
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.tex
+Ap\'endice B.
 ) [51
 
 
@@ -1511,21 +1619,12 @@ Ap\'endice A.
 
 
 ]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.tex
-Ap\'endice B.
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.tex
+Ap\'endice C.
 ) [53
 
 
 ] [54
-
-
-]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.tex
-Ap\'endice C.
-) [55
-
-
-] [56
 
 
 ]
@@ -1582,18 +1681,18 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-) [57
+) [55
 
 
-] [58
+] [56
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/glosario.tex
-[59
+[57
 
 
-]) [60]
+]) [58]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 88.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 88.
  (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.aux
@@ -1616,7 +1715,7 @@ ux)
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 88.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 88.
 Package rerunfilecheck Info: File `traballo.out' has not changed.
-(rerunfilecheck)             Checksum: 08D024BDDBBBC7A1996D03ABDF6530F7;2400.
+(rerunfilecheck)             Checksum: D233B11F746371D922B041B6359EAFD0;2356.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.13947pt have occurred.
@@ -1631,11 +1730,11 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 88.
  ) 
 Here is how much of TeX's memory you used:
  8456 strings out of 493922
- 124841 string characters out of 3147299
- 227664 words of memory out of 3000000
+ 124875 string characters out of 3147299
+ 227667 words of memory out of 3000000
  11523 multiletter control sequences out of 15000+200000
  13879 words of font info for 53 fonts, out of 3000000 for 9000
  842 hyphenation exceptions out of 8191
- 31i,9n,51p,1214b,1133s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 30i,9n,51p,1214b,1133s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on traballo.dvi (70 pages, 205344 bytes).
+Output written on traballo.dvi (68 pages, 203380 bytes).

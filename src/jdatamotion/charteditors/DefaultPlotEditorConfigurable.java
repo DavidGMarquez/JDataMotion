@@ -40,6 +40,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import jdatamotion.Vista;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.ColorBar;
 import org.jfree.chart.plot.CategoryPlot;
@@ -64,7 +65,7 @@ import org.jfree.util.BooleanUtilities;
  *
  * @author usuario
  */
-class DefaultPlotEditorConfigurable extends JPanel implements ActionListener {
+public class DefaultPlotEditorConfigurable extends JPanel implements ActionListener {
 
     /**
      * Orientation constants.
@@ -166,39 +167,43 @@ class DefaultPlotEditorConfigurable extends JPanel implements ActionListener {
      *
      * @param plot the plot, which should be changed.
      */
-    public DefaultPlotEditorConfigurable(Plot plot) {
-        JPanel panel = createPlotPanel(plot);
+    public DefaultPlotEditorConfigurable() {
+        JPanel panel = createPlotPanel();
         add(panel);
     }
 
-    protected JPanel createPlotPanel(Plot plot) {
-        this.plotInsets = plot.getInsets();
-        this.backgroundPaintSample = new PaintSample(plot.getBackgroundPaint());
-        this.outlineStrokeSample = new StrokeSample(plot.getOutlineStroke());
-        this.outlinePaintSample = new PaintSample(plot.getOutlinePaint());
-        if (plot instanceof CategoryPlot) {
-            this.plotOrientation = ((CategoryPlot) plot).getOrientation();
-        } else if (plot instanceof XYPlot) {
-            this.plotOrientation = ((XYPlot) plot).getOrientation();
-        }
-        if (plot instanceof CategoryPlot) {
-            CategoryItemRenderer renderer = ((CategoryPlot) plot).getRenderer();
-            if (renderer instanceof LineAndShapeRenderer) {
-                LineAndShapeRenderer r = (LineAndShapeRenderer) renderer;
-                this.drawLines = BooleanUtilities.valueOf(
-                        r.getBaseLinesVisible());
-                this.drawShapes = BooleanUtilities.valueOf(
-                        r.getBaseShapesVisible());
-            }
-        } else if (plot instanceof XYPlot) {
-            XYItemRenderer renderer = ((XYPlot) plot).getRenderer();
-            if (renderer instanceof StandardXYItemRenderer) {
-                StandardXYItemRenderer r = (StandardXYItemRenderer) renderer;
-                this.drawLines = BooleanUtilities.valueOf(r.getPlotLines());
-                this.drawShapes = BooleanUtilities.valueOf(
-                        r.getBaseShapesVisible());
-            }
-        }
+    protected JPanel createPlotPanel() {
+//        this.plotInsets = plot.getInsets();
+//        this.backgroundPaintSample = new PaintSample(plot.getBackgroundPaint());
+        this.backgroundPaintSample = new PaintSample(Vista.GraphicConfigurationManager.readColorProperty("scatterplot_background_paint"));
+//        this.outlineStrokeSample = new StrokeSample(plot.getOutlineStroke());
+        this.outlineStrokeSample = new StrokeSample(Vista.GraphicConfigurationManager.readStrokeProperty("outline_stroke"));
+//        this.outlinePaintSample = new PaintSample(plot.getOutlinePaint());
+        this.outlinePaintSample = new PaintSample(Vista.GraphicConfigurationManager.readColorProperty("outline_paint"));
+//        if (plot instanceof CategoryPlot) {
+//            this.plotOrientation = ((CategoryPlot) plot).getOrientation();
+//        } else if (plot instanceof XYPlot) {
+//            this.plotOrientation = ((XYPlot) plot).getOrientation();
+//        }
+        this.plotOrientation = Vista.GraphicConfigurationManager.readPlotOrientationProperty("orientation");
+//        if (plot instanceof CategoryPlot) {
+//            CategoryItemRenderer renderer = ((CategoryPlot) plot).getRenderer();
+//            if (renderer instanceof LineAndShapeRenderer) {
+//                LineAndShapeRenderer r = (LineAndShapeRenderer) renderer;
+//                this.drawLines = BooleanUtilities.valueOf(
+//                        r.getBaseLinesVisible());
+//                this.drawShapes = BooleanUtilities.valueOf(
+//                        r.getBaseShapesVisible());
+//            }
+//        } else if (plot instanceof XYPlot) {
+//            XYItemRenderer renderer = ((XYPlot) plot).getRenderer();
+//            if (renderer instanceof StandardXYItemRenderer) {
+//                StandardXYItemRenderer r = (StandardXYItemRenderer) renderer;
+//                this.drawLines = BooleanUtilities.valueOf(r.getPlotLines());
+//                this.drawShapes = BooleanUtilities.valueOf(
+//                        r.getBaseShapesVisible());
+//            }
+//        }
 
         setLayout(new BorderLayout());
 
@@ -214,7 +219,7 @@ class DefaultPlotEditorConfigurable extends JPanel implements ActionListener {
         // create a panel for the settings...
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), plot.getPlotType()
+                BorderFactory.createEtchedBorder(), "XY Plot"
                 + localizationResources.getString(":")));
 
         JPanel general = new JPanel(new BorderLayout());
@@ -303,25 +308,25 @@ class DefaultPlotEditorConfigurable extends JPanel implements ActionListener {
         appearance.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         appearance.add(general, BorderLayout.NORTH);
 
-        JTabbedPane tabs = createPlotTabs(plot);
+        JTabbedPane tabs = createPlotTabs();
         tabs.add(localizationResources.getString("Appearance"), appearance);
         panel.add(tabs);
 
         return panel;
     }
 
-    protected JTabbedPane createPlotTabs(Plot plot) {
+    protected JTabbedPane createPlotTabs() {
         JTabbedPane tabs = new JTabbedPane();
         tabs.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
-        Axis domainAxis = null;
-        if (plot instanceof CategoryPlot) {
-            domainAxis = ((CategoryPlot) plot).getDomainAxis();
-        } else if (plot instanceof XYPlot) {
-            domainAxis = ((XYPlot) plot).getDomainAxis();
-        }
-        this.domainAxisPropertyPanel = DefaultAxisEditorConfigurable.getInstance(
-                domainAxis);
+//        Axis domainAxis = null;
+//        if (plot instanceof CategoryPlot) {
+//            domainAxis = ((CategoryPlot) plot).getDomainAxis();
+//        } else if (plot instanceof XYPlot) {
+//            domainAxis = ((XYPlot) plot).getDomainAxis();
+////        }
+//        this.domainAxisPropertyPanel = DefaultAxisEditorConfigurable.getInstance(
+//                domainAxis);
         if (this.domainAxisPropertyPanel != null) {
             this.domainAxisPropertyPanel.setBorder(
                     BorderFactory.createEmptyBorder(2, 2, 2, 2));
@@ -329,16 +334,16 @@ class DefaultPlotEditorConfigurable extends JPanel implements ActionListener {
                     this.domainAxisPropertyPanel);
         }
 
-        Axis rangeAxis = null;
-        if (plot instanceof CategoryPlot) {
-            rangeAxis = ((CategoryPlot) plot).getRangeAxis();
-        } else if (plot instanceof XYPlot) {
-            rangeAxis = ((XYPlot) plot).getRangeAxis();
-        } else if (plot instanceof PolarPlot) {
-            rangeAxis = ((PolarPlot) plot).getAxis();
-        }
-
-        this.rangeAxisPropertyPanel = DefaultAxisEditorConfigurable.getInstance(rangeAxis);
+//        Axis rangeAxis = null;
+//        if (plot instanceof CategoryPlot) {
+//            rangeAxis = ((CategoryPlot) plot).getRangeAxis();
+//        } else if (plot instanceof XYPlot) {
+//            rangeAxis = ((XYPlot) plot).getRangeAxis();
+//        } else if (plot instanceof PolarPlot) {
+//            rangeAxis = ((PolarPlot) plot).getAxis();
+//        }
+//
+//        this.rangeAxisPropertyPanel = DefaultAxisEditorConfigurable.getInstance(rangeAxis);
         if (this.rangeAxisPropertyPanel != null) {
             this.rangeAxisPropertyPanel.setBorder(
                     BorderFactory.createEmptyBorder(2, 2, 2, 2));
@@ -347,13 +352,13 @@ class DefaultPlotEditorConfigurable extends JPanel implements ActionListener {
         }
 
 //dmo: added this panel for colorbar control. (start dmo additions)
-        ColorBar colorBar = null;
-        if (plot instanceof ContourPlot) {
-            colorBar = ((ContourPlot) plot).getColorBar();
-        }
-
-        this.colorBarAxisPropertyPanel = DefaultColorBarEditorConfigurable.getInstance(
-                colorBar);
+//        ColorBar colorBar = null;
+//        if (plot instanceof ContourPlot) {
+//            colorBar = ((ContourPlot) plot).getColorBar();
+//        }
+//
+//        this.colorBarAxisPropertyPanel = DefaultColorBarEditorConfigurable.getInstance(
+//                colorBar);
         if (this.colorBarAxisPropertyPanel != null) {
             this.colorBarAxisPropertyPanel.setBorder(
                     BorderFactory.createEmptyBorder(2, 2, 2, 2));

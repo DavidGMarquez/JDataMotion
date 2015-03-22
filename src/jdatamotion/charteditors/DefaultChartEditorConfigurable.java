@@ -37,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import jdatamotion.Vista;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.editor.ChartEditor;
 import org.jfree.chart.plot.Plot;
@@ -86,7 +87,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
      *
      * @param chart the chart, whichs properties should be changed.
      */
-    public DefaultChartEditorConfigurable(JFreeChart chart) {
+    public DefaultChartEditorConfigurable() {
         setLayout(new BorderLayout());
 
         JPanel other = new JPanel(new BorderLayout());
@@ -102,13 +103,13 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
 
         this.antialias = new JCheckBox(localizationResources.getString(
                 "Draw_anti-aliased"));
-        this.antialias.setSelected(chart.getAntiAlias());
+        this.antialias.setSelected(Vista.GraphicConfigurationManager.readBooleanProperty("anti-aliased"));
         interior.add(this.antialias);
         interior.add(new JLabel(""));
         interior.add(new JLabel(""));
         interior.add(new JLabel(localizationResources.getString(
                 "Background_paint")));
-        this.background = new PaintSample(chart.getBackgroundPaint());
+        this.background = new PaintSample(Vista.GraphicConfigurationManager.readColorProperty("chart_background_paint"));
         interior.add(this.background);
         JButton button = new JButton(localizationResources.getString(
                 "Select..."));
@@ -161,20 +162,22 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
 
         JPanel parts = new JPanel(new BorderLayout());
 
-        Title title = chart.getTitle();
-        Plot plot = chart.getPlot();
+//        Title title = chart.getTitle();
+//        Plot plot = chart.getPlot();
 
         JTabbedPane tabs = new JTabbedPane();
 
-        this.titleEditor = new DefaultTitleEditorConfigurable(title);
+//        this.titleEditor = new DefaultTitleEditorConfigurable(title);
+        this.titleEditor = new DefaultTitleEditorConfigurable();
         this.titleEditor.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         tabs.addTab(localizationResources.getString("Title"), this.titleEditor);
 
-        if (plot instanceof PolarPlot) {
-            this.plotEditor = new DefaultPolarPlotEditorConfigurable((PolarPlot) plot);
-        } else {
-            this.plotEditor = new DefaultPlotEditorConfigurable(plot);
-        }
+//        if (plot instanceof PolarPlot) {
+//            this.plotEditor = new DefaultPolarPlotEditorConfigurable((PolarPlot) plot);
+//        } else {
+//            this.plotEditor = new DefaultPlotEditorConfigurable(plot);
+//        }
+        this.plotEditor = new DefaultPlotEditorConfigurable();
         this.plotEditor.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         tabs.addTab(localizationResources.getString("Plot"), this.plotEditor);
 

@@ -31,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import jdatamotion.Vista;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PolarPlot;
@@ -69,11 +70,13 @@ public class DefaultPolarPlotEditorConfigurable extends DefaultPlotEditorConfigu
      *
      * @param plot the plot, which should be changed.
      */
-    public DefaultPolarPlotEditorConfigurable(PolarPlot plot) {
-        super(plot);
-        this.angleOffsetValue = plot.getAngleOffset();
+    public DefaultPolarPlotEditorConfigurable() {
+        super();
+        //this.angleOffsetValue = plot.getAngleOffset();
+        this.angleOffsetValue = Vista.GraphicConfigurationManager.readDoubleProperty("angle-offset");
         this.angleOffset.setText(Double.toString(this.angleOffsetValue));
-        this.manualTickUnitValue = plot.getAngleTickUnit().getSize();
+        //this.manualTickUnitValue = plot.getAngleTickUnit().getSize();
+        this.manualTickUnitValue = Vista.GraphicConfigurationManager.readDoubleProperty("manual-tick-unit");
         this.manualTickUnit.setText(Double.toString(this.manualTickUnitValue));
     }
 
@@ -85,8 +88,8 @@ public class DefaultPolarPlotEditorConfigurable extends DefaultPlotEditorConfigu
      * @return A tabbed pane.
      */
     @Override
-    protected JTabbedPane createPlotTabs(Plot plot) {
-        JTabbedPane tabs = super.createPlotTabs(plot);
+    protected JTabbedPane createPlotTabs() {
+        JTabbedPane tabs = super.createPlotTabs();
         // TODO find a better localization key
         tabs.insertTab(localizationResources.getString("General1"), null,
                 createPlotPanel(), null, 0);
@@ -94,7 +97,8 @@ public class DefaultPolarPlotEditorConfigurable extends DefaultPlotEditorConfigu
         return tabs;
     }
 
-    private JPanel createPlotPanel() {
+    @Override
+    protected JPanel createPlotPanel() {
         JPanel plotPanel = new JPanel(new LCBLayout(3));
         plotPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 

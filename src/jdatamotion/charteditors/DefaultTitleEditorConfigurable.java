@@ -38,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import jdatamotion.Vista;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.chart.title.Title;
@@ -51,7 +52,7 @@ import org.jfree.ui.PaintSample;
  *
  * @author usuario
  */
-class DefaultTitleEditorConfigurable extends JPanel implements ActionListener {
+public class DefaultTitleEditorConfigurable extends JPanel implements ActionListener {
 
     /**
      * Whether or not to display the title on the chart.
@@ -106,14 +107,16 @@ class DefaultTitleEditorConfigurable extends JPanel implements ActionListener {
      *
      * @param title the title, which should be changed.
      */
-    public DefaultTitleEditorConfigurable(Title title) {
+    public DefaultTitleEditorConfigurable() {
 
-        TextTitle t = (title != null ? (TextTitle) title
-                : new TextTitle(localizationResources.getString("Title")));
-        this.showTitle = (title != null);
-        this.titleFont = t.getFont();
-        this.titleField = new JTextField(t.getText());
-        this.titlePaint = new PaintSample(t.getPaint());
+//        TextTitle t = (title != null ? (TextTitle) title
+//                : new TextTitle(localizationResources.getString("Title")));
+//        this.showTitle = (title != null);
+        this.titleFont = Vista.GraphicConfigurationManager.readFontProperty("title_font");
+//        this.titleField = new JTextField(t.getText());
+        //this.titlePaint = new PaintSample(t.getPaint());
+        String stc = Vista.propiedades.getProperty("title_paint");
+        this.titlePaint = new PaintSample(new Color(Integer.valueOf(stc.split(",")[0]), Integer.valueOf(stc.split(",")[1]), Integer.valueOf(stc.split(",")[2])));
 
         setLayout(new BorderLayout());
 
@@ -128,6 +131,18 @@ class DefaultTitleEditorConfigurable extends JPanel implements ActionListener {
         JPanel interior = new JPanel(new LCBLayout(4));
         interior.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
+//        interior.add(new JLabel(localizationResources.getString("Show_Title")));
+//        this.showTitleCheckBox = new JCheckBox();
+//        this.showTitleCheckBox.setSelected(this.showTitle);
+//        this.showTitleCheckBox.setActionCommand("ShowTitle");
+//        this.showTitleCheckBox.addActionListener(this);
+//        interior.add(new JPanel());
+//        interior.add(this.showTitleCheckBox);
+//
+//        JLabel titleLabel = new JLabel(localizationResources.getString("Text"));
+//        interior.add(titleLabel);
+//        interior.add(this.titleField);
+//        interior.add(new JPanel());
         JLabel fontLabel = new JLabel(localizationResources.getString("Font"));
         this.fontfield = new FontDisplayField(this.titleFont);
         this.selectFontButton = new JButton(

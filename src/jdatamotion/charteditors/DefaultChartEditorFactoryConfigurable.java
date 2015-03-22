@@ -48,7 +48,7 @@ public class DefaultChartEditorFactoryConfigurable implements ChartEditorFactory
      */
     @Override
     public ChartEditor createEditor(JFreeChart chart) {
-        return new DefaultChartEditorConfigurable(chart);
+        return new DefaultChartEditorConfigurable();
     }
 
 }

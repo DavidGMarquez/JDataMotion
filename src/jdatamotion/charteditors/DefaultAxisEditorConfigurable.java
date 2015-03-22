@@ -42,7 +42,6 @@ import javax.swing.JTextField;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.LogAxis;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.editor.DefaultLogAxisEditor;
 import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.layout.LCBLayout;
 import org.jfree.ui.FontChooserPanel;
@@ -54,7 +53,7 @@ import org.jfree.ui.RectangleInsets;
  *
  * @author usuario
  */
-class DefaultAxisEditorConfigurable extends JPanel implements ActionListener {
+public class DefaultAxisEditorConfigurable extends JPanel implements ActionListener {
 
     /**
      * The axis label.
@@ -199,10 +198,10 @@ class DefaultAxisEditorConfigurable extends JPanel implements ActionListener {
 
         JPanel interior = new JPanel(new LCBLayout(5));
         interior.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-        interior.add(new JLabel(localizationResources.getString("Label")));
-        this.label = new JTextField(axis.getLabel());
-        interior.add(this.label);
-        interior.add(new JPanel());
+//        interior.add(new JLabel(localizationResources.getString("Label")));
+//        this.label = new JTextField(axis.getLabel());
+//        interior.add(this.label);
+//        interior.add(new JPanel());
 
         interior.add(new JLabel(localizationResources.getString("Font")));
         this.labelFontField = new FontDisplayField(this.labelFont);

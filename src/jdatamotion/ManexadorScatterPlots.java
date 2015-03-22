@@ -25,7 +25,6 @@ package jdatamotion;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
@@ -788,13 +787,26 @@ public final class ManexadorScatterPlots {
     }
 
     public void aplicarConfiguracionGraficaScatterPlot(ScatterPlot sp) {
-        int r = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[0]), g = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[1]), b = Integer.valueOf(Vista.propiedades.getProperty("chart_background_paint").split(",")[2]);
-        Color bg = new Color(r, g, b);
+
+        Color ccbp = Vista.GraphicConfigurationManager.readColorProperty("chart_background_paint");
+        Color csbp = Vista.GraphicConfigurationManager.readColorProperty("scatterplot_background_paint");
+        Color cop = Vista.GraphicConfigurationManager.readColorProperty("outline_paint");
+        Color ctc = Vista.GraphicConfigurationManager.readColorProperty("title_paint");
+        Color cdap = Vista.GraphicConfigurationManager.readColorProperty("domain_axis_paint");
+        Color crap = Vista.GraphicConfigurationManager.readColorProperty("range_axis_paint");
+
         for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
-            jf.setBackgroundPaint(bg);
+            jf.setBackgroundPaint(ccbp);
             if (jf.getLegend() != null) {
-                jf.getLegend().setBackgroundPaint(bg);
+                jf.getLegend().setBackgroundPaint(ccbp);
             }
+            jf.getXYPlot().setBackgroundPaint(csbp);
+            jf.getXYPlot().setOutlinePaint(cop);
+            if (jf.getTitle() != null) {
+                jf.getTitle().setPaint(ctc);
+            }
+            jf.getXYPlot().getDomainAxis().setLabelPaint(cdap);
+            jf.getXYPlot().getRangeAxis().setLabelPaint(crap);
         }
     }
 
@@ -840,10 +852,6 @@ public final class ManexadorScatterPlots {
                 }
             }
 
-            @Override
-            public synchronized void paintComponent(Graphics g) {
-                super.paintComponent(g);
-            }
         }
 
         public void pintarEstela() {
@@ -859,10 +867,13 @@ public final class ManexadorScatterPlots {
                     if (nAnterior == null) {
                         break;
                     }
-                    for (int j = 0; j < nActual.getObject().size(); j++) {
-                        double xAct = nActual.getObject().get(j).value(indiceAtributoX), yAct = nActual.getObject().get(j).value(indiceAtributoY);
-                        for (int k = 0; k < nAnterior.getObject().size(); k++) {
-                            double xAnt = nAnterior.getObject().get(k).value(indiceAtributoX), yAnt = nAnterior.getObject().get(k).value(indiceAtributoY);
+                    Iterator<Instance> it1 = nActual.getObject().iterator(), it2 = nAnterior.getObject().iterator();
+                    while (it1.hasNext()) {
+                        Instance i1 = it1.next();
+                        double xAct = i1.value(indiceAtributoX), yAct = i1.value(indiceAtributoY);
+                        while (it2.hasNext()) {
+                            Instance i2 = it2.next();
+                            double xAnt = i2.value(indiceAtributoX), yAnt = i2.value(indiceAtributoY);
                             chartPanelCela.getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundChartPanel)), false);
                             jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(new XYLineAnnotation(xAnt, yAnt, xAct, yAct, new BasicStroke(2.0f), obterCorIntermedia(i, lonxitudeEstela, corEstela, corBackgroundJFrameAmpliar)), false);
                         }

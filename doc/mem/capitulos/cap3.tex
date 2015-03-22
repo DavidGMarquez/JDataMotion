@@ -1,4 +1,8 @@
-\chapter{Análise de requisitos}
+\chapter{Análise}
+
+Na fase de análise do proxecto intentaremos discernir cales van ser as metas ou obxectivos do mesmo. Ao seu remate deberemos ter claro cales son os obxectivos que debe alcanzar o proxecto, así como ter definidos os pasos ou tarefas para logralos. Tras isto, nesta etapa tamén incorporaremos un estudo e valoración das tecnoloxías das que botaremos man.
+
+\section{Análise de requisitos}
 
 A extracción dos requisitos dun proxecto é unha fase fundamental na realización de calquera proxecto, pois inflúe non só nas propias tarefas a desenvolver para a súa implementación, se non tamén na valoración do produto final e da súa calidade. O proceso desta etapa pódese revisar na norma IEEE-STD-830-1998 \cite{ieee-std-830-1998}. A obtención de requisitos adóitase facer durante ou tras unha reunión cos clientes.
 
@@ -15,9 +19,9 @@ Os casos de uso empréganse para modelar e representar cómo se vai realizar a i
 
 Un escenario de caso de uso podería comezar cun traballador do ámbito médico-sanitario que dispón nun csv (exportado por outra aplicación, por exemplo) de certas medicións relacionadas cun paciente seu ao longo do seu seguimento. O traballador (usuario do sistema) podería importar o arquivo dentro do JDataMotion e obter unha táboa editable cos datos contidos, aplicar filtros para eliminar os datos atípicos das medicións do paciente e normalizar algunhas variables. Cos datos xa preprocesados, poderá reproducilos para ver o seu comportamento ao longo do tempo e a evolución do paciente. Finalmente, gardará os datos filtrados baixo un novo csv.
 
-\section{Requisitos funcionais}
+\subsection{Requisitos funcionais}
 
-\subsection*{RF01}
+\subsubsection*{RF01}
 \begin{description}
 \item[Título] \hfill \\
 Importar arquivos con datos para o experimento
@@ -27,17 +31,17 @@ A aplicación debe permitir cargar do sistema de arquivos un ficheiro que conte�
 Esencial
 \end{description}
 
-\subsection*{RF02}
+\subsubsection*{RF02}
 \begin{description}
 \item[Título] \hfill \\
 Exportar datos
 \item[Descrición] \hfill \\
 A aplicación debe permitir almacenar nun arquivo o conxunto de datos do experimento actual (tendo en conta filtrados, modificacións, datos engadidos ou eliminados...). Os arquivos de saída deberán respectar o RNF01 en canto a formato de almacenamento.
-\subsubsection{Importancia}
+\subsubsubsection{Importancia}
 Esencial
 \end{description}
 
-\subsection*{RF03}
+\subsubsection*{RF03}
 \begin{description}
 \item[Título] \hfill \\
 Gardar sesión
@@ -47,7 +51,7 @@ A aplicación debe permitir gardar en disco a sesión (ou experimento) actual ta
 Esencial
 \end{description}
 
-\subsection*{RF04}
+\subsubsection*{RF04}
 \begin{description}
 \item[Título] \hfill \\
 Abrir sesión
@@ -57,7 +61,7 @@ A aplicación debe permitir restaurar unha sesión (ou experimento) gardada ante
 Esencial
 \end{description}
 
-\subsection*{RF05}
+\subsubsection*{RF05}
 \begin{description}
 \item[Título] \hfill \\
 Representar os datos en forma de táboa
@@ -67,7 +71,7 @@ A aplicación debe ser capaz de amosar os datos segundo unha táboa na que figur
 Esencial
 \end{description}
 
-\subsection*{RF06}
+\subsubsection*{RF06}
 \begin{description}
 \item[Título] \hfill \\
 Insertar datos no experimento actual
@@ -77,7 +81,7 @@ A aplicación debe permitir a inserción dinámica de datos no experimento actua
 Esencial
 \end{description}
 
-\subsection*{RF07}
+\subsubsection*{RF07}
 \begin{description}
 \item[Título] \hfill \\
 Modificar datos no experimento actual
@@ -87,7 +91,7 @@ A aplicación debe permitir a modificación dinámica de datos no experimento ac
 Esencial
 \end{description}
 
-\subsection*{RF08}
+\subsubsection*{RF08}
 \begin{description}
 \item[Título] \hfill \\
 Eliminar datos no experimento actual
@@ -97,7 +101,7 @@ A aplicación debe permitir a eliminación dinámica de datos no experimento act
 Esencial
 \end{description}
 
-\subsection*{RF09}
+\subsubsection*{RF09}
 \begin{description}
 \item[Título] \hfill \\
 Asignar tipos aos atributos dun arquivo importado
@@ -107,7 +111,7 @@ A aplicación debe permitir especificar os tipos de atributos presentes no arqui
 Esencial
 \end{description}
 
-\subsection*{RF10}
+\subsubsection*{RF10}
 \begin{description}
 \item[Título] \hfill \\
 Sinalar identificación temporal
@@ -117,7 +121,7 @@ A aplicación debe permitir sinalar unha columna que exprese o orde ou a tempora
 Esencial
 \end{description}
 
-\subsection*{RF11}
+\subsubsection*{RF11}
 \begin{description}
 \item[Título] \hfill \\
 Representar os datos graficamente mediante diagrama de dispersión
@@ -127,7 +131,7 @@ A aplicación debe ser capaz de representar graficamente (mediante diagrama de d
 Esencial
 \end{description}
 
-\subsection*{RF12}
+\subsubsection*{RF12}
 \begin{description}
 \item[Título] \hfill \\
 Engadir diagramas de dispersión ao menú de visualización
@@ -137,7 +141,7 @@ A aplicación debe permitir engadir dinámicamente novos diagramas de dispersió
 Esencial
 \end{description}
 
-\subsection*{RF13}
+\subsubsection*{RF13}
 \begin{description}
 \item[Título] \hfill \\
 Eliminar un diagrama de dispersión do menú de visualización
@@ -147,7 +151,7 @@ A aplicación debe permitir eliminar un diagrama de dispersión do menú de visu
 Esencial
 \end{description}
 
-\subsection*{RF14}
+\subsubsection*{RF14}
 \begin{description}
 \item[Título] \hfill \\
 Configurar diagramas de dispersión do menú de visualización
@@ -157,7 +161,7 @@ A aplicación debe permitir especificar para os diagramas de dispersión do men�
 Esencial
 \end{description}
 
-\subsection*{RF15}
+\subsubsection*{RF15}
 \begin{description}
 \item[Título] \hfill \\
 Detallar punto seleccionado dentro do diagrama de dispersión
@@ -167,7 +171,7 @@ Cada punto dos diagramas de dispersión pode ser seleccionado para ver nun apart
 Esencial
 \end{description}
 
-\subsection*{RF16}
+\subsubsection*{RF16}
 \begin{description}
 \item[Título] \hfill \\
 Resaltar punto en diagramas de dispersión
@@ -177,7 +181,7 @@ Cada punto seleccionalo dentro dun diagrama de dispersión resaltarase tanto nel
 Esencial
 \end{description}
 
-\subsection*{RF17}
+\subsubsection*{RF17}
 \begin{description}
 \item[Título] \hfill \\
 Desprazar a ventá de visualización por arrastre de cada diagrama de dispersión
@@ -187,7 +191,7 @@ Para cada diagrama de dispersión poderemos usar unha ferramenta ``man'' para de
 Esencial
 \end{description}
 
-\subsection*{RF18}
+\subsubsection*{RF18}
 \begin{description}
 \item[Título] \hfill \\
 Escalar a ventá de visualización de cada diagrama de dispersión
@@ -197,7 +201,7 @@ Para cada diagrama de dispersión poderemos usar unha ferramenta de escalado da 
 Esencial
 \end{description}
 
-\subsection*{RF19}
+\subsubsection*{RF19}
 \begin{description}
 \item[Título] \hfill \\
 Escalar e reposicionar dinamicamente
@@ -207,7 +211,7 @@ Para cada diagrama de dispersión permitirase que a ventá de visualización que
 Esencial
 \end{description}
 
-\subsection*{RF20}
+\subsubsection*{RF20}
 \begin{description}
 \item[Título] \hfill \\
 Reproducir a secuencia de datos
@@ -217,7 +221,7 @@ A aplicación debe de permitir que a visualización dos diagramas de dispersión
 Esencial
 \end{description}
 
-\subsection*{RF21}
+\subsubsection*{RF21}
 \begin{description}
 \item[Título] \hfill \\
 Representar estela
@@ -227,7 +231,7 @@ A aplicación debe de permitir que cada novo punto pintado se ligue ao último r
 Esencial
 \end{description}
 
-\subsection*{RF22}
+\subsubsection*{RF22}
 \begin{description}
 \item[Título] \hfill \\
 Difuminar estela ao longo da reprodución
@@ -237,7 +241,7 @@ A aplicación debe permitir difuminar as estelas xa representadas a través do a
 Esencial
 \end{description}
 
-\subsection*{RF23}
+\subsubsection*{RF23}
 \begin{description}
 \item[Título] \hfill \\
 Configurar a reprodución da secuencia de datos
@@ -247,7 +251,7 @@ A aplicación debe de permitir que a visualización dos diagramas de dispersión
 Esencial
 \end{description}
 
-\subsection*{RF24}
+\subsubsection*{RF24}
 \begin{description}
 \item[Título] \hfill \\
 Pausar a reprodución
@@ -257,7 +261,7 @@ A aplicación debe permitir parar a reprodución na marca de tempo na que se ato
 Esencial
 \end{description}
 
-\subsection*{RF25}
+\subsubsection*{RF25}
 \begin{description}
 \item[Título] \hfill \\
 Ir a un determinado instante dentro do intervalo temporal da reprodución
@@ -267,7 +271,7 @@ A aplicación debe permitir situarse directamente sobre un instante de tempo, ma
 Esencial
 \end{description}
 
-\subsection*{RF26}
+\subsubsection*{RF26}
 \begin{description}
 \item[Título] \hfill \\
 Insertar filtros para os datos do experimento
@@ -277,7 +281,7 @@ A aplicación debe permitir engadir unha serie de filtros que se aplicarán de x
 Esencial
 \end{description}
 
-\subsection*{RF27}
+\subsubsection*{RF27}
 \begin{description}
 \item[Título] \hfill \\
 Eliminar un filtro para os datos do experimento
@@ -287,7 +291,7 @@ A aplicación debe permitir eliminar un determinado filtro dentro da secuencia d
 Esencial
 \end{description}
 
-\subsection*{RF28}
+\subsubsection*{RF28}
 \begin{description}
 \item[Título] \hfill \\
 Configurar filtros para os datos do experimento
@@ -297,7 +301,7 @@ A aplicación debe permitir seleccionar un determinado filtro dentro da secuenci
 Esencial
 \end{description}
 
-\subsection*{RF29}
+\subsubsection*{RF29}
 \begin{description}
 \item[Título] \hfill \\
 Gardar unha secuencia de filtros do experimento
@@ -307,7 +311,7 @@ A aplicación debe permitir gardar unha secuencia de filtros, non necesariamente
 Esencial
 \end{description}
 
-\subsection*{RF30}
+\subsubsection*{RF30}
 \begin{description}
 \item[Título] \hfill \\
 Cargar unha secuencia de filtros para o experimento
@@ -317,7 +321,7 @@ A aplicación debe permitir cargar do sistema de arquivos unha secuencia de filt
 Esencial
 \end{description}
 
-\subsection*{RF31}
+\subsubsection*{RF31}
 \begin{description}
 \item[Título] \hfill \\
 Mover os filtros dentro da secuencia de filtros
@@ -327,7 +331,7 @@ A aplicación debe permitir desprazar un filtro dentro da secuencia de filtros d
 Esencial
 \end{description}
 
-\subsection*{RF32}
+\subsubsection*{RF32}
 \begin{description}
 \item[Título] \hfill \\
 Configurar o menú de visualización
@@ -337,9 +341,9 @@ A aplicación debe permitir cambiar os parámetros de visualización dos diagram
 Optativa
 \end{description}
 
-\section{Requisitos de calidade}
+\subsection{Requisitos de calidade}
 
-\subsection*{RC01}
+\subsubsection*{RC01}
 \begin{description}
 \item[Título] \hfill \\
 Latencia mínima para o procesamento
@@ -349,9 +353,9 @@ A aplicación debe responder nun tempo razoable ás operacións executadas polo 
 Esencial
 \end{description}
 
-\section{Requisitos de deseño}
+\subsection{Requisitos de deseño}
 
-\subsection*{RD01}
+\subsubsection*{RD01}
 \begin{description}
 \item[Título] \hfill \\
 Modularidade no deseño dos filtros
@@ -361,9 +365,9 @@ A aplicación debe facilitar unha interface para a inclusión e uso de filtros p
 Esencial
 \end{description}
 
-\section{Requisitos non funcionais}
+\subsection{Requisitos non funcionais}
 
-\subsection*{RNF01}
+\subsubsection*{RNF01}
 \begin{description}
 \item[Título] \hfill \\
 Formatos de arquivo admitidos ao importar e exportar arquivos
@@ -373,7 +377,7 @@ A aplicación debe estar preparada para importar e exportar arquivos en distinto
 Esencial
 \end{description}
 
-\subsection*{RNF02}
+\subsubsection*{RNF02}
 \begin{description}
 \item[Título] \hfill \\
 Relación programa-sesión
@@ -383,7 +387,7 @@ Cada instancia do programa debe traballar cunha única sesión (experimento).
 Esencial
 \end{description}
 
-\subsection*{RNF03}
+\subsubsection*{RNF03}
 \begin{description}
 \item[Título] \hfill \\
 Implementación en Java
@@ -393,7 +397,7 @@ O software tense que desenvolver na linguaxe de programación Java.
 Esencial
 \end{description}
 
-\subsection*{RNF04}
+\subsubsection*{RNF04}
 \begin{description}
 \item[Título] \hfill \\
 Representación matricial dos diagramas de dispersión
@@ -403,7 +407,7 @@ Os diagramas de dispersión represéntanse de xeito matricial, facendo que cada 
 Esencial
 \end{description}
 
-\subsection*{RNF05}
+\subsubsection*{RNF05}
 \begin{description}
 \item[Título] \hfill \\
 Entrega dentro de prazo
@@ -413,11 +417,11 @@ Débese entregar unha versión funcional e documentada antes do día 13 de Febre
 Esencial
 \end{description}
 
-\section{RFs dos sprints}
+\subsection{RFs dos sprints}
 
 Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprints ao longo da fase de Desenvolvemento, asignando uns prazos aproximados de traballo sobre uns conxunto de RFs relacionados entre si.
 
-\subsection*{Sprint 01}
+\subsubsection*{Sprint 01}
 \begin{description}
 \item[Nome:] Interacción co sistema de ficheiros
 \item[Fase:] Desenvolvemento
@@ -426,7 +430,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF01, RF02, RF03, RF04
 \end{description}
 
-\subsection*{Sprint 02}
+\subsubsection*{Sprint 02}
 \begin{description}
 \item[Nome:] Manipulación de datos
 \item[Fase:] Desenvolvemento
@@ -435,7 +439,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF05, RF06, RF07, RF08
 \end{description}
 
-\subsection*{Sprint 03}
+\subsubsection*{Sprint 03}
 \begin{description}
 \item[Nome:] Preprocesado
 \item[Fase:] Desenvolvemento
@@ -444,7 +448,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF09, RF10
 \end{description}
 
-\subsection*{Sprint 04}
+\subsubsection*{Sprint 04}
 \begin{description}
 \item[Nome:] Visualización dos datos
 \item[Fase:] Desenvolvemento
@@ -453,7 +457,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF11, RF12, RF13, RF14
 \end{description}
 
-\subsection*{Sprint 05}
+\subsubsection*{Sprint 05}
 \begin{description}
 \item[Nome:] Ferramentas de visualización
 \item[Fase:] Desenvolvemento
@@ -462,7 +466,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF15, RF16, RF17, RF18, RF19
 \end{description}
 
-\subsection*{Sprint 06}
+\subsubsection*{Sprint 06}
 \begin{description}
 \item[Nome:] Reprodución
 \item[Fase:] Desenvolvemento
@@ -471,7 +475,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF20
 \end{description}
 
-\subsection*{Sprint 07}
+\subsubsection*{Sprint 07}
 \begin{description}
 \item[Nome:] Configuración da reprodución
 \item[Fase:] Desenvolvemento
@@ -480,7 +484,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF21, RF22, RF23
 \end{description}
 
-\subsection*{Sprint 08}
+\subsubsection*{Sprint 08}
 \begin{description}
 \item[Nome:] Funcións de reprodución
 \item[Fase:] Desenvolvemento
@@ -489,7 +493,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF24, RF25
 \end{description}
 
-\subsection*{Sprint 09}
+\subsubsection*{Sprint 09}
 \begin{description}
 \item[Nome:] Filtros
 \item[Fase:] Desenvolvemento
@@ -498,7 +502,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF26, RF27, RF28
 \end{description}
 
-\subsection*{Sprint 10}
+\subsubsection*{Sprint 10}
 \begin{description}
 \item[Nome:] Xestionar filtros
 \item[Fase:] Desenvolvemento
@@ -507,7 +511,7 @@ Imos a detallar a asignación de requisitos funcionais (RFs) aos distintos sprin
 \item[RFs a implementar:] RF29, RF30, RF31
 \end{description}
 
-\subsection*{Sprint 11}
+\subsubsection*{Sprint 11}
 \begin{description}
 \item[Nome:] Outras funcións de visualización
 \item[Fase:] Desenvolvemento
@@ -553,23 +557,23 @@ Considerando que coñecemos as tarefas da fase de inicio e da fase de documentac
 \label{edt}
 \end{figure}
 
-\chapter{Análise de tecnoloxías}
+\section{Análise de tecnoloxías}
 
 Chegados a este punto, temos un conxunto de tarefas especificadas e delimitadas no tempo que se van realizar, así que agora abordaremos as tecnoloxías (ferramentas e técnicas) que imos utilizar para levalas a cabo.
 
-\section{Arquitectura}
+\subsection{Arquitectura}
 
 Nesta sección imos comentar a arquitectura sobre a que estará cimentada o noso proxecto. É importante considerar á hora de elixila que a nosa aplicación non só debe funcionar correctamente con ela, se non que ademais debe facilitar a súa mellora e evolución ao longo do tempo, ou o que é o mesmo, debe permitir a súa escalabilidade.
 
 Na especificación deste proxecto e na captura de requisitos falouse do JDataMotion como unha ferramenta que permite visualizar dinamicamente conxuntos de datos que o usuario aporta. Esta premisa xa nos permite entrever que o modelo de datos non ten necesidade de ser extraido da máquina do cliente. Pódese traballar sobre ela de xeito local e obter resultados (visuais, ou un novo ficheiro de información procesada) sen necesidade de interactuar con sistemas externos (o que sería a computación distribuída). A arquitectura elixida será, segundo estas premisas, a dunha aplicación de escritorio.
 
-\section{Tecnoloxías}
+\subsection{Tecnoloxías}
 
 A partir do paradigma de computación que escollemos hai que elixir un conxunto de tecnoloxías que non só sexan compatibles con ela, se non que ademais permitan desenvolver satisfactoriamente os RFs pactados.
 
-\subsection{Ferramentas de deseño}
+\subsubsection{Ferramentas de deseño}
 
-\subsubsection{UML}
+\subsubsubsection{UML}
 
 UML (Unified Modeling Language) é un estándar de modelado perfectamente aplicable ao un entorno de desenvolvemento de software. Baséase na especificación e documentación dos compoñentes do sistema a diferentes niveis, dentro da fase de deseño do sistema. Nós empregaremos este estándar mediante 3 tipos de diagramas:
 
@@ -579,11 +583,11 @@ UML (Unified Modeling Language) é un estándar de modelado perfectamente aplica
 \item[Diagramas de secuencia:] Estes diagramas plasman a interacción entre os compoñentes (ou obxectos) do sistema durante escenarios concretos da execución da aplicación. Neles amósase o intercambio de información e o fluxo de control entre compoñentes.
 \end{description} 
 
-\subsection{Ferramentas de desenvolvemento}
+\subsubsection{Ferramentas de desenvolvemento}
 
 A única imposición a nivel de desenvolvemento dada pola especificación do anteproxecto é perfectamente válida coas premisas tomadas ata agora: o sistema debe ser implementado na linguaxe de programación Java.
 
-\subsubsection{Java}
+\subsubsubsection{Java}
 
 Java é unha linguaxe de programación de propósito xeral, é dicir, contén librarías e soporte para diversos propósitos: acceso a base de datos, comunicación entre máquinas, cálculo matemático, procesamento de imaxes, etc. Tamén é unha linguaxe concorrente, pois contén fornecemento para fíos de execución que van dan lugar, entre outras moitas vantaxes, á posibilidade de crear unha interface gráfica como a que imos necesitar.
 
@@ -598,7 +602,7 @@ Java é unha das linguaxes máis populares para practicar a programación orient
 
 Para o noso proxecto, a versión de Java que imos empregar vai ser a 8, en calquera das súas actualizacións (1.8.X, sendo X calquer valor). Para a execución do JDataMotion deberemos ter instalada unha versión igual ou superior da máquina virtual de Java, que podemos descargar dende o sitio web oficial \cite{java}.
 
-\subsubsection{JFreeChart}
+\subsubsubsection{JFreeChart}
 
 Na especificación do proxecto tamén se deixa caer unha decisión que afectará significativamente ao desenvolvemento do proxecto cerca das últimas tarefas deste (sprints asociados a visualización dos datos) e é o de elixir unha libraría gráfica axeitada para as nosas necesidades á hora de representar os diagramas de dispersión.
 
@@ -626,11 +630,11 @@ Deste conxunto saleu como mellor posicionado o proxecto JFreeChart \cite{jfreech
 \item Incorpora as funcións de axuste da ventá de visualización para os diagramas de dispersión. Cada vez que creemos un diagrama de dispersión, este xa contará coa posibilidade de ser desprazado ou escalado dentro da súa ventá de visualización. Ademais tamén mellora a inserción dinámica de puntos no diagrama, pois cada vez que un punto se engade ao diagrama, a ventá reposiciónase para seguir abarcando todos os puntos.
 \end{itemize} 
 
-\subsubsection{JCommon}
+\subsubsubsection{JCommon}
 
 JCommon é unha librería da cal depende JFreeChart. Temos que acoplala ao proxecto, pero non imos ter necesidade de utilizala directamente.
 
-\subsubsection{Formatos de arquivo}
+\subsubsubsection{Formatos de arquivo}
 
 No RNF01 fálase de dous tipos de arquivo de entrada e saída: ``csv'' e ``arff''.
 
@@ -651,7 +655,7 @@ O formato arff \bibitem{arff} é un formato de arquivo que contén a mesma infor
 \item[\% \textless calquera liña de texto \textgreater] os comentarios comezan co símbolo '\%' e abranguen a liña enteira. Poden ir intercalados en calquera zona do ficheiro.
 \end{description} 
 
-\subsubsection{Weka}
+\subsubsubsection{Weka}
 
 A raíz da documentación atopada sobre o formato arff vimos mencionado varias veces o término Weka. Weka (Waikato Environment for Knowledge Analysis) é unha plataforma de software libre para o aprendizaxe automático e a minería de datos, desenvolvido en Java pola Universidade de Waikato. Esta universidade precisamente creou o formato arff para Weka.
 
@@ -673,18 +677,18 @@ O software de Weka pódese obterse a través do seu sitio web \cite{weka}. A apa
 
 Podemos extraer de Weka non só ideas para a interface do JDataMotion e das súas funcionalidades, se non que ademais, gracias a que Weka é un proxecto de código aberto, poderemos reutilizar o proxecto como unha libraría mais, utilizando os métodos e clases públicas que ofrece a súa interface de programación (API) para implementar facilmente a importación dos datos desde arquivo. A visualización dos datos tamén podería ser reutilizada, pero os diagramas de dispersión de Weka son estáticos, e a súa solución de visualización non vai servir para o JDataMotion. Weka non implementa a reprodución da visualización que JDataMotion busca.
 
-\subsubsection{Swing}
+\subsubsubsection{Swing}
 
 Swing é unha libraría gráfica expresamente deseñada para Java. Inclúe unha serie de elementos (coñecidos como ``widgets'') para facilitar a confección da interface gráfica a calquera desenvolvedor. Ao igual que Java, Swing é independente da plataforma, e ademáis posibilita en gran medida e extensión de clases, ou widgets, para adaptalos ás necesidades de calquera interface gráfica.
 
-\subsubsection{NetBeans IDE}
+\subsubsubsection{NetBeans IDE}
 
 NetBeans IDE é un entorno de desenvolvemento integrado, especialmente deseñado para programar sistemas en linguaxe Java, aínda que tamén da soporte a moitos outros linguaxes de programación. En NetBeans poderemos programar con facilidade as clases que logo o IDE compilará e executará. Tamén facilitará as labores de adxuntar librarías e dependencias, e dará fornecemento ao deseño da interface por medio dun lenzo e unha paleta de ``widgets'' propios de Swing, o cal reducirá o tempo que tardemos en aprender a manexar a libraría Swing.
 
-\subsection{Ferramentas de validación}
+\subsubsection{Ferramentas de validación}
 
 A validación é un proceso que permite contrastar os resultados da implementación do sistema fronte aos requisitos (funcionais, non funcionais, de deseño, de calidade, etc) que inicialmente se esperaban dela.
 
-\subsubsection{JUnit}
+\subsubsubsection{JUnit}
 
 JUnit \cite{junit} é un compendio de librarías para aplicacións Java destinadas a realizar probas unitarias do sistema no que se inclúen. Contén un conxunto de clases que actúan sobre as clases e métodos do sistema orixinal, validando a súa resposta ante certos parámetros de entrada.
