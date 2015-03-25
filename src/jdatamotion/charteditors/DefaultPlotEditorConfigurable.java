@@ -153,8 +153,9 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
      * The resourceBundle for the localization.
      */
     protected static ResourceBundle localizationResources
-            = ResourceBundleWrapper.getBundle(
-                    "org.jfree.chart.editor.LocalizationBundle");
+//            = ResourceBundleWrapper.getBundle(
+//                    "org.jfree.chart.editor.LocalizationBundle");
+            = Vista.bundle;
 
     /**
      * Standard constructor - constructs a panel for editing the properties of
@@ -319,22 +320,19 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
         JTabbedPane tabs = new JTabbedPane();
         tabs.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
-//        Axis domainAxis = null;
+        Axis domainAxis = null;
 //        if (plot instanceof CategoryPlot) {
 //            domainAxis = ((CategoryPlot) plot).getDomainAxis();
 //        } else if (plot instanceof XYPlot) {
 //            domainAxis = ((XYPlot) plot).getDomainAxis();
-////        }
-//        this.domainAxisPropertyPanel = DefaultAxisEditorConfigurable.getInstance(
-//                domainAxis);
+//        }
+        this.domainAxisPropertyPanel = DefaultAxisEditorConfigurable.getInstance(true);
         if (this.domainAxisPropertyPanel != null) {
-            this.domainAxisPropertyPanel.setBorder(
-                    BorderFactory.createEmptyBorder(2, 2, 2, 2));
-            tabs.add(localizationResources.getString("Domain_Axis"),
-                    this.domainAxisPropertyPanel);
+            this.domainAxisPropertyPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+            tabs.add(localizationResources.getString("Domain_Axis"), this.domainAxisPropertyPanel);
         }
 
-//        Axis rangeAxis = null;
+        Axis rangeAxis = null;
 //        if (plot instanceof CategoryPlot) {
 //            rangeAxis = ((CategoryPlot) plot).getRangeAxis();
 //        } else if (plot instanceof XYPlot) {
@@ -343,12 +341,10 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
 //            rangeAxis = ((PolarPlot) plot).getAxis();
 //        }
 //
-//        this.rangeAxisPropertyPanel = DefaultAxisEditorConfigurable.getInstance(rangeAxis);
+        this.rangeAxisPropertyPanel = DefaultAxisEditorConfigurable.getInstance(false);
         if (this.rangeAxisPropertyPanel != null) {
-            this.rangeAxisPropertyPanel.setBorder(
-                    BorderFactory.createEmptyBorder(2, 2, 2, 2));
-            tabs.add(localizationResources.getString("Range_Axis"),
-                    this.rangeAxisPropertyPanel);
+            this.rangeAxisPropertyPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+            tabs.add(localizationResources.getString("Range_Axis"), this.rangeAxisPropertyPanel);
         }
 
 //dmo: added this panel for colorbar control. (start dmo additions)
@@ -368,6 +364,10 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
 //dmo: (end dmo additions)
 
         return tabs;
+    }
+
+    public PlotOrientation getPlotOrientation() {
+        return plotOrientation;
     }
 
     /**

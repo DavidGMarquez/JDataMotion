@@ -39,6 +39,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import jdatamotion.Vista;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.LogAxis;
 import org.jfree.chart.axis.NumberAxis;
@@ -137,8 +138,9 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
      * The resourceBundle for the localization.
      */
     protected static ResourceBundle localizationResources
-            = ResourceBundleWrapper.getBundle(
-                    "org.jfree.chart.editor.LocalizationBundle");
+//            = ResourceBundleWrapper.getBundle(
+//                    "org.jfree.chart.editor.LocalizationBundle");
+            = Vista.bundle;
 
     /**
      * A static method that returns a panel that is appropriate for the axis
@@ -149,22 +151,23 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
      *
      * @return A panel or {@code null} if axis is {@code null}.
      */
-    public static DefaultAxisEditorConfigurable getInstance(Axis axis) {
+    public static DefaultAxisEditorConfigurable getInstance(boolean isDomain) {
 
-        if (axis != null) {
-            // figure out what type of axis we have and instantiate the
-            // appropriate panel
-            if (axis instanceof NumberAxis) {
-                return new DefaultNumberAxisEditorConfigurable((NumberAxis) axis);
-            }
-            if (axis instanceof LogAxis) {
-                return new DefaultLogAxisEditorConfigurable((LogAxis) axis);
-            } else {
-                return new DefaultAxisEditorConfigurable(axis);
-            }
-        } else {
-            return null;
-        }
+//        if (axis != null) {
+//            // figure out what type of axis we have and instantiate the
+//            // appropriate panel
+//            if (axis instanceof NumberAxis) {
+//                return new DefaultNumberAxisEditorConfigurable((NumberAxis) axis);
+//            }
+//            if (axis instanceof LogAxis) {
+//                return new DefaultLogAxisEditorConfigurable((LogAxis) axis);
+//            } else {
+//                return new DefaultAxisEditorConfigurable(axis);
+//            }
+//        } else {
+//            return null;
+//        }
+        return new DefaultAxisEditorConfigurable(isDomain);
 
     }
 
@@ -175,17 +178,15 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
      * @param axis the axis whose properties are to be displayed/edited in the
      * panel.
      */
-    public DefaultAxisEditorConfigurable(Axis axis) {
+    public DefaultAxisEditorConfigurable(boolean isDomain) {
 
-        this.labelFont = axis.getLabelFont();
-        this.labelPaintSample = new PaintSample(axis.getLabelPaint());
-        this.tickLabelFont = axis.getTickLabelFont();
-        this.tickLabelPaintSample = new PaintSample(axis.getTickLabelPaint());
-
+        //this.labelFont = axis.getLabelFont();
+        this.labelPaintSample = new PaintSample(Vista.GraphicConfigurationManager.readColorProperty(isDomain ? "domain_axis_paint" : "range_axis_paint"));
+        //this.tickLabelFont = axis.getTickLabelFont();
+        //this.tickLabelPaintSample = new PaintSample(axis.getTickLabelPaint());
         // Insets values
-        this.tickLabelInsets = axis.getTickLabelInsets();
-        this.labelInsets = axis.getLabelInsets();
-
+        //this.tickLabelInsets = axis.getTickLabelInsets();
+        //this.labelInsets = axis.getLabelInsets();
         setLayout(new BorderLayout());
 
         JPanel general = new JPanel(new BorderLayout());
@@ -255,11 +256,11 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
         JPanel ticks = new JPanel(new LCBLayout(3));
         ticks.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        this.showTickLabelsCheckBox = new JCheckBox(
-                localizationResources.getString("Show_tick_labels"),
-                axis.isTickLabelsVisible()
-        );
-        ticks.add(this.showTickLabelsCheckBox);
+//        this.showTickLabelsCheckBox = new JCheckBox(
+//                localizationResources.getString("Show_tick_labels"),
+//                axis.isTickLabelsVisible()
+//        );
+//        ticks.add(this.showTickLabelsCheckBox);
         ticks.add(new JPanel());
         ticks.add(new JPanel());
 
@@ -273,11 +274,11 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
         b.addActionListener(this);
         ticks.add(b);
 
-        this.showTickMarksCheckBox = new JCheckBox(
-                localizationResources.getString("Show_tick_marks"),
-                axis.isTickMarksVisible()
-        );
-        ticks.add(this.showTickMarksCheckBox);
+//        this.showTickMarksCheckBox = new JCheckBox(
+//                localizationResources.getString("Show_tick_marks"),
+//                axis.isTickMarksVisible()
+//        );
+//        ticks.add(this.showTickMarksCheckBox);
         ticks.add(new JPanel());
         ticks.add(new JPanel());
 
@@ -461,6 +462,14 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
             );
         }
 
+    }
+
+    public PaintSample getLabelPaintSample() {
+        return labelPaintSample;
+    }
+
+    public void setLabelPaintSample(PaintSample labelPaintSample) {
+        this.labelPaintSample = labelPaintSample;
     }
 
 //    /**

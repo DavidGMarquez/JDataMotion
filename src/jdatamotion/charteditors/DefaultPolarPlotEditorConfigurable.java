@@ -92,13 +92,20 @@ public class DefaultPolarPlotEditorConfigurable extends DefaultPlotEditorConfigu
         JTabbedPane tabs = super.createPlotTabs();
         // TODO find a better localization key
         tabs.insertTab(localizationResources.getString("General1"), null,
-                createPlotPanel(), null, 0);
+                createPolarPlotPanel(), null, 0);
         tabs.setSelectedIndex(0);
         return tabs;
     }
 
-    @Override
-    protected JPanel createPlotPanel() {
+    public double getManualTickUnitValue() {
+        return manualTickUnitValue;
+    }
+
+    public double getAngleOffsetValue() {
+        return angleOffsetValue;
+    }
+
+    protected JPanel createPolarPlotPanel() {
         JPanel plotPanel = new JPanel(new LCBLayout(3));
         plotPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 

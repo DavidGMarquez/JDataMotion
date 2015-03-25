@@ -51,7 +51,7 @@ import org.jfree.ui.PaintSample;
  *
  * @author usuario
  */
-public class DefaultChartEditorConfigurable extends JPanel implements ActionListener, ChartEditor {
+public class DefaultChartEditorConfigurable extends JPanel implements ActionListener {
 
     /**
      * A panel for displaying/editing the properties of the title.
@@ -78,8 +78,9 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
      * The resourceBundle for the localization.
      */
     protected static ResourceBundle localizationResources
-            = ResourceBundleWrapper.getBundle(
-                    "org.jfree.chart.editor.LocalizationBundle");
+            // = ResourceBundleWrapper.getBundle(
+            //      "org.jfree.chart.editor.LocalizationBundle");
+            = Vista.bundle;
 
     /**
      * Standard constructor - the property panel is made up of a number of
@@ -164,7 +165,6 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
 
 //        Title title = chart.getTitle();
 //        Plot plot = chart.getPlot();
-
         JTabbedPane tabs = new JTabbedPane();
 
 //        this.titleEditor = new DefaultTitleEditorConfigurable(title);
@@ -177,7 +177,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
 //        } else {
 //            this.plotEditor = new DefaultPlotEditorConfigurable(plot);
 //        }
-        this.plotEditor = new DefaultPlotEditorConfigurable();
+        this.plotEditor = new DefaultPolarPlotEditorConfigurable();
         this.plotEditor.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
         tabs.addTab(localizationResources.getString("Plot"), this.plotEditor);
 
@@ -247,20 +247,6 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         if (c != null) {
             this.background.setPaint(c);
         }
-    }
-
-    /**
-     * Updates the properties of a chart to match the properties defined on the
-     * panel.
-     *
-     * @param chart the chart.
-     */
-    @Override
-    public void updateChart(JFreeChart chart) {
-        this.titleEditor.setTitleProperties(chart);
-        this.plotEditor.updatePlotProperties(chart.getPlot());
-        chart.setAntiAlias(getAntiAlias());
-        chart.setBackgroundPaint(getBackgroundPaint());
     }
 
 }

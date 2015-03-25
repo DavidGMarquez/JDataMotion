@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import jdatamotion.Vista;
 import org.jfree.chart.axis.ColorBar;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.editor.PaletteSample;
@@ -81,16 +82,17 @@ class DefaultColorBarEditorConfigurable extends DefaultNumberAxisEditorConfigura
      * The resourceBundle for the localization.
      */
     protected static ResourceBundle localizationResources
-            = ResourceBundleWrapper.getBundle(
-                    "org.jfree.chart.editor.LocalizationBundle");
+//            = ResourceBundleWrapper.getBundle(
+//                    "org.jfree.chart.editor.LocalizationBundle");
+            = Vista.bundle;
 
     /**
      * Creates a new edit panel for a color bar.
      *
      * @param colorBar the color bar.
      */
-    public DefaultColorBarEditorConfigurable(ColorBar colorBar) {
-        super((NumberAxis) colorBar.getAxis());
+    public DefaultColorBarEditorConfigurable(ColorBar colorBar, boolean isDomain) {
+        super(isDomain);
         this.invertPalette = colorBar.getColorPalette().isInverse();
         this.stepPalette = colorBar.getColorPalette().isStepped();
         this.currentPalette = new PaletteSample(colorBar.getColorPalette());
@@ -198,10 +200,10 @@ class DefaultColorBarEditorConfigurable extends DefaultNumberAxisEditorConfigura
      *
      * @return A panel or <code>null</code< if axis is <code>null</code>.
      */
-    public static DefaultColorBarEditorConfigurable getInstance(ColorBar colorBar) {
+    public static DefaultColorBarEditorConfigurable getInstance(ColorBar colorBar, boolean isDomain) {
 
         if (colorBar != null) {
-            return new DefaultColorBarEditorConfigurable(colorBar);
+            return new DefaultColorBarEditorConfigurable(colorBar, isDomain);
         } else {
             return null;
         }

@@ -37,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import jdatamotion.Vista;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.util.ResourceBundleWrapper;
@@ -114,22 +115,23 @@ class DefaultValueAxisEditorConfigurable extends DefaultAxisEditorConfigurable
      * The resourceBundle for the localization.
      */
     protected static ResourceBundle localizationResources
-            = ResourceBundleWrapper.getBundle(
-                    "org.jfree.chart.editor.LocalizationBundle");
+//            = ResourceBundleWrapper.getBundle(
+//                    "org.jfree.chart.editor.LocalizationBundle");
+            = Vista.bundle;
 
     /**
      * Standard constructor: builds a property panel for the specified axis.
      *
      * @param axis the axis, which should be changed.
      */
-    public DefaultValueAxisEditorConfigurable(ValueAxis axis) {
+    public DefaultValueAxisEditorConfigurable(boolean isDomain) {
 
-        super(axis);
+        super(isDomain);
 
-        this.autoRange = axis.isAutoRange();
-        this.minimumValue = axis.getLowerBound();
-        this.maximumValue = axis.getUpperBound();
-        this.autoTickUnitSelection = axis.isAutoTickUnitSelection();
+//        this.autoRange = axis.isAutoRange();
+//        this.minimumValue = axis.getLowerBound();
+//        this.maximumValue = axis.getUpperBound();
+//        this.autoTickUnitSelection = axis.isAutoTickUnitSelection();
 
         this.gridPaintSample = new PaintSample(Color.blue);
         this.gridStrokeSample = new StrokeSample(new BasicStroke(1.0f));

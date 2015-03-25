@@ -23,9 +23,7 @@
  */
 package jdatamotion.charteditors;
 
-import org.jfree.chart.JFreeChart;
 import org.jfree.chart.editor.ChartEditor;
-import org.jfree.chart.editor.ChartEditorFactory;
 import org.jfree.chart.util.ParamChecks;
 
 /**
@@ -35,44 +33,35 @@ import org.jfree.chart.util.ParamChecks;
 public class ChartEditorManagerConfigurable {
 
     /**
-     * This factory creates new {@link ChartEditor} instances as required.
+     * This defaultChartEditorConfigurable creates new {@link ChartEditor}
+     * instances as required.
      */
-    static ChartEditorFactory factory = new DefaultChartEditorFactoryConfigurable();
+    static DefaultChartEditorConfigurable defaultChartEditorConfigurable = new DefaultChartEditorConfigurable();
 
     /**
      * Private constructor prevents instantiation.
      */
     private ChartEditorManagerConfigurable() {
-        // nothing to do
     }
 
     /**
-     * Returns the current factory.
+     * Returns the current defaultChartEditorConfigurable.
      *
-     * @return The current factory (never <code>null</code>).
+     * @return The current defaultChartEditorConfigurable (never
+     * <code>null</code>).
      */
-    public static ChartEditorFactory getChartEditorFactory() {
-        return factory;
+    public static DefaultChartEditorConfigurable getDefaultChartEditorConfigurable() {
+        return defaultChartEditorConfigurable;
     }
 
     /**
-     * Sets the chart editor factory.
+     * Sets the chart editor defaultChartEditorConfigurable.
      *
-     * @param f the new factory (<code>null</code> not permitted).
+     * @param f the new defaultChartEditorConfigurable (<code>null</code> not
+     * permitted).
      */
-    public static void setChartEditorFactory(ChartEditorFactory f) {
+    public static void setDefaultChartEditorConfigurable(DefaultChartEditorConfigurable f) {
         ParamChecks.nullNotPermitted(f, "f");
-        factory = f;
-    }
-
-    /**
-     * Returns a component that can be used to edit the given chart.
-     *
-     * @param chart the chart.
-     *
-     * @return The chart editor.
-     */
-    public static ChartEditor getChartEditor(JFreeChart chart) {
-        return factory.createEditor(chart);
+        defaultChartEditorConfigurable = f;
     }
 }

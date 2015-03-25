@@ -52,11 +52,11 @@ class DefaultNumberAxisEditorConfigurable extends DefaultValueAxisEditorConfigur
      *
      * @param axis the axis, which should be changed.
      */
-    public DefaultNumberAxisEditorConfigurable(NumberAxis axis) {
+    public DefaultNumberAxisEditorConfigurable(boolean isDomain) {
 
-        super(axis);
+        super(isDomain);
 
-        this.manualTickUnitValue = axis.getTickUnit().getSize();
+        //this.manualTickUnitValue = axis.getTickUnit().getSize();
         validateTickUnit();
     }
 

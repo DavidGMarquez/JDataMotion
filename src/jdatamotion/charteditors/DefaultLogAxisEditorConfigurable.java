@@ -47,10 +47,10 @@ public class DefaultLogAxisEditorConfigurable extends DefaultValueAxisEditorConf
      *
      * @param axis the axis, which should be changed.
      */
-    public DefaultLogAxisEditorConfigurable(LogAxis axis) {
-        super(axis);
-        this.manualTickUnitValue = axis.getTickUnit().getSize();
-        manualTickUnit.setText(Double.toString(this.manualTickUnitValue));
+    public DefaultLogAxisEditorConfigurable(boolean isDomain) {
+        super(isDomain);
+//        this.manualTickUnitValue = axis.getTickUnit().getSize();
+//        manualTickUnit.setText(Double.toString(this.manualTickUnitValue));
     }
 
     /**

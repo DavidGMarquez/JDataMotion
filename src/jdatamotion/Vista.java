@@ -115,6 +115,7 @@ import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionVista;
 import jdatamotion.sesions.Sesionizable;
 import jdatamotion.charteditors.DefaultChartEditorConfigurable;
+import jdatamotion.charteditors.DefaultPolarPlotEditorConfigurable;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jfree.chart.ChartFactory;
@@ -671,9 +672,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         GraphicConfigurationManager.writeColorProperty("chart_background_paint", (Color) editor.getBackgroundPaint());
         GraphicConfigurationManager.writeColorProperty("scatterplot_background_paint", (Color) editor.getPlotEditor().getBackgroundPaint());
         GraphicConfigurationManager.writeColorProperty("outline_paint", (Color) editor.getPlotEditor().getOutlinePaint());
+        GraphicConfigurationManager.writeStrokeProperty("outline_stroke", editor.getPlotEditor().getOutlineStroke());
         GraphicConfigurationManager.writeColorProperty("title_paint", (Color) editor.getTitleEditor().getTitlePaint());
         GraphicConfigurationManager.writeColorProperty("domain_axis_paint", (Color) editor.getPlotEditor().getDomainAxisPropertyEditPanel().getLabelPaint());
         GraphicConfigurationManager.writeColorProperty("range_axis_paint", (Color) editor.getPlotEditor().getRangeAxisPropertyEditPanel().getLabelPaint());
+        GraphicConfigurationManager.writeBooleanProperty("anti-aliased", editor.getAntiAlias());
+        GraphicConfigurationManager.writePlotOrientationProperty("orientation", editor.getPlotEditor().getPlotOrientation());
+        GraphicConfigurationManager.writeFontProperty("title_font", editor.getTitleEditor().getFont());
+        GraphicConfigurationManager.writeDoubleProperty("angle-offset", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getAngleOffsetValue());
+        GraphicConfigurationManager.writeDoubleProperty("manual-tick-unit", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getManualTickUnitValue());
         mansp.aplicarConfiguracionGraficaScatterPlots();
     }
 

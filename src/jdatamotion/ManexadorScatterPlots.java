@@ -25,6 +25,7 @@ package jdatamotion;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
@@ -791,10 +792,15 @@ public final class ManexadorScatterPlots {
         Color ccbp = Vista.GraphicConfigurationManager.readColorProperty("chart_background_paint");
         Color csbp = Vista.GraphicConfigurationManager.readColorProperty("scatterplot_background_paint");
         Color cop = Vista.GraphicConfigurationManager.readColorProperty("outline_paint");
+        Stroke sos = Vista.GraphicConfigurationManager.readStrokeProperty("outline_stroke");
         Color ctc = Vista.GraphicConfigurationManager.readColorProperty("title_paint");
         Color cdap = Vista.GraphicConfigurationManager.readColorProperty("domain_axis_paint");
         Color crap = Vista.GraphicConfigurationManager.readColorProperty("range_axis_paint");
-
+        Boolean baa = Vista.GraphicConfigurationManager.readBooleanProperty("anti-aliased");
+        PlotOrientation poo = Vista.GraphicConfigurationManager.readPlotOrientationProperty("orientation");
+        Font ftf = Vista.GraphicConfigurationManager.readFontProperty("title_font");
+        Double dao = Vista.GraphicConfigurationManager.readDoubleProperty("angle-offset");
+        Double dmtu = Vista.GraphicConfigurationManager.readDoubleProperty("manual-tick-unit");
         for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
             jf.setBackgroundPaint(ccbp);
             if (jf.getLegend() != null) {
@@ -802,11 +808,17 @@ public final class ManexadorScatterPlots {
             }
             jf.getXYPlot().setBackgroundPaint(csbp);
             jf.getXYPlot().setOutlinePaint(cop);
+            jf.getXYPlot().setOutlineStroke(sos);
             if (jf.getTitle() != null) {
                 jf.getTitle().setPaint(ctc);
+                jf.getTitle().setFont(ftf);
             }
             jf.getXYPlot().getDomainAxis().setLabelPaint(cdap);
             jf.getXYPlot().getRangeAxis().setLabelPaint(crap);
+            jf.setAntiAlias(baa);
+            jf.getXYPlot().setOrientation(poo);
+//            GraphicConfigurationManager.writeDoubleProperty("angle-offset", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getAngleOffsetValue());
+//         GraphicConfigurationManager.writeDoubleProperty("manual-tick-unit", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getManualTickUnitValue());
         }
     }
 
@@ -846,9 +858,13 @@ public final class ManexadorScatterPlots {
 
             @Override
             public void doEditChartProperties() {
-                DefaultChartEditorConfigurable editor = (DefaultChartEditorConfigurable) ChartEditorManagerConfigurable.getChartEditor(getChart());
-                if (JOptionPane.showConfirmDialog(this, editor, localizationResources.getString("Chart_Properties"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
-                    vista.grabarEscribirConfiguracionGraficaScatterPlots(editor);
+                try {
+                    DefaultChartEditorConfigurable editor = (DefaultChartEditorConfigurable) ChartEditorManagerConfigurable.getDefaultChartEditorConfigurable();
+                    if (JOptionPane.showConfirmDialog(this, editor, localizationResources.getString("Chart_Properties"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+                        vista.grabarEscribirConfiguracionGraficaScatterPlots(editor);
+                    }
+                } catch (java.lang.ExceptionInInitializerError e) {
+                    Logger.getLogger(ManexadorScatterPlots.class.getName()).log(Level.SEVERE, null, e.getException());
                 }
             }
 
