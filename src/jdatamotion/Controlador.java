@@ -235,9 +235,6 @@ public class Controlador implements Sesionizable {
                 importarFiltros((String) argumento);
                 break;
             case EXPORTAR_FILTROS:
-                System.out.println(argumento);
-                System.out.println(((Object[]) argumento)[0]);
-                System.out.println(((Object[]) argumento)[1]);
                 exportarFiltros((String) ((Object[]) argumento)[0], (Integer[]) ((Object[]) argumento)[1]);
                 break;
         }

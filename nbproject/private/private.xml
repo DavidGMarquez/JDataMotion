@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="1">
                 <name/>
-                <line>561</line>
+                <line>583</line>
                 <key/>
             </bookmark>
         </file>
@@ -20,24 +20,14 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultPolarPlotEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/idiomas/Bundle.properties</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultChartEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultNumberAxisEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/default_config.properties</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultColorBarEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/idiomas/Bundle_es.properties</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/ChartEditorManagerConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/PaletteChooserPanelConfigurable.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/chart/ChartFactory.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/chart/plot/XYPlot.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/idiomas/Bundle_gl.properties</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Vista.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultPlotEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultLogAxisEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultAxisEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultTitleEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultValueAxisEditorConfigurable.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/chart/plot/CategoryPlot.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Controlador.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/ChartEditorManagerConfigurable.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/chart/ChartPanel.java</file>
         </group>
     </open-files>
 </project-private>

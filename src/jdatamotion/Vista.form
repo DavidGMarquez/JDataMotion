@@ -1464,8 +1464,9 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="filler2" min="-2" max="-2" attributes="0"/>
                                           <Component id="filler1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jScrollPane5" min="-2" pref="38" max="-2" attributes="0"/>
+                                          <Component id="jScrollPane5" min="-2" pref="50" max="-2" attributes="0"/>
                                       </Group>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Component id="jScrollPane3" pref="600" max="32767" attributes="0"/>
                                   </Group>
                               </Group>

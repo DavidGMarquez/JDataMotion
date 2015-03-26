@@ -105,8 +105,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
+import jdatamotion.ManexadorScatterPlots.ChartPanelConfigurable;
 import jdatamotion.ManexadorScatterPlots.JFrameChartPanel;
 import jdatamotion.ManexadorScatterPlots.ScatterPlot;
+import jdatamotion.charteditors.ChartEditorManagerConfigurable;
 import jdatamotion.filtros.AbstractFilter;
 import jdatamotion.filtros.DoubleParameter;
 import jdatamotion.filtros.Parameter;
@@ -125,6 +127,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -164,7 +167,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private transient Modelo meuModelo;
     private int ordeVisualizacion;
     private int paso;
-    private ManexadorScatterPlots mansp;
+    private static ManexadorScatterPlots mansp;
     private final TarefaProgreso task;
     private transient Controlador meuControlador;
     private boolean scatterPlotsVisibles[][];
@@ -450,6 +453,22 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
+    private class mouseAdapterPropertiesMenu extends MouseAdapter {
+
+        private final Component c;
+
+        public mouseAdapterPropertiesMenu(Component c) {
+            this.c = c;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (SwingUtilities.isRightMouseButton(e)) {
+                mansp.createPropertiesPopupMenu().show(c, e.getX(), e.getY());
+            }
+        }
+    }
+
     private void pintarMenuVisualizacion() {
         visualizacionDesactualizada = true;
         if (jTabbedPane1.getSelectedIndex() == 2) {
@@ -471,15 +490,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             mansp.addPropertyChangeListener(this);
             jPopupMenu1.setVisible(false);
             jPanel4.removeAll();
-            final MouseAdapter mouseAdapterConfiguracionGrafica = new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (SwingUtilities.isRightMouseButton(e)) {
-                        JOptionPane.showMessageDialog(Vista.this, "TODO: configurabilidad pinchando en fondo.");
-                    }
-                }
-            };
-            jPanel4.addMouseListener(mouseAdapterConfiguracionGrafica);
             setScatterPlotsBackground();
             int numCols = mansp.numColumnasNonVacias(), numFilas = mansp.numFilasNonVacias();
             if (numCols * numFilas != 0) {
@@ -511,14 +521,14 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                                     ScatterPlot sp = mansp.getScatterPlot(i, j);
                                     int xPos = numFilas + filasVacias - 1 - i, yPos = j - columnasVacias;
                                     if (sp != null) {
-                                        configurarScatterPlot(sp, instanciasFiltradas);
+                                        configureMatrixScatterPlot(sp, instanciasFiltradas);
                                         ChartPanel chartPanelCela = sp.getChartPanelCela();
                                         jPanel4.add(chartPanelCela, new TableLayoutConstraints(yPos, xPos));
                                         chartPanelCela.revalidate();
                                         chartPanelCela.repaint();
                                     } else {
                                         JLabel l = new JLabel();
-                                        l.addMouseListener(mouseAdapterConfiguracionGrafica);
+                                        l.addMouseListener(new mouseAdapterPropertiesMenu(l));
                                         jPanel4.add(l, new TableLayoutConstraints(yPos, xPos));
                                     }
                                     task.acumulate(1);
@@ -551,6 +561,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 p.add(b);
                 p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel4.add(p);
+                jPanel4.addMouseListener(new mouseAdapterPropertiesMenu(jPanel4));
             }
             jLabel4.setText("/" + String.valueOf(instanciasFiltradas.numInstances()));
             jTextField1.setText(String.valueOf(instanciasFiltradas.numInstances()));
@@ -560,11 +571,22 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
+    public static void doEditProperties(Component c) {
+        try {
+            DefaultChartEditorConfigurable editor = (DefaultChartEditorConfigurable) ChartEditorManagerConfigurable.getDefaultChartEditorConfigurable();
+            if (JOptionPane.showConfirmDialog(c, editor, bundle.getString("Chart_Properties"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+                grabarEscribirConfiguracionGraficaScatterPlots(editor);
+            }
+        } catch (java.lang.ExceptionInInitializerError e) {
+            Logger.getLogger(ManexadorScatterPlots.class.getName()).log(Level.SEVERE, null, e.getException());
+        }
+    }
+
     public void engadirScatterPlot(ScatterPlot sp, int j, int i) {
         if (sp == null) {
             jPanel4.add(new JLabel(), new TableLayoutConstraints(i, j));
         } else {
-            configurarScatterPlot(sp, meuModelo.getInstancesComparable());
+            configureMatrixScatterPlot(sp, meuModelo.getInstancesComparable());
             ChartPanel chartPanelCela = sp.getChartPanelCela();
             chartPanelCela.setLayout(new GridBagLayout());
             JButton clickmeButton = new JButton();
@@ -668,7 +690,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel4.setBackground(GraphicConfigurationManager.readColorProperty("chart_background_paint"));
     }
 
-    public void grabarEscribirConfiguracionGraficaScatterPlots(DefaultChartEditorConfigurable editor) {
+    public static void grabarEscribirConfiguracionGraficaScatterPlots(DefaultChartEditorConfigurable editor) {
         GraphicConfigurationManager.writeColorProperty("chart_background_paint", (Color) editor.getBackgroundPaint());
         GraphicConfigurationManager.writeColorProperty("scatterplot_background_paint", (Color) editor.getPlotEditor().getBackgroundPaint());
         GraphicConfigurationManager.writeColorProperty("outline_paint", (Color) editor.getPlotEditor().getOutlinePaint());
@@ -733,9 +755,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
-    private void configurarScatterPlot(ScatterPlot sp, InstancesComparable instances) {
-        configurarChartPanel(sp.getChartPanelCela(), instances, sp.getIndiceAtributoX(), sp.getIndiceAtributoY());
-        configurarChartPanel(sp.getJFrameAmpliado().getChartPanel(), instances, sp.getIndiceAtributoX(), sp.getIndiceAtributoY());
+    private void configureMatrixScatterPlot(ScatterPlot sp, InstancesComparable instances) {
+        configureScatterPlot(sp, instances);
         ChartPanel chartPanelCela = sp.getChartPanelCela();
         chartPanelCela.setLayout(new GridBagLayout());
         JButton botonAmpliar = new JButton();
@@ -765,72 +786,85 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         sp.pintarEstela();
     }
 
-    private void configurarChartPanel(ChartPanel chartpanel, InstancesComparable instances, int indiceAtributoX, int indiceAtributoY) {
+    private static void configureChartPanel(ChartPanel chartpanel, int width, int height) {
         chartpanel.setMouseWheelEnabled(true);
-        chartpanel.setPreferredSize(new Dimension(340, 210));
-        chartpanel.addChartMouseListener(new ChartMouseListener() {
-            @Override
-            public void chartMouseClicked(final ChartMouseEvent event) {
-                java.awt.EventQueue.invokeLater(() -> {
-                    if (mansp.getEstado() != ManexadorScatterPlots.PLAY && SwingUtilities.isLeftMouseButton(event.getTrigger()) && event.getTrigger().getClickCount() == 1) {
-                        XYPlot xyp = event.getChart().getXYPlot();
-                        double domainCrosshairValue = xyp.getDomainCrosshairValue();
-                        double rangeCrosshairValue = xyp.getRangeCrosshairValue();
-                        ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
-                        Enumeration e = instances.enumerateInstances();
-                        for (int i = 0; e.hasMoreElements(); i++) {
-                            Instance di = (Instance) e.nextElement();
-                            if (di.value(indiceAtributoX) == domainCrosshairValue && di.value(indiceAtributoY) == rangeCrosshairValue) {
-                                indicesInstancesPuntos.add(i);
-                            }
-                        }
-                        if (!indicesInstancesPuntos.isEmpty()) {
-                            jPopupMenu1.removeAll();
-                            jPopupMenu1.setLayout(new BoxLayout(jPopupMenu1, BoxLayout.X_AXIS));
-                            for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
-                                int p = indicesInstancesPuntos.get(i);
-                                if (mansp.getMsInstances()[p] <= mansp.getTActual()) {
-                                    if (i != 0) {
-                                        jPopupMenu1.add(new JSeparator(SwingConstants.VERTICAL));
-                                    }
-                                    JPanel pa = new JPanel();
-                                    pa.setBorder(new LineBorder(ManexadorScatterPlots.obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
-                                    pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
-                                    Enumeration en = instances.enumerateAttributes();
-                                    while (en.hasMoreElements()) {
-                                        Attribute a = (Attribute) en.nextElement();
-                                        boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
-                                        pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
-                                    }
-                                    jPopupMenu1.add(pa);
+        chartpanel.setPreferredSize(new Dimension(width, height));
+        Plot pl = chartpanel.getChart().getPlot();
+        if (pl instanceof XYPlot) {
+            XYPlot xpl = (XYPlot) pl;
+            xpl.setDomainPannable(true);
+            xpl.setRangePannable(true);
+        }
+    }
+
+    private void configureScatterPlot(ScatterPlot sp, InstancesComparable instances) {
+        int indiceAtributoX = sp.getIndiceAtributoX(), indiceAtributoY = sp.getIndiceAtributoY();
+        for (ChartPanel chartpanel : new ChartPanel[]{sp.getChartPanelCela(), sp.getJFrameAmpliado().getChartPanel()}) {
+            configureChartPanel(chartpanel, 340, 210);
+            chartpanel.addChartMouseListener(new ChartMouseListener() {
+                @Override
+                public void chartMouseClicked(final ChartMouseEvent event) {
+                    java.awt.EventQueue.invokeLater(() -> {
+                        if (mansp.getEstado() != ManexadorScatterPlots.PLAY && SwingUtilities.isLeftMouseButton(event.getTrigger()) && event.getTrigger().getClickCount() == 1) {
+                            XYPlot xyp = event.getChart().getXYPlot();
+                            double domainCrosshairValue = xyp.getDomainCrosshairValue();
+                            double rangeCrosshairValue = xyp.getRangeCrosshairValue();
+                            ArrayList<Integer> indicesInstancesPuntos = new ArrayList<>();
+                            Enumeration e = instances.enumerateInstances();
+                            for (int i = 0; e.hasMoreElements(); i++) {
+                                Instance di = (Instance) e.nextElement();
+                                if (di.value(indiceAtributoX) == domainCrosshairValue && di.value(indiceAtributoY) == rangeCrosshairValue) {
+                                    indicesInstancesPuntos.add(i);
                                 }
                             }
-                            jPopupMenu1.show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
-                            mansp.procesarSeleccion(instances, indicesInstancesPuntos);
+                            if (!indicesInstancesPuntos.isEmpty()) {
+                                jPopupMenu1.removeAll();
+                                jPopupMenu1.setLayout(new BoxLayout(jPopupMenu1, BoxLayout.X_AXIS));
+                                for (int i = 0; i < indicesInstancesPuntos.size(); i++) {
+                                    int p = indicesInstancesPuntos.get(i);
+                                    if (mansp.getMsInstances()[p] <= mansp.getTActual()) {
+                                        if (i != 0) {
+                                            jPopupMenu1.add(new JSeparator(SwingConstants.VERTICAL));
+                                        }
+                                        JPanel pa = new JPanel();
+                                        pa.setBorder(new LineBorder(ManexadorScatterPlots.obterCoresHSB(i, indicesInstancesPuntos.size()), 2));
+                                        pa.setLayout(new BoxLayout(pa, BoxLayout.Y_AXIS));
+                                        Enumeration en = instances.enumerateAttributes();
+                                        while (en.hasMoreElements()) {
+                                            Attribute a = (Attribute) en.nextElement();
+                                            boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
+                                            pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
+                                        }
+                                        jPopupMenu1.add(pa);
+                                    }
+                                }
+                                jPopupMenu1.show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
+                                mansp.procesarSeleccion(instances, indicesInstancesPuntos);
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
 
-            @Override
-            public void chartMouseMoved(ChartMouseEvent event) {
-            }
-        });
-        chartpanel.addMouseWheelListener((MouseWheelEvent e) -> {
-            jPopupMenu1.setVisible(false);
-        });
-        chartpanel.addMouseMotionListener(new MouseMotionListener() {
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
+                @Override
+                public void chartMouseMoved(ChartMouseEvent event) {
+                }
+            });
+            chartpanel.addMouseWheelListener((MouseWheelEvent e) -> {
                 jPopupMenu1.setVisible(false);
-            }
+            });
+            chartpanel.addMouseMotionListener(new MouseMotionListener() {
 
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                jPopupMenu1.setVisible(false);
-            }
-        });
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    jPopupMenu1.setVisible(false);
+                }
+
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    jPopupMenu1.setVisible(false);
+                }
+            });
+        }
     }
 
     private void actualizarScatterPlotsVisibles(int numAtributosNumericos) {
@@ -1822,7 +1856,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, 0)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3241,7 +3276,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             columnaNumerais.removeAll();
             String data[][] = new String[modelo.obterNumInstancias()][1];
             for (int i = 0; i < data.length; i++) {
-                data[i][0] = String.valueOf(i + 1);
+                data[i][0] = "<html><body style='white-space:nowrap;'>" + String.valueOf(i + 1) + "</body></html>";
             }
             JTable tablaIndices = new JTable(null);
             tablaIndices.setModel(new DefaultTableModel(data, new String[]{""}) {
@@ -3787,8 +3822,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         add(new JLabel(bundle.getString("media") + ": " + (media != null ? media : "-")));
                         add(new JLabel(bundle.getString("varianza") + ": " + (varianza != null && Double.compare(varianza, Double.NaN) != 0 ? varianza : "-")));
                         add(new JLabel(bundle.getString("desviacionTipica") + ": " + (desvTipica != null && Double.compare(desvTipica, Double.NaN) != 0 ? desvTipica : "-")));
-                        ChartPanel cp = new ChartPanel(createChartAtributoNumerico(modelo.getInstancesComparable(), columnaModeloSeleccionada, min != null ? min : 0.0, max != null ? max : 0.0, 10));
-                        cp.setPreferredSize(new Dimension(0, (int) Math.round(getPreferredSize().getWidth() * cp.getPreferredSize().getHeight() / cp.getPreferredSize().getWidth())));
+                        ChartPanel cp = new ChartPanelConfigurable(createChartAtributoNumerico(modelo.getInstancesComparable(), columnaModeloSeleccionada, min != null ? min : 0.0, max != null ? max : 0.0, 10), false, true, true, true, true);
+                        configureChartPanel(cp, 0, (int) Math.round(getPreferredSize().getWidth() * cp.getPreferredSize().getHeight() / cp.getPreferredSize().getWidth()));
                         add(cp);
                         break;
                     case "nominal":
@@ -3805,8 +3840,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         for (int i = 1; i < coincidencias.size(); i++) {
                             add(new JLabel("  " + modelo.getInstancesComparable().attribute(columnaModeloSeleccionada).value(i - 1) + " (" + coincidencias.get(i) + ")"));
                         }
-                        cp = new ChartPanel(createChartAtributoNominal(modelo.getInstancesComparable(), columnaModeloSeleccionada));
-                        cp.setPreferredSize(new Dimension(0, (int) Math.round(getPreferredSize().getWidth() * cp.getPreferredSize().getHeight() / cp.getPreferredSize().getWidth())));
+                        cp = new ChartPanelConfigurable(createChartAtributoNominal(modelo.getInstancesComparable(), columnaModeloSeleccionada), false, true, true, true, true);
+                        configureChartPanel(cp, 0, (int) Math.round(getPreferredSize().getWidth() * cp.getPreferredSize().getHeight() / cp.getPreferredSize().getWidth()));
                         add(cp);
                         break;
                     case "string":

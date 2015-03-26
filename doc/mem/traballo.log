@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  20 MAR 2015 21:29
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  26 MAR 2015 00:30
 entering extended mode
 **traballo.tex
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.tex
@@ -1630,14 +1630,20 @@ Ap\'endice C.
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/bibliografia.t
 ex
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+\OT1/cmr/m/n/12 en \OT1/cmr/m/it/12 http://www.cs.waikato.ac.nz/ml/weka/arff.ht
+ml \OT1/cmr/m/n/12 [[]Ulti-ma con-sul-ta:
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 15--16
 []\OT1/cmr/m/n/12 Tarifasgasluz. Pre-cio del kWh en Es-pa~na. Si-tio web
  []
 
 
-Overfull \hbox (21.83139pt too wide) in paragraph at lines 15--16
+Overfull \hbox (18.56754pt too wide) in paragraph at lines 15--16
 \OT1/cmr/m/it/12 http://www.endesaonline.com/es/empresas/dual/empresas/4/precio
-s/index.asp\OT1/cmr/m/n/12 . 
+s/index.asp
  []
 
 
@@ -1645,41 +1651,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 17--18
 []\OT1/cmr/m/n/12 Electricity usa-ge of a Lap-top or No-te-bo-ok. Si-tio web
  []
 
-! Missing $ inserted.
-<inserted text> 
-                $
-l.27 ...www.ctr.unican.es/asignaturas/is1/IEEE830_
-                                                  esp.pdf}.
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
 
-! Extra }, or forgotten $.
-l.27 ...unican.es/asignaturas/is1/IEEE830_esp.pdf}
-                                                  .
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.28 
-     
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.28 
-     
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
+Underfull \hbox (badness 10000) in paragraph at lines 17--18
+\OT1/cmr/m/it/12 http://energyusecalculator.com/electricity[]laptop.htm \OT1/cm
+r/m/n/12 [[]Ulti-ma con-sul-ta:
+ []
 
 ) [55
 
@@ -1729,12 +1705,12 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 88.
  ) 
 Here is how much of TeX's memory you used:
- 8456 strings out of 493922
- 124875 string characters out of 3147299
+ 8455 strings out of 493922
+ 124848 string characters out of 3147299
  227667 words of memory out of 3000000
- 11523 multiletter control sequences out of 15000+200000
+ 11522 multiletter control sequences out of 15000+200000
  13879 words of font info for 53 fonts, out of 3000000 for 9000
  842 hyphenation exceptions out of 8191
  30i,9n,51p,1214b,1133s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on traballo.dvi (68 pages, 203380 bytes).
+Output written on traballo.dvi (68 pages, 203656 bytes).

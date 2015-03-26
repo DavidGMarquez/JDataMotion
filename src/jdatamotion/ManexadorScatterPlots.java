@@ -40,15 +40,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import static jdatamotion.Vista.bundle;
-import jdatamotion.charteditors.ChartEditorManagerConfigurable;
-import jdatamotion.charteditors.DefaultChartEditorConfigurable;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
+import static org.jfree.chart.ChartPanel.DEFAULT_BUFFER_USED;
+import static org.jfree.chart.ChartPanel.DEFAULT_HEIGHT;
+import static org.jfree.chart.ChartPanel.DEFAULT_MAXIMUM_DRAW_HEIGHT;
+import static org.jfree.chart.ChartPanel.DEFAULT_MAXIMUM_DRAW_WIDTH;
+import static org.jfree.chart.ChartPanel.DEFAULT_MINIMUM_DRAW_HEIGHT;
+import static org.jfree.chart.ChartPanel.DEFAULT_MINIMUM_DRAW_WIDTH;
+import static org.jfree.chart.ChartPanel.DEFAULT_WIDTH;
 import org.jfree.chart.ChartTheme;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
@@ -90,7 +95,8 @@ public final class ManexadorScatterPlots {
     private Nodo<InstancesSimultaneas> nodoActual;
     private int msInstances[];
     private final int lonxitudeEstela;
-    private final Vista vista;
+    private static Vista vista;
+    Object createPropertiesPopupMenu;
 
     public synchronized int getTInicial() {
         if (eixoTemporal.isEmpty()) {
@@ -207,6 +213,10 @@ public final class ManexadorScatterPlots {
         goTo(nodoActual.getBack().getObject().getMs());
     }
 
+    public JPopupMenu createPropertiesPopupMenu() {
+        return new ChartPanelConfigurable(null, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_MINIMUM_DRAW_WIDTH, DEFAULT_MINIMUM_DRAW_HEIGHT, DEFAULT_MAXIMUM_DRAW_WIDTH, DEFAULT_MAXIMUM_DRAW_HEIGHT, DEFAULT_BUFFER_USED, true, false, false, false, false, false).getPopupMenu();
+    }
+
     class Nodo<E> {
 
         private Nodo<E> next;
@@ -284,7 +294,7 @@ public final class ManexadorScatterPlots {
         }
     }
 
-    synchronized private NodeList<InstancesSimultaneas> fabricarEixo(InstancesComparable instances, int indiceTemporal, int ordeVisualizacion, int lonxitudeEstela) {
+    synchronized private NodeList<InstancesSimultaneas> fabricarEixo(InstancesComparable instances, int indiceTemporal, int ordeVisualizacion) {
         NodeList<InstancesSimultaneas> eixo = new NodeList<>();
         msInstances = new int[instances.numInstances()];
         Instances ins = instances;
@@ -437,7 +447,7 @@ public final class ManexadorScatterPlots {
 
     public ManexadorScatterPlots(Vista vista, InstancesComparable instances, int atributoColor, int indiceTemporal, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField, int ordeVisualizacion, int paso, int lonxitudeEstela) {
         int numAtributosNumericos = scatterPlotsVisibles.length;
-        this.vista = vista;
+        ManexadorScatterPlots.vista = vista;
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
         this.instances = instances;
         if (atributoColor == -1) {
@@ -460,7 +470,7 @@ public final class ManexadorScatterPlots {
         this.lonxitudeEstela = lonxitudeEstela;
         this.paso = paso;
         this.textField = textField;
-        this.eixoTemporal = fabricarEixo(instances, indiceTemporal, ordeVisualizacion, lonxitudeEstela);
+        this.eixoTemporal = fabricarEixo(instances, indiceTemporal, ordeVisualizacion);
         this.t = getTInicial();
     }
 
@@ -850,26 +860,6 @@ public final class ManexadorScatterPlots {
             return indiceAtributoColor;
         }
 
-        private class ChartPanelConfigurable extends ChartPanel {
-
-            public ChartPanelConfigurable(JFreeChart chart) {
-                super(chart);
-            }
-
-            @Override
-            public void doEditChartProperties() {
-                try {
-                    DefaultChartEditorConfigurable editor = (DefaultChartEditorConfigurable) ChartEditorManagerConfigurable.getDefaultChartEditorConfigurable();
-                    if (JOptionPane.showConfirmDialog(this, editor, localizationResources.getString("Chart_Properties"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
-                        vista.grabarEscribirConfiguracionGraficaScatterPlots(editor);
-                    }
-                } catch (java.lang.ExceptionInInitializerError e) {
-                    Logger.getLogger(ManexadorScatterPlots.class.getName()).log(Level.SEVERE, null, e.getException());
-                }
-            }
-
-        }
-
         public void pintarEstela() {
             pintarEstela(nodoActual, lonxitudeEstela);
         }
@@ -968,6 +958,31 @@ public final class ManexadorScatterPlots {
         public ChartPanel getChartPanelCela() {
             return chartPanelCela;
         }
+    }
+
+    public static class ChartPanelConfigurable extends ChartPanel {
+
+        static {
+            ChartPanel.localizationResources = Vista.bundle;
+        }
+
+        public ChartPanelConfigurable(JFreeChart chart) {
+            super(chart);
+        }
+
+        public ChartPanelConfigurable(JFreeChart chart, int width, int height, int minimumDrawWidth, int minimumDrawHeight, int maximumDrawWidth, int maximumDrawHeight, boolean useBuffer, boolean properties, boolean copy, boolean save, boolean print, boolean zoom, boolean tooltips) {
+            super(chart, width, height, minimumDrawWidth, minimumDrawHeight, maximumDrawWidth, maximumDrawHeight, useBuffer, properties, copy, save, print, zoom, tooltips);
+        }
+
+        @Override
+        public void doEditChartProperties() {
+            Vista.doEditProperties(this);
+        }
+
+        public ChartPanelConfigurable(JFreeChart chart, boolean properties, boolean save, boolean print, boolean zoom, boolean tooltips) {
+            super(chart, properties, save, print, zoom, tooltips);
+        }
+
     }
 
     class CircleDrawer implements Drawable {
