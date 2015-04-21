@@ -71,6 +71,8 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
      */
     private PaintSample labelPaintSample;
 
+    private final boolean isDomain;
+
     /**
      * A field showing a description of the label font.
      */
@@ -138,8 +140,8 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
      * The resourceBundle for the localization.
      */
     protected static ResourceBundle localizationResources
-//            = ResourceBundleWrapper.getBundle(
-//                    "org.jfree.chart.editor.LocalizationBundle");
+            //            = ResourceBundleWrapper.getBundle(
+            //                    "org.jfree.chart.editor.LocalizationBundle");
             = Vista.bundle;
 
     /**
@@ -180,7 +182,9 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
      */
     public DefaultAxisEditorConfigurable(boolean isDomain) {
 
+        this.isDomain = isDomain;
         //this.labelFont = axis.getLabelFont();
+        this.labelFont = Vista.GraphicConfigurationManager.readFontProperty(isDomain ? "domain_axis_font" : "range_axis_font");
         this.labelPaintSample = new PaintSample(Vista.GraphicConfigurationManager.readColorProperty(isDomain ? "domain_axis_paint" : "range_axis_paint"));
         //this.tickLabelFont = axis.getTickLabelFont();
         //this.tickLabelPaintSample = new PaintSample(axis.getTickLabelPaint());
@@ -256,11 +260,12 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
         JPanel ticks = new JPanel(new LCBLayout(3));
         ticks.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-//        this.showTickLabelsCheckBox = new JCheckBox(
-//                localizationResources.getString("Show_tick_labels"),
-//                axis.isTickLabelsVisible()
-//        );
-//        ticks.add(this.showTickLabelsCheckBox);
+        this.showTickLabelsCheckBox = new JCheckBox(
+                localizationResources.getString("Show_tick_labels"),
+                //axis.isTickLabelsVisible()
+                Vista.GraphicConfigurationManager.readBooleanProperty("tick_labels")
+        );
+        ticks.add(this.showTickLabelsCheckBox);
         ticks.add(new JPanel());
         ticks.add(new JPanel());
 
@@ -274,11 +279,12 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
         b.addActionListener(this);
         ticks.add(b);
 
-//        this.showTickMarksCheckBox = new JCheckBox(
-//                localizationResources.getString("Show_tick_marks"),
-//                axis.isTickMarksVisible()
-//        );
-//        ticks.add(this.showTickMarksCheckBox);
+        this.showTickMarksCheckBox = new JCheckBox(
+                localizationResources.getString("Show_tick_marks"),
+                //axis.isTickMarksVisible()
+                Vista.GraphicConfigurationManager.readBooleanProperty("tick_marks")
+        );
+        ticks.add(this.showTickMarksCheckBox);
         ticks.add(new JPanel());
         ticks.add(new JPanel());
 
@@ -292,6 +298,10 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
         this.slot2.add(this.slot1, BorderLayout.NORTH);
         add(this.slot2);
 
+    }
+
+    public boolean isIsDomain() {
+        return isDomain;
     }
 
     /**

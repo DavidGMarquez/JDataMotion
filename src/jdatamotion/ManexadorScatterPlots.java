@@ -806,11 +806,11 @@ public final class ManexadorScatterPlots {
         Color ctc = Vista.GraphicConfigurationManager.readColorProperty("title_paint");
         Color cdap = Vista.GraphicConfigurationManager.readColorProperty("domain_axis_paint");
         Color crap = Vista.GraphicConfigurationManager.readColorProperty("range_axis_paint");
+        Font fdaf = Vista.GraphicConfigurationManager.readFontProperty("domain_axis_font");
+        Font fraf = Vista.GraphicConfigurationManager.readFontProperty("range_axis_font");
         Boolean baa = Vista.GraphicConfigurationManager.readBooleanProperty("anti-aliased");
         PlotOrientation poo = Vista.GraphicConfigurationManager.readPlotOrientationProperty("orientation");
         Font ftf = Vista.GraphicConfigurationManager.readFontProperty("title_font");
-        Double dao = Vista.GraphicConfigurationManager.readDoubleProperty("angle-offset");
-        Double dmtu = Vista.GraphicConfigurationManager.readDoubleProperty("manual-tick-unit");
         for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
             jf.setBackgroundPaint(ccbp);
             if (jf.getLegend() != null) {
@@ -823,12 +823,16 @@ public final class ManexadorScatterPlots {
                 jf.getTitle().setPaint(ctc);
                 jf.getTitle().setFont(ftf);
             }
+            for (int i = 0; i < jf.getXYPlot().getDomainAxisCount(); i++) {
+                jf.getXYPlot().getDomainAxis(i).setLabelFont(fdaf);
+            }
+            for (int i = 0; i < jf.getXYPlot().getRangeAxisCount(); i++) {
+                jf.getXYPlot().getRangeAxis(i).setLabelFont(fraf);
+            }
             jf.getXYPlot().getDomainAxis().setLabelPaint(cdap);
             jf.getXYPlot().getRangeAxis().setLabelPaint(crap);
             jf.setAntiAlias(baa);
             jf.getXYPlot().setOrientation(poo);
-//            GraphicConfigurationManager.writeDoubleProperty("angle-offset", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getAngleOffsetValue());
-//         GraphicConfigurationManager.writeDoubleProperty("manual-tick-unit", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getManualTickUnitValue());
         }
     }
 

@@ -73,11 +73,9 @@ public class DefaultPolarPlotEditorConfigurable extends DefaultPlotEditorConfigu
     public DefaultPolarPlotEditorConfigurable() {
         super();
         //this.angleOffsetValue = plot.getAngleOffset();
-        this.angleOffsetValue = Vista.GraphicConfigurationManager.readDoubleProperty("angle-offset");
-        this.angleOffset.setText(Double.toString(this.angleOffsetValue));
+        //this.angleOffset.setText(Double.toString(this.angleOffsetValue));
         //this.manualTickUnitValue = plot.getAngleTickUnit().getSize();
-        this.manualTickUnitValue = Vista.GraphicConfigurationManager.readDoubleProperty("manual-tick-unit");
-        this.manualTickUnit.setText(Double.toString(this.manualTickUnitValue));
+        //this.manualTickUnit.setText(Double.toString(this.manualTickUnitValue));
     }
 
     /**
@@ -91,8 +89,7 @@ public class DefaultPolarPlotEditorConfigurable extends DefaultPlotEditorConfigu
     protected JTabbedPane createPlotTabs() {
         JTabbedPane tabs = super.createPlotTabs();
         // TODO find a better localization key
-        tabs.insertTab(localizationResources.getString("General1"), null,
-                createPolarPlotPanel(), null, 0);
+        //tabs.insertTab(localizationResources.getString("General1"), null,createPolarPlotPanel(), null, 0);
         tabs.setSelectedIndex(0);
         return tabs;
     }
@@ -163,6 +160,7 @@ public class DefaultPolarPlotEditorConfigurable extends DefaultPlotEditorConfigu
      */
     @Override
     public void actionPerformed(ActionEvent event) {
+        super.actionPerformed(event);
         String command = event.getActionCommand();
         if (command.equals("AngleOffsetValue")) {
             validateAngleOffset();

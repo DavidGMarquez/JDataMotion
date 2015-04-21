@@ -53,7 +53,6 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.layout.LCBLayout;
 import org.jfree.ui.PaintSample;
 import org.jfree.ui.RectangleInsets;
@@ -153,8 +152,8 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
      * The resourceBundle for the localization.
      */
     protected static ResourceBundle localizationResources
-//            = ResourceBundleWrapper.getBundle(
-//                    "org.jfree.chart.editor.LocalizationBundle");
+            //            = ResourceBundleWrapper.getBundle(
+            //                    "org.jfree.chart.editor.LocalizationBundle");
             = Vista.bundle;
 
     /**
@@ -243,8 +242,7 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
 //        interior.add(button);
         interior.add(new JLabel(localizationResources.getString(
                 "Outline_stroke")));
-        JButton button = new JButton(localizationResources.getString(
-                "Select..."));
+        JButton button = new JButton(localizationResources.getString("Select..."));
         button.setActionCommand("OutlineStroke");
         button.addActionListener(this);
         interior.add(this.outlineStrokeSample);

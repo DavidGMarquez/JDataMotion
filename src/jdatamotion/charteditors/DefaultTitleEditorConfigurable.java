@@ -41,8 +41,6 @@ import javax.swing.JTextField;
 import jdatamotion.Vista;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.title.TextTitle;
-import org.jfree.chart.title.Title;
-import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.layout.LCBLayout;
 import org.jfree.ui.FontChooserPanel;
 import org.jfree.ui.FontDisplayField;
@@ -77,29 +75,29 @@ public class DefaultTitleEditorConfigurable extends JPanel implements ActionList
     /**
      * A field for displaying a description of the title font.
      */
-    private JTextField fontfield;
+    private final JTextField fontfield;
 
     /**
      * The button to use to select a new title font.
      */
-    private JButton selectFontButton;
+    private final JButton selectFontButton;
 
     /**
      * The paint (color) used to draw the title.
      */
-    private PaintSample titlePaint;
+    private final PaintSample titlePaint;
 
     /**
      * The button to use to select a new paint (color) to draw the title.
      */
-    private JButton selectPaintButton;
+    private final JButton selectPaintButton;
 
     /**
      * The resourceBundle for the localization.
      */
     protected static ResourceBundle localizationResources
-//            = ResourceBundleWrapper.getBundle(
-//                    "org.jfree.chart.editor.LocalizationBundle");
+            //            = ResourceBundleWrapper.getBundle(
+            //                    "org.jfree.chart.editor.LocalizationBundle");
             = Vista.bundle;
 
     /**
@@ -116,8 +114,7 @@ public class DefaultTitleEditorConfigurable extends JPanel implements ActionList
         this.titleFont = Vista.GraphicConfigurationManager.readFontProperty("title_font");
 //        this.titleField = new JTextField(t.getText());
         //this.titlePaint = new PaintSample(t.getPaint());
-        String stc = Vista.propiedades.getProperty("title_paint");
-        this.titlePaint = new PaintSample(new Color(Integer.valueOf(stc.split(",")[0]), Integer.valueOf(stc.split(",")[1]), Integer.valueOf(stc.split(",")[2])));
+        this.titlePaint = new PaintSample(Vista.GraphicConfigurationManager.readColorProperty("title_paint"));
 
         setLayout(new BorderLayout());
 
@@ -211,12 +208,16 @@ public class DefaultTitleEditorConfigurable extends JPanel implements ActionList
 
         String command = event.getActionCommand();
 
-        if (command.equals("SelectFont")) {
-            attemptFontSelection();
-        } else if (command.equals("SelectPaint")) {
-            attemptPaintSelection();
-        } else if (command.equals("ShowTitle")) {
-            attemptModifyShowTitle();
+        switch (command) {
+            case "SelectFont":
+                attemptFontSelection();
+                break;
+            case "SelectPaint":
+                attemptPaintSelection();
+                break;
+            case "ShowTitle":
+                attemptModifyShowTitle();
+                break;
         }
     }
 

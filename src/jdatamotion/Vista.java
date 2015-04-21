@@ -326,11 +326,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
 
         public static Stroke readStrokeProperty(String propiedad) {
-            return new BasicStroke(Float.parseFloat(propiedades.getProperty(propiedad)));
+            Float f = Float.parseFloat(propiedades.getProperty(propiedad));
+            return f != 0.0 ? new BasicStroke() : null;
         }
 
         public static void writeStrokeProperty(String propiedad, Stroke s) {
-            gravarEscribirPropiedade(propiedades, propiedad, String.valueOf(((BasicStroke) s).getLineWidth()), ficheiroConfiguracion);
+            gravarEscribirPropiedade(propiedades, propiedad, String.valueOf(s != null ? ((BasicStroke) s).getLineWidth() : 0.0), ficheiroConfiguracion);
         }
 
         public static Font readFontProperty(String propiedad) {
@@ -698,9 +699,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         GraphicConfigurationManager.writeColorProperty("title_paint", (Color) editor.getTitleEditor().getTitlePaint());
         GraphicConfigurationManager.writeColorProperty("domain_axis_paint", (Color) editor.getPlotEditor().getDomainAxisPropertyEditPanel().getLabelPaint());
         GraphicConfigurationManager.writeColorProperty("range_axis_paint", (Color) editor.getPlotEditor().getRangeAxisPropertyEditPanel().getLabelPaint());
+        GraphicConfigurationManager.writeFontProperty("domain_axis_font", editor.getPlotEditor().getDomainAxisPropertyEditPanel().getLabelFont());
+        GraphicConfigurationManager.writeFontProperty("range_axis_font", editor.getPlotEditor().getRangeAxisPropertyEditPanel().getLabelFont());
         GraphicConfigurationManager.writeBooleanProperty("anti-aliased", editor.getAntiAlias());
         GraphicConfigurationManager.writePlotOrientationProperty("orientation", editor.getPlotEditor().getPlotOrientation());
-        GraphicConfigurationManager.writeFontProperty("title_font", editor.getTitleEditor().getFont());
+        GraphicConfigurationManager.writeFontProperty("title_font", editor.getTitleEditor().getTitleFont());
         GraphicConfigurationManager.writeDoubleProperty("angle-offset", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getAngleOffsetValue());
         GraphicConfigurationManager.writeDoubleProperty("manual-tick-unit", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getManualTickUnitValue());
         mansp.aplicarConfiguracionGraficaScatterPlots();
