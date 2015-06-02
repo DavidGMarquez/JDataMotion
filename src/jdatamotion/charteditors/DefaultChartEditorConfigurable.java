@@ -25,25 +25,26 @@ package jdatamotion.charteditors;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import jdatamotion.Vista;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.editor.ChartEditor;
-import org.jfree.chart.plot.Plot;
-import org.jfree.chart.plot.PolarPlot;
-import org.jfree.chart.title.Title;
-import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.layout.LCBLayout;
 import org.jfree.ui.PaintSample;
 
@@ -122,40 +123,46 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
                 "Series_Paint")));
         JTextField info = new JTextField(localizationResources.getString(
                 "No_editor_implemented"));
-        info.setEnabled(false);
-        interior.add(info);
+        interior.add(new JLabel());
         button = new JButton(localizationResources.getString("Edit..."));
-        button.setEnabled(false);
+        button.setActionCommand("SeriesPaint");
+        button.addActionListener(this);
         interior.add(button);
 
         interior.add(new JLabel(localizationResources.getString(
                 "Series_Stroke")));
         info = new JTextField(localizationResources.getString(
                 "No_editor_implemented"));
-        info.setEnabled(false);
-        interior.add(info);
+        info.setEnabled(true);
+        interior.add(new JLabel());
         button = new JButton(localizationResources.getString("Edit..."));
-        button.setEnabled(false);
+        button.setActionCommand("SeriesStroke");
+        button.addActionListener(this);
+        button.setEnabled(true);
         interior.add(button);
 
         interior.add(new JLabel(localizationResources.getString(
                 "Series_Outline_Paint")));
         info = new JTextField(localizationResources.getString(
                 "No_editor_implemented"));
-        info.setEnabled(false);
-        interior.add(info);
+        info.setEnabled(true);
+        interior.add(new JLabel());
         button = new JButton(localizationResources.getString("Edit..."));
-        button.setEnabled(false);
+        button.setActionCommand("SeriesOutlinePaint");
+        button.addActionListener(this);
+        button.setEnabled(true);
         interior.add(button);
 
         interior.add(new JLabel(localizationResources.getString(
                 "Series_Outline_Stroke")));
         info = new JTextField(localizationResources.getString(
                 "No_editor_implemented"));
-        info.setEnabled(false);
-        interior.add(info);
+        info.setEnabled(true);
+        interior.add(new JLabel());
         button = new JButton(localizationResources.getString("Edit..."));
-        button.setEnabled(false);
+        button.setActionCommand("SeriesOutlineStroke");
+        button.addActionListener(this);
+        button.setEnabled(true);
         interior.add(button);
 
         general.add(interior, BorderLayout.NORTH);
@@ -230,8 +237,22 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
     @Override
     public void actionPerformed(ActionEvent event) {
         String command = event.getActionCommand();
-        if (command.equals("BackgroundPaint")) {
-            attemptModifyBackgroundPaint();
+        switch (command) {
+            case "BackgroundPaint":
+                attemptModifyBackgroundPaint();
+                break;
+            case "SeriesPaint":
+                attemptModifySeriesPaint();
+                break;
+            case "SeriesStroke":
+                //attemptModifyBackgroundPaint();
+                break;
+            case "SeriesOutlinePaint":
+                //attemptModifyBackgroundPaint();
+                break;
+            case "SeriesOutlineStroke":
+                //attemptModifyBackgroundPaint();
+                break;
         }
     }
 
@@ -242,10 +263,54 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
      */
     private void attemptModifyBackgroundPaint() {
         Color c;
-        c = JColorChooser.showDialog(this, localizationResources.getString(
-                "Background_Color"), Color.blue);
+        c = JColorChooser.showDialog(this, localizationResources.getString("Background_Color"), Vista.GraphicConfigurationManager.readColorProperty("chart_background_paint"));
         if (c != null) {
             this.background.setPaint(c);
+        }
+    }
+
+    private void attemptModifySeriesPaint() {
+        JPanel c = new JPanel();
+        JPanel p = new JPanel();
+         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+         JScrollPane js = new JScrollPane(p);
+         js.setPreferredSize(new Dimension(300, 200));
+         c.add(js);
+         List<Color> colors = new ArrayList<>();
+         ActionListener al = new ActionListenerImpl(colors, p);
+         al.actionPerformed(null);
+        JOptionPane.showMessageDialog(null, c, localizationResources.getString("Series_Paint"), JOptionPane.PLAIN_MESSAGE);
+        //if (co != null) {
+        //this.background.setPaint(c);
+        //}
+    }
+
+    private static class ActionListenerImpl implements ActionListener {
+
+        private final List<Color> colors;
+        private final JPanel p;
+
+        public ActionListenerImpl(List<Color> colors, JPanel p) {
+            this.colors = colors;
+            this.p = p;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JPanel linea = new JPanel();
+            colors.add(Color.red);
+            JLabel etiqueta = new JLabel(localizationResources.getString("corSeriesNumero") + " " + String.valueOf(colors.size()) + ": ");
+            linea.add(etiqueta);
+            linea.setMaximumSize(new Dimension(300,30));
+            JButton boton = new JButton("añadido");
+            boton.addActionListener(ActionListenerImpl.this);
+            if (e != null) {
+                ((JButton) e.getSource()).removeActionListener(((JButton) e.getSource()).getActionListeners()[0]);
+            }
+            linea.add(boton);
+            p.add(linea);
+            p.revalidate();
+            p.repaint();
         }
     }
 

@@ -41,9 +41,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import jdatamotion.Vista;
 import org.jfree.chart.axis.Axis;
-import org.jfree.chart.axis.LogAxis;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.util.ResourceBundleWrapper;
 import org.jfree.layout.LCBLayout;
 import org.jfree.ui.FontChooserPanel;
 import org.jfree.ui.FontDisplayField;
@@ -187,6 +184,7 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
         this.labelFont = Vista.GraphicConfigurationManager.readFontProperty(isDomain ? "domain_axis_font" : "range_axis_font");
         this.labelPaintSample = new PaintSample(Vista.GraphicConfigurationManager.readColorProperty(isDomain ? "domain_axis_paint" : "range_axis_paint"));
         //this.tickLabelFont = axis.getTickLabelFont();
+        this.tickLabelFont = Vista.GraphicConfigurationManager.readFontProperty(isDomain ? "domain_tick_labels_font" : "range_tick_labels_font");
         //this.tickLabelPaintSample = new PaintSample(axis.getTickLabelPaint());
         // Insets values
         //this.tickLabelInsets = axis.getTickLabelInsets();
@@ -210,6 +208,8 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
 
         interior.add(new JLabel(localizationResources.getString("Font")));
         this.labelFontField = new FontDisplayField(this.labelFont);
+        this.labelFontField.setEnabled(true);
+        this.labelFontField.setEditable(false);
         interior.add(this.labelFontField);
         JButton b = new JButton(localizationResources.getString("Select..."));
         b.setActionCommand("SelectLabelFont");
@@ -263,7 +263,7 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
         this.showTickLabelsCheckBox = new JCheckBox(
                 localizationResources.getString("Show_tick_labels"),
                 //axis.isTickLabelsVisible()
-                Vista.GraphicConfigurationManager.readBooleanProperty("tick_labels")
+                Vista.GraphicConfigurationManager.readBooleanProperty(isDomain ? "domain_tick_labels" : "range_tick_labels")
         );
         ticks.add(this.showTickLabelsCheckBox);
         ticks.add(new JPanel());
@@ -273,6 +273,8 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
                 new JLabel(localizationResources.getString("Tick_label_font"))
         );
         this.tickLabelFontField = new FontDisplayField(this.tickLabelFont);
+        this.tickLabelFontField.setEnabled(true);
+        this.tickLabelFontField.setEditable(false);
         ticks.add(this.tickLabelFontField);
         b = new JButton(localizationResources.getString("Select..."));
         b.setActionCommand("SelectTickLabelFont");
@@ -282,7 +284,7 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
         this.showTickMarksCheckBox = new JCheckBox(
                 localizationResources.getString("Show_tick_marks"),
                 //axis.isTickMarksVisible()
-                Vista.GraphicConfigurationManager.readBooleanProperty("tick_marks")
+                Vista.GraphicConfigurationManager.readBooleanProperty(isDomain ? "domain_tick_marks" : "range_tick_marks")
         );
         ticks.add(this.showTickMarksCheckBox);
         ticks.add(new JPanel());

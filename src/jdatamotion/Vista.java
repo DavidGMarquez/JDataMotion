@@ -117,7 +117,6 @@ import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionVista;
 import jdatamotion.sesions.Sesionizable;
 import jdatamotion.charteditors.DefaultChartEditorConfigurable;
-import jdatamotion.charteditors.DefaultPolarPlotEditorConfigurable;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jfree.chart.ChartFactory;
@@ -302,6 +301,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             return propiedades.getProperty(propiedad).equals("y");
         }
 
+        public static boolean hasProperty(String propiedad) {
+            return propiedades.getProperty(propiedad) != null;
+        }
+
         public static void writeBooleanProperty(String propiedad, Boolean b) {
             gravarEscribirPropiedade(propiedades, propiedad, b ? "y" : "n", ficheiroConfiguracion);
         }
@@ -313,8 +316,22 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             return new Color(Integer.valueOf(propiedades.getProperty(propiedad).split(",")[0]), Integer.valueOf(propiedades.getProperty(propiedad).split(",")[1]), Integer.valueOf(propiedades.getProperty(propiedad).split(",")[2]));
         }
 
+        public static List<Color> readListColorProperty(String propiedad) {
+            List<Color> l = new ArrayList<>();
+            for (String serieColor : propiedades.getProperty(propiedad).split("|")) {
+                l.add(new Color(Integer.valueOf(serieColor.split(",")[0]), Integer.valueOf(serieColor.split(",")[1]), Integer.valueOf(serieColor.split(",")[2])));
+            }
+            return l;
+        }
+
         public static void writeColorProperty(String propiedad, Color color) {
             gravarEscribirPropiedade(propiedades, propiedad, color.getRed() + "," + color.getGreen() + "," + color.getBlue(), ficheiroConfiguracion);
+        }
+
+        public static void writeListColorProperty(String propiedad, List<Color> colorList) {
+            String colorListString = "";
+            colorListString = colorList.stream().map((color) -> color.getRed() + "," + color.getGreen() + "," + color.getBlue()).reduce(colorListString, String::concat);
+            gravarEscribirPropiedade(propiedades, propiedad, colorListString, ficheiroConfiguracion);
         }
 
         public static PlotOrientation readPlotOrientationProperty(String propiedad) {
@@ -704,8 +721,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         GraphicConfigurationManager.writeBooleanProperty("anti-aliased", editor.getAntiAlias());
         GraphicConfigurationManager.writePlotOrientationProperty("orientation", editor.getPlotEditor().getPlotOrientation());
         GraphicConfigurationManager.writeFontProperty("title_font", editor.getTitleEditor().getTitleFont());
-        GraphicConfigurationManager.writeDoubleProperty("angle-offset", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getAngleOffsetValue());
-        GraphicConfigurationManager.writeDoubleProperty("manual-tick-unit", ((DefaultPolarPlotEditorConfigurable) editor.getPlotEditor()).getManualTickUnitValue());
+        GraphicConfigurationManager.writeBooleanProperty("range_tick_labels", editor.getPlotEditor().getRangeAxisPropertyEditPanel().isTickLabelsVisible());
+        GraphicConfigurationManager.writeBooleanProperty("range_tick_marks", editor.getPlotEditor().getRangeAxisPropertyEditPanel().isTickMarksVisible());
+        GraphicConfigurationManager.writeBooleanProperty("domain_tick_labels", editor.getPlotEditor().getDomainAxisPropertyEditPanel().isTickLabelsVisible());
+        GraphicConfigurationManager.writeBooleanProperty("domain_tick_marks", editor.getPlotEditor().getDomainAxisPropertyEditPanel().isTickMarksVisible());
+        GraphicConfigurationManager.writeFontProperty("domain_tick_labels_font", editor.getPlotEditor().getDomainAxisPropertyEditPanel().getTickLabelFont());
+        GraphicConfigurationManager.writeFontProperty("range_tick_labels_font", editor.getPlotEditor().getRangeAxisPropertyEditPanel().getTickLabelFont());
         mansp.aplicarConfiguracionGraficaScatterPlots();
     }
 
@@ -1233,7 +1254,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jMenuItem6 = new javax.swing.JMenuItem();
 
         jDialog1.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        jDialog1.setLocationByPlatform(true);
         jDialog1.setModal(true);
         jDialog1.setName("jDialog1"); // NOI18N
 
@@ -1326,7 +1346,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jDialog2.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jDialog2.setTitle(bundle.getString("Vista.jMenuItem16.text")); // NOI18N
-        jDialog2.setLocationByPlatform(true);
         jDialog2.setMinimumSize(new java.awt.Dimension(500, 500));
         jDialog2.setModal(true);
         jDialog2.setName("jDialog2"); // NOI18N
@@ -1437,7 +1456,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jDialog3.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jDialog3.setTitle(bundle.getString("Vista.jMenuItem17.text")); // NOI18N
-        jDialog3.setLocationByPlatform(true);
         jDialog3.setModal(true);
         jDialog3.setName("jDialog3"); // NOI18N
 
@@ -1488,7 +1506,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPopupMenu1.setName("jPopupMenu1"); // NOI18N
 
         jDialog4.setTitle(bundle.getString("Vista.jMenuItem22.text")); // NOI18N
-        jDialog4.setLocationByPlatform(true);
         jDialog4.setName("jDialog4"); // NOI18N
 
         buttonGroup2.add(jRadioButton2);

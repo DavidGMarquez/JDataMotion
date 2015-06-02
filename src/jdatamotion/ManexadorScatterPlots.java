@@ -809,8 +809,14 @@ public final class ManexadorScatterPlots {
         Font fdaf = Vista.GraphicConfigurationManager.readFontProperty("domain_axis_font");
         Font fraf = Vista.GraphicConfigurationManager.readFontProperty("range_axis_font");
         Boolean baa = Vista.GraphicConfigurationManager.readBooleanProperty("anti-aliased");
+        Boolean brtl = Vista.GraphicConfigurationManager.readBooleanProperty("range_tick_labels");
+        Boolean bdtl = Vista.GraphicConfigurationManager.readBooleanProperty("domain_tick_labels");
+        Boolean bdtm = Vista.GraphicConfigurationManager.readBooleanProperty("domain_tick_marks");
+        Boolean brtm = Vista.GraphicConfigurationManager.readBooleanProperty("range_tick_marks");
         PlotOrientation poo = Vista.GraphicConfigurationManager.readPlotOrientationProperty("orientation");
         Font ftf = Vista.GraphicConfigurationManager.readFontProperty("title_font");
+        Font fdtlf = Vista.GraphicConfigurationManager.readFontProperty("domain_tick_labels_font");
+        Font frtlf = Vista.GraphicConfigurationManager.readFontProperty("range_tick_labels_font");
         for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
             jf.setBackgroundPaint(ccbp);
             if (jf.getLegend() != null) {
@@ -825,9 +831,15 @@ public final class ManexadorScatterPlots {
             }
             for (int i = 0; i < jf.getXYPlot().getDomainAxisCount(); i++) {
                 jf.getXYPlot().getDomainAxis(i).setLabelFont(fdaf);
+                jf.getXYPlot().getDomainAxis(i).setTickMarksVisible(bdtm);
+                jf.getXYPlot().getDomainAxis(i).setTickLabelsVisible(bdtl);
+                jf.getXYPlot().getDomainAxis(i).setTickLabelFont(fdtlf);
             }
             for (int i = 0; i < jf.getXYPlot().getRangeAxisCount(); i++) {
                 jf.getXYPlot().getRangeAxis(i).setLabelFont(fraf);
+                jf.getXYPlot().getRangeAxis(i).setTickMarksVisible(brtm);
+                jf.getXYPlot().getRangeAxis(i).setTickLabelsVisible(brtl);
+                jf.getXYPlot().getRangeAxis(i).setTickLabelFont(frtlf);
             }
             jf.getXYPlot().getDomainAxis().setLabelPaint(cdap);
             jf.getXYPlot().getRangeAxis().setLabelPaint(crap);

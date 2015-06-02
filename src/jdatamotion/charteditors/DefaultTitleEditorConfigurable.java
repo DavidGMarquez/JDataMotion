@@ -143,6 +143,8 @@ public class DefaultTitleEditorConfigurable extends JPanel implements ActionList
 //        interior.add(new JPanel());
         JLabel fontLabel = new JLabel(localizationResources.getString("Font"));
         this.fontfield = new FontDisplayField(this.titleFont);
+        this.fontfield.setEnabled(true);
+        this.fontfield.setEditable(false);
         this.selectFontButton = new JButton(
                 localizationResources.getString("Select...")
         );
