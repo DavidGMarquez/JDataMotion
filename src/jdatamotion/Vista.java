@@ -52,6 +52,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -318,7 +319,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         public static List<Color> readListColorProperty(String propiedad) {
             List<Color> l = new ArrayList<>();
-            for (String serieColor : propiedades.getProperty(propiedad).split("|")) {
+            for (String serieColor : propiedades.getProperty(propiedad).split("\\|")) {
                 l.add(new Color(Integer.valueOf(serieColor.split(",")[0]), Integer.valueOf(serieColor.split(",")[1]), Integer.valueOf(serieColor.split(",")[2])));
             }
             return l;
@@ -330,7 +331,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         public static void writeListColorProperty(String propiedad, List<Color> colorList) {
             String colorListString = "";
-            colorListString = colorList.stream().map((color) -> color.getRed() + "," + color.getGreen() + "," + color.getBlue()).reduce(colorListString, String::concat);
+            colorListString = colorList.stream().map((c) -> c.getRed() + "," + c.getGreen() + "," + c.getBlue() + "|").reduce(colorListString, String::concat);
+            colorListString = colorListString.substring(0, colorListString.length() - 1);
             gravarEscribirPropiedade(propiedades, propiedad, colorListString, ficheiroConfiguracion);
         }
 
