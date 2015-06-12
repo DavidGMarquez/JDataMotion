@@ -26,6 +26,7 @@ package jdatamotion.charteditors;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -42,13 +43,16 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import jdatamotion.Vista;
 import org.jfree.layout.LCBLayout;
 import org.jfree.ui.PaintSample;
@@ -300,17 +304,19 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
 
     class MuestraForma extends JPanel {
 
+        private final Shape forma;
+
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(20, 20);
         }
 
-        Shape shapes;
-        Color color;
+        public Shape getForma() {
+            return forma;
+        }
 
-        public void setShapes(Shape shapes, Color color) {
-            this.shapes = shapes;
-            this.color = color;
+        public MuestraForma(Shape forma) {
+            this.forma = forma;
         }
 
         @Override
@@ -320,9 +326,10 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
             g.fillRect(0, 0, getWidth(), getHeight());
             g.setColor(Color.black);
             g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
-            g.setColor(color);
-            ((Graphics2D) g).draw(shapes);
-            RoundRectangle2D.Double rd2;
+            g.setColor(Color.BLACK);
+            if (forma != null) {
+                ((Graphics2D) g).draw(forma);
+            }
         }
     }
 
@@ -361,18 +368,18 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         js.setMaximumSize(new Dimension(400, 200));
         js.setPreferredSize(new Dimension(400, 200));
         c.add(js);
-        List<MuestraColor> colors = new ArrayList<>();
+        List<MuestraForma> shapes = new ArrayList<>();
         List<Shape> readListColorProperty = Vista.GraphicConfigurationManager.readListStrokeProperty(property);
         readListColorProperty.stream().forEach((co) -> {
-            colors.add(new MuestraForma());
+            shapes.add(new MuestraForma(co));
         });
-        pintarLineasColor(p, colors);
+        pintarLineasForma(p, shapes);
         if (JOptionPane.showConfirmDialog(null, c, localizationResources.getString("seleccionarListaFormas"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
-            List<Color> colorlist = new ArrayList<>();
-            colors.stream().forEach((ps) -> {
-                colorlist.add((Color) ps.getPaint());
+            List<Shape> shapelist = new ArrayList<>();
+            shapes.stream().forEach((ps) -> {
+                shapelist.add(ps.getForma());
             });
-            Vista.GraphicConfigurationManager.writeListColorProperty(property, colorlist);
+            Vista.GraphicConfigurationManager.writeListShapeProperty(property, shapelist);
         }
     }
 
@@ -430,14 +437,24 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         p.repaint();
     }
 
-    private void addLineaForma(JPanel p, MuestraColor c, List<MuestraColor> colors) {
+    private void pintarLineasForma(JPanel p, List<MuestraForma> shapes) {
+        p.removeAll();
+        shapes.stream().forEach((co) -> {
+            addLineaForma(p, co, shapes);
+        });
+        addLineaForma(p, null, shapes);
+        p.revalidate();
+        p.repaint();
+    }
+
+    private void addLineaForma(JPanel p, MuestraForma c, List<MuestraForma> shapes) {
         JPanel linea = new JPanel();
         linea.add(Box.createHorizontalStrut(10));
         linea.setLayout(new BoxLayout(linea, BoxLayout.X_AXIS));
         JLabel etiqueta = new JLabel(localizationResources.getString("formaNumero") + " " + String.valueOf(p.getComponentCount()) + " " + (p.getComponentCount() == 0 ? "(" + Vista.bundle.getString("senDefinir") + ")" : "") + ": ");
         linea.add(etiqueta);
         linea.add(Box.createHorizontalGlue());
-        MuestraColor ps = c != null ? c : new MuestraColor(null);
+        MuestraForma ps = c != null ? c : new MuestraForma(null);
         ps.setMaximumSize(c != null ? new Dimension(20, 20) : new Dimension(0, 0));
         ps.setMinimumSize(c != null ? new Dimension(20, 20) : new Dimension(0, 0));
         ps.setPreferredSize(c != null ? new Dimension(20, 20) : new Dimension(0, 0));
@@ -446,14 +463,25 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         linea.setMaximumSize(new Dimension(400, 30));
         linea.setPreferredSize(new Dimension(400, 30));
         linea.add(Box.createHorizontalStrut(20));
-        final JColorChooser jcc = new JColorChooser(c != null ? (Color) c.getPaint() : Color.BLACK);
+        //final JColorChooser jcc = new JColorChooser(c != null ? (Color) c.getPaint() : Color.BLACK);
+
+        JPanel co = new JPanel(new FlowLayout());
+        co.add(new JComboBox(new String[]{Vista.bundle.getString("ningun"), Vista.bundle.getString("estrela"), Vista.bundle.getString("poligono")}));
+        co.add(new JSpinner(new SpinnerNumberModel(3, 3, 10, 1)));
+        /*if (JOptionPane.showConfirmDialog(null, co, localizationResources.getString("seleccionarListaFormas"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+            List<Shape> shapelist = new ArrayList<>();
+            shapes.stream().forEach((ps) -> {
+                colorlist.add((Color) ps.getPaint());
+            });
+        }
+
         JButton boton1 = new JButton(ps.getPaint() != null ? Vista.bundle.getString("modificar") : Vista.bundle.getString("engadir"));
         ActionListener okActionListener1 = (ActionEvent e1) -> {
             if (ps.getPaint() == null) {
-                colors.add(ps);
+                shapes.add(ps);
             }
             ps.setPaint(jcc.getColor());
-            pintarLineasColor(p, colors);
+            pintarLineasColor(p, shapes);
         };
         boton1.addActionListener((ActionEvent e) -> {
             final JDialog jccd = JColorChooser.createDialog(null, "Change Button Background", true, jcc, okActionListener1, (ActionEvent e1) -> {
@@ -465,23 +493,12 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         if (ps.getPaint() != null) {
             JButton boton2 = new JButton(Vista.bundle.getString("eliminar"));
             boton2.addActionListener((ActionEvent e1) -> {
-                colors.remove(ps);
-                pintarLineasColor(p, colors);
+                shapes.remove(ps);
+                pintarLineasColor(p, shapes);
             });
             linea.add(boton2);
             linea.add(Box.createHorizontalStrut(10));
-        }
+        }*/
         p.add(linea);
     }
-
-    private void pintarLineasForma(JPanel p, List<MuestraColor> colors) {
-        p.removeAll();
-        colors.stream().forEach((co) -> {
-            addLineaColor(p, co, colors);
-        });
-        addLineaColor(p, null, colors);
-        p.revalidate();
-        p.repaint();
-    }
-
 }

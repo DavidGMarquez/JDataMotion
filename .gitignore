@@ -1,4 +1,4 @@
-/build/
-/store/
-/dist/
-/configuracion.properties
+build/
+store/
+dist/
+configuracion.properties

@@ -319,6 +319,25 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             return new Color(Integer.valueOf(propiedades.getProperty(propiedad).split(",")[0]), Integer.valueOf(propiedades.getProperty(propiedad).split(",")[1]), Integer.valueOf(propiedades.getProperty(propiedad).split(",")[2]));
         }
 
+        public static List<Shape> readListStrokeProperty(String propiedad) {
+            List<Shape> l = new ArrayList<>();
+            for (String serieColor : propiedades.getProperty(propiedad).split("\\|")) {
+                Shape s = null;
+                switch (serieColor.split(",")[0]) {
+                    case "regular":
+                        s = new RegularPolygon(0, 0, 0, Integer.valueOf(serieColor.split(",")[1]), 0);
+                        break;
+                    case "star":
+                        s = new StarPolygon(0, 0, 0, Integer.valueOf(serieColor.split(",")[1]), 0);
+                        break;
+                }
+                if (s != null) {
+                    l.add(s);
+                }
+            }
+            return l;
+        }
+
         public static List<Color> readListColorProperty(String propiedad) {
             List<Color> l = new ArrayList<>();
             for (String serieColor : propiedades.getProperty(propiedad).split("\\|")) {
@@ -342,9 +361,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             String shapeListString = "";
             for (Shape s : colorList) {
                 if (s instanceof RegularPolygon) {
-                    shapeListString += "regular" + ((RegularPolygon) s).getVertexCount();
+                    shapeListString += "regular," + ((RegularPolygon) s).getVertexCount();
                 } else if (s instanceof StarPolygon) {
-                    shapeListString += "regular" + ((StarPolygon) s).getVertexCount();
+                    shapeListString += "star," + ((StarPolygon) s).getVertexCount();
                 }
                 shapeListString += "|";
             }
