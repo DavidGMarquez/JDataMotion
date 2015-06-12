@@ -28,6 +28,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
@@ -817,6 +818,10 @@ public final class ManexadorScatterPlots {
         Font ftf = Vista.GraphicConfigurationManager.readFontProperty("title_font");
         Font fdtlf = Vista.GraphicConfigurationManager.readFontProperty("domain_tick_labels_font");
         Font frtlf = Vista.GraphicConfigurationManager.readFontProperty("range_tick_labels_font");
+        List<Color> lcsp = Vista.GraphicConfigurationManager.readListColorProperty("series_paint");
+        List<Color> lcsop = Vista.GraphicConfigurationManager.readListColorProperty("series_outline_paint");
+        List<Shape> lsss = Vista.GraphicConfigurationManager.readListStrokeProperty("series_stroke");
+        List<Shape> lssos = Vista.GraphicConfigurationManager.readListStrokeProperty("series_outline_stroke");
         for (JFreeChart jf : new JFreeChart[]{sp.getChartPanelCela().getChart(), sp.getJFrameAmpliado().getChartPanel().getChart()}) {
             jf.setBackgroundPaint(ccbp);
             if (jf.getLegend() != null) {
@@ -845,6 +850,18 @@ public final class ManexadorScatterPlots {
             jf.getXYPlot().getRangeAxis().setLabelPaint(crap);
             jf.setAntiAlias(baa);
             jf.getXYPlot().setOrientation(poo);
+            for (int i = 0; i < lcsp.size(); i++) {
+                jf.getXYPlot().getRenderer().setSeriesPaint(i, lcsp.get(i));
+            }
+            for (int i = 0; i < lcsop.size(); i++) {
+                jf.getXYPlot().getRenderer().setSeriesOutlinePaint(i, lcsop.get(i));
+            }
+            for (int i = 0; i < lsss.size(); i++) {
+                jf.getXYPlot().getRenderer().setSeriesShape(i, lsss.get(i));
+            }
+            /*for (int i = 0; i < lssos.size(); i++) {
+                jf.getXYPlot().getRenderer().setSeriesOutlineStroke(i, (Stroke) lssos.get(i));
+            }*/
         }
     }
 
@@ -993,6 +1010,7 @@ public final class ManexadorScatterPlots {
         @Override
         public void doEditChartProperties() {
             Vista.doEditProperties(this);
+            
         }
 
         public ChartPanelConfigurable(JFreeChart chart, boolean properties, boolean save, boolean print, boolean zoom, boolean tooltips) {

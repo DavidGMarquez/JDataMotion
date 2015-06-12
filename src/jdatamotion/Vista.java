@@ -321,18 +321,21 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         public static List<Shape> readListStrokeProperty(String propiedad) {
             List<Shape> l = new ArrayList<>();
-            for (String serieColor : propiedades.getProperty(propiedad).split("\\|")) {
-                Shape s = null;
-                switch (serieColor.split(",")[0]) {
-                    case "regular":
-                        s = new RegularPolygon(0, 0, 0, Integer.valueOf(serieColor.split(",")[1]), 0);
-                        break;
-                    case "star":
-                        s = new StarPolygon(0, 0, 0, Integer.valueOf(serieColor.split(",")[1]), 0);
-                        break;
-                }
-                if (s != null) {
-                    l.add(s);
+            for (String serieShape : propiedades.getProperty(propiedad).split("\\|")) {
+                if (!serieShape.isEmpty()) {
+                    Shape s = null;
+                    int v = Integer.valueOf(serieShape.split(",")[1]);
+                    switch (serieShape.split(",")[0]) {
+                        case "regular":
+                            s = new RegularPolygon(0, 0, 4, v, -Math.PI / 2);
+                            break;
+                        case "star":
+                            s = new StarPolygon(0, 0, 4, 2, v, -Math.PI / 2);
+                            break;
+                    }
+                    if (s != null) {
+                        l.add(s);
+                    }
                 }
             }
             return l;
@@ -341,7 +344,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         public static List<Color> readListColorProperty(String propiedad) {
             List<Color> l = new ArrayList<>();
             for (String serieColor : propiedades.getProperty(propiedad).split("\\|")) {
-                l.add(new Color(Integer.valueOf(serieColor.split(",")[0]), Integer.valueOf(serieColor.split(",")[1]), Integer.valueOf(serieColor.split(",")[2])));
+                if (!serieColor.isEmpty()) {
+                    l.add(new Color(Integer.valueOf(serieColor.split(",")[0]), Integer.valueOf(serieColor.split(",")[1]), Integer.valueOf(serieColor.split(",")[2])));
+                }
             }
             return l;
         }
@@ -353,7 +358,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         public static void writeListColorProperty(String propiedad, List<Color> colorList) {
             String colorListString = "";
             colorListString = colorList.stream().map((c) -> c.getRed() + "," + c.getGreen() + "," + c.getBlue() + "|").reduce(colorListString, String::concat);
-            colorListString = colorListString.substring(0, colorListString.length() - 1);
+            if (!colorListString.isEmpty()) {
+                colorListString = colorListString.substring(0, colorListString.length() - 1);
+            }
             gravarEscribirPropiedade(propiedades, propiedad, colorListString, ficheiroConfiguracion);
         }
 
@@ -367,7 +374,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 }
                 shapeListString += "|";
             }
-            shapeListString = shapeListString.substring(0, shapeListString.length() - 1);
+            if (!shapeListString.isEmpty()) {
+                shapeListString = shapeListString.substring(0, shapeListString.length() - 1);
+            }
             gravarEscribirPropiedade(propiedades, propiedad, shapeListString, ficheiroConfiguracion);
         }
 
@@ -764,7 +773,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         GraphicConfigurationManager.writeBooleanProperty("domain_tick_marks", editor.getPlotEditor().getDomainAxisPropertyEditPanel().isTickMarksVisible());
         GraphicConfigurationManager.writeFontProperty("domain_tick_labels_font", editor.getPlotEditor().getDomainAxisPropertyEditPanel().getTickLabelFont());
         GraphicConfigurationManager.writeFontProperty("range_tick_labels_font", editor.getPlotEditor().getRangeAxisPropertyEditPanel().getTickLabelFont());
-        mansp.aplicarConfiguracionGraficaScatterPlots();
+        GraphicConfigurationManager.writeListColorProperty("series_paint", editor.getSeriesPaint());
+        GraphicConfigurationManager.writeListColorProperty("series_outline_paint", editor.getSeriesOutlinePaint());
+        GraphicConfigurationManager.writeListShapeProperty("series_stroke", editor.getSeriesStroke());
+        GraphicConfigurationManager.writeListShapeProperty("series_outline_stroke", editor.getSeriesOutlineStroke());
     }
 
     public class TarefaProgreso extends SwingWorker<Void, Void> {

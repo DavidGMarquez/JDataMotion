@@ -33,7 +33,6 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -91,6 +90,27 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
             // = ResourceBundleWrapper.getBundle(
             //      "org.jfree.chart.editor.LocalizationBundle");
             = Vista.bundle;
+
+    private List<Color> seriesPaint;
+    private List<Shape> seriesOutlineStroke;
+    private List<Shape> seriesStroke;
+    private List<Color> seriesOutlinePaint;
+
+    public List getSeriesPaint() {
+        return seriesPaint;
+    }
+
+    public List getSeriesOutlineStroke() {
+        return seriesOutlineStroke;
+    }
+
+    public List getSeriesStroke() {
+        return seriesStroke;
+    }
+
+    public List getSeriesOutlinePaint() {
+        return seriesOutlinePaint;
+    }
 
     /**
      * Standard constructor - the property panel is made up of a number of
@@ -200,6 +220,10 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         tabs.add(localizationResources.getString("Other"), other);
         parts.add(tabs, BorderLayout.NORTH);
         add(parts);
+        this.seriesOutlinePaint = Vista.GraphicConfigurationManager.readListColorProperty("series_outline_paint");
+        this.seriesOutlineStroke = Vista.GraphicConfigurationManager.readListStrokeProperty("series_outline_stroke");
+        this.seriesPaint = Vista.GraphicConfigurationManager.readListColorProperty("series_paint");
+        this.seriesStroke = Vista.GraphicConfigurationManager.readListStrokeProperty("series_stroke");
     }
 
     /**
@@ -265,11 +289,6 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         }
     }
 
-    /**
-     * Allows the user the opportunity to select a new background paint. Uses
-     * JColorChooser, so we are only allowing a subset of all Paint objects to
-     * be selected (fix later).
-     */
     private void attemptModifyBackgroundPaint() {
         Color c;
         c = JColorChooser.showDialog(this, localizationResources.getString("Background_Color"), Vista.GraphicConfigurationManager.readColorProperty("chart_background_paint"));
@@ -279,15 +298,19 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
     }
 
     private void attemptModifySeriesOutlinePaint() {
-        showColorListSelector("series_outline_paint");
+        showColorListSelector(this.seriesOutlinePaint);
     }
 
     private void attemptModifySeriesStroke() {
-        showStrokeListSelector("series_stroke");
+        showStrokeListSelector(this.seriesStroke);
     }
 
     private void attemptModifySeriesOutlineStroke() {
-        showStrokeListSelector("series_outline_stroke");
+        showStrokeListSelector(this.seriesOutlineStroke);
+    }
+
+    private void attemptModifySeriesPaint() {
+        showColorListSelector(this.seriesPaint);
     }
 
     class MuestraColor extends PaintSample {
@@ -304,11 +327,25 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
 
     class MuestraForma extends JPanel {
 
-        private final Shape forma;
+        private Shape forma;
+
+        public void setForma(Shape forma) {
+            this.forma = forma;
+        }
 
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(20, 20);
+        }
+
+        public Integer getNumeroVertices() {
+            if (forma instanceof RegularPolygon) {
+                return ((RegularPolygon) forma).getVertexCount();
+            } else if (forma instanceof StarPolygon) {
+                return ((StarPolygon) forma).getVertexCount();
+            } else {
+                return null;
+            }
         }
 
         public Shape getForma() {
@@ -324,20 +361,15 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
             super.paintComponent(g);
             g.setColor(Color.white);
             g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(Color.black);
-            g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
-            g.setColor(Color.BLACK);
             if (forma != null) {
+                ((Graphics2D) g).translate(10, 10);
+                ((Graphics2D) g).setPaint(Color.black);
                 ((Graphics2D) g).draw(forma);
             }
         }
     }
 
-    private void attemptModifySeriesPaint() {
-        showColorListSelector("series_paint");
-    }
-
-    private void showColorListSelector(String property) {
+    private void showColorListSelector(List<Color> initialList) {
         JPanel c = new JPanel();
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
@@ -346,8 +378,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         js.setPreferredSize(new Dimension(400, 200));
         c.add(js);
         List<MuestraColor> colors = new ArrayList<>();
-        List<Color> readListColorProperty = Vista.GraphicConfigurationManager.readListColorProperty(property);
-        readListColorProperty.stream().forEach((co) -> {
+        initialList.stream().forEach((co) -> {
             colors.add(new MuestraColor(co));
         });
         pintarLineasColor(p, colors);
@@ -356,11 +387,14 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
             colors.stream().forEach((ps) -> {
                 colorlist.add((Color) ps.getPaint());
             });
-            Vista.GraphicConfigurationManager.writeListColorProperty(property, colorlist);
+            initialList.clear();
+            colorlist.stream().forEach((color) -> {
+                initialList.add(color);
+            });
         }
     }
 
-    private void showStrokeListSelector(String property) {
+    private void showStrokeListSelector(List<Shape> initialList) {
         JPanel c = new JPanel();
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
@@ -369,8 +403,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         js.setPreferredSize(new Dimension(400, 200));
         c.add(js);
         List<MuestraForma> shapes = new ArrayList<>();
-        List<Shape> readListColorProperty = Vista.GraphicConfigurationManager.readListStrokeProperty(property);
-        readListColorProperty.stream().forEach((co) -> {
+        initialList.stream().forEach((co) -> {
             shapes.add(new MuestraForma(co));
         });
         pintarLineasForma(p, shapes);
@@ -379,7 +412,10 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
             shapes.stream().forEach((ps) -> {
                 shapelist.add(ps.getForma());
             });
-            Vista.GraphicConfigurationManager.writeListShapeProperty(property, shapelist);
+            initialList.clear();
+            shapelist.stream().forEach((shape) -> {
+                initialList.add(shape);
+            });
         }
     }
 
@@ -463,42 +499,52 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         linea.setMaximumSize(new Dimension(400, 30));
         linea.setPreferredSize(new Dimension(400, 30));
         linea.add(Box.createHorizontalStrut(20));
-        //final JColorChooser jcc = new JColorChooser(c != null ? (Color) c.getPaint() : Color.BLACK);
-
         JPanel co = new JPanel(new FlowLayout());
-        co.add(new JComboBox(new String[]{Vista.bundle.getString("ningun"), Vista.bundle.getString("estrela"), Vista.bundle.getString("poligono")}));
-        co.add(new JSpinner(new SpinnerNumberModel(3, 3, 10, 1)));
-        /*if (JOptionPane.showConfirmDialog(null, co, localizationResources.getString("seleccionarListaFormas"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
-            List<Shape> shapelist = new ArrayList<>();
-            shapes.stream().forEach((ps) -> {
-                colorlist.add((Color) ps.getPaint());
-            });
-        }
-
-        JButton boton1 = new JButton(ps.getPaint() != null ? Vista.bundle.getString("modificar") : Vista.bundle.getString("engadir"));
-        ActionListener okActionListener1 = (ActionEvent e1) -> {
-            if (ps.getPaint() == null) {
-                shapes.add(ps);
+        JComboBox<String> jcb = new JComboBox(new String[]{Vista.bundle.getString("ningun"), Vista.bundle.getString("estrela"), Vista.bundle.getString("poligono")});
+        if (c != null) {
+            if (c.getForma() instanceof StarPolygon) {
+                jcb.setSelectedIndex(1);
             }
-            ps.setPaint(jcc.getColor());
-            pintarLineasColor(p, shapes);
-        };
+            if (c.getForma() instanceof RegularPolygon) {
+                jcb.setSelectedIndex(2);
+            }
+        }
+        co.add(jcb);
+        JSpinner js = new JSpinner(new SpinnerNumberModel(c != null ? c.getNumeroVertices() : 3, 3, 10, 1));
+        co.add(js);
+        JButton boton1 = new JButton(ps.getForma() != null ? Vista.bundle.getString("modificar") : Vista.bundle.getString("engadir"));
         boton1.addActionListener((ActionEvent e) -> {
-            final JDialog jccd = JColorChooser.createDialog(null, "Change Button Background", true, jcc, okActionListener1, (ActionEvent e1) -> {
-            });
-            jccd.setVisible(true);
+            if (JOptionPane.showConfirmDialog(null, co, localizationResources.getString("seleccionarListaFormas"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+                if (jcb.getSelectedIndex() != 0 && ps.getForma() == null) {
+                    shapes.add(ps);
+                }
+                if (jcb.getSelectedIndex() != 0) {
+                    Shape s = null;
+                    int v = (int) js.getModel().getValue();
+                    switch (jcb.getSelectedIndex()) {
+                        case 1:
+                            s = new StarPolygon(0, 0, 4, 2, v, -Math.PI / 2);
+                            break;
+                        case 2:
+                            s = new RegularPolygon(0, 0, 4, v, -Math.PI / 2);
+                            break;
+                    }
+                    ps.setForma(s);
+                }
+                pintarLineasForma(p, shapes);
+            }
         });
         linea.add(boton1);
         linea.add(Box.createHorizontalStrut(10));
-        if (ps.getPaint() != null) {
+        if (ps.getForma() != null) {
             JButton boton2 = new JButton(Vista.bundle.getString("eliminar"));
             boton2.addActionListener((ActionEvent e1) -> {
                 shapes.remove(ps);
-                pintarLineasColor(p, shapes);
+                pintarLineasForma(p, shapes);
             });
             linea.add(boton2);
             linea.add(Box.createHorizontalStrut(10));
-        }*/
+        }
         p.add(linea);
     }
 }
