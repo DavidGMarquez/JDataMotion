@@ -20,6 +20,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,7 +53,6 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -118,6 +118,8 @@ import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionVista;
 import jdatamotion.sesions.Sesionizable;
 import jdatamotion.charteditors.DefaultChartEditorConfigurable;
+import jdatamotion.charteditors.RegularPolygon;
+import jdatamotion.charteditors.StarPolygon;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jfree.chart.ChartFactory;
@@ -334,6 +336,20 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             colorListString = colorList.stream().map((c) -> c.getRed() + "," + c.getGreen() + "," + c.getBlue() + "|").reduce(colorListString, String::concat);
             colorListString = colorListString.substring(0, colorListString.length() - 1);
             gravarEscribirPropiedade(propiedades, propiedad, colorListString, ficheiroConfiguracion);
+        }
+
+        public static void writeListShapeProperty(String propiedad, List<Shape> colorList) {
+            String shapeListString = "";
+            for (Shape s : colorList) {
+                if (s instanceof RegularPolygon) {
+                    shapeListString += "regular" + ((RegularPolygon) s).getVertexCount();
+                } else if (s instanceof StarPolygon) {
+                    shapeListString += "regular" + ((StarPolygon) s).getVertexCount();
+                }
+                shapeListString += "|";
+            }
+            shapeListString = shapeListString.substring(0, shapeListString.length() - 1);
+            gravarEscribirPropiedade(propiedades, propiedad, shapeListString, ficheiroConfiguracion);
         }
 
         public static PlotOrientation readPlotOrientationProperty(String propiedad) {

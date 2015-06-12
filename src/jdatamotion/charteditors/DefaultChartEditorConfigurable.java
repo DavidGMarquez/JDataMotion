@@ -26,9 +26,13 @@ package jdatamotion.charteditors;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -246,13 +250,13 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
                 attemptModifySeriesPaint();
                 break;
             case "SeriesStroke":
-                //attemptModifyBackgroundPaint();
+                attemptModifySeriesStroke();
                 break;
             case "SeriesOutlinePaint":
-                //attemptModifyBackgroundPaint();
+                attemptModifySeriesOutlinePaint();
                 break;
             case "SeriesOutlineStroke":
-                //attemptModifyBackgroundPaint();
+                attemptModifySeriesOutlineStroke();
                 break;
         }
     }
@@ -270,6 +274,18 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         }
     }
 
+    private void attemptModifySeriesOutlinePaint() {
+        showColorListSelector("series_outline_paint");
+    }
+
+    private void attemptModifySeriesStroke() {
+        showStrokeListSelector("series_stroke");
+    }
+
+    private void attemptModifySeriesOutlineStroke() {
+        showStrokeListSelector("series_outline_stroke");
+    }
+
     class MuestraColor extends PaintSample {
 
         @Override
@@ -282,7 +298,39 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         }
     }
 
+    class MuestraForma extends JPanel {
+
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(20, 20);
+        }
+
+        Shape shapes;
+        Color color;
+
+        public void setShapes(Shape shapes, Color color) {
+            this.shapes = shapes;
+            this.color = color;
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(Color.white);
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.black);
+            g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+            g.setColor(color);
+            ((Graphics2D) g).draw(shapes);
+            RoundRectangle2D.Double rd2;
+        }
+    }
+
     private void attemptModifySeriesPaint() {
+        showColorListSelector("series_paint");
+    }
+
+    private void showColorListSelector(String property) {
         JPanel c = new JPanel();
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
@@ -291,25 +339,48 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         js.setPreferredSize(new Dimension(400, 200));
         c.add(js);
         List<MuestraColor> colors = new ArrayList<>();
-        List<Color> readListColorProperty = Vista.GraphicConfigurationManager.readListColorProperty("series_paint");
+        List<Color> readListColorProperty = Vista.GraphicConfigurationManager.readListColorProperty(property);
         readListColorProperty.stream().forEach((co) -> {
             colors.add(new MuestraColor(co));
         });
-        pintarLineas(p, colors);
-        if (JOptionPane.showConfirmDialog(null, c, localizationResources.getString("Series_Paint"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+        pintarLineasColor(p, colors);
+        if (JOptionPane.showConfirmDialog(null, c, localizationResources.getString("seleccionarListaCores"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
             List<Color> colorlist = new ArrayList<>();
             colors.stream().forEach((ps) -> {
                 colorlist.add((Color) ps.getPaint());
             });
-            Vista.GraphicConfigurationManager.writeListColorProperty("series_paint", colorlist);
+            Vista.GraphicConfigurationManager.writeListColorProperty(property, colorlist);
         }
     }
 
-    private void addLinea(JPanel p, MuestraColor c, List<MuestraColor> colors) {
+    private void showStrokeListSelector(String property) {
+        JPanel c = new JPanel();
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        JScrollPane js = new JScrollPane(p);
+        js.setMaximumSize(new Dimension(400, 200));
+        js.setPreferredSize(new Dimension(400, 200));
+        c.add(js);
+        List<MuestraColor> colors = new ArrayList<>();
+        List<Shape> readListColorProperty = Vista.GraphicConfigurationManager.readListStrokeProperty(property);
+        readListColorProperty.stream().forEach((co) -> {
+            colors.add(new MuestraForma());
+        });
+        pintarLineasColor(p, colors);
+        if (JOptionPane.showConfirmDialog(null, c, localizationResources.getString("seleccionarListaFormas"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
+            List<Color> colorlist = new ArrayList<>();
+            colors.stream().forEach((ps) -> {
+                colorlist.add((Color) ps.getPaint());
+            });
+            Vista.GraphicConfigurationManager.writeListColorProperty(property, colorlist);
+        }
+    }
+
+    private void addLineaColor(JPanel p, MuestraColor c, List<MuestraColor> colors) {
         JPanel linea = new JPanel();
         linea.add(Box.createHorizontalStrut(10));
         linea.setLayout(new BoxLayout(linea, BoxLayout.X_AXIS));
-        JLabel etiqueta = new JLabel(localizationResources.getString("corSeriesNumero") + " " + String.valueOf(p.getComponentCount()) + " " + (p.getComponentCount() == 0 ? "(" + Vista.bundle.getString("senDefinir") + ")" : "") + ": ");
+        JLabel etiqueta = new JLabel(localizationResources.getString("corNumero") + " " + String.valueOf(p.getComponentCount()) + " " + (p.getComponentCount() == 0 ? "(" + Vista.bundle.getString("senDefinir") + ")" : "") + ": ");
         linea.add(etiqueta);
         linea.add(Box.createHorizontalGlue());
         MuestraColor ps = c != null ? c : new MuestraColor(null);
@@ -328,7 +399,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
                 colors.add(ps);
             }
             ps.setPaint(jcc.getColor());
-            pintarLineas(p, colors);
+            pintarLineasColor(p, colors);
         };
         boton1.addActionListener((ActionEvent e) -> {
             final JDialog jccd = JColorChooser.createDialog(null, "Change Button Background", true, jcc, okActionListener1, (ActionEvent e1) -> {
@@ -341,7 +412,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
             JButton boton2 = new JButton(Vista.bundle.getString("eliminar"));
             boton2.addActionListener((ActionEvent e1) -> {
                 colors.remove(ps);
-                pintarLineas(p, colors);
+                pintarLineasColor(p, colors);
             });
             linea.add(boton2);
             linea.add(Box.createHorizontalStrut(10));
@@ -349,12 +420,66 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         p.add(linea);
     }
 
-    private void pintarLineas(JPanel p, List<MuestraColor> colors) {
+    private void pintarLineasColor(JPanel p, List<MuestraColor> colors) {
         p.removeAll();
         colors.stream().forEach((co) -> {
-            addLinea(p, co, colors);
+            addLineaColor(p, co, colors);
         });
-        addLinea(p, null, colors);
+        addLineaColor(p, null, colors);
+        p.revalidate();
+        p.repaint();
+    }
+
+    private void addLineaForma(JPanel p, MuestraColor c, List<MuestraColor> colors) {
+        JPanel linea = new JPanel();
+        linea.add(Box.createHorizontalStrut(10));
+        linea.setLayout(new BoxLayout(linea, BoxLayout.X_AXIS));
+        JLabel etiqueta = new JLabel(localizationResources.getString("formaNumero") + " " + String.valueOf(p.getComponentCount()) + " " + (p.getComponentCount() == 0 ? "(" + Vista.bundle.getString("senDefinir") + ")" : "") + ": ");
+        linea.add(etiqueta);
+        linea.add(Box.createHorizontalGlue());
+        MuestraColor ps = c != null ? c : new MuestraColor(null);
+        ps.setMaximumSize(c != null ? new Dimension(20, 20) : new Dimension(0, 0));
+        ps.setMinimumSize(c != null ? new Dimension(20, 20) : new Dimension(0, 0));
+        ps.setPreferredSize(c != null ? new Dimension(20, 20) : new Dimension(0, 0));
+        ps.setSize(c != null ? new Dimension(20, 20) : new Dimension(0, 0));
+        linea.add(ps);
+        linea.setMaximumSize(new Dimension(400, 30));
+        linea.setPreferredSize(new Dimension(400, 30));
+        linea.add(Box.createHorizontalStrut(20));
+        final JColorChooser jcc = new JColorChooser(c != null ? (Color) c.getPaint() : Color.BLACK);
+        JButton boton1 = new JButton(ps.getPaint() != null ? Vista.bundle.getString("modificar") : Vista.bundle.getString("engadir"));
+        ActionListener okActionListener1 = (ActionEvent e1) -> {
+            if (ps.getPaint() == null) {
+                colors.add(ps);
+            }
+            ps.setPaint(jcc.getColor());
+            pintarLineasColor(p, colors);
+        };
+        boton1.addActionListener((ActionEvent e) -> {
+            final JDialog jccd = JColorChooser.createDialog(null, "Change Button Background", true, jcc, okActionListener1, (ActionEvent e1) -> {
+            });
+            jccd.setVisible(true);
+        });
+        linea.add(boton1);
+        linea.add(Box.createHorizontalStrut(10));
+        if (ps.getPaint() != null) {
+            JButton boton2 = new JButton(Vista.bundle.getString("eliminar"));
+            boton2.addActionListener((ActionEvent e1) -> {
+                colors.remove(ps);
+                pintarLineasColor(p, colors);
+            });
+            linea.add(boton2);
+            linea.add(Box.createHorizontalStrut(10));
+        }
+        p.add(linea);
+    }
+
+    private void pintarLineasForma(JPanel p, List<MuestraColor> colors) {
+        p.removeAll();
+        colors.stream().forEach((co) -> {
+            addLineaColor(p, co, colors);
+        });
+        addLineaColor(p, null, colors);
         p.revalidate();
         p.repaint();
     }

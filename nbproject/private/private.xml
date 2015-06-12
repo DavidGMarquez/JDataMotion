@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="1">
                 <name/>
-                <line>587</line>
+                <line>603</line>
                 <key/>
             </bookmark>
         </file>
@@ -22,14 +22,15 @@
         <group>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/idiomas/Bundle.properties</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultChartEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/chart/editor/DefaultValueAxisEditor.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/Vista.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/configuracion.properties</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/default_config.properties</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultAxisEditorConfigurable.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/RegularPolygon.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/DefaultTitleEditorConfigurable.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/chart/editor/DefaultChartEditor.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/chart/editor/DefaultTitleEditor.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/chart/editor/DefaultPlotEditor.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/RoundPolygon.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/src/jdatamotion/charteditors/StarPolygon.java</file>
         </group>
     </open-files>
 </project-private>
