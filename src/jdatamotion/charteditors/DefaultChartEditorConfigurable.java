@@ -93,7 +93,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
 
     private List<Color> seriesPaint;
     private List<Shape> seriesOutlineStroke;
-    private List<Shape> seriesStroke;
+    private List<Shape> seriesShape;
     private List<Color> seriesOutlinePaint;
 
     public List getSeriesPaint() {
@@ -104,8 +104,8 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         return seriesOutlineStroke;
     }
 
-    public List getSeriesStroke() {
-        return seriesStroke;
+    public List getSeriesShape() {
+        return seriesShape;
     }
 
     public List getSeriesOutlinePaint() {
@@ -159,41 +159,40 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         interior.add(button);
 
         interior.add(new JLabel(localizationResources.getString(
-                "Series_Stroke")));
+                "Series_Shape")));
         info = new JTextField(localizationResources.getString(
                 "No_editor_implemented"));
         info.setEnabled(true);
         interior.add(new JLabel());
         button = new JButton(localizationResources.getString("Edit..."));
-        button.setActionCommand("SeriesStroke");
+        button.setActionCommand("SeriesShape");
         button.addActionListener(this);
         button.setEnabled(true);
         interior.add(button);
 
-        interior.add(new JLabel(localizationResources.getString(
-                "Series_Outline_Paint")));
-        info = new JTextField(localizationResources.getString(
-                "No_editor_implemented"));
-        info.setEnabled(true);
-        interior.add(new JLabel());
-        button = new JButton(localizationResources.getString("Edit..."));
-        button.setActionCommand("SeriesOutlinePaint");
-        button.addActionListener(this);
-        button.setEnabled(true);
-        interior.add(button);
+        /*interior.add(new JLabel(localizationResources.getString(
+         "Series_Outline_Paint")));
+         info = new JTextField(localizationResources.getString(
+         "No_editor_implemented"));
+         info.setEnabled(true);
+         interior.add(new JLabel());
+         button = new JButton(localizationResources.getString("Edit..."));
+         button.setActionCommand("SeriesOutlinePaint");
+         button.addActionListener(this);
+         button.setEnabled(true);
+         interior.add(button);
 
-        interior.add(new JLabel(localizationResources.getString(
-                "Series_Outline_Stroke")));
-        info = new JTextField(localizationResources.getString(
-                "No_editor_implemented"));
-        info.setEnabled(true);
-        interior.add(new JLabel());
-        button = new JButton(localizationResources.getString("Edit..."));
-        button.setActionCommand("SeriesOutlineStroke");
-        button.addActionListener(this);
-        button.setEnabled(true);
-        interior.add(button);
-
+         interior.add(new JLabel(localizationResources.getString(
+         "Series_Outline_Stroke")));
+         info = new JTextField(localizationResources.getString(
+         "No_editor_implemented"));
+         info.setEnabled(true);
+         interior.add(new JLabel());
+         button = new JButton(localizationResources.getString("Edit..."));
+         button.setActionCommand("SeriesOutlineStroke");
+         button.addActionListener(this);
+         button.setEnabled(true);
+         interior.add(button);*/
         general.add(interior, BorderLayout.NORTH);
         other.add(general, BorderLayout.NORTH);
 
@@ -220,10 +219,8 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         tabs.add(localizationResources.getString("Other"), other);
         parts.add(tabs, BorderLayout.NORTH);
         add(parts);
-        this.seriesOutlinePaint = Vista.GraphicConfigurationManager.readListColorProperty("series_outline_paint");
-        this.seriesOutlineStroke = Vista.GraphicConfigurationManager.readListStrokeProperty("series_outline_stroke");
         this.seriesPaint = Vista.GraphicConfigurationManager.readListColorProperty("series_paint");
-        this.seriesStroke = Vista.GraphicConfigurationManager.readListStrokeProperty("series_stroke");
+        this.seriesShape = Vista.GraphicConfigurationManager.readListStrokeProperty("series_shape");
     }
 
     /**
@@ -277,15 +274,15 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
             case "SeriesPaint":
                 attemptModifySeriesPaint();
                 break;
-            case "SeriesStroke":
-                attemptModifySeriesStroke();
+            case "SeriesShape":
+                attemptModifySeriesShape();
                 break;
-            case "SeriesOutlinePaint":
-                attemptModifySeriesOutlinePaint();
-                break;
-            case "SeriesOutlineStroke":
-                attemptModifySeriesOutlineStroke();
-                break;
+            /*case "SeriesOutlinePaint":
+             attemptModifySeriesOutlinePaint();
+             break;
+             case "SeriesOutlineStroke":
+             attemptModifySeriesOutlineStroke();
+             break;*/
         }
     }
 
@@ -297,18 +294,16 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         }
     }
 
-    private void attemptModifySeriesOutlinePaint() {
-        showColorListSelector(this.seriesOutlinePaint);
+    /*private void attemptModifySeriesOutlinePaint() {
+     showColorListSelector(this.seriesOutlinePaint);
+     }*/
+    private void attemptModifySeriesShape() {
+        showStrokeListSelector(this.seriesShape);
     }
 
-    private void attemptModifySeriesStroke() {
-        showStrokeListSelector(this.seriesStroke);
-    }
-
-    private void attemptModifySeriesOutlineStroke() {
-        showStrokeListSelector(this.seriesOutlineStroke);
-    }
-
+    /*private void attemptModifySeriesOutlineStroke() {
+     showStrokeListSelector(this.seriesOutlineStroke);
+     }*/
     private void attemptModifySeriesPaint() {
         showColorListSelector(this.seriesPaint);
     }
