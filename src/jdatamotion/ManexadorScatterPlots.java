@@ -182,6 +182,38 @@ public final class ManexadorScatterPlots {
         t = (int) Math.round(getTInicial() + to * (getTFinal() - getTInicial()));
     }
 
+    /*public synchronized void goTo(int n) {
+     int toMs = (int) Math.round(to * (getTFinal() - getTInicial()) + getTInicial());
+     Nodo<InstancesSimultaneas> nodo = nodoActual;
+     int numeroItems = 0;
+     if (toMs > t) {
+     numeroItems = numeroItemsAVisualizar(toMs);
+     for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+     for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+     if (scatterPlotsVisibles[j][k]) {
+     ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+     XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+     nodo = xyd.visualizarItems(sp, numeroItems);
+     }
+     }
+     }
+     } else if (toMs < t) {
+     numeroItems = -numeroItemsAAgochar(toMs);
+     for (int j = matrizScatterPlots.size() - 1; j >= 0; j--) {
+     for (int k = 0; k < matrizScatterPlots.get(j).size(); k++) {
+     if (scatterPlotsVisibles[j][k]) {
+     ScatterPlot sp = matrizScatterPlots.get(j).get(k);
+     XYDatasetModelo xyd = (XYDatasetModelo) sp.getChartPanelCela().getChart().getXYPlot().getDataset();
+     nodo = xyd.agocharItems(sp, -numeroItems);
+     }
+     }
+     }
+     }
+     textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + numeroItems));
+     slider.setValue((int) Math.round(to * slider.getMaximum()));
+     nodoActual = nodo;
+     t = (int) Math.round(getTInicial() + to * (getTFinal() - getTInicial()));
+     }*/
     private synchronized int numeroItemsAVisualizar(int toMs) {
         int n = 0;
         if (nodoActual != null) {
