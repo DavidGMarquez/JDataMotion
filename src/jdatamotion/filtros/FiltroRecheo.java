@@ -23,36 +23,46 @@
  */
 package jdatamotion.filtros;
 
+import java.util.HashMap;
+import jdatamotioncommon.filtros.DoubleParameter;
 import java.util.Iterator;
-import jdatamotion.InstancesComparable;
+import java.util.Map;
 import jdatamotion.Vista;
+import jdatamotioncommon.ComparableInstances;
+import jdatamotioncommon.filtros.IFilter;
+import jdatamotioncommon.filtros.Parameter;
 import weka.core.Instance;
 
 /**
  *
  * @author usuario
  */
-public class FiltroRecheo extends AbstractFilter {
+public class FiltroRecheo implements IFilter {
 
     private static final String VALOR = Vista.bundle.getString("valor");
 
+    private final HashMap<String, Parameter> parameters = new HashMap<>();
+
+    @Override
+    public HashMap<String, Parameter> getParameters() {
+        return parameters;
+    }
+
     public FiltroRecheo() {
-        super(new Parameter[]{
-            new DoubleParameter(VALOR)
-        });
+        this.parameters.put(VALOR, new DoubleParameter());
     }
 
     @Override
-    public InstancesComparable filter(InstancesComparable instancesComparable) {
-        if (!estaTodoConfigurado() || !instancesComparable.attribute(getIndiceAtributoFiltrado()).isNumeric()) {
-            return instancesComparable;
+    public ComparableInstances filter(ComparableInstances comparableInstances, Integer filteredAttributeIndex, Map<String, Parameter> parameters) {
+        if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
+            return comparableInstances;
         }
-        InstancesComparable ins = new InstancesComparable(instancesComparable);
+        ComparableInstances ins = new ComparableInstances(comparableInstances);
         Iterator<Instance> it = ins.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
-            if (instance.isMissing(getIndiceAtributoFiltrado())) {
-                instance.setValue(getIndiceAtributoFiltrado(), (double) getParameter(VALOR).getValue());
+            if (instance.isMissing(filteredAttributeIndex)) {
+                instance.setValue(filteredAttributeIndex, (double) parameters.get(VALOR).getValue());
             }
         }
         return ins;

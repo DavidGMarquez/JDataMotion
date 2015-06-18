@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -37,13 +38,14 @@ import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
 import jdatamotion.excepcions.ExcepcionComandoInutil;
 import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
 import jdatamotion.excepcions.ExcepcionLeve;
-import jdatamotion.filtros.AbstractFilter;
-import jdatamotion.filtros.Parameter;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionControlador;
 import jdatamotion.sesions.SesionModelo;
 import jdatamotion.sesions.SesionVista;
 import jdatamotion.sesions.Sesionizable;
+import jdatamotion.filtros.FilterHandler;
+import jdatamotioncommon.filtros.IFilter;
+import jdatamotioncommon.filtros.Parameter;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
@@ -76,7 +78,7 @@ public class Controlador implements Sesionizable {
     public static final int IMPORTAR_FILTROS = 22;
     public static final int EXPORTAR_FILTROS = 23;
 
-    public static final boolean debug = false;
+    public static final boolean debug = true;
     private transient Modelo meuModelo;
     private transient Vista minaVista;
     private XestorComandos xestorComandos;
@@ -220,13 +222,13 @@ public class Controlador implements Sesionizable {
                 eliminarAtributo((int) argumento);
                 break;
             case ENGADIR_FILTRO:
-                engadirFiltro((int) ((Object[]) argumento)[0], (AbstractFilter) ((Object[]) argumento)[1]);
+                engadirFiltro((int) ((Object[]) argumento)[0], (IFilter) ((Object[]) argumento)[1]);
                 break;
             case ELIMINAR_FILTRO:
                 eliminarFiltro((int) argumento);
                 break;
             case CONFIGURAR_FILTRO:
-                configurarFiltro((int) ((Object[]) argumento)[0], (Parameter[]) ((Object[]) argumento)[1]);
+                configurarFiltro((int) ((Object[]) argumento)[0], (HashMap<String, Parameter>) ((Object[]) argumento)[1]);
                 break;
             case INTERCAMBIAR_FILTROS:
                 intercambiarFiltros((int) ((Object[]) argumento)[0], (int) ((Object[]) argumento)[1]);
@@ -529,7 +531,7 @@ public class Controlador implements Sesionizable {
         }
     }
 
-    private void engadirFiltro(int i, AbstractFilter abstractFilter) {
+    private void engadirFiltro(int i, IFilter abstractFilter) {
         try {
             xestorComandos.ExecutarComando(new ComandoEngadirFiltro(meuModelo, i, abstractFilter));
         } catch (Exception ex) {
@@ -551,7 +553,7 @@ public class Controlador implements Sesionizable {
         }
     }
 
-    private void configurarFiltro(int i, Parameter[] configuracion) {
+    private void configurarFiltro(int i, HashMap<String, Parameter> configuracion) {
         try {
             xestorComandos.ExecutarComando(new ComandoConfigurarFiltro(meuModelo, i, configuracion));
         } catch (Exception ex) {

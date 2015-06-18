@@ -23,9 +23,9 @@
  */
 package jdatamotion.comandos;
 
-import jdatamotion.InstancesComparable;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
+import jdatamotioncommon.ComparableInstances;
 
 /**
  *
@@ -34,7 +34,7 @@ import jdatamotion.Vista;
 public class ComandoEliminarDatos extends ComandoDesfacible {
 
     private final Integer[] indicesDatos;
-    private InstancesComparable modeloAntigo;
+    private ComparableInstances modeloAntigo;
 
     public ComandoEliminarDatos(Modelo modelo, Integer[] datos) {
         super(modelo, Vista.bundle.getString("Vista.jMenuItem14.text"));
@@ -48,7 +48,7 @@ public class ComandoEliminarDatos extends ComandoDesfacible {
 
     @Override
     public void Executar() throws Exception {
-        this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
+        this.modeloAntigo = new ComparableInstances(((Modelo) getObxectivo()).getInstancesComparable());
         ((Modelo) getObxectivo()).eliminarDatos(indicesDatos);
     }
 }

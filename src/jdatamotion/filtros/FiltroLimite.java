@@ -23,17 +23,23 @@
  */
 package jdatamotion.filtros;
 
+import java.util.HashMap;
+import jdatamotioncommon.filtros.DoubleParameter;
+import jdatamotioncommon.filtros.StringParameter;
 import java.util.Iterator;
-import jdatamotion.InstancesComparable;
+import java.util.Map;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
+import jdatamotioncommon.ComparableInstances;
+import jdatamotioncommon.filtros.IFilter;
+import jdatamotioncommon.filtros.Parameter;
 import weka.core.Instance;
 
 /**
  *
  * @author usuario
  */
-public class FiltroLimite extends AbstractFilter {
+public class FiltroLimite implements IFilter {
 
     private static final String TIPO_LIMITE = Vista.bundle.getString("tipoLimite");
     private static final String LIMITE_VALOR = Vista.bundle.getString("limiteValor");
@@ -45,32 +51,37 @@ public class FiltroLimite extends AbstractFilter {
 
     private static final String VALOR = Vista.bundle.getString("valor");
 
+    private final HashMap<String, Parameter> parameters = new HashMap<>();
+
+    @Override
+    public HashMap<String, Parameter> getParameters() {
+        return parameters;
+    }
+
     public FiltroLimite() {
-        super(new Parameter[]{
-            new StringParameter(TIPO_LIMITE, new String[]{LIMITE_VALOR, LIMITE_PERCENTIL}),
-            new StringParameter(TIPO_COTA, new String[]{COTA_SUPERIOR, COTA_INFERIOR}),
-            new DoubleParameter(VALOR)
-        });
+        this.parameters.put(TIPO_LIMITE, new StringParameter(new String[]{LIMITE_VALOR, LIMITE_PERCENTIL}));
+        this.parameters.put(TIPO_COTA, new StringParameter(new String[]{COTA_SUPERIOR, COTA_INFERIOR}));
+        this.parameters.put(VALOR, new DoubleParameter());
     }
 
     @Override
-    public InstancesComparable filter(InstancesComparable instancesComparable) {
-        if (!estaTodoConfigurado() || !instancesComparable.attribute(getIndiceAtributoFiltrado()).isNumeric()) {
-            return instancesComparable;
+    public ComparableInstances filter(ComparableInstances comparableInstances, Integer filteredAttributeIndex, Map<String, Parameter> parameters) {
+        if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
+            return comparableInstances;
         }
-        InstancesComparable ins = new InstancesComparable(instancesComparable);
+        ComparableInstances ins = new ComparableInstances(comparableInstances);
         Double valorNumerico = 0.0;
-        if (getParameter(TIPO_LIMITE).getValue().equals(LIMITE_VALOR)) {
-            valorNumerico = (Double) getParameter(VALOR).getValue();
-        } else if (getParameter(TIPO_LIMITE).getValue().equals(LIMITE_PERCENTIL)) {
-            valorNumerico = Modelo.getValorPercentil(instancesComparable, ((Double) getParameter(VALOR).getValue()).intValue(), getIndiceAtributoFiltrado());
+        if (parameters.get(TIPO_LIMITE).getValue().equals(LIMITE_VALOR)) {
+            valorNumerico = (Double) parameters.get(VALOR).getValue();
+        } else if (parameters.get(TIPO_LIMITE).getValue().equals(LIMITE_PERCENTIL)) {
+            valorNumerico = Modelo.getValorPercentil(comparableInstances, ((Double) parameters.get(VALOR).getValue()).intValue(), filteredAttributeIndex);
         }
         Iterator<Instance> it = ins.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
-            Double v = instance.isMissing(getIndiceAtributoFiltrado()) ? null : instance.value(getIndiceAtributoFiltrado());
-            if (v != null && valorNumerico != null && ((getParameter(TIPO_COTA).getValue().equals(COTA_SUPERIOR) && v > valorNumerico) || (getParameter(TIPO_COTA).getValue().equals(COTA_INFERIOR) && v < valorNumerico))) {
-                instance.setValue(getIndiceAtributoFiltrado(), valorNumerico);
+            Double v = instance.isMissing(filteredAttributeIndex) ? null : instance.value(filteredAttributeIndex);
+            if (v != null && valorNumerico != null && ((parameters.get(TIPO_COTA).getValue().equals(COTA_SUPERIOR) && v > valorNumerico) || (parameters.get(TIPO_COTA).getValue().equals(COTA_INFERIOR) && v < valorNumerico))) {
+                instance.setValue(filteredAttributeIndex, valorNumerico);
             }
         }
         return ins;

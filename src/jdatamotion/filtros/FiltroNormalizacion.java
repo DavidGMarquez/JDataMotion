@@ -23,35 +23,45 @@
  */
 package jdatamotion.filtros;
 
+import java.util.HashMap;
 import java.util.Iterator;
-import jdatamotion.InstancesComparable;
+import java.util.Map;
 import jdatamotion.Modelo;
+import jdatamotioncommon.ComparableInstances;
+import jdatamotioncommon.filtros.IFilter;
+import jdatamotioncommon.filtros.Parameter;
 import weka.core.Instance;
 
 /**
  *
  * @author usuario
  */
-public class FiltroNormalizacion extends AbstractFilter {
+public class FiltroNormalizacion implements IFilter {
+
+    private final HashMap<String, Parameter> parameters = new HashMap<>();
+
+    @Override
+    public HashMap<String, Parameter> getParameters() {
+        return parameters;
+    }
 
     public FiltroNormalizacion() {
-        super(new Parameter[]{});
     }
 
     @Override
-    public InstancesComparable filter(InstancesComparable instancesComparable) {
-        if (!estaTodoConfigurado() || !instancesComparable.attribute(getIndiceAtributoFiltrado()).isNumeric()) {
-            return instancesComparable;
+    public ComparableInstances filter(ComparableInstances comparableInstances, Integer filteredAttributeIndex, Map<String, Parameter> parameters) {
+        if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
+            return comparableInstances;
         }
-        InstancesComparable ins = new InstancesComparable(instancesComparable);
-        Double desvTipica = Modelo.getDesviacionTipica(ins, getIndiceAtributoFiltrado()), media = Modelo.getMedia(instancesComparable, getIndiceAtributoFiltrado());
+        ComparableInstances ins = new ComparableInstances(comparableInstances);
+        Double desvTipica = Modelo.getDesviacionTipica(ins, filteredAttributeIndex), media = Modelo.getMedia(comparableInstances, filteredAttributeIndex);
         Iterator<Instance> it = ins.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
-            Double v = instance.isMissing(getIndiceAtributoFiltrado()) ? null : instance.value(getIndiceAtributoFiltrado());
+            Double v = instance.isMissing(filteredAttributeIndex) ? null : instance.value(filteredAttributeIndex);
             if (v != null) {
-                Double vInstance = instance.value(getIndiceAtributoFiltrado());
-                instance.setValue(getIndiceAtributoFiltrado(), (vInstance - media) / desvTipica);
+                Double vInstance = instance.value(filteredAttributeIndex);
+                instance.setValue(filteredAttributeIndex, (vInstance - media) / desvTipica);
             }
         }
         return ins;

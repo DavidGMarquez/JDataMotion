@@ -24,10 +24,10 @@
 package jdatamotion.comandos;
 
 import java.util.List;
-import jdatamotion.InstancesComparable;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import jdatamotion.filtros.AbstractFilter;
+import jdatamotion.filtros.FilterHandler;
+import jdatamotioncommon.ComparableInstances;
 
 /**
  *
@@ -37,8 +37,8 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
 
     private int indiceAtributoTemporalAntigo;
     private final int indiceAtributoNoModelo;
-    private InstancesComparable modeloAntigo;
-    private List<AbstractFilter> filtrosAntigos;
+    private ComparableInstances modeloAntigo;
+    private List<FilterHandler> filtrosAntigos;
 
     public ComandoEliminarAtributo(Modelo modelo, int indiceAtributoNoModelo) {
         super(modelo, Vista.bundle.getString("Vista.jMenuItem19.text"));
@@ -54,7 +54,7 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
 
     @Override
     public void Executar() throws Exception {
-        this.modeloAntigo = new InstancesComparable(((Modelo) getObxectivo()).getInstancesComparable());
+        this.modeloAntigo = new ComparableInstances(((Modelo) getObxectivo()).getInstancesComparable());
         this.indiceAtributoTemporalAntigo = ((Modelo) getObxectivo()).getIndiceTemporal();
         this.filtrosAntigos = ((Modelo) getObxectivo()).getFiltros();
         if (indiceAtributoNoModelo == ((Modelo) getObxectivo()).getIndiceTemporal()) {

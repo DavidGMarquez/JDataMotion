@@ -23,9 +23,14 @@
  */
 package jdatamotion.comandos;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import jdatamotion.filtros.Parameter;
+import jdatamotioncommon.filtros.Parameter;
 
 /**
  *
@@ -34,23 +39,30 @@ import jdatamotion.filtros.Parameter;
 public class ComandoConfigurarFiltro extends ComandoDesfacible {
 
     private final int index;
-    private final Parameter[] parametrosAntigos;
-    private final Parameter[] parametrosNovos;
+    private final Map<String, Parameter> parametrosAntigos;
+    private final Map<String, Parameter> parametrosNovos;
+    private final Integer indiceAtributoAntigo;
+    private final Integer indiceAtributoNovo;
 
-    public ComandoConfigurarFiltro(Modelo modelo, int index, Parameter[] parametrosNovos) throws CloneNotSupportedException {
+    public ComandoConfigurarFiltro(Modelo modelo, int index, HashMap<String, Parameter> parametrosNovos) throws CloneNotSupportedException {
         super(modelo, Vista.bundle.getString("comandoConfigurarFiltro"));
         this.index = index;
-        this.parametrosNovos = parametrosNovos;
+        HashMap<String, Parameter> parametrosNovosAux = (HashMap<String, Parameter>) parametrosNovos.clone();
+        this.indiceAtributoNovo = (Integer) parametrosNovosAux.remove("indiceAtributo").getValue();
+        this.parametrosNovos = parametrosNovosAux;
         this.parametrosAntigos = modelo.getFiltro(index).getParameters();
+        this.indiceAtributoAntigo = modelo.getFiltro(index).getIndiceAtributoFiltrado();
     }
 
     @Override
     public void Desfacer() throws Exception {
         ((Modelo) getObxectivo()).configurarFiltro(index, parametrosAntigos);
+        ((Modelo) getObxectivo()).getFiltro(index).setIndiceAtributoFiltrado(indiceAtributoAntigo);
     }
 
     @Override
     public void Executar() throws Exception {
         ((Modelo) getObxectivo()).configurarFiltro(index, parametrosNovos);
+        ((Modelo) getObxectivo()).getFiltro(index).setIndiceAtributoFiltrado(indiceAtributoNovo);
     }
 }

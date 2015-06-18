@@ -46,6 +46,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import static jdatamotion.Vista.bundle;
+import jdatamotioncommon.ComparableInstances;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import static org.jfree.chart.ChartPanel.DEFAULT_BUFFER_USED;
@@ -90,7 +91,7 @@ public final class ManexadorScatterPlots {
     private final transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
     private final int numSeries;
     private final NodeList<InstancesSimultaneas> eixoTemporal;
-    private final InstancesComparable instances;
+    private final ComparableInstances instances;
     private final int paso;
     private int t;
     private Nodo<InstancesSimultaneas> nodoActual;
@@ -327,7 +328,7 @@ public final class ManexadorScatterPlots {
         }
     }
 
-    synchronized private NodeList<InstancesSimultaneas> fabricarEixo(InstancesComparable instances, int indiceTemporal, int ordeVisualizacion) {
+    synchronized private NodeList<InstancesSimultaneas> fabricarEixo(ComparableInstances instances, int indiceTemporal, int ordeVisualizacion) {
         NodeList<InstancesSimultaneas> eixo = new NodeList<>();
         msInstances = new int[instances.numInstances()];
         Instances ins = instances;
@@ -478,7 +479,7 @@ public final class ManexadorScatterPlots {
         tarefaPlay.play();
     }
 
-    public ManexadorScatterPlots(Vista vista, InstancesComparable instances, int atributoColor, int indiceTemporal, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField, int ordeVisualizacion, int paso, int lonxitudeEstela) {
+    public ManexadorScatterPlots(Vista vista, ComparableInstances instances, int atributoColor, int indiceTemporal, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField, int ordeVisualizacion, int paso, int lonxitudeEstela) {
         int numAtributosNumericos = scatterPlotsVisibles.length;
         ManexadorScatterPlots.vista = vista;
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
@@ -535,7 +536,7 @@ public final class ManexadorScatterPlots {
         private final int atributoY;
         private final int atributoX;
         private final int atributoColor;
-        private final InstancesComparable atributos;
+        private final ComparableInstances atributos;
 
         public int getAtributoY() {
             return atributoY;
@@ -585,7 +586,7 @@ public final class ManexadorScatterPlots {
             return r;
         }
 
-        public XYDatasetModelo(InstancesComparable atributos, int atributoX, int atributoY, int atributoColor) {
+        public XYDatasetModelo(ComparableInstances atributos, int atributoX, int atributoY, int atributoColor) {
             super();
             this.atributos = atributos;
             this.atributoX = atributoX;
@@ -729,7 +730,7 @@ public final class ManexadorScatterPlots {
         }
     }
 
-    public synchronized void procesarSeleccion(InstancesComparable instances, ArrayList<Integer> indicesInstances) {
+    public synchronized void procesarSeleccion(ComparableInstances instances, ArrayList<Integer> indicesInstances) {
         double radioInicial = 15.0;
         double grosorInicial = 1.0;
         double pasoGrosor = 0.0;
@@ -945,7 +946,7 @@ public final class ManexadorScatterPlots {
             }
         }
 
-        public ScatterPlot(final InstancesComparable instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor) {
+        public ScatterPlot(final ComparableInstances instances, final int indiceAtributoX, final int indiceAtributoY, int indiceAtributoColor) {
             this.indiceAtributoX = indiceAtributoX;
             this.indiceAtributoColor = indiceAtributoColor;
             this.indiceAtributoY = indiceAtributoY;
@@ -987,7 +988,7 @@ public final class ManexadorScatterPlots {
             jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(a, false);
         }
 
-        private JFreeChart createChart(InstancesComparable instances, XYDatasetModelo xydataset) {
+        private JFreeChart createChart(ComparableInstances instances, XYDatasetModelo xydataset) {
             JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + Vista.getBundle().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, false, false);
             XYPlot xyplot = (XYPlot) jfreechart.getPlot();
             xyplot.setDomainCrosshairVisible(true);

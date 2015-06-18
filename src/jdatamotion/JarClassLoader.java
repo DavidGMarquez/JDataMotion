@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 usuario.
+ * Copyright 2015 usuario.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,43 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jdatamotion.filtros;
-
-import java.io.Serializable;
+package jdatamotion;
 
 /**
  *
  * @author usuario
- * @param <T>
  */
-public abstract class Parameter<T> implements Serializable {
-
-    private String name;
-    private T value;
-
-    public abstract boolean isValid(T value);
-
-    public Parameter(String name, T value) {
-        this.name = name;
-        this.value = value;
+public class JarClassLoader extends MultiClassLoader
+    {
+    private JarResources    jarResources;
+    public JarClassLoader (String jarName)
+    {
+    // Create the JarResource and suck in the jar file.
+    jarResources = new JarResources (jarName);
     }
-
-    public String getName() {
-        return name;
+    protected byte[] loadClassBytes (String className)
+    {
+    // Support the MultiClassLoader's class name munging facility.
+    className = formatClassName (className);
+    // Attempt to get the class data from the JarResource.
+    return (jarResources.getResource (className));
     }
-
-    public T getValue() {
-        return value;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setValue(T value) {
-        if (isValid(value)) {
-            this.value = value;
-        }
-    }
-
-}

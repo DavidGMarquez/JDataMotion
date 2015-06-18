@@ -23,7 +23,7 @@
  */
 package jdatamotion.sesions;
 
-import jdatamotion.InstancesComparable;
+import jdatamotioncommon.ComparableInstances;
 
 /**
  *
@@ -32,7 +32,7 @@ import jdatamotion.InstancesComparable;
 public class SesionModelo extends Sesion {
 
     private String direccionAoFicheiro;
-    private InstancesComparable cabeceiras;
+    private ComparableInstances cabeceiras;
     private int indiceTemporal;
     private byte[] hash;
     private String nomeRelacion;
@@ -74,7 +74,7 @@ public class SesionModelo extends Sesion {
         this.direccionAoFicheiro = direccionAoFicheiro;
     }
 
-    public void setCabeceiras(InstancesComparable cabeceiras) {
+    public void setCabeceiras(ComparableInstances cabeceiras) {
         this.cabeceiras = cabeceiras;
     }
 
@@ -86,7 +86,7 @@ public class SesionModelo extends Sesion {
         return direccionAoFicheiro;
     }
 
-    public InstancesComparable getCabeceiras() {
+    public ComparableInstances getCabeceiras() {
         return cabeceiras;
     }
 

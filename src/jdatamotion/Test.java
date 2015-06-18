@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 usuario.
+ * Copyright 2015 usuario.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,42 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package jdatamotion.filtros;
-
-import java.util.Arrays;
+package jdatamotion;
 
 /**
  *
  * @author usuario
  */
-public class StringParameter extends Parameter<String> {
+public class Test {
 
-    private final String[] options;
-
-    public StringParameter(String name, String value, String[] options) {
-        super(name, value);
-        this.options = options;
+    public static void main(String[] args) throws Exception {
+        if (args.length != 2) {
+            System.err.println("Usage: java JarClassLoader "
+                    + "<jar file name> <class name>");
+            System.exit(1);
+        }
+        /*
+         * Create the jar class loader and use the first argument
+         * passed in from the command line as the jar file to use.
+         */
+        JarClassLoader jarLoader = new JarClassLoader(args[0]);
+        /* Load the class from the jar file and resolve it. */
+        Class c = jarLoader.loadClass(args[1], true);
+        /*
+         * Create an instance of the class.
+         *
+         * Note that created object's constructor-taking-no-arguments
+         * will be called as part of the object's creation.
+         */
+        Object o = c.newInstance();
+        /* Are we using a class we specifically know about? */
+        /*if (o instanceof TestClass) {
+            TestClass tc = (TestClass) o;
+            tc.doSomething();
+        }*/
     }
-
-    public StringParameter(String name, String[] options) {
-        this(name, null, options);
-    }
-
-    public String[] getOptions() {
-        return options;
-    }
-
-    public StringParameter(String name) {
-        this(name, null, null);
-    }
-
-    public StringParameter(String name, String value) {
-        this(name, value, null);
-    }
-
-    @Override
-    public boolean isValid(String value) {
-        return value == null || options == null || Arrays.asList(options).contains(value);
-    }
-
-}
+}   // End of nested Class Test.

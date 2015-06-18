@@ -23,38 +23,44 @@
  */
 package jdatamotion.filtros;
 
+import java.util.HashMap;
+import jdatamotioncommon.filtros.DoubleParameter;
 import java.util.Iterator;
-import jdatamotion.InstancesComparable;
+import java.util.Map;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
+import jdatamotioncommon.ComparableInstances;
+import jdatamotioncommon.filtros.IFilter;
+import jdatamotioncommon.filtros.Parameter;
 import weka.core.Instance;
 
 /**
  *
  * @author usuario
  */
-public class FiltroEliminacionOutliers extends AbstractFilter {
+public class FiltroEliminacionOutliers implements IFilter {
 
     private static final String NUMERO_DE_DTS = Vista.bundle.getString("numeroDeDTs");
 
-    public FiltroEliminacionOutliers() {
-        super(new Parameter[]{
-            new DoubleParameter(NUMERO_DE_DTS)
-        });
+    @Override
+    public HashMap<String, Parameter> getParameters() {
+        HashMap<String, Parameter> p = new HashMap<>();
+        p.put(NUMERO_DE_DTS, new DoubleParameter());
+        return p;
     }
 
     @Override
-    public InstancesComparable filter(InstancesComparable instancesComparable) {
-        if (!estaTodoConfigurado() || !instancesComparable.attribute(getIndiceAtributoFiltrado()).isNumeric()) {
-            return instancesComparable;
+    public ComparableInstances filter(ComparableInstances comparableInstances, Integer filteredAttributeIndex, Map<String, Parameter> parameters) {
+        if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
+            return comparableInstances;
         }
-        InstancesComparable ins = new InstancesComparable(instancesComparable);
-        Double desvTipica = Modelo.getDesviacionTipica(ins, getIndiceAtributoFiltrado()), media = Modelo.getMedia(ins, getIndiceAtributoFiltrado());
-        Double numDTs = (Double) getParameter(NUMERO_DE_DTS).getValue();
+        ComparableInstances ins = new ComparableInstances(comparableInstances);
+        Double desvTipica = Modelo.getDesviacionTipica(ins, filteredAttributeIndex), media = Modelo.getMedia(ins, filteredAttributeIndex);
+        Double numDTs = (Double) parameters.get(NUMERO_DE_DTS).getValue();
         Iterator<Instance> it = ins.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
-            Double v = instance.isMissing(getIndiceAtributoFiltrado()) ? null : instance.value(getIndiceAtributoFiltrado());
+            Double v = instance.isMissing(filteredAttributeIndex) ? null : instance.value(filteredAttributeIndex);
             if (v != null && (v < media - numDTs * desvTipica || v > media + numDTs * desvTipica)) {
                 it.remove();
             }

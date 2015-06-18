@@ -25,7 +25,8 @@ package jdatamotion.comandos;
 
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
-import jdatamotion.filtros.AbstractFilter;
+import jdatamotion.filtros.FilterHandler;
+import jdatamotioncommon.filtros.IFilter;
 
 /**
  *
@@ -35,7 +36,7 @@ public class ComandoEliminarFiltro extends ComandoDesfacible {
 
     private final int index;
     private int indexAntigo;
-    private AbstractFilter filtroAntigo;
+    private IFilter filtroAntigo;
 
     public ComandoEliminarFiltro(Modelo modelo, int index) {
         super(modelo, Vista.bundle.getString("comandoEliminarFiltro"));
@@ -50,7 +51,7 @@ public class ComandoEliminarFiltro extends ComandoDesfacible {
     @Override
     public void Executar() throws Exception {
         indexAntigo = index;
-        filtroAntigo = ((Modelo) getObxectivo()).getFiltro(index);
+        filtroAntigo = ((Modelo) getObxectivo()).getFiltro(index).getFiltro();
         ((Modelo) getObxectivo()).eliminarFiltro(index);
     }
 }

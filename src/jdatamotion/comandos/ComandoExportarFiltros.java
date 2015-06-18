@@ -23,9 +23,7 @@
  */
 package jdatamotion.comandos;
 
-import java.util.List;
 import jdatamotion.Modelo;
-import jdatamotion.filtros.AbstractFilter;
 
 /**
  *
