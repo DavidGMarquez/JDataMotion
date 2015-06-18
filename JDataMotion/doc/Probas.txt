@@ -1,0 +1,194 @@
+P01
+Título: Importar arquivo CSV
+Descrición: Arquivo -> Importar arquivo -> Seleccionar arquivo .csv -> Importar
+Resultado: Os datos do arquivo aparecen no menú de procesamento
+
+P02
+Título: Importar arquivo ARFF
+Descrición: Arquivo -> Importar arquivo -> Seleccionar arquivo .arff -> Importar
+Resultado: Os datos do arquivo aparecen no menú de procesamento
+
+P03
+Título: Exportar arquivo CSV
+Descrición: Arquivo -> Exportar arquivo -> Seleccionar formato .csv, directorio e nome para o arquivo -> Exportar
+Resultado: Os datos cos que se está traballando no experimento alóxanse nun ficheiro de formato CSV
+
+P04
+Título: Exportar arquivo ARFF
+Descrición: Arquivo -> Exportar arquivo -> Seleccionar formato .arff, directorio e nome para o arquivo
+Resultado: Os datos cos que se está traballando no experimento alóxanse nun ficheiro de formato ARFF
+
+P05
+Título: Gardar sesión
+Descrición: Arquivo -> Gardar sesión -> Seleccionamos nome para a sesión
+Resultado: Nun directorio privado do programa hai un arquivo co nome que lle demos á sesión
+
+P06
+Título: Abrir sesión
+Descrición: Tras gardar unha sesión anteriormente -> Arquivo -> Abrir sesión -> Seleccionamos dunha lista unha sesión que tivesemos gardado
+Resultado: Os datos, menús e configuracións son os mesmos ca no instante previo ao gardado da sesión aberta
+
+P07
+Título: Insertar datos no experimento
+Descrición: No menú de procesamento: Prememos en "Engadir tupla" ao final da táboa -> Engadimos valores válidos
+Resultado: A nova tupla figura ao final da lista dentro do menú de procesamento
+
+P08
+Título: Modificar datos no experimento
+Descrición: No menú de procesamento: Prememos nunha celda de calquera tupla para poder editala -> Insertamos un novo dato, diferente pero do mesmo tipo
+Resultado: A tupla foi actualizada co valor modificado
+
+P09
+Título: Eliminar datos no experimento
+Descrición: No menú de procesamento: Prememos na aspa ao final dunha tupla -> Confirmamos eliminación
+Resultado: A tupla xa non está presente na táboa
+
+P10
+Título: Asignar tipos aos datos do experimento
+Descrición: No menú de procesamento, dentro dos títulos das columnas que representan a cada atributo: Prememos debaixo do nome dun atributo que vaia a tomar valores reais e desplegarase unha lista cos tipos dispoñibles -> Eliximos Float
+Resultado: No título da columna o atributo ten especificado o tipo Float
+
+P11
+Título: Sinalar identificación temporal mediante unha columna xa existente que expresa a orde
+Descrición: No menú de procesamento, dentro dos títulos das columnas que representan a cada atributo: Prememos, dentro da cela de título de columna, no botón "indice temporal" -> especificamos nesa columna o tipo "ordinal"
+Resultado: Só a columna seleccionada ten activada a opción "indice temporal"
+
+P12
+Título: Sinalar identificación temporal mediante unha nova columna con marcas temporais cronolóxicas
+Descrición: No menú de procesamento, na columna "novo atributo de identificación temporal" -> activamos "indice temporal" -> especificamos tipo "timestamp" -> enchemos a columna de arriba abaixo con datos do formato [ hh:mm:ss ]
+Resultado: Só a columna "novo atributo de identificación temporal" ten activada a opción "indice temporal", e ten valores de tempo válidos
+
+P13
+Título: Representar os datos baixo un scatterplot
+Descrición: Tras importar correctamente un arquivo -> Vamos ao menú de visualización -> Seleccionamos representar un scatterplot que compare dúas variables
+Resultado: No menú aparece unha soa gráfica que compara os dous atributos. O scatterplot en cuestión está ben construido
+
+P14
+Título: Engadir dous scatterplots ao menú de visualización
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Seleccionamos "Engadir scatterplots" -> Engadimos dous scatterplots que comparen en total 4 atributos -> Aceptar
+Resultado: No menú de visualización móstranse un total de 3 scatterplots que representan os datos correctamente
+
+P15
+Título: Eliminar un scatterplot do menú de visualización
+Descrición: Tras representar correctamente tres scatterplots no menú de visualización -> Pinchamos na aspa enriba dun scatterplot -> Confirmamos
+Resultado: No menú aparecen dúas gráficas. A gráfica que falta foi a eliminada.
+
+P16
+Título: Configurar un scatterplot do menú de visualización
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos no botón "Configurar scatterplot" dunha gráfica -> Modificamos todos os valores -> Aceptar
+Resultado: Comprobamos que os cambios foron aplicaron correctamente
+
+P17
+Título: Detallar punto seleccionado
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos nun punto do scatterplot
+Resultado: No apartado de detalles figuran todos os atributos do punto, un plug-in para contido adicional e a marca temporal
+
+P18
+Título: Resaltar punto seleccionado en todos os scatterplots
+Descrición: Tras representar correctamente tres scatterplots no menú de visualización -> Pinchamos nun punto do scatterplot
+Resultado: O punto resaltouse nas representacións propias de cada scatterplot
+
+P19
+Título: Reposicionar a vista dun scatterplot
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos no fondo da gráfica e arrastramos o cursor
+Resultado: A ventá que amosa o scatterplot arrastrouse segundo o movemento do cursor mentras se mantiña pulsado
+
+P20
+Título: Escalar a vista dun scatterplot
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos debaixo da gráfica na lupa (+) dúas veces e na lupa (-) outras dúas veces.
+Resultado: A gráfica ampliouse dúas veces e reduceuse outras dúas para volver á súa escala orixinal
+
+P21
+Escalar e reposicionar dinámicamente
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Configurar scatterplot -> Seleccionamos "Axuste automático"
+Resultado: A fiestra axústase para englobar a todos os puntos, e situar os máximos e os mínimos próximos aos seus bordes
+
+P22
+Título: Reproducir
+Descrición: Tras representar correctamente tres scatterplots no menú de visualización -> Pinchamos no botón de play
+Resultado: A secuencia de vídeo reprodúcese correctamente nos tres scatterplots, de acordo coa identificación temporal establecida para cada tupla (punto da gráfica)
+
+P23
+Título: Difuminar puntos
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos no botón de play
+Resultado: Os puntos xa representados difumínanse un pouco con cada novo punto que se debuxa
+
+P24
+Título: Representar estelas
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos no botón de play
+Resultado: Cada novo punto únese ao último representado por medio dunha liña recta (estela)
+
+P25
+Título: Difuminar estelas
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos no botón de play
+Resultado: As estelas difumínanse un pouco con cada nova estela que se debuxa
+
+P26
+Título: Configurar a reprodución
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos no botón "Configurar visualización" -> Modificamos todos os valores -> Aceptar
+Resultado: Comprobamos que os cambios foron aplicaron correctamente premendo Play
+
+P27
+Título: Rebobinamos e facemos avance rápido
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos no botón de avance rápido -> Cando chegue ao final da barra temporal, prememos o de rebobinar
+Resultado: A secuencia reproduceuse a gran velocidade (x8), ao chegar ao final parouse, e ao rebobinar, veuse a secuencia na orde inversa á mesma velocidade (x8)
+
+P28
+Título: Pausar reprodución
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos no botón de avance rápido -> Antes de que chegue ao final, prememos o botón de Pause
+Resultado: A imaxe quedou parada no momento que prememos a pausa, así coma o desprazador da barra temporal dentro desta
+
+P29
+Título: Ir a un determinado instante da reprodución
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Movemos o desprazador da barra temporal
+Resultado: O scatterplot adáptase para representar os valores correspondentes a cada instante que marque o desprazador
+
+P30
+Título: Ir ao comezo ou ao final da reprodución
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Pinchamos en "Ir ao final" -> Pinchamos en "Ir ao comezo"
+Resultado: Ao premer o primeiro, o scatterplot adopta a apariencia que adquiriría ao final da reprodución. Ao premer o segundo, o scatterplot adopta a apariencia inicial outra vez
+
+P31
+Título: Insertar tres filtros
+Descrición: Tras importar correctamente un arquivo, asignarlle tipos aos atributos e sinalar a identificación temporal -> Menú de filtros -> Insertar límites superiores e inferiores para un primeiro atributo -> Insertar límites superiores e inferiores para un segundo atributo -> Insertar límites superiores e inferiores para un tercer atributo
+Resultado: Comprobamos que no menú de visualización se omitiron os resultados que foron filtrados por algún dos 3 filtros
+
+P32
+Título: Gardar unha subsecuencia de filtros
+Descrición: Tras insertar tres filtros satisfactoriamente -> Gardar subsecuencia de filtros -> Tildamos o primeiro e o segundo filtro -> Gardar -> Seleccionamos nome e ubicación
+Resultado: No directorio seleccionado atópase un arquivo co noso da nosa subsecuencia gardada
+
+P33
+Título: Cargar unha subsecuencia de filtros
+Descrición: Tras insertar tres filtros satisfactoriamente e gardar os dous primeiros -> Cargar subsecuencia de filtros -> Seleccionamos a subsecuencia de filtros gardada
+Resultado: Á secuencia de filtros actual engadiuse no seu final a subsecuencia de filtros gardada, quedando de tal xeito: 1 - 2 - 3 - 1 - 2
+
+P34
+Título: Eliminar un filtro
+Descrición: Tras insertar tres filtros satisfactoriamente -> Buscar o segundo filtro (o do medio) -> Premer a aspa -> Confirmar
+Resultado: Quedaron o primeiro e máis o terceiro filtros
+
+P35
+Título: Configurar un filtro
+Descrición: Tras insertar tres filtros satisfactoriamente -> Buscar o segundo filtro (o do medio) -> Premer o botón de "Configurar filtro" -> Modificar varios campos -> Aceptar
+Resultado: Pódese apreciar no menú de visualización o efecto da modificación
+
+P36
+Título: Mover un filtro
+Descrición: Tras insertar tres filtros satisfactoriamente -> Buscar o segundo filtro (o do medio) -> Premer o botón de "Mover filtro" -> Seleccionar un índice novo -> Aceptar
+Resultado: Pódese apreciar na secuencia de filtros o seu desprazamento
+
+P37
+Título: Calcular distancia entre dous puntos
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Seleccionar "Calcular distancia" -> Seleccionar dous puntos dentro dun mesmo scatterplot
+Resultado: Unha venta emerxente móstranos a distancia entre os puntos, segundo a función usada por defecto
+
+P38
+Título: Configurar a fórmula para achar a distancia
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Seleccionar "Configurar fórmula da distancia" -> Introducir a expresión desexada -> Aceptar -> Seleccionar "Calcular distancia" -> Seleccionar dous puntos dentro dun mesmo scatterplot
+Resultado: Unha venta emerxente móstranos a distancia entre os puntos segundo a fórmula que especificamos
+
+P39
+Título: Configurar o menú de visualización
+Descrición: Tras representar correctamente un scatterplot no menú de visualización -> Seleccionar "Configurar menú" -> Modificar varios trazos propios da apariencia -> Aceptar
+Resultado: Pódese apreciar no menú de visualización o efecto da modificación

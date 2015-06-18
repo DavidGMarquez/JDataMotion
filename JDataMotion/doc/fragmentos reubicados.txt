@@ -1,0 +1,65 @@
+descripcion do sistema:
+
+\section{Descrición do sistema}
+
+A ferramenta JDataMotion desenvolverase integramente na linguaxe de programación Java, posto que necesitamos unha linguaxe orientada a obxectos que axilice o desenvolvemento do software, favoreza a reutilización de código e facilite o deseño dunha interface gráfica. Dentro do paradigma orientado a obxectos, Java é unha solución razoable que ademais conferiría á nosa aplicación bastantes opcións á hora de representar os scatterplots, grazas ás librerías de terceiros que fornecen esta funcionalidade. Por outra banda, podemos usar a librería gráfica Swing para a implementación da interface.
+ 
+A nivel funcional, JDataMotion busca estender coa perspectiva dinámica as posibilidades do software de Weka\cite{weka}. En base a isto, intentaremos adaptar algunhas das súas funcionalidades e incluso botaremos man da súa interface de programación (API), sobre todo na parte do modelo da aplicación.
+ 
+O seu funcionamento parte dun arquivo dado en formato CSV ou ARFF que se deberá importar nun primeiro momento, ou ben dunha sesión (en formato JDMS) gardada durante un experimento anterior. Botarase man das librerías facilitadas pola ferramenta Weka\cite{weka} para a importación, exportación e almacenamento do modelo de datos. 
+
+Os tipos de datos dos atributos poderán ser configurados de acordo ás seguintes etiquetas propias do estándar que proporciona o formato ARFF\cite{arff}: nominal, numérico, string ou data. A maiores, tamén se poderá especificar que un atributo numérico actúe como índice temporal para ser utilizado na reprodución. Así mesmo, permítese a inserción, eliminación e modificación dos datos.
+
+Poderanse engadir filtros configurables aos datos que se están a procesar. Os filtros representaranse nunha secuencia, e permitirase a adición, desprazamento ou eliminación de filtros nela. Tamén se facilitará unha interface pública para que calquera desenvolvedor poida aplicar no seu experimento filtros personalizados, sempre que implementen esa interface.
+
+De acordo coa ferramenta Weka\cite{weka}, para a visualización de datos seguirase un esquema matricial, de xeito que para cada par de atributos numéricos, exista unha cela dentro de esa matriz para representalos baixo a forma dun scatterplot, de tal forma que os scatterplots dentro da matriz estarán ordenados por filas e columnas segundo o atributo que representen en cada eixo. Para a creación de scatterplots escolleise JFreeChart\cite{jfreechart}, debido ás súas prestacións\cite{jfreechart}\cite{introduction_to_jfreechart}:
+
+\begin{itemize}
+\item É unha solución desenvolvida en código aberto, e distribuído baixo licencia pública LGPL.
+\item A interface de programación (API) está extensamente documentada, o cal facilita a aprendizaxe do seu uso.
+\item Da soporte moitos tipos de gráficas, non só scatterplots, o cal será útil á hora de amosar histogramas para resumir variables.
+\item As gráficas xa implementan funcións de zoom e reposicionamento (automáticos e manuais), así como unha gran serie de opcións de personalización (cores, liñas, puntos, etc.) ou incluso a posibilidade de exportar a nosa imaxe en formato PNG ou JPEG.
+\item Permite a creación de gráficas dinámicas, isto é, permite engadir en tempo de execución puntos ás gráficas, o cal constituirá o punto de partida para desenvolver as funcións de reprodución.
+\end{itemize} 
+ 
+Ademáis, a reprodución dinámica dos datos deberá ser configurable. Poderase sinalar un atributo nominal para que os seus valores se representen con puntos de cor e forma diferente e ampliar un scatterplot nunha nova ventá, así como facer zoom e reposicionar a ventá de cada scatterplot. 
+
+O usuario poderá exportar o seu traballo en calquera momento baixo un novo ficheiro de formato ARFF ou CSV, ou ben gardar a sesión (JDMS) para retomala máis adiante. 
+
+
+RF mala escalabilidade do sistema
+
+\item \textbf{Risco 05}
+\begin{description}
+\item[Nome:] Mala escalabilidade do sistema
+\item[Descrición:] O noso sistema escala mal con entradas de datos de gran tamaño.
+\item[Probabilidade:] Alta
+\item[Gravidade:] Media
+\item[Medidas de minimización:] Programaremos prazos de tempo maiores para entregas nas que a escalabilidade poida ser un problema (visualización, carga de datos, etc.) para mellorar este aspecto. Se non é viable reducir máis a latencia, procederase a aliviala mellorando a usabilidade do sistema (por exemplo, empregando barras de progreso).
+\end{description}
+
+
+edt con intro
+
+Do mesmo xeito, coa referencia do anteproxecto extraemos na Figura \ref{edt} o Esquema de Descomposición do Traballo (EDT) do proxecto. Cada fase anterior amosarase dividida nas tarefas que a compoñen. Cabe destacar que na fase de Desenvolvemento, para cada sprint, as tarefas que ten asignadas son os propios requisitos funcionais (RFs) a implementar nese sprint, ou o que é o mesmo, a implementación de cada RF constitúe a tarefa que o representa. Por exemplo, o RF 'Insertar filtros' impleméntase na tarefa do mesmo nome: Insertar filtros.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/edt}
+\caption{Esquema de Descomposición do Traballo (EDT)}
+\label{edt}
+\end{figure}
+
+
+gantt e intro
+
+A continuación e en base ao especificado no anteproxecto (sprints e planificación temporal dos mesmos), exporemos na Figura \ref{gantt} o Diagrama de Gantt que ilustra a planificación temporal das fases. Cómpre destacar que a fase de Desenvolvemento será dividida nos sprints que a compoñen directamente.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/gantt}
+\caption{Diagrama de Gantt}
+\label{gantt}
+\end{figure}
+
+
