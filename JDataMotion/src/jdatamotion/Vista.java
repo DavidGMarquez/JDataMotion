@@ -1,5 +1,6 @@
 package jdatamotion;
 
+import jdatamotion.filtros.FilterHandler;
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstraints;
 import java.awt.BasicStroke;
@@ -32,6 +33,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,10 +44,15 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -54,8 +61,13 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -65,6 +77,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -75,6 +88,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -121,12 +135,10 @@ import jdatamotion.sesions.Sesionizable;
 import jdatamotion.charteditors.DefaultChartEditorConfigurable;
 import jdatamotion.charteditors.RegularPolygon;
 import jdatamotion.charteditors.StarPolygon;
-import jdatamotion.filtros.FilterHandler;
 import jdatamotioncommon.ComparableInstances;
 import jdatamotioncommon.filtros.IFilter;
 import jdatamotioncommon.filtros.IntegerParameter;
 import jdatamotioncommon.filtros.Parameter;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
@@ -171,6 +183,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private static final int EXPLORADOR_EXPORTAR_FICHEIRO = 3;
     private static final int EXPLORADOR_IMPORTAR_FILTROS = 4;
     private static final int EXPLORADOR_EXPORTAR_FILTROS = 5;
+    private static final int EXPLORADOR_IMPORTAR_FILTRO_DESDE_JAR = 6;
 
     private transient Modelo meuModelo;
     private int ordeVisualizacion;
@@ -301,6 +314,218 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        }
+    }
+
+    private final class JarResources {
+
+        public boolean debugOn = false;
+
+        private final Hashtable htSizes = new Hashtable();
+        private final Hashtable htJarContents = new Hashtable();
+
+        private final String jarFileName;
+
+        public JarResources(String jarFileName) {
+            this.jarFileName = jarFileName;
+            init();
+        }
+
+        public byte[] getResource(String name) {
+            return (byte[]) htJarContents.get(name);
+        }
+
+        private void init() {
+            try {
+                try (ZipFile zf = new ZipFile(jarFileName)) {
+                    Enumeration e = zf.entries();
+                    while (e.hasMoreElements()) {
+                        ZipEntry ze = (ZipEntry) e.nextElement();
+
+                        if (debugOn) {
+                            System.out.println(dumpZipEntry(ze));
+                        }
+                        htSizes.put(ze.getName(), (int) ze.getSize());
+                    }
+                }
+                FileInputStream fis = new FileInputStream(jarFileName);
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                ZipInputStream zis = new ZipInputStream(bis);
+                ZipEntry ze;
+                while ((ze = zis.getNextEntry()) != null) {
+                    if (ze.isDirectory()) {
+                        continue;
+                    }
+                    if (debugOn) {
+                        System.out.println("ze.getName()=" + ze.getName()
+                                + "," + "getSize()=" + ze.getSize());
+                    }
+                    int size = (int) ze.getSize();
+                    if (size == -1) {
+                        size = ((Integer) htSizes.get(ze.getName()));
+                    }
+                    byte[] b = new byte[(int) size];
+                    int rb = 0;
+                    int chunk;
+                    while (((int) size - rb) > 0) {
+                        chunk = zis.read(b, rb, (int) size - rb);
+                        if (chunk == -1) {
+                            break;
+                        }
+                        rb += chunk;
+                    }
+                    htJarContents.put(ze.getName(), b);
+                    if (debugOn) {
+                        System.out.println(ze.getName() + "  rb=" + rb
+                                + ",size=" + size
+                                + ",csize=" + ze.getCompressedSize());
+                    }
+                }
+            } catch (NullPointerException e) {
+                System.out.println("done.");
+            } catch (IOException e) {
+            }
+        }
+
+        private String dumpZipEntry(ZipEntry ze) {
+            StringBuilder sb = new StringBuilder();
+            if (ze.isDirectory()) {
+                sb.append("d ");
+            } else {
+                sb.append("f ");
+            }
+            if (ze.getMethod() == ZipEntry.STORED) {
+                sb.append("stored   ");
+            } else {
+                sb.append("defalted ");
+            }
+            sb.append(ze.getName());
+            sb.append("\t");
+            sb.append("").append(ze.getSize());
+            if (ze.getMethod() == ZipEntry.DEFLATED) {
+                sb.append("/").append(ze.getCompressedSize());
+            }
+            return (sb.toString());
+        }
+    }
+
+    private abstract class MultiClassLoader extends ClassLoader {
+
+        private Hashtable classes = new Hashtable();
+        private char classNameReplacementChar;
+
+        protected boolean monitorOn = false;
+        protected boolean sourceMonitorOn = true;
+
+        public MultiClassLoader() {
+        }
+
+        public Class loadClass(String className) throws ClassNotFoundException {
+            return (loadClass(className, true));
+        }
+
+        public synchronized Class loadClass(String className,
+                boolean resolveIt) throws ClassNotFoundException {
+
+            Class result;
+            byte[] classBytes;
+            monitor(">> MultiClassLoader.loadClass(" + className + ", " + resolveIt + ")");
+
+            result = (Class) classes.get(className);
+            if (result != null) {
+                monitor(">> returning cached result.");
+                return result;
+            }
+
+            try {
+                result = super.findSystemClass(className);
+                monitor(">> returning system class (in CLASSPATH).");
+                return result;
+            } catch (ClassNotFoundException e) {
+                monitor(">> Not a system class.");
+            }
+
+            classBytes = loadClassBytes(className);
+            if (classBytes == null) {
+                throw new ClassNotFoundException();
+            }
+
+            result = defineClass(className, classBytes, 0, classBytes.length);
+            if (result == null) {
+                throw new ClassFormatError();
+            }
+
+            if (resolveIt) {
+                resolveClass(result);
+            }
+
+            classes.put(className, result);
+            monitor(">> Returning newly loaded class.");
+            return result;
+        }
+
+        public void setClassNameReplacementChar(char replacement) {
+            classNameReplacementChar = replacement;
+        }
+
+        protected abstract byte[] loadClassBytes(String className);
+
+        protected String formatClassName(String className) {
+            if (classNameReplacementChar == '\u0000') {
+                return className.replace('.', '/') + ".class";
+            } else {
+                return className.replace('.',
+                        classNameReplacementChar) + ".class";
+            }
+        }
+
+        protected void monitor(String text) {
+            if (monitorOn) {
+                print(text);
+            }
+        }
+
+        protected void print(String text) {
+            System.out.println(text);
+        }
+
+    }
+
+    private class JarClassLoader extends MultiClassLoader {
+
+        private final JarResources jarResources;
+
+        public JarClassLoader(String jarName) {
+            jarResources = new JarResources(jarName);
+        }
+
+        @Override
+        protected byte[] loadClassBytes(String className) {
+            className = formatClassName(className);
+            return (jarResources.getResource(className));
+        }
+    }
+
+    void anadirFiltro(String jarUrl) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        JarClassLoader jarLoader = new JarClassLoader(jarUrl);
+        JarFile jarFile = new JarFile(jarUrl);
+        Enumeration ee = jarFile.entries();
+        boolean valido = false;
+        while (ee.hasMoreElements()) {
+            JarEntry entry = (JarEntry) ee.nextElement();
+            String name = entry.getName();
+            if (name.endsWith(".class")) {
+                Class c = jarLoader.loadClass(name.substring(0, name.lastIndexOf('.')).replaceAll("/", "."), true);
+                Object o = c.newInstance();
+                if (o instanceof IFilter) {
+                    valido = true;
+                    break;
+                }
+            }
+        }
+        if (valido) {
+            Files.copy(Paths.get(jarUrl), Paths.get("filters\\" + jarUrl.substring(jarUrl.lastIndexOf("\\") + 1)), REPLACE_EXISTING);
+            pintarMenuFiltros();
         }
     }
 
@@ -766,6 +991,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             IntegerParameter indiceAtributo = new IntegerParameter();
             indiceAtributo.setValue(jcb.getSelectedItem() != null ? meuModelo.getIndiceAtributo((String) jcb.getSelectedItem()) : null);
             resultado.put("indiceAtributo", indiceAtributo);
+        } else {
+            return null;
         }
         return resultado;
     }
@@ -993,46 +1220,123 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jLabel2.setText(meuModelo.getInstancesComparable().relationName());
     }
 
+    private static class ClassEnumerator {
+
+        private final static boolean log = false;
+
+        private static void log(String msg) {
+            if (log) {
+                System.out.println("ClassDiscovery: " + msg);
+            }
+        }
+
+        private static void processDirectory(File directory, String pkgname, ArrayList<String> classes) {
+            log("Reading Directory '" + directory + "'");
+            String[] files = directory.list();
+            for (String fileName : files) {
+                String className = null;
+                // we are only interested in .class files
+                if (fileName.endsWith(".class")) {
+                    // removes the .class extension
+                    className = pkgname + '.' + fileName.substring(0, fileName.length() - 6);
+                }
+                log("FileName '" + fileName + "'  =>  class '" + className + "'");
+                if (className != null) {
+                    classes.add(className);
+                }
+                File subdir = new File(directory, fileName);
+                if (subdir.isDirectory()) {
+                    processDirectory(subdir, pkgname + '.' + fileName, classes);
+                }
+            }
+        }
+
+        private static ArrayList<String> getClassesForPackage(Package pkg) {
+            ArrayList<String> classes = new ArrayList<>();
+            String pkgname = pkg.getName();
+            String relPath = pkgname.replace('.', '/');
+            URL resource = ClassLoader.getSystemClassLoader().getResource(relPath);
+            if (resource == null) {
+                throw new RuntimeException("Unexpected problem: No resource for " + relPath);
+            }
+            log("Package: '" + pkgname + "' becomes Resource: '" + resource.toString() + "'");
+            resource.getPath();
+            processDirectory(new File(resource.getPath()), pkgname, classes);
+            return classes;
+        }
+    }
+
     private void pintarMenuFiltros() {
         try {
             jFrameModeloParcial.dispose();
             jPanel3.removeAll();
             jList1.setModel(new DefaultListModel<>());
-            List<String> lines = IOUtils.readLines(getClass().getResourceAsStream("filtros/filtrosImportados"));
-            for (String line : lines) {
+            DefaultListModel<IFilter> dlm = (DefaultListModel<IFilter>) jList1.getModel();
+            ArrayList<String> discoveredClasses = ClassEnumerator.getClassesForPackage(FilterHandler.class.getPackage());
+            for (String line : discoveredClasses) {
                 if (!line.isEmpty()) {
                     Class<?> c = Class.forName(line);
-                    Object object = null;
-                    try {
-                        object = c.getDeclaredConstructor(ComparableInstances.class).newInstance(meuModelo.getInstancesComparable());
-                    } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    if (!c.equals(FilterHandler.class)) {
+                        Object object = null;
                         try {
-                            object = c.getDeclaredConstructor().newInstance();
-                        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex1) {
-                            amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
-                            if (Controlador.debug) {
-                                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex1);
+                            object = c.getDeclaredConstructor(ComparableInstances.class).newInstance(meuModelo.getInstancesComparable());
+                        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                            try {
+                                object = c.getDeclaredConstructor().newInstance();
+                            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex1) {
+                                amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+                                if (Controlador.debug) {
+                                    Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex1);
+                                }
                             }
                         }
-                    }
-                    if (object instanceof IFilter) {
-                        IFilter filtro = (IFilter) object;
-                        String nomeFiltro = filtro.toString();
-                        DefaultListModel<IFilter> dlm = (DefaultListModel<IFilter>) jList1.getModel();
-                        boolean valido = true;
-                        for (int i = 0; i < dlm.getSize(); i++) {
-                            if (nomeFiltro.equals(dlm.get(i).toString())) {
-                                valido = false;
-                                break;
+                        if (object instanceof IFilter) {
+                            IFilter filtro = (IFilter) object;
+                            String nomeFiltro = filtro.toString();
+                            boolean valido = true;
+                            for (int i = 0; i < dlm.getSize(); i++) {
+                                if (nomeFiltro.equals(dlm.get(i).toString())) {
+                                    valido = false;
+                                    break;
+                                }
                             }
-                        }
-                        if (valido) {
-                            dlm.addElement(filtro);
+                            if (valido) {
+                                dlm.addElement(filtro);
+                            }
                         }
                     }
                 }
             }
-        } catch (ClassNotFoundException | IOException ex) {
+            File[] listOfFiles = new File("filters").listFiles();
+            for (File listOfFile : listOfFiles) {
+                if (listOfFile.isFile()) {
+                    JarClassLoader jarLoader = new JarClassLoader(listOfFile.getPath());
+                    JarFile jarFile = new JarFile(listOfFile.getPath());
+                    Enumeration ee = jarFile.entries();
+                    while (ee.hasMoreElements()) {
+                        JarEntry entry = (JarEntry) ee.nextElement();
+                        String name = entry.getName();
+                        if (name.endsWith(".class")) {
+                            Class c = jarLoader.loadClass(name.substring(0, name.lastIndexOf('.')).replaceAll("/", "."), true);
+                            Object o = c.newInstance();
+                            if (o instanceof IFilter) {
+                                IFilter filtro = (IFilter) o;
+                                boolean valido = true;
+                                for (int i = 0; i < dlm.getSize(); i++) {
+                                    if (filtro.toString().equals(dlm.get(i).toString())) {
+                                        valido = false;
+                                        break;
+                                    }
+                                }
+                                if (valido) {
+                                    dlm.addElement(filtro);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (ClassNotFoundException | IOException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
         }
         int gap = 8, padding = 16;
@@ -1186,6 +1490,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jMenuItem21.setEnabled(true);
             jMenuItem22.setEnabled(true);
             jMenuItem23.setEnabled(true);
+            jMenuItem26.setEnabled(true);
             jMenu4.setEnabled(true);
             jTabbedPane1.setEnabled(true);
             jTabbedPane1.setSelectedIndex(0);
@@ -1314,6 +1619,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jMenu7 = new javax.swing.JMenu();
         jMenuItem23 = new javax.swing.JMenuItem();
         jMenuItem24 = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem26 = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem16 = new javax.swing.JMenuItem();
         jMenuItem17 = new javax.swing.JMenuItem();
@@ -1422,7 +1729,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog2.setMinimumSize(new java.awt.Dimension(500, 500));
         jDialog2.setModal(true);
         jDialog2.setName("jDialog2"); // NOI18N
-        jDialog2.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jButton1.setText(bundle.getString("Aceptar")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
@@ -1995,6 +2301,17 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         });
 
+        jList1.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (renderer instanceof JLabel && value instanceof IFilter) {
+                    ((JLabel) renderer).setText(((IFilter) value).getName());
+                }
+                return renderer;
+            }
+        });
+
         jScrollPane11.setMinimumSize(new java.awt.Dimension(400, 100));
         jScrollPane11.setName("jScrollPane11"); // NOI18N
 
@@ -2322,6 +2639,19 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         });
         jMenu7.add(jMenuItem24);
+
+        jSeparator7.setName("jSeparator7"); // NOI18N
+        jMenu7.add(jSeparator7);
+
+        jMenuItem26.setText(bundle.getString("Vista.jMenuItem26.text")); // NOI18N
+        jMenuItem26.setEnabled(false);
+        jMenuItem26.setName("jMenuItem26"); // NOI18N
+        jMenuItem26.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem26ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(jMenuItem26);
 
         jMenuBar1.add(jMenu7);
 
@@ -2745,6 +3075,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
+    private void jMenuItem26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem26ActionPerformed
+        abrirExploradorFicheiros(EXPLORADOR_IMPORTAR_FILTRO_DESDE_JAR);
+    }//GEN-LAST:event_jMenuItem26ActionPerformed
+
     public JSlider getjSlider1() {
         return jSlider1;
     }
@@ -2970,6 +3304,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private void abrirExploradorFicheiros(int opcion) {
         switch (opcion) {
+            case EXPLORADOR_IMPORTAR_FILTRO_DESDE_JAR:
+                configurarJFileChooserAbrir(Controlador.IMPORTAR_FILTRO_DESDE_JAR);
+                break;
             case EXPLORADOR_ABRIR_SESION:
                 configurarJFileChooserAbrir(Controlador.ABRIR_SESION);
                 break;
@@ -3054,12 +3391,18 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 jDialog1.setTitle(bundle.getString("Vista.jMenuItem23.text"));
                 jFileChooser1.setApproveButtonText(bundle.getString("importar"));
                 break;
+            case Controlador.IMPORTAR_FILTRO_DESDE_JAR:
+                ext.add(new FiltroExtension(bundle.getString("formatoJAR") + " (*.jar)", new String[]{"jar"}));
+                ext.add(new FiltroExtension(bundle.getString("todosOsFicheiros") + " (*.*)", null));
+                definirExtensions(ext);
+                jDialog1.setTitle(bundle.getString("Vista.jMenuItem26.text"));
+                jFileChooser1.setApproveButtonText(bundle.getString("importar"));
+                break;
         }
         jFileChooser1.setSelectedFile(new File(""));
         jFileChooser1.addActionListener((ActionEvent e) -> {
             jDialog1.dispose();
             if (JFileChooser.APPROVE_SELECTION.equals(e.getActionCommand())) {
-                jTableModelo = null;
                 meuControlador.manexarEvento(
                         eventoParaControlador,
                         jFileChooser1.getSelectedFile().getAbsolutePath());
@@ -3808,7 +4151,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }// </editor-fold>                        
 
         private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {
-            meuControlador.manexarEvento(Controlador.CONFIGURAR_FILTRO, new Object[]{indiceFiltro, obterConfiguracionFiltro(indiceFiltro)});
+            Map<String, Parameter> config = obterConfiguracionFiltro(indiceFiltro);
+            if (config != null) {
+                meuControlador.manexarEvento(Controlador.CONFIGURAR_FILTRO, new Object[]{indiceFiltro, config});
+            }
         }
 
         private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -3948,6 +4294,27 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
+    private static JarFile jarForClass(Class<?> clazz, JarFile defaultJar) {
+        String path = "/" + clazz.getName().replace('.', '/') + ".class";
+        URL jarUrl = clazz.getResource(path);
+        if (jarUrl == null) {
+            return defaultJar;
+        }
+
+        String url = jarUrl.toString();
+        int bang = url.indexOf("!");
+        String JAR_URI_PREFIX = "jar:file:";
+        if (url.startsWith(JAR_URI_PREFIX) && bang != -1) {
+            try {
+                return new JarFile(url.substring(JAR_URI_PREFIX.length(), bang));
+            } catch (IOException e) {
+                throw new IllegalStateException("Error loading jar file.", e);
+            }
+        } else {
+            return defaultJar;
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JRadioButtonMenuItem botonData;
     javax.swing.JRadioButtonMenuItem botonIndiceTemporal;
@@ -4016,6 +4383,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JMenuItem jMenuItem22;
     javax.swing.JMenuItem jMenuItem23;
     javax.swing.JMenuItem jMenuItem24;
+    javax.swing.JMenuItem jMenuItem26;
     javax.swing.JMenuItem jMenuItem3;
     javax.swing.JMenuItem jMenuItem4;
     javax.swing.JMenuItem jMenuItem5;
@@ -4057,6 +4425,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JPopupMenu.Separator jSeparator4;
     javax.swing.JPopupMenu.Separator jSeparator5;
     javax.swing.JPopupMenu.Separator jSeparator6;
+    javax.swing.JPopupMenu.Separator jSeparator7;
     javax.swing.JSlider jSlider1;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JTextField jTextField1;

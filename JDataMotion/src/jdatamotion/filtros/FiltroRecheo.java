@@ -41,15 +41,11 @@ public class FiltroRecheo implements IFilter {
 
     private static final String VALOR = Vista.bundle.getString("valor");
 
-    private final HashMap<String, Parameter> parameters = new HashMap<>();
-
     @Override
-    public HashMap<String, Parameter> getParameters() {
-        return parameters;
-    }
-
-    public FiltroRecheo() {
-        this.parameters.put(VALOR, new DoubleParameter());
+    public Map<String, Parameter> getParametersNeeded() {
+        Map<String, Parameter> p = new HashMap<>();
+        p.put(VALOR, new DoubleParameter());
+        return p;
     }
 
     @Override
@@ -57,19 +53,18 @@ public class FiltroRecheo implements IFilter {
         if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
             return comparableInstances;
         }
-        ComparableInstances ins = new ComparableInstances(comparableInstances);
-        Iterator<Instance> it = ins.iterator();
+        Iterator<Instance> it = comparableInstances.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
             if (instance.isMissing(filteredAttributeIndex)) {
                 instance.setValue(filteredAttributeIndex, (double) parameters.get(VALOR).getValue());
             }
         }
-        return ins;
+        return comparableInstances;
     }
 
     @Override
-    public String toString() {
+    public String getName() {
         return "Filtro de recheo";
     }
 

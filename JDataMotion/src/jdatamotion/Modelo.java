@@ -1,5 +1,6 @@
 package jdatamotion;
 
+import jdatamotion.filtros.FilterHandler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,7 +24,6 @@ import jdatamotion.excepcions.ExcepcionArquivoModificado;
 import jdatamotion.excepcions.ExcepcionCambiarTipoAtributo;
 import jdatamotion.excepcions.ExcepcionComandoInutil;
 import jdatamotion.excepcions.ExcepcionFormatoIdentificacionTemporal;
-import jdatamotion.filtros.FilterHandler;
 import jdatamotion.sesions.Sesion;
 import jdatamotion.sesions.SesionModelo;
 import jdatamotion.sesions.Sesionizable;

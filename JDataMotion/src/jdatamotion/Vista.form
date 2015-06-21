@@ -144,9 +144,6 @@
         </Property>
         <Property name="modal" type="boolean" value="true"/>
         <Property name="name" type="java.lang.String" value="jDialog2" noResource="true"/>
-        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[500, 500]"/>
-        </Property>
       </Properties>
 
       <Layout>
@@ -1031,6 +1028,23 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem24ActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator7" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem26">
+              <Properties>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="jdatamotion/idiomas/Bundle.properties" key="Vista.jMenuItem26.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="jMenuItem26" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem26ActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu8">
@@ -1672,7 +1686,7 @@
                         <Property name="name" type="java.lang.String" value="jList1" noResource="true"/>
                       </Properties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jList1.getSelectionModel().addListSelectionListener(new ListSelectionListener(){&#xa;        public void valueChanged(ListSelectionEvent event) {&#xa;            jButton14.setEnabled(!jList1.isSelectionEmpty());&#xa;        }&#xa;    });"/>
+                        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jList1.getSelectionModel().addListSelectionListener(new ListSelectionListener(){&#xa;        public void valueChanged(ListSelectionEvent event) {&#xa;            jButton14.setEnabled(!jList1.isSelectionEmpty());&#xa;        }&#xa;    });&#xa;&#xa;jList1.setCellRenderer(new DefaultListCellRenderer() {&#xa;            @Override&#xa;            public Component getListCellRendererComponent(JList&lt;?&gt; list, Object value, int index, boolean isSelected, boolean cellHasFocus) {&#xa;                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);&#xa;                if (renderer instanceof JLabel &amp;&amp; value instanceof IFilter) {&#xa;                    ((JLabel) renderer).setText(((IFilter) value).getName());&#xa;                }&#xa;                return renderer;&#xa;            }&#xa;        });"/>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JList&lt;&gt;()"/>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;IFilter&gt;"/>
                       </AuxValues>

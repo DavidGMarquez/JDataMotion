@@ -28,8 +28,10 @@ import java.util.Iterator;
 import java.util.Map;
 import jdatamotion.Modelo;
 import jdatamotioncommon.ComparableInstances;
+import jdatamotioncommon.filtros.DoubleParameter;
 import jdatamotioncommon.filtros.IFilter;
 import jdatamotioncommon.filtros.Parameter;
+import jdatamotioncommon.filtros.StringParameter;
 import weka.core.Instance;
 
 /**
@@ -38,11 +40,10 @@ import weka.core.Instance;
  */
 public class FiltroNormalizacion implements IFilter {
 
-    private final HashMap<String, Parameter> parameters = new HashMap<>();
-
     @Override
-    public HashMap<String, Parameter> getParameters() {
-        return parameters;
+    public Map<String, Parameter> getParametersNeeded() {
+        Map<String, Parameter> p = new HashMap<>();
+        return p;
     }
 
     public FiltroNormalizacion() {
@@ -53,9 +54,8 @@ public class FiltroNormalizacion implements IFilter {
         if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
             return comparableInstances;
         }
-        ComparableInstances ins = new ComparableInstances(comparableInstances);
-        Double desvTipica = Modelo.getDesviacionTipica(ins, filteredAttributeIndex), media = Modelo.getMedia(comparableInstances, filteredAttributeIndex);
-        Iterator<Instance> it = ins.iterator();
+        Double desvTipica = Modelo.getDesviacionTipica(comparableInstances, filteredAttributeIndex), media = Modelo.getMedia(comparableInstances, filteredAttributeIndex);
+        Iterator<Instance> it = comparableInstances.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
             Double v = instance.isMissing(filteredAttributeIndex) ? null : instance.value(filteredAttributeIndex);
@@ -64,11 +64,11 @@ public class FiltroNormalizacion implements IFilter {
                 instance.setValue(filteredAttributeIndex, (vInstance - media) / desvTipica);
             }
         }
-        return ins;
+        return comparableInstances;
     }
 
     @Override
-    public String toString() {
+    public String getName() {
         return "Filtro de normalización";
     }
 

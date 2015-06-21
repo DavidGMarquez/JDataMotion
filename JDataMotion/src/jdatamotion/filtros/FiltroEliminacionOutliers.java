@@ -43,8 +43,8 @@ public class FiltroEliminacionOutliers implements IFilter {
     private static final String NUMERO_DE_DTS = Vista.bundle.getString("numeroDeDTs");
 
     @Override
-    public HashMap<String, Parameter> getParameters() {
-        HashMap<String, Parameter> p = new HashMap<>();
+    public Map<String, Parameter> getParametersNeeded() {
+        Map<String, Parameter> p = new HashMap<>();
         p.put(NUMERO_DE_DTS, new DoubleParameter());
         return p;
     }
@@ -54,10 +54,9 @@ public class FiltroEliminacionOutliers implements IFilter {
         if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
             return comparableInstances;
         }
-        ComparableInstances ins = new ComparableInstances(comparableInstances);
-        Double desvTipica = Modelo.getDesviacionTipica(ins, filteredAttributeIndex), media = Modelo.getMedia(ins, filteredAttributeIndex);
+        Double desvTipica = Modelo.getDesviacionTipica(comparableInstances, filteredAttributeIndex), media = Modelo.getMedia(comparableInstances, filteredAttributeIndex);
         Double numDTs = (Double) parameters.get(NUMERO_DE_DTS).getValue();
-        Iterator<Instance> it = ins.iterator();
+        Iterator<Instance> it = comparableInstances.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
             Double v = instance.isMissing(filteredAttributeIndex) ? null : instance.value(filteredAttributeIndex);
@@ -65,11 +64,11 @@ public class FiltroEliminacionOutliers implements IFilter {
                 it.remove();
             }
         }
-        return ins;
+        return comparableInstances;
     }
 
     @Override
-    public String toString() {
+    public String getName() {
         return "Filtro de eliminación de outliers";
     }
 }

@@ -51,17 +51,13 @@ public class FiltroLimite implements IFilter {
 
     private static final String VALOR = Vista.bundle.getString("valor");
 
-    private final HashMap<String, Parameter> parameters = new HashMap<>();
-
     @Override
-    public HashMap<String, Parameter> getParameters() {
-        return parameters;
-    }
-
-    public FiltroLimite() {
-        this.parameters.put(TIPO_LIMITE, new StringParameter(new String[]{LIMITE_VALOR, LIMITE_PERCENTIL}));
-        this.parameters.put(TIPO_COTA, new StringParameter(new String[]{COTA_SUPERIOR, COTA_INFERIOR}));
-        this.parameters.put(VALOR, new DoubleParameter());
+    public Map<String, Parameter> getParametersNeeded() {
+        Map<String, Parameter> p = new HashMap<>();
+        p.put(TIPO_LIMITE, new StringParameter(new String[]{LIMITE_VALOR, LIMITE_PERCENTIL}));
+        p.put(TIPO_COTA, new StringParameter(new String[]{COTA_SUPERIOR, COTA_INFERIOR}));
+        p.put(VALOR, new DoubleParameter());
+        return p;
     }
 
     @Override
@@ -69,14 +65,13 @@ public class FiltroLimite implements IFilter {
         if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
             return comparableInstances;
         }
-        ComparableInstances ins = new ComparableInstances(comparableInstances);
         Double valorNumerico = 0.0;
         if (parameters.get(TIPO_LIMITE).getValue().equals(LIMITE_VALOR)) {
             valorNumerico = (Double) parameters.get(VALOR).getValue();
         } else if (parameters.get(TIPO_LIMITE).getValue().equals(LIMITE_PERCENTIL)) {
             valorNumerico = Modelo.getValorPercentil(comparableInstances, ((Double) parameters.get(VALOR).getValue()).intValue(), filteredAttributeIndex);
         }
-        Iterator<Instance> it = ins.iterator();
+        Iterator<Instance> it = comparableInstances.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();
             Double v = instance.isMissing(filteredAttributeIndex) ? null : instance.value(filteredAttributeIndex);
@@ -84,11 +79,11 @@ public class FiltroLimite implements IFilter {
                 instance.setValue(filteredAttributeIndex, valorNumerico);
             }
         }
-        return ins;
+        return comparableInstances;
     }
 
     @Override
-    public String toString() {
+    public String getName() {
         return "Filtro de límite";
     }
 

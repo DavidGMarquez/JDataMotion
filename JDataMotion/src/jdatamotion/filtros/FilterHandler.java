@@ -55,7 +55,7 @@ public class FilterHandler implements Serializable {
         this.indiceAtributoFiltrado = indiceAtributoFiltrado;
         this.seleccionado = false;
         this.filtro = filtro;
-        this.parameters = filtro.getParameters();
+        this.parameters = filtro.getParametersNeeded();
     }
 
     public final void setIndiceAtributoFiltrado(Integer indiceAtributoFiltrado) {
@@ -71,7 +71,7 @@ public class FilterHandler implements Serializable {
     }
 
     public final Parameter getParameter(String parameterName) {
-        Iterator<Entry<String, Parameter>> it = filtro.getParameters().entrySet().iterator();
+        Iterator<Entry<String, Parameter>> it = parameters.entrySet().iterator();
         while (it.hasNext()) {
             Entry<String, Parameter> pair = it.next();
             if (pair.getKey().equals(parameterName)) {
@@ -82,12 +82,12 @@ public class FilterHandler implements Serializable {
     }
 
     public ComparableInstances filter(ComparableInstances instancesComparable) {
-        return filtro.filter(instancesComparable, indiceAtributoFiltrado, parameters);
+        return filtro.filter(new ComparableInstances(instancesComparable), indiceAtributoFiltrado, parameters);
     }
 
     @Override
     public String toString() {
-        return filtro.toString();
+        return filtro.getName();
     }
 
     public final void setParameters(Map<String, Parameter> parametros) {
@@ -95,7 +95,7 @@ public class FilterHandler implements Serializable {
     }
 
     public boolean estaTodoConfigurado() {
-        return IFilter.isEverythingConfigured(indiceAtributoFiltrado, this.filtro.getParameters());
+        return IFilter.isEverythingConfigured(indiceAtributoFiltrado, parameters);
     }
 
     public IFilter getFiltro() {

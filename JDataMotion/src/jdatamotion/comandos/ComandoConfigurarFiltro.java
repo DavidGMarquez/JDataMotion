@@ -48,7 +48,7 @@ public class ComandoConfigurarFiltro extends ComandoDesfacible {
         super(modelo, Vista.bundle.getString("comandoConfigurarFiltro"));
         this.index = index;
         HashMap<String, Parameter> parametrosNovosAux = (HashMap<String, Parameter>) parametrosNovos.clone();
-        this.indiceAtributoNovo = (Integer) parametrosNovosAux.remove("indiceAtributo").getValue();
+        this.indiceAtributoNovo = parametrosNovosAux.containsKey("indiceAtributo") ? (Integer) parametrosNovosAux.remove("indiceAtributo").getValue() : null;
         this.parametrosNovos = parametrosNovosAux;
         this.parametrosAntigos = modelo.getFiltro(index).getParameters();
         this.indiceAtributoAntigo = modelo.getFiltro(index).getIndiceAtributoFiltrado();

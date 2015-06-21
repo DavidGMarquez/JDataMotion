@@ -5,7 +5,7 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="1">
                 <name/>
-                <line>609</line>
+                <line>804</line>
                 <key/>
             </bookmark>
         </file>
@@ -19,6 +19,11 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/filtros/FiltroEliminacionOutliers.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Vista.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/JDataMotion.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/filtros/FiltroRecheo.java</file>
+        </group>
     </open-files>
 </project-private>

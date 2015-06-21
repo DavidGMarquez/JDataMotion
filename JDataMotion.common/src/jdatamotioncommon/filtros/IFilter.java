@@ -5,14 +5,17 @@
  */
 package jdatamotioncommon.filtros;
 
+import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import jdatamotioncommon.ComparableInstances;
 
 /**
  *
  * @author usuario
  */
-public interface IFilter {
+public interface IFilter extends Serializable {
 
     public static boolean isEverythingConfigured(Integer filteredAttributeIndex, Map<String, Parameter> parameters) {
         return isConfiguredFilteredAttribute(filteredAttributeIndex) && areParametersConfigured(parameters);
@@ -23,14 +26,21 @@ public interface IFilter {
     }
 
     public static boolean areParametersConfigured(Map<String, Parameter> parameters) {
-        return parameters.values().stream().noneMatch((p) -> (p == null));
+        if (parameters != null && !parameters.isEmpty()) {
+            Iterator<Entry<String, Parameter>> it = parameters.entrySet().iterator();
+            while (it.hasNext()) {
+                if (it.next().getValue().getValue() == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public ComparableInstances filter(ComparableInstances comparableInstances, Integer filteredAttributeIndex, Map<String, Parameter> parameters);
 
-    @Override
-    public abstract String toString();
+    public abstract String getName();
 
-    public abstract Map<String, Parameter> getParameters();
+    public abstract Map<String, Parameter> getParametersNeeded();
 
 }
