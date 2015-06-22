@@ -201,6 +201,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private static final String ficheiroConfiguracionPorDefecto = "/jdatamotion/default_config.properties";
     public static Properties propiedades;
     private boolean visualizacionDesactualizada;
+    private Instance puntoDesde;
+    private Instance puntoHasta;
 
     public static ResourceBundle getBundle() {
         return bundle;
@@ -411,7 +413,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private abstract class MultiClassLoader extends ClassLoader {
 
-        private Hashtable classes = new Hashtable();
+        private final Hashtable classes = new Hashtable();
         private char classNameReplacementChar;
 
         protected boolean monitorOn = false;
@@ -420,10 +422,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         public MultiClassLoader() {
         }
 
+        @Override
         public Class loadClass(String className) throws ClassNotFoundException {
             return (loadClass(className, true));
         }
 
+        @Override
         public synchronized Class loadClass(String className,
                 boolean resolveIt) throws ClassNotFoundException {
 
