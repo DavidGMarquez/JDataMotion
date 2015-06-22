@@ -615,14 +615,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             gravarEscribirPropiedade(propiedades, propiedad, shapeListString, ficheiroConfiguracion);
         }
 
-        public static PlotOrientation readPlotOrientationProperty(String propiedad) {
-            return propiedades.getProperty(propiedad).equals("h") ? PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL;
-        }
-
-        public static void writePlotOrientationProperty(String propiedad, PlotOrientation po) {
-            gravarEscribirPropiedade(propiedades, propiedad, po.isHorizontal() ? "h" : "v", ficheiroConfiguracion);
-        }
-
         public static Stroke readStrokeProperty(String propiedad) {
             Float f = Float.parseFloat(propiedades.getProperty(propiedad));
             return f != 0.0 ? new BasicStroke() : null;
@@ -1020,7 +1012,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         GraphicConfigurationManager.writeFontProperty("domain_axis_font", editor.getPlotEditor().getDomainAxisPropertyEditPanel().getLabelFont());
         GraphicConfigurationManager.writeFontProperty("range_axis_font", editor.getPlotEditor().getRangeAxisPropertyEditPanel().getLabelFont());
         GraphicConfigurationManager.writeBooleanProperty("anti-aliased", editor.getAntiAlias());
-        GraphicConfigurationManager.writePlotOrientationProperty("orientation", editor.getPlotEditor().getPlotOrientation());
         GraphicConfigurationManager.writeFontProperty("title_font", editor.getTitleEditor().getTitleFont());
         GraphicConfigurationManager.writeBooleanProperty("range_tick_labels", editor.getPlotEditor().getRangeAxisPropertyEditPanel().isTickLabelsVisible());
         GraphicConfigurationManager.writeBooleanProperty("range_tick_marks", editor.getPlotEditor().getRangeAxisPropertyEditPanel().isTickMarksVisible());

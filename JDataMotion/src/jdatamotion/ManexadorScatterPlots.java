@@ -846,7 +846,6 @@ public final class ManexadorScatterPlots {
         Boolean bdtl = Vista.GraphicConfigurationManager.readBooleanProperty("domain_tick_labels");
         Boolean bdtm = Vista.GraphicConfigurationManager.readBooleanProperty("domain_tick_marks");
         Boolean brtm = Vista.GraphicConfigurationManager.readBooleanProperty("range_tick_marks");
-        PlotOrientation poo = Vista.GraphicConfigurationManager.readPlotOrientationProperty("orientation");
         Font ftf = Vista.GraphicConfigurationManager.readFontProperty("title_font");
         Font fdtlf = Vista.GraphicConfigurationManager.readFontProperty("domain_tick_labels_font");
         Font frtlf = Vista.GraphicConfigurationManager.readFontProperty("range_tick_labels_font");
@@ -879,7 +878,6 @@ public final class ManexadorScatterPlots {
             jf.getXYPlot().getDomainAxis().setLabelPaint(cdap);
             jf.getXYPlot().getRangeAxis().setLabelPaint(crap);
             jf.setAntiAlias(baa);
-            jf.getXYPlot().setOrientation(poo);
             for (int i = 0; i < lcsp.size(); i++) {
                 jf.getXYPlot().getRenderer().setSeriesPaint(i, lcsp.get(i));
             }

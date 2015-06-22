@@ -124,8 +124,7 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
      * The orientation combo box (for <tt>CategoryPlot</tt>s and
      * <tt>XYPlot</tt>s).
      */
-    private JComboBox orientationCombo;
-
+    //private JComboBox orientationCombo;
     /**
      * Whether or not to draw lines between each data point (for
      * <tt>LineAndShapeRenderer</tt>s and <tt>StandardXYItemRenderer</tt>s).
@@ -185,7 +184,7 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
 //        } else if (plot instanceof XYPlot) {
 //            this.plotOrientation = ((XYPlot) plot).getOrientation();
 //        }
-        this.plotOrientation = Vista.GraphicConfigurationManager.readPlotOrientationProperty("orientation");
+//        this.plotOrientation = Vista.GraphicConfigurationManager.readPlotOrientationProperty("orientation");
 //        if (plot instanceof CategoryPlot) {
 //            CategoryItemRenderer renderer = ((CategoryPlot) plot).getRenderer();
 //            if (renderer instanceof LineAndShapeRenderer) {
@@ -264,21 +263,20 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
         interior.add(this.backgroundPaintSample);
         interior.add(button);
 
-        if (this.plotOrientation != null) {
-            boolean isVertical = this.plotOrientation.equals(
-                    PlotOrientation.VERTICAL);
-            int index = isVertical ? ORIENTATION_VERTICAL
-                    : ORIENTATION_HORIZONTAL;
-            interior.add(new JLabel(localizationResources.getString(
-                    "Orientation")));
-            this.orientationCombo = new JComboBox<>(orientationNames);
-            this.orientationCombo.setSelectedIndex(index);
-            this.orientationCombo.setActionCommand("Orientation");
-            this.orientationCombo.addActionListener(this);
-            interior.add(new JPanel());
-            interior.add(this.orientationCombo);
-        }
-
+        /*if (this.plotOrientation != null) {
+         boolean isVertical = this.plotOrientation.equals(
+         PlotOrientation.VERTICAL);
+         int index = isVertical ? ORIENTATION_VERTICAL
+         : ORIENTATION_HORIZONTAL;
+         interior.add(new JLabel(localizationResources.getString(
+         "Orientation")));
+         this.orientationCombo = new JComboBox<>(orientationNames);
+         this.orientationCombo.setSelectedIndex(index);
+         this.orientationCombo.setActionCommand("Orientation");
+         this.orientationCombo.addActionListener(this);
+         interior.add(new JPanel());
+         interior.add(this.orientationCombo);
+         }*/
         if (this.drawLines != null) {
             interior.add(new JLabel(localizationResources.getString(
                     "Draw_lines")));
@@ -444,9 +442,10 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
         } //        else if (command.equals("Insets")) {
         //            editInsets();
         //        }
-        else if (command.equals("Orientation")) {
-            attemptOrientationSelection();
-        } else if (command.equals("DrawLines")) {
+        //else if (command.equals("Orientation")) {
+        //    attemptOrientationSelection();
+        //} 
+        else if (command.equals("DrawLines")) {
             attemptDrawLinesSelection();
         } else if (command.equals("DrawShapes")) {
             attemptDrawShapesSelection();
@@ -514,17 +513,16 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
      * Allow the user to modify the plot orientation if this is an editor for a
      * <tt>CategoryPlot</tt> or a <tt>XYPlot</tt>.
      */
-    private void attemptOrientationSelection() {
+    /*private void attemptOrientationSelection() {
 
-        int index = this.orientationCombo.getSelectedIndex();
+     int index = this.orientationCombo.getSelectedIndex();
 
-        if (index == ORIENTATION_VERTICAL) {
-            this.plotOrientation = PlotOrientation.VERTICAL;
-        } else {
-            this.plotOrientation = PlotOrientation.HORIZONTAL;
-        }
-    }
-
+     if (index == ORIENTATION_VERTICAL) {
+     this.plotOrientation = PlotOrientation.VERTICAL;
+     } else {
+     this.plotOrientation = PlotOrientation.HORIZONTAL;
+     }
+     }*/
     /**
      * Allow the user to modify whether or not lines are drawn between data
      * points by <tt>LineAndShapeRenderer</tt>s and
