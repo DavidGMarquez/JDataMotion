@@ -495,7 +495,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     }
 
-    private class JarClassLoader extends MultiClassLoader {
+    class JarClassLoader extends MultiClassLoader {
 
         private final JarResources jarResources;
 
@@ -1304,7 +1304,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
             File[] listOfFiles = new File("filters").listFiles();
             for (File listOfFile : listOfFiles) {
-                if (listOfFile.isFile()) {
+                if (listOfFile.isFile() && listOfFile.getName().endsWith(".jar")) {
                     JarClassLoader jarLoader = new JarClassLoader(listOfFile.getPath());
                     JarFile jarFile = new JarFile(listOfFile.getPath());
                     Enumeration ee = jarFile.entries();

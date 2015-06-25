@@ -1,11 +1,16 @@
 package jdatamotion;
 
+import java.beans.IntrospectionException;
 import java.io.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +57,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
  * @author Pablo Pérez Romaní
  */
 public class Controlador implements Sesionizable {
-    
+
     public static final int IMPORTAR_FICHEIRO = 0;
     public static final int ABRIR_SESION = 1;
     public static final int GARDAR_SESION = 2;
@@ -77,26 +82,26 @@ public class Controlador implements Sesionizable {
     public static final int IMPORTAR_FILTROS = 22;
     public static final int EXPORTAR_FILTROS = 23;
     public static final int IMPORTAR_FILTRO_DESDE_JAR = 24;
-    
+
     public static final boolean debug = true;
     private transient Modelo meuModelo;
     private transient Vista minaVista;
     private XestorComandos xestorComandos;
-    
+
     public Controlador() {
         xestorComandos = new XestorComandos();
     }
-    
+
     public void inicializar(Modelo modelo, Vista vista) {
         meuModelo = modelo;
         minaVista = vista;
     }
-    
+
     public void reset() {
         xestorComandos.vaciarPilaDesfacer();
         xestorComandos.vaciarPilaRefacer();
     }
-    
+
     private void importarFicheiro(String url) {
         try {
             reset();
@@ -245,7 +250,7 @@ public class Controlador implements Sesionizable {
         }
         meuModelo.update();
     }
-    
+
     private void mudarNomeRelacion(String nomeRelacion) {
         try {
             xestorComandos.ExecutarComando(new ComandoMudarNomeRelacion(meuModelo, nomeRelacion));
@@ -255,7 +260,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void desfacer() {
         try {
             xestorComandos.Desfacer();
@@ -265,7 +270,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void refacer() {
         try {
             xestorComandos.Refacer();
@@ -275,7 +280,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void gardarSesion(String path) {
         try {
             ArrayList<Sesion> sesions = new ArrayList<>();
@@ -297,6 +302,19 @@ public class Controlador implements Sesionizable {
         }
     }
 
+    public static void addURLToSystemClassLoader(URL url) throws IntrospectionException {
+        URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        Class<URLClassLoader> classLoaderClass = URLClassLoader.class;
+
+        try {
+            Method method = classLoaderClass.getDeclaredMethod("addURL", new Class[]{URL.class});
+            method.setAccessible(true);
+            method.invoke(systemClassLoader, new Object[]{url});
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException t) {
+            throw new IntrospectionException("Error when adding url to system ClassLoader ");
+        }
+    }
+
     /**
      *
      * @param path
@@ -306,12 +324,24 @@ public class Controlador implements Sesionizable {
         try {
             minaVista.reset();
             reset();
+            File[] listOfFiles = new File("filters").listFiles();
+            for (File listOfFile : listOfFiles) {
+                if (listOfFile.isFile() && listOfFile.getName().endsWith(".jar")) {
+                    addURLToSystemClassLoader(listOfFile.toURI().toURL());
+                }
+            }
             FileInputStream saveFile;
             saveFile = new FileInputStream(path);
             ObjectInputStream restore = new ObjectInputStream(saveFile);
-            ArrayList<Sesion> sesions = (ArrayList<Sesion>) restore.readObject();
-            for (Sesion s : sesions) {
-                aplicarSesionEnObxectivo(s);
+            try {
+                ArrayList<Sesion> sesions = (ArrayList<Sesion>) restore.readObject();
+                for (Sesion s : sesions) {
+                    aplicarSesionEnObxectivo(s);
+                }
+            } catch (ClassNotFoundException e) {
+                if (Controlador.debug) {
+                    Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, e);
+                }
             }
         } catch (ExcepcionArquivoModificado ex) {
             minaVista.amosarDialogo("Erro: O arquivo '" + ex.getUrl() + "' foi modificado e as sesións construidas sobre él quedaron corruptas.\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
@@ -325,7 +355,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void aplicarSesionEnObxectivo(Sesion s) throws Exception {
         if (s instanceof SesionControlador) {
             this.aplicarSesion(s);
@@ -335,7 +365,7 @@ public class Controlador implements Sesionizable {
             minaVista.aplicarSesion(s);
         }
     }
-    
+
     private void exportarFicheiro(String path, String extension) {
         try {
             xestorComandos.ExecutarComando(new ComandoExportarFicheiro(meuModelo, path, extension));
@@ -345,7 +375,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void mudarDato(int numFila, int numColumna, Object dato) {
         try {
             xestorComandos.ExecutarComando(new ComandoMudarDato(meuModelo, numFila, numColumna, dato));
@@ -366,7 +396,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void engadirDatos() {
         try {
             xestorComandos.ExecutarComando(new ComandoEngadirDatos(meuModelo));
@@ -387,11 +417,11 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     public XestorComandos getXestorComandos() {
         return xestorComandos;
     }
-    
+
     private void eliminarDatos(Integer[] filas) {
         try {
             xestorComandos.ExecutarComando(new ComandoEliminarDatos(meuModelo, filas));
@@ -402,18 +432,18 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     @Override
     public Sesion obterSesion() {
         SesionControlador s = new SesionControlador();
         s.setXestorComandos(getXestorComandos());
         return s;
     }
-    
+
     public void setXestorComandos(XestorComandos xestorComandos) {
         this.xestorComandos = xestorComandos;
     }
-    
+
     private void actualizarObxectivosComando(Comando c) {
         if (c.getObxectivo().getClass().equals(Modelo.class)) {
             c.setObxectivo(meuModelo);
@@ -423,7 +453,7 @@ public class Controlador implements Sesionizable {
             c.setObxectivo(minaVista);
         }
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Controlador == false) {
@@ -432,7 +462,7 @@ public class Controlador implements Sesionizable {
         Controlador m = (Controlador) o;
         return m.meuModelo.equals(meuModelo) && m.getXestorComandos().equals(getXestorComandos());
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -441,12 +471,12 @@ public class Controlador implements Sesionizable {
         hash = 41 * hash + Objects.hashCode(this.xestorComandos);
         return hash;
     }
-    
+
     @Override
     public String toString() {
         return ReflectionToStringBuilder.toString(this);
     }
-    
+
     @Override
     public void aplicarSesion(Sesion sesion) throws Exception {
         SesionControlador s = (SesionControlador) sesion;
@@ -460,7 +490,7 @@ public class Controlador implements Sesionizable {
             actualizarObxectivosComando(c);
         });
     }
-    
+
     private void restaurar() {
         try {
             xestorComandos.ExecutarComando(new ComandoRestaurar(meuModelo));
@@ -468,7 +498,7 @@ public class Controlador implements Sesionizable {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
         }
     }
-    
+
     private void mudarIndiceTemporal(int i) {
         try {
             xestorComandos.ExecutarComando(new ComandoMudarIndiceTemporal(meuModelo, i));
@@ -484,7 +514,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void mudarTipo(int columnaTaboa, int tipo) {
         try {
             xestorComandos.ExecutarComando(new ComandoMudarTipo(meuModelo, columnaTaboa, tipo));
@@ -500,7 +530,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void renomearAtributo(int i, String novoNome) {
         try {
             xestorComandos.ExecutarComando(new ComandoRenomearAtributo(meuModelo, novoNome, i));
@@ -511,7 +541,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void engadirAtributo() {
         try {
             xestorComandos.ExecutarComando(new ComandoEngadirAtributo(meuModelo));
@@ -522,7 +552,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void eliminarAtributo(int i) {
         try {
             xestorComandos.ExecutarComando(new ComandoEliminarAtributo(meuModelo, i));
@@ -533,7 +563,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void engadirFiltro(int i, IFilter abstractFilter) {
         try {
             xestorComandos.ExecutarComando(new ComandoEngadirFiltro(meuModelo, i, abstractFilter));
@@ -544,7 +574,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void eliminarFiltro(int i) {
         try {
             xestorComandos.ExecutarComando(new ComandoEliminarFiltro(meuModelo, i));
@@ -555,7 +585,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void configurarFiltro(int i, HashMap<String, Parameter> configuracion) {
         try {
             xestorComandos.ExecutarComando(new ComandoConfigurarFiltro(meuModelo, i, configuracion));
@@ -566,7 +596,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void intercambiarFiltros(int indiceFiltroA, int indiceFiltroB) {
         try {
             xestorComandos.ExecutarComando(new ComandoIntercambiarFiltros(meuModelo, indiceFiltroA, indiceFiltroB));
@@ -577,7 +607,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void importarFiltros(String url) {
         try {
             xestorComandos.ExecutarComando(new ComandoImportarFiltros(meuModelo, url));
@@ -588,7 +618,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void exportarFiltros(String url, Integer[] indicesFiltros) {
         try {
             xestorComandos.ExecutarComando(new ComandoExportarFiltros(meuModelo, url, indicesFiltros));
@@ -599,7 +629,7 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     private void anadirFiltro(String string) {
         try {
             minaVista.anadirFiltro(string);
@@ -610,12 +640,12 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
     public class XestorComandos implements Serializable {
-        
+
         private final Stack<ComandoDesfacible> pilaDesfacer;
         private final Stack<ComandoDesfacible> pilaRefacer;
-        
+
         @Override
         public boolean equals(Object o) {
             if (o instanceof XestorComandos == false) {
@@ -624,7 +654,7 @@ public class Controlador implements Sesionizable {
             XestorComandos m = (XestorComandos) o;
             return m.getPilaDesfacer().equals(getPilaDesfacer()) && m.getPilaRefacer().equals(getPilaRefacer());
         }
-        
+
         @Override
         public int hashCode() {
             int hash = 3;
@@ -632,25 +662,25 @@ public class Controlador implements Sesionizable {
             hash = 47 * hash + Objects.hashCode(this.pilaRefacer);
             return hash;
         }
-        
+
         @Override
         public String toString() {
             return ReflectionToStringBuilder.toString(this);
         }
-        
+
         public XestorComandos() {
             pilaDesfacer = new Stack<>();
             pilaRefacer = new Stack<>();
         }
-        
+
         public Stack<ComandoDesfacible> getPilaDesfacer() {
             return pilaDesfacer;
         }
-        
+
         public Stack<ComandoDesfacible> getPilaRefacer() {
             return pilaRefacer;
         }
-        
+
         public void ExecutarComando(Comando cmd) throws Exception {
             ExcepcionLeve excepcionLeve = null;
             try {
@@ -669,29 +699,29 @@ public class Controlador implements Sesionizable {
             } catch (ExcepcionComandoInutil e) {
             }
         }
-        
+
         public void Reverter() throws Exception {
             for (int i = pilaDesfacer.size() - 1; i >= 0; i--) {
                 pilaDesfacer.get(i).Desfacer();
             }
         }
-        
+
         public boolean pilaDesfacerVacia() {
             return pilaDesfacer.empty();
         }
-        
+
         public void vaciarPilaRefacer() {
             pilaRefacer.removeAllElements();
         }
-        
+
         public void vaciarPilaDesfacer() {
             pilaDesfacer.removeAllElements();
         }
-        
+
         public boolean pilaRefacerVacia() {
             return pilaRefacer.empty();
         }
-        
+
         public void Desfacer() throws Exception {
             if (!pilaDesfacer.empty()) {
                 ComandoDesfacible cmd = (ComandoDesfacible) pilaDesfacer.peek();
@@ -699,7 +729,7 @@ public class Controlador implements Sesionizable {
                 pilaRefacer.push(pilaDesfacer.pop());
             }
         }
-        
+
         public void Refacer() throws Exception {
             if (!pilaRefacer.empty()) {
                 ComandoDesfacible cmd = (ComandoDesfacible) pilaRefacer.peek();
@@ -708,5 +738,5 @@ public class Controlador implements Sesionizable {
             }
         }
     }
-    
+
 }
