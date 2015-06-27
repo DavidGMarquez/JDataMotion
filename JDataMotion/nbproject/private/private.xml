@@ -5,12 +5,12 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="3">
                 <name/>
-                <line>519</line>
+                <line>545</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>800</line>
+                <line>826</line>
                 <key/>
             </bookmark>
         </file>
@@ -25,11 +25,9 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/charteditors/DefaultPlotEditorConfigurable.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Controlador.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Vista.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Modelo.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/JEvalTest.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Test.java</file>
         </group>
     </open-files>
 </project-private>

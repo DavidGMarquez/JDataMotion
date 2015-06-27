@@ -23,8 +23,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -65,6 +68,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -101,6 +106,8 @@ import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JViewport;
+import javax.swing.JWindow;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -110,6 +117,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableColumnModelEvent;
@@ -123,6 +132,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
 import jdatamotion.ManexadorScatterPlots.ChartPanelConfigurable;
 import jdatamotion.ManexadorScatterPlots.JFrameChartPanel;
 import jdatamotion.ManexadorScatterPlots.ScatterPlot;
@@ -139,6 +150,8 @@ import jdatamotioncommon.ComparableInstances;
 import jdatamotioncommon.filtros.IFilter;
 import jdatamotioncommon.filtros.IntegerParameter;
 import jdatamotioncommon.filtros.Parameter;
+import net.sourceforge.jeval.EvaluationException;
+import net.sourceforge.jeval.Evaluator;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartMouseEvent;
@@ -201,8 +214,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private static final String ficheiroConfiguracionPorDefecto = "/jdatamotion/default_config.properties";
     public static Properties propiedades;
     private boolean visualizacionDesactualizada;
-    private Instance puntoDesde;
-    private Instance puntoHasta;
+    private String distanceFormula;
+    private Instance puntoA;
+    private Instance puntoB;
+    private Character buscaPunto = null;
 
     public static ResourceBundle getBundle() {
         return bundle;
@@ -282,6 +297,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         this.task = new TarefaProgreso();
         this.visualizacionDesactualizada = false;
         this.jPanel8.setVisible(false);
+        this.distanceFormula = "";
     }
 
     @SuppressWarnings("null")
@@ -317,6 +333,18 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 }
             }
         }
+    }
+
+    private String interpretarFormula(Instance puntoA, Instance puntoB, String formula) throws EvaluationException {
+        Matcher m = Pattern.compile("\\$([12])\\.`(.*?)`").matcher(formula);
+        StringBuffer s = new StringBuffer();
+        while (m.find()) {
+            Attribute atributo = meuModelo.getInstancesComparable().attribute(m.group(2));
+            if (atributo != null) {
+                m.appendReplacement(s, String.valueOf((m.group(1).equals("1") ? puntoA : puntoB).value(atributo)));
+            }
+        }
+        return new Evaluator().evaluate(s.toString());
     }
 
     private final class JarResources {
@@ -1152,10 +1180,36 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                                             boolean represented = a.index() == indiceAtributoX || a.index() == indiceAtributoY;
                                             pa.add(new JLabel((represented ? "<html><strong>" : "") + a.name() + ": " + (a.type() == Attribute.NUMERIC ? Double.compare(instances.instance(p).value(a), Double.NaN) != 0 ? instances.instance(p).value(a) : "?" : instances.instance(p).stringValue(a)) + (represented ? "</strong></html>" : "")));
                                         }
+                                        if (buscaPunto != null) {
+                                            pa.addMouseListener(new MouseAdapter() {
+                                                @Override
+                                                public void mouseClicked(MouseEvent e) {
+                                                    switch (buscaPunto) {
+                                                        case 'A':
+                                                            puntoA = instances.instance(p);
+                                                            jLabel11.setText(instances.instance(p).toString());
+                                                            break;
+                                                        case 'B':
+                                                            puntoB = instances.instance(p);
+                                                            jLabel13.setText(instances.instance(p).toString());
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                    buscaPunto = null;
+                                                    jPopupMenu1.setVisible(false);
+                                                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                                                }
+                                            });
+                                            jPopupMenu1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                                        } else {
+                                            jPopupMenu1.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                                        }
                                         jPopupMenu1.add(pa);
                                     }
                                 }
                                 jPopupMenu1.show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
+
                                 mansp.procesarSeleccion(instances, indicesInstancesPuntos);
                             }
                         }
@@ -1167,7 +1221,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 }
             });
             chartpanel.addMouseWheelListener((MouseWheelEvent e) -> {
-                jPopupMenu1.setVisible(false);
+                if (buscaPunto == null) {
+                    jPopupMenu1.setVisible(false);
+                }
             });
             chartpanel.addMouseMotionListener(new MouseMotionListener() {
 
@@ -1485,6 +1541,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jMenuItem21.setEnabled(true);
             jMenuItem22.setEnabled(true);
             jMenuItem23.setEnabled(true);
+            jMenuItem25.setEnabled(true);
             jMenuItem26.setEnabled(true);
             jMenu4.setEnabled(true);
             jTabbedPane1.setEnabled(true);
@@ -1553,6 +1610,17 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel12 = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 25), new java.awt.Dimension(0, 25), new java.awt.Dimension(0, 25));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 18));
+        jDialog5 = new javax.swing.JDialog();
+        jLabel8 = new javax.swing.JLabel();
+        jButton15 = new javax.swing.JButton();
+        jButton16 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jTextField6 = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jButton17 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jButton18 = new javax.swing.JButton();
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel3 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
@@ -1620,6 +1688,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jMenuItem16 = new javax.swing.JMenuItem();
         jMenuItem17 = new javax.swing.JMenuItem();
         jMenuItem22 = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem25 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
         jMenuItem9 = new javax.swing.JMenuItem();
@@ -1883,7 +1953,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog4.setName("jDialog4"); // NOI18N
 
         buttonGroup2.add(jRadioButton2);
-        jRadioButton2.setSelected(true);
         jRadioButton2.setText(bundle.getString("Vista.jRadioButton2.text")); // NOI18N
         jRadioButton2.setName("jRadioButton2"); // NOI18N
 
@@ -2042,6 +2111,119 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                         .addGap(0, 0, 0)
                         .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+
+        jDialog5.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jDialog5.setTitle(bundle.getString("Vista.jMenuItem25.text")); // NOI18N
+        jDialog5.setAlwaysOnTop(true);
+        jDialog5.setName("jDialog5"); // NOI18N
+        jDialog5.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                jDialog5WindowClosed(evt);
+            }
+        });
+
+        jLabel8.setText(bundle.getString("Vista.jLabel8.text")); // NOI18N
+        jLabel8.setName("jLabel8"); // NOI18N
+
+        jButton15.setText(bundle.getString("Aceptar")); // NOI18N
+        jButton15.setName("jButton15"); // NOI18N
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+
+        jButton16.setText(bundle.getString("Cancelar")); // NOI18N
+        jButton16.setName("jButton16"); // NOI18N
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton16ActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText(bundle.getString("Vista.jLabel10.text")); // NOI18N
+        jLabel10.setName("jLabel10"); // NOI18N
+
+        jTextField6.setName("jTextField6"); // NOI18N
+
+        jLabel11.setName("jLabel11"); // NOI18N
+
+        jButton17.setText(bundle.getString("definir")); // NOI18N
+        jButton17.setName("jButton17"); // NOI18N
+        jButton17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton17ActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setText(bundle.getString("Vista.jLabel12.text")); // NOI18N
+        jLabel12.setName("jLabel12"); // NOI18N
+
+        jLabel13.setName("jLabel13"); // NOI18N
+
+        jButton18.setText(bundle.getString("definir")); // NOI18N
+        jButton18.setName("jButton18"); // NOI18N
+        jButton18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton18ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jDialog5Layout = new javax.swing.GroupLayout(jDialog5.getContentPane());
+        jDialog5.getContentPane().setLayout(jDialog5Layout);
+        jDialog5Layout.setHorizontalGroup(
+            jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDialog5Layout.createSequentialGroup()
+                        .addGap(0, 107, Short.MAX_VALUE)
+                        .addComponent(jButton15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton16))
+                    .addGroup(jDialog5Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton17))
+                    .addGroup(jDialog5Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField6))
+                    .addGroup(jDialog5Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton18)))
+                .addContainerGap())
+        );
+        jDialog5Layout.setVerticalGroup(
+            jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel8)
+                        .addComponent(jButton17)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel12)
+                        .addComponent(jButton18)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton15)
+                    .addComponent(jButton16))
                 .addContainerGap())
         );
 
@@ -2683,6 +2865,19 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         });
         jMenu8.add(jMenuItem22);
 
+        jSeparator8.setName("jSeparator8"); // NOI18N
+        jMenu8.add(jSeparator8);
+
+        jMenuItem25.setText(bundle.getString("Vista.jMenuItem25.text")); // NOI18N
+        jMenuItem25.setEnabled(false);
+        jMenuItem25.setName("jMenuItem25"); // NOI18N
+        jMenuItem25.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem25ActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItem25);
+
         jMenuBar1.add(jMenu8);
 
         jMenu5.setText(bundle.getString("Vista.jMenu5.text")); // NOI18N
@@ -3073,6 +3268,62 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private void jMenuItem26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem26ActionPerformed
         abrirExploradorFicheiros(EXPLORADOR_IMPORTAR_FILTRO_DESDE_JAR);
     }//GEN-LAST:event_jMenuItem26ActionPerformed
+
+    private void jMenuItem25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem25ActionPerformed
+        jTextField6.setText(distanceFormula);
+        jDialog5.pack();
+        jDialog5.setLocationRelativeTo(this);
+        jDialog5.setVisible(true);
+
+        ArrayList<String> words = new ArrayList<>();
+        Enumeration<Attribute> en = meuModelo.getInstancesComparable().enumerateAttributes();
+        while (en.hasMoreElements()) {
+            Attribute at = en.nextElement();
+            words.add("`" + at.name() + "`");
+        }
+
+        new AutoSuggestor(jTextField6, jDialog5, words, Color.WHITE.brighter(), Color.BLUE, Color.RED, 0.75f) {
+            @Override
+            boolean wordTyped(String typedWord) {
+                return getTextField().getText().substring(0, Math.min(getTextField().getCaretPosition() + 1, getTextField().getText().length())).matches("^.*\\$[12]\\.(`[a-zA-Z0-9]*)?$");
+            }
+        };
+
+    }//GEN-LAST:event_jMenuItem25ActionPerformed
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        jDialog5.dispose();
+    }//GEN-LAST:event_jButton16ActionPerformed
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        if (puntoA == null || puntoB == null || jTextField6.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(jDialog5, bundle.getString("distanciaCamposIncompletos"));
+        } else {
+            distanceFormula = jTextField6.getText();
+            try {
+                JOptionPane.showMessageDialog(this, "La distancia es " + interpretarFormula(puntoA, puntoB, jTextField6.getText()) + ".");
+            } catch (EvaluationException ex) {
+                JOptionPane.showMessageDialog(jDialog5, bundle.getString("formulaDistanciaErronea"));
+            }
+        }
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void jDialog5WindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialog5WindowClosed
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        buscaPunto = null;
+        puntoA = null;
+        puntoB = null;
+    }//GEN-LAST:event_jDialog5WindowClosed
+
+    private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+        setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+        buscaPunto = 'A';
+    }//GEN-LAST:event_jButton17ActionPerformed
+
+    private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
+        setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+        buscaPunto = 'B';
+    }//GEN-LAST:event_jButton18ActionPerformed
 
     public JSlider getjSlider1() {
         return jSlider1;
@@ -4310,6 +4561,354 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
+    class AutoSuggestor {
+
+        private final JTextComponent textComp;
+        private final Window container;
+        private final JPanel suggestionsPanel;
+        private final JWindow autoSuggestionPopUpWindow;
+        private String typedWord;
+        private final ArrayList<String> dictionary = new ArrayList<>();
+        private int currentIndexOfSpace, tW, tH;
+        private final DocumentListener documentListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                checkForAndShowSuggestions();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                checkForAndShowSuggestions();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                checkForAndShowSuggestions();
+            }
+        };
+        private final Color suggestionsTextColor;
+        private final Color suggestionFocusedColor;
+
+        public AutoSuggestor(JTextComponent textComp, Window mainWindow, ArrayList<String> words, Color popUpBackground, Color textColor, Color suggestionFocusedColor, float opacity) {
+            this.textComp = textComp;
+            this.suggestionsTextColor = textColor;
+            this.container = mainWindow;
+            this.suggestionFocusedColor = suggestionFocusedColor;
+            this.textComp.getDocument().addDocumentListener(documentListener);
+            setDictionary(words);
+            typedWord = "";
+            currentIndexOfSpace = 0;
+            tW = 0;
+            tH = 0;
+            autoSuggestionPopUpWindow = new JWindow(mainWindow);
+            autoSuggestionPopUpWindow.setOpacity(opacity);
+            suggestionsPanel = new JPanel();
+            suggestionsPanel.setLayout(new GridLayout(0, 1));
+            suggestionsPanel.setBackground(popUpBackground);
+            addKeyBindingToRequestFocusInPopUpWindow();
+        }
+
+        private void addKeyBindingToRequestFocusInPopUpWindow() {
+            textComp.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "Down released");
+            textComp.getActionMap().put("Down released", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {//focuses the first label on popwindow
+                    for (int i = 0; i < suggestionsPanel.getComponentCount(); i++) {
+                        if (suggestionsPanel.getComponent(i) instanceof SuggestionLabel) {
+                            ((SuggestionLabel) suggestionsPanel.getComponent(i)).setFocused(true);
+                            autoSuggestionPopUpWindow.toFront();
+                            autoSuggestionPopUpWindow.requestFocusInWindow();
+                            suggestionsPanel.requestFocusInWindow();
+                            suggestionsPanel.getComponent(i).requestFocusInWindow();
+                            break;
+                        }
+                    }
+                }
+            });
+            suggestionsPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), "Down released");
+            suggestionsPanel.getActionMap().put("Down released", new AbstractAction() {
+                int lastFocusableIndex = 0;
+
+                @Override
+                public void actionPerformed(ActionEvent ae) {//allows scrolling of labels in pop window (I know very hacky for now :))
+
+                    ArrayList<SuggestionLabel> sls = getAddedSuggestionLabels();
+                    int max = sls.size();
+
+                    if (max > 1) {//more than 1 suggestion
+                        for (int i = 0; i < max; i++) {
+                            SuggestionLabel sl = sls.get(i);
+                            if (sl.isFocused()) {
+                                if (lastFocusableIndex == max - 1) {
+                                    lastFocusableIndex = 0;
+                                    sl.setFocused(false);
+                                    autoSuggestionPopUpWindow.setVisible(false);
+                                    setFocusToTextField();
+                                    checkForAndShowSuggestions();//fire method as if document listener change occured and fired it
+
+                                } else {
+                                    sl.setFocused(false);
+                                    lastFocusableIndex = i;
+                                }
+                            } else if (lastFocusableIndex <= i) {
+                                if (i < max) {
+                                    sl.setFocused(true);
+                                    autoSuggestionPopUpWindow.toFront();
+                                    autoSuggestionPopUpWindow.requestFocusInWindow();
+                                    suggestionsPanel.requestFocusInWindow();
+                                    suggestionsPanel.getComponent(i).requestFocusInWindow();
+                                    lastFocusableIndex = i;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {//only a single suggestion was given
+                        autoSuggestionPopUpWindow.setVisible(false);
+                        setFocusToTextField();
+                        checkForAndShowSuggestions();//fire method as if document listener change occured and fired it
+                    }
+                }
+            });
+        }
+
+        private void setFocusToTextField() {
+            container.toFront();
+            container.requestFocusInWindow();
+            textComp.requestFocusInWindow();
+        }
+
+        public ArrayList<SuggestionLabel> getAddedSuggestionLabels() {
+            ArrayList<SuggestionLabel> sls = new ArrayList<>();
+            for (int i = 0; i < suggestionsPanel.getComponentCount(); i++) {
+                if (suggestionsPanel.getComponent(i) instanceof SuggestionLabel) {
+                    SuggestionLabel sl = (SuggestionLabel) suggestionsPanel.getComponent(i);
+                    sls.add(sl);
+                }
+            }
+            return sls;
+        }
+
+        private void checkForAndShowSuggestions() {
+            typedWord = getCurrentlyTypedWord();
+
+            suggestionsPanel.removeAll();//remove previos words/jlabels that were added
+
+            //used to calcualte size of JWindow as new Jlabels are added
+            tW = 0;
+            tH = 0;
+
+            boolean added = wordTyped(typedWord);
+
+            if (!added) {
+                if (autoSuggestionPopUpWindow.isVisible()) {
+                    autoSuggestionPopUpWindow.setVisible(false);
+                }
+            } else {
+                showPopUpWindow();
+                setFocusToTextField();
+            }
+        }
+
+        protected void addWordToSuggestions(String word) {
+            SuggestionLabel suggestionLabel = new SuggestionLabel(word, suggestionFocusedColor, suggestionsTextColor, this);
+
+            calculatePopUpWindowSize(suggestionLabel);
+
+            suggestionsPanel.add(suggestionLabel);
+        }
+
+        public String getCurrentlyTypedWord() {//get newest word after last white spaceif any or the first word if no white spaces
+            /*String text = textComp.getText();
+             String wordBeingTyped = "";
+             text = text.replaceAll("(\\r|\\n)", " ");
+             if (text.contains(" ")) {
+             int tmp = text.lastIndexOf(" ");
+             if (tmp >= currentIndexOfSpace) {
+             currentIndexOfSpace = tmp;
+             wordBeingTyped = text.substring(text.lastIndexOf(" "));
+             }
+             } else {
+             wordBeingTyped = text;
+             }
+             return wordBeingTyped.trim();*/
+            String word = "";
+            Pattern p = Pattern.compile("^.*\\$[12]\\.(`[a-zA-Z0-9]*)?$");
+            Matcher m = p.matcher(getTextField().getText().substring(0, Math.min(getTextField().getCaretPosition() + 1, getTextField().getText().length())));
+            if (m.matches()) {
+                word = m.group(1);
+            }
+            System.out.println(word);
+            return word;
+        }
+
+        private void calculatePopUpWindowSize(JLabel label) {
+            //so we can size the JWindow correctly
+            if (tW < label.getPreferredSize().width) {
+                tW = label.getPreferredSize().width;
+            }
+            tH += label.getPreferredSize().height;
+        }
+
+        private void showPopUpWindow() {
+            autoSuggestionPopUpWindow.getContentPane().add(suggestionsPanel);
+            autoSuggestionPopUpWindow.setMinimumSize(new Dimension(textComp.getWidth(), 30));
+            autoSuggestionPopUpWindow.setSize(tW, tH);
+            autoSuggestionPopUpWindow.setVisible(true);
+
+            Integer windowX = null;
+            Integer windowY = null;
+
+            if (textComp instanceof JTextField) {//calculate x and y for JWindow at bottom of JTextField
+                windowX = container.getX() + textComp.getX() + 5;
+                if (suggestionsPanel.getHeight() > autoSuggestionPopUpWindow.getMinimumSize().height) {
+                    windowY = container.getY() + textComp.getY() + textComp.getHeight() + autoSuggestionPopUpWindow.getMinimumSize().height;
+                } else {
+                    windowY = container.getY() + textComp.getY() + textComp.getHeight() + autoSuggestionPopUpWindow.getHeight();
+                }
+            } else {//calculate x and y for JWindow on any JTextComponent using the carets position
+                Rectangle rect = null;
+                try {
+                    rect = textComp.getUI().modelToView(textComp, textComp.getCaret().getDot());//get carets position
+                } catch (BadLocationException ex) {
+                }
+
+                if (rect != null) {
+                    windowX = (int) (rect.getX() + 15);
+                    windowY = (int) (rect.getY() + (rect.getHeight() * 3));
+                }
+            }
+
+            if (windowX != null && windowY != null) {
+                autoSuggestionPopUpWindow.setLocation(windowX, windowY);
+            }
+            autoSuggestionPopUpWindow.setMinimumSize(new Dimension(textComp.getWidth(), 30));
+            autoSuggestionPopUpWindow.revalidate();
+            autoSuggestionPopUpWindow.repaint();
+
+        }
+
+        private void setDictionary(ArrayList<String> words) {
+            dictionary.clear();
+            if (words == null) {
+                return;//so we can call constructor with null value for dictionary without exception thrown
+            }
+            words.stream().forEach((word) -> {
+                dictionary.add(word);
+            });
+        }
+
+        public JWindow getAutoSuggestionPopUpWindow() {
+            return autoSuggestionPopUpWindow;
+        }
+
+        public Window getContainer() {
+            return container;
+        }
+
+        public JTextComponent getTextField() {
+            return textComp;
+        }
+
+        public void addToDictionary(String word) {
+            dictionary.add(word);
+        }
+
+        boolean wordTyped(String typedWord) {
+
+            if (typedWord.isEmpty()) {
+                return false;
+            }
+            //System.out.println("Typed word: " + typedWord);
+
+            boolean suggestionAdded = false;
+
+            for (String word : dictionary) {//get words in the dictionary which we added
+                boolean fullymatches = true;
+                for (int i = 0; i < typedWord.length(); i++) {//each string in the word
+                    if (!typedWord.toLowerCase().startsWith(String.valueOf(word.toLowerCase().charAt(i)), i)) {//check for match
+                        fullymatches = false;
+                        break;
+                    }
+                }
+                if (fullymatches) {
+                    addWordToSuggestions(word);
+                    suggestionAdded = true;
+                }
+            }
+            return suggestionAdded;
+        }
+    }
+
+    class SuggestionLabel extends JLabel {
+
+        private boolean focused = false;
+        private final JWindow autoSuggestionsPopUpWindow;
+        private final JTextComponent textComponent;
+        private final AutoSuggestor autoSuggestor;
+        private final Color suggestionsTextColor, suggestionBorderColor;
+
+        public SuggestionLabel(String string, final Color borderColor, Color suggestionsTextColor, AutoSuggestor autoSuggestor) {
+            super(string);
+
+            this.suggestionsTextColor = suggestionsTextColor;
+            this.autoSuggestor = autoSuggestor;
+            this.textComponent = autoSuggestor.getTextField();
+            this.suggestionBorderColor = borderColor;
+            this.autoSuggestionsPopUpWindow = autoSuggestor.getAutoSuggestionPopUpWindow();
+
+            initComponent();
+        }
+
+        private void initComponent() {
+            setFocusable(true);
+            setForeground(suggestionsTextColor);
+
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent me) {
+                    super.mouseClicked(me);
+
+                    replaceWithSuggestedText();
+
+                    autoSuggestionsPopUpWindow.setVisible(false);
+                }
+            });
+
+            getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, true), "Enter released");
+            getActionMap().put("Enter released", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    replaceWithSuggestedText();
+                    autoSuggestionsPopUpWindow.setVisible(false);
+                }
+            });
+        }
+
+        public void setFocused(boolean focused) {
+            if (focused) {
+                setBorder(new LineBorder(suggestionBorderColor));
+            } else {
+                setBorder(null);
+            }
+            repaint();
+            this.focused = focused;
+        }
+
+        public boolean isFocused() {
+            return focused;
+        }
+
+        private void replaceWithSuggestedText() {
+            String suggestedWord = getText();
+            String text = textComponent.getText();
+            String typedWord = autoSuggestor.getCurrentlyTypedWord();
+            String t = text.substring(0, text.lastIndexOf(typedWord));
+            String tmp = t + text.substring(text.lastIndexOf(typedWord)).replace(typedWord, suggestedWord);
+            textComponent.setText(tmp + " ");
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JRadioButtonMenuItem botonData;
     javax.swing.JRadioButtonMenuItem botonIndiceTemporal;
@@ -4328,6 +4927,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JButton jButton12;
     javax.swing.JButton jButton13;
     javax.swing.JButton jButton14;
+    javax.swing.JButton jButton15;
+    javax.swing.JButton jButton16;
+    javax.swing.JButton jButton17;
+    javax.swing.JButton jButton18;
     javax.swing.JButton jButton2;
     javax.swing.JButton jButton3;
     javax.swing.JButton jButton4;
@@ -4341,15 +4944,21 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JDialog jDialog2;
     javax.swing.JDialog jDialog3;
     javax.swing.JDialog jDialog4;
+    javax.swing.JDialog jDialog5;
     javax.swing.JFileChooser jFileChooser1;
     javax.swing.JFrame jFrameModeloParcial;
     javax.swing.JLabel jLabel1;
+    javax.swing.JLabel jLabel10;
+    javax.swing.JLabel jLabel11;
+    javax.swing.JLabel jLabel12;
+    javax.swing.JLabel jLabel13;
     javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel3;
     javax.swing.JLabel jLabel4;
     javax.swing.JLabel jLabel5;
     javax.swing.JLabel jLabel6;
     javax.swing.JLabel jLabel7;
+    javax.swing.JLabel jLabel8;
     javax.swing.JLayeredPane jLayeredPane1;
     javax.swing.JList<IFilter> jList1;
     javax.swing.JMenu jMenu1;
@@ -4378,6 +4987,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JMenuItem jMenuItem22;
     javax.swing.JMenuItem jMenuItem23;
     javax.swing.JMenuItem jMenuItem24;
+    javax.swing.JMenuItem jMenuItem25;
     javax.swing.JMenuItem jMenuItem26;
     javax.swing.JMenuItem jMenuItem3;
     javax.swing.JMenuItem jMenuItem4;
@@ -4421,11 +5031,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JPopupMenu.Separator jSeparator5;
     javax.swing.JPopupMenu.Separator jSeparator6;
     javax.swing.JPopupMenu.Separator jSeparator7;
+    javax.swing.JPopupMenu.Separator jSeparator8;
     javax.swing.JSlider jSlider1;
     javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JTextField jTextField1;
     javax.swing.JTextField jTextField2;
     javax.swing.JTextField jTextField3;
+    javax.swing.JTextField jTextField6;
     javax.swing.JMenu menuTipo;
     javax.swing.JPanel panelDetallarAtributo;
     javax.swing.JPopupMenu popupConfigurarAtributo;

@@ -25,6 +25,8 @@ package jdatamotion;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.sourceforge.jeval.EvaluationException;
 import net.sourceforge.jeval.Evaluator;
 
@@ -35,12 +37,20 @@ import net.sourceforge.jeval.Evaluator;
 public class JEvalTest {
 
     public static void main(String[] args) {
-        try {
-            Evaluator mEvaluator = new Evaluator();
-            String r2 = mEvaluator.evaluate("sqrt(2)");
-            System.out.println(r2);
-        } catch (EvaluationException ex) {
-            Logger.getLogger(JEvalTest.class.getName()).log(Level.SEVERE, null, ex);
+        String regex = "^.*\\$[12]\\.(`[a-zA-Z0-9]*)?$";
+        String test = "$1.`asd";
+        System.out.println("MATCH? " + test.matches(regex));
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(test);
+        if (m.matches()) {
+            System.out.println("MATCHES: " + m.group(1));
         }
+        /*try {
+         Evaluator mEvaluator = new Evaluator();
+         String r2 = mEvaluator.evaluate("sqrt(2)");
+         System.out.println(r2);
+         } catch (EvaluationException ex) {
+         Logger.getLogger(JEvalTest.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
     }
 }
