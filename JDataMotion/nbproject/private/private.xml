@@ -5,12 +5,12 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="3">
                 <name/>
-                <line>545</line>
+                <line>543</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>826</line>
+                <line>824</line>
                 <key/>
             </bookmark>
         </file>
@@ -25,8 +25,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/idiomas/Bundle.properties</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Vista.java</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/JEvalTest.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/default_config.properties</file>
             <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Test.java</file>
         </group>
     </open-files>

@@ -26,8 +26,6 @@ import java.awt.Stroke;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -297,7 +295,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         this.task = new TarefaProgreso();
         this.visualizacionDesactualizada = false;
         this.jPanel8.setVisible(false);
-        this.distanceFormula = "";
+        this.distanceFormula = "sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2))";
     }
 
     @SuppressWarnings("null")
@@ -337,19 +335,17 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private String interpretarFormula(Instance puntoA, Instance puntoB, String formula) throws EvaluationException {
         Matcher m = Pattern.compile("\\$([12])\\.`(.*?)`").matcher(formula);
-        StringBuffer s = new StringBuffer();
+        String s = formula;
         while (m.find()) {
             Attribute atributo = meuModelo.getInstancesComparable().attribute(m.group(2));
             if (atributo != null) {
-                m.appendReplacement(s, String.valueOf((m.group(1).equals("1") ? puntoA : puntoB).value(atributo)));
+                s = s.replaceAll("\\$" + m.group(1) + "\\.`" + m.group(2) + "`", String.valueOf((m.group(1).equals("1") ? puntoA : puntoB).value(atributo)));
             }
         }
-        return new Evaluator().evaluate(s.toString());
+        return new Evaluator().evaluate(s);
     }
 
     private final class JarResources {
-
-        public boolean debugOn = false;
 
         private final Hashtable htSizes = new Hashtable();
         private final Hashtable htJarContents = new Hashtable();
@@ -372,9 +368,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     while (e.hasMoreElements()) {
                         ZipEntry ze = (ZipEntry) e.nextElement();
 
-                        if (debugOn) {
-                            System.out.println(dumpZipEntry(ze));
-                        }
                         htSizes.put(ze.getName(), (int) ze.getSize());
                     }
                 }
@@ -385,10 +378,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 while ((ze = zis.getNextEntry()) != null) {
                     if (ze.isDirectory()) {
                         continue;
-                    }
-                    if (debugOn) {
-                        System.out.println("ze.getName()=" + ze.getName()
-                                + "," + "getSize()=" + ze.getSize());
                     }
                     int size = (int) ze.getSize();
                     if (size == -1) {
@@ -405,14 +394,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         rb += chunk;
                     }
                     htJarContents.put(ze.getName(), b);
-                    if (debugOn) {
-                        System.out.println(ze.getName() + "  rb=" + rb
-                                + ",size=" + size
-                                + ",csize=" + ze.getCompressedSize());
-                    }
                 }
             } catch (NullPointerException e) {
-                System.out.println("done.");
             } catch (IOException e) {
             }
         }
@@ -1610,17 +1593,17 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jPanel12 = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 25), new java.awt.Dimension(0, 25), new java.awt.Dimension(0, 25));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 18));
-        jDialog5 = new javax.swing.JDialog();
+        jFrame1 = new javax.swing.JFrame();
         jLabel8 = new javax.swing.JLabel();
-        jButton15 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jButton17 = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        jButton16 = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jTextField6 = new javax.swing.JTextField();
+        jButton15 = new javax.swing.JButton();
         jButton18 = new javax.swing.JButton();
+        jButton17 = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel3 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
@@ -1794,6 +1777,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog2.setMinimumSize(new java.awt.Dimension(500, 500));
         jDialog2.setModal(true);
         jDialog2.setName("jDialog2"); // NOI18N
+        jDialog2.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jButton1.setText(bundle.getString("Aceptar")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
@@ -2114,26 +2098,20 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 .addContainerGap())
         );
 
-        jDialog5.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        jDialog5.setTitle(bundle.getString("Vista.jMenuItem25.text")); // NOI18N
-        jDialog5.setAlwaysOnTop(true);
-        jDialog5.setName("jDialog5"); // NOI18N
-        jDialog5.addWindowListener(new java.awt.event.WindowAdapter() {
+        jFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jFrame1.setTitle(bundle.getString("Vista.jMenuItem25.text")); // NOI18N
+        jFrame1.setName("jFrame1"); // NOI18N
+        jFrame1.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
-                jDialog5WindowClosed(evt);
+                jFrame1WindowClosed(evt);
             }
         });
 
         jLabel8.setText(bundle.getString("Vista.jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
-        jButton15.setText(bundle.getString("Aceptar")); // NOI18N
-        jButton15.setName("jButton15"); // NOI18N
-        jButton15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton15ActionPerformed(evt);
-            }
-        });
+        jLabel12.setText(bundle.getString("Vista.jLabel12.text")); // NOI18N
+        jLabel12.setName("jLabel12"); // NOI18N
 
         jButton16.setText(bundle.getString("Cancelar")); // NOI18N
         jButton16.setName("jButton16"); // NOI18N
@@ -2143,25 +2121,18 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         });
 
-        jLabel10.setText(bundle.getString("Vista.jLabel10.text")); // NOI18N
-        jLabel10.setName("jLabel10"); // NOI18N
-
-        jTextField6.setName("jTextField6"); // NOI18N
-
         jLabel11.setName("jLabel11"); // NOI18N
 
-        jButton17.setText(bundle.getString("definir")); // NOI18N
-        jButton17.setName("jButton17"); // NOI18N
-        jButton17.addActionListener(new java.awt.event.ActionListener() {
+        jTextField6.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        jTextField6.setName("jTextField6"); // NOI18N
+
+        jButton15.setText(bundle.getString("Aceptar")); // NOI18N
+        jButton15.setName("jButton15"); // NOI18N
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton17ActionPerformed(evt);
+                jButton15ActionPerformed(evt);
             }
         });
-
-        jLabel12.setText(bundle.getString("Vista.jLabel12.text")); // NOI18N
-        jLabel12.setName("jLabel12"); // NOI18N
-
-        jLabel13.setName("jLabel13"); // NOI18N
 
         jButton18.setText(bundle.getString("definir")); // NOI18N
         jButton18.setName("jButton18"); // NOI18N
@@ -2171,29 +2142,42 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         });
 
-        javax.swing.GroupLayout jDialog5Layout = new javax.swing.GroupLayout(jDialog5.getContentPane());
-        jDialog5.getContentPane().setLayout(jDialog5Layout);
-        jDialog5Layout.setHorizontalGroup(
-            jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog5Layout.createSequentialGroup()
+        jButton17.setText(bundle.getString("definir")); // NOI18N
+        jButton17.setName("jButton17"); // NOI18N
+        jButton17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton17ActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setName("jLabel13"); // NOI18N
+
+        jLabel10.setText(bundle.getString("Vista.jLabel10.text")); // NOI18N
+        jLabel10.setName("jLabel10"); // NOI18N
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDialog5Layout.createSequentialGroup()
-                        .addGap(0, 107, Short.MAX_VALUE)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addGap(0, 362, Short.MAX_VALUE)
                         .addComponent(jButton15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton16))
-                    .addGroup(jDialog5Layout.createSequentialGroup()
+                    .addGroup(jFrame1Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton17))
-                    .addGroup(jDialog5Layout.createSequentialGroup()
+                    .addGroup(jFrame1Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField6))
-                    .addGroup(jDialog5Layout.createSequentialGroup()
+                    .addGroup(jFrame1Layout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2201,27 +2185,27 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         .addComponent(jButton18)))
                 .addContainerGap())
         );
-        jDialog5Layout.setVerticalGroup(
-            jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog5Layout.createSequentialGroup()
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8)
                         .addComponent(jButton17)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel12)
                         .addComponent(jButton18)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDialog5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton15)
                     .addComponent(jButton16))
                 .addContainerGap())
@@ -3271,9 +3255,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private void jMenuItem25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem25ActionPerformed
         jTextField6.setText(distanceFormula);
-        jDialog5.pack();
-        jDialog5.setLocationRelativeTo(this);
-        jDialog5.setVisible(true);
+        jFrame1.pack();
+        jFrame1.setLocationRelativeTo(this);
+        jFrame1.setVisible(true);
 
         ArrayList<String> words = new ArrayList<>();
         Enumeration<Attribute> en = meuModelo.getInstancesComparable().enumerateAttributes();
@@ -3282,38 +3266,31 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             words.add("`" + at.name() + "`");
         }
 
-        new AutoSuggestor(jTextField6, jDialog5, words, Color.WHITE.brighter(), Color.BLUE, Color.RED, 0.75f) {
+        new AutoSuggestor(jTextField6, jFrame1, words, Color.WHITE.brighter(), Color.BLUE, Color.RED, 0.75f) {
             @Override
             boolean wordTyped(String typedWord) {
-                return getTextField().getText().substring(0, Math.min(getTextField().getCaretPosition() + 1, getTextField().getText().length())).matches("^.*\\$[12]\\.(`[a-zA-Z0-9]*)?$");
+                return super.wordTyped(getTextField().getText().substring(0, Math.min(getTextField().getCaretPosition() + 1, getTextField().getText().length())));
             }
         };
 
     }//GEN-LAST:event_jMenuItem25ActionPerformed
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
-        jDialog5.dispose();
+        jFrame1.dispose();
     }//GEN-LAST:event_jButton16ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         if (puntoA == null || puntoB == null || jTextField6.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(jDialog5, bundle.getString("distanciaCamposIncompletos"));
+            JOptionPane.showMessageDialog(jFrame1, bundle.getString("distanciaCamposIncompletos"));
         } else {
             distanceFormula = jTextField6.getText();
             try {
                 JOptionPane.showMessageDialog(this, "La distancia es " + interpretarFormula(puntoA, puntoB, jTextField6.getText()) + ".");
             } catch (EvaluationException ex) {
-                JOptionPane.showMessageDialog(jDialog5, bundle.getString("formulaDistanciaErronea"));
+                JOptionPane.showMessageDialog(jFrame1, bundle.getString("formulaDistanciaErronea"));
             }
         }
     }//GEN-LAST:event_jButton15ActionPerformed
-
-    private void jDialog5WindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialog5WindowClosed
-        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        buscaPunto = null;
-        puntoA = null;
-        puntoB = null;
-    }//GEN-LAST:event_jDialog5WindowClosed
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
         setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
@@ -3324,6 +3301,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
         buscaPunto = 'B';
     }//GEN-LAST:event_jButton18ActionPerformed
+
+    private void jFrame1WindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrame1WindowClosed
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        buscaPunto = null;
+        puntoA = null;
+        puntoB = null;
+    }//GEN-LAST:event_jFrame1WindowClosed
 
     public JSlider getjSlider1() {
         return jSlider1;
@@ -4718,26 +4702,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
 
         public String getCurrentlyTypedWord() {//get newest word after last white spaceif any or the first word if no white spaces
-            /*String text = textComp.getText();
-             String wordBeingTyped = "";
-             text = text.replaceAll("(\\r|\\n)", " ");
-             if (text.contains(" ")) {
-             int tmp = text.lastIndexOf(" ");
-             if (tmp >= currentIndexOfSpace) {
-             currentIndexOfSpace = tmp;
-             wordBeingTyped = text.substring(text.lastIndexOf(" "));
-             }
-             } else {
-             wordBeingTyped = text;
-             }
-             return wordBeingTyped.trim();*/
-            String word = "";
+            String word = null;
             Pattern p = Pattern.compile("^.*\\$[12]\\.(`[a-zA-Z0-9]*)?$");
-            Matcher m = p.matcher(getTextField().getText().substring(0, Math.min(getTextField().getCaretPosition() + 1, getTextField().getText().length())));
+            Matcher m = p.matcher(getTextField().getText().substring(0, Math.min(getTextField().getCaretPosition(), getTextField().getText().length())));
             if (m.matches()) {
-                word = m.group(1);
+                word = m.group(1) != null ? m.group(1) : "";
             }
-            System.out.println(word);
             return word;
         }
 
@@ -4818,14 +4788,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             if (typedWord.isEmpty()) {
                 return false;
             }
-            //System.out.println("Typed word: " + typedWord);
 
             boolean suggestionAdded = false;
-
             for (String word : dictionary) {//get words in the dictionary which we added
                 boolean fullymatches = true;
                 for (int i = 0; i < typedWord.length(); i++) {//each string in the word
-                    if (!typedWord.toLowerCase().startsWith(String.valueOf(word.toLowerCase().charAt(i)), i)) {//check for match
+                    if (!typedWord.toLowerCase().matches("^.*\\$[12]\\.(`[a-zA-Z0-9]*)?$") || !word.toLowerCase().matches("^" + typedWord.substring(typedWord.lastIndexOf(".") + 1) + ".*$")) {//check for match
                         fullymatches = false;
                         break;
                     }
@@ -4900,11 +4868,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         private void replaceWithSuggestedText() {
             String suggestedWord = getText();
-            String text = textComponent.getText();
+            String text = textComponent.getText().substring(0, Math.min(textComponent.getCaretPosition(), textComponent.getText().length()));
             String typedWord = autoSuggestor.getCurrentlyTypedWord();
             String t = text.substring(0, text.lastIndexOf(typedWord));
             String tmp = t + text.substring(text.lastIndexOf(typedWord)).replace(typedWord, suggestedWord);
-            textComponent.setText(tmp + " ");
+            textComponent.setText(tmp.concat(textComponent.getText().substring(textComponent.getCaretPosition())));
+            textComponent.setCaretPosition(tmp.length());
         }
     }
 
@@ -4944,8 +4913,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JDialog jDialog2;
     javax.swing.JDialog jDialog3;
     javax.swing.JDialog jDialog4;
-    javax.swing.JDialog jDialog5;
     javax.swing.JFileChooser jFileChooser1;
+    javax.swing.JFrame jFrame1;
     javax.swing.JFrame jFrameModeloParcial;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel10;
