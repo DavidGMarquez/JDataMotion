@@ -33,9 +33,13 @@ import java.awt.Stroke;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +49,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
+import static jdatamotion.Modelo.formatoTimeIdentificadorTemporal;
+import static jdatamotion.Modelo.normalizarTime;
 import static jdatamotion.Vista.bundle;
 import jdatamotioncommon.ComparableInstances;
 import org.jfree.chart.ChartFactory;
@@ -207,10 +213,14 @@ public final class ManexadorScatterPlots {
                 }
             }
         }
-        textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + numeroItems));
-        slider.setValue(slider.getValue() + numeroItems);
         nodoActual = nodo;
         t = nodo.getObject().getMs();
+        ajustarSlider();
+        textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + numeroItems));
+    }
+
+    private void ajustarSlider() {
+        slider.setValue(Math.round((float) 1.0 * slider.getMaximum() * (getTActual() - getTInicial()) / (getTFinal() - getTInicial())));
     }
 
     private synchronized int numeroItemsAVisualizar(int toMs) {
@@ -331,7 +341,35 @@ public final class ManexadorScatterPlots {
     synchronized private NodeList<InstancesSimultaneas> fabricarEixo(ComparableInstances instances, int indiceTemporal, int ordeVisualizacion) {
         NodeList<InstancesSimultaneas> eixo = new NodeList<>();
         msInstances = new int[instances.numInstances()];
-        Instances ins = instances;
+        ComparableInstances ins;
+        if (indiceTemporal > -1 && instances.attribute(indiceTemporal).isString()) {
+            ArrayList<Attribute> temp = new ArrayList<>();
+            Enumeration e = instances.enumerateInstances();
+            Attribute at;
+            for (int i = 0; i < instances.numAttributes(); i++) {
+                if (i != indiceTemporal) {
+                    at = instances.attribute(i);
+                } else {
+                    at = new Attribute(instances.attribute(i).name());
+                }
+                temp.add(at);
+            }
+            ComparableInstances tempInstances = new ComparableInstances(instances.relationName(), temp, 0);
+            SimpleDateFormat timeFormat = new SimpleDateFormat(formatoTimeIdentificadorTemporal, Locale.getDefault());
+            while (e.hasMoreElements()) {
+                Instance in = (Instance) ((Instance) e.nextElement()).copy();
+                try {
+                    in.setValue(indiceTemporal, timeFormat.parse(normalizarTime(in.stringValue(indiceTemporal))).getTime() - timeFormat.parse(normalizarTime("0")).getTime());
+                } catch (ParseException ex) {
+                    Logger.getLogger(ManexadorScatterPlots.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                tempInstances.add(in);
+            }
+            ins = tempInstances;
+
+        } else {
+            ins = new ComparableInstances(instances);
+        }
         Double ultimoIndice;
         switch (ordeVisualizacion) {
             case Vista.ORDE_MODELO:
@@ -365,6 +403,7 @@ public final class ManexadorScatterPlots {
                 }
                 break;
             case Vista.ORDE_INDICE_TEMPORAL_NUMERICO_PONDERADO:
+                int p = instances.attribute(indiceTemporal).isString() ? 1 : paso;
                 atributos = new ArrayList<>();
                 atributos.add(new Attribute("indiceInstancesOrixinal"));
                 atributos.add(new Attribute("indiceTemporal"));
@@ -372,7 +411,7 @@ public final class ManexadorScatterPlots {
                 double max = 0.0;
                 for (int i = 0; i < ins.numInstances(); i++) {
                     insts.add(new DenseInstance(1.0, new double[]{i, ins.get(i).value(indiceTemporal)}));
-                    int indiceTemporalMs = Math.round((float) ins.get(i).value(indiceTemporal) * paso);
+                    int indiceTemporalMs = Math.round((float) ins.get(i).value(indiceTemporal) * p);
                     if (indiceTemporalMs > max) {
                         max = indiceTemporalMs;
                     }
@@ -381,7 +420,7 @@ public final class ManexadorScatterPlots {
                 ultimoIndice = null;
                 for (int i = 0; i < insts.numInstances(); i++) {
                     Instance in = (Instance) insts.instance(i);
-                    msInstances[(int) in.value(0)] = (int) (!in.isMissing(1) ? Math.round((float) in.value(1) * paso) : max + paso);
+                    msInstances[(int) in.value(0)] = (int) (!in.isMissing(1) ? Math.round((float) in.value(1) * p) : max + p);
                     if (!Objects.equals(in.value(1), ultimoIndice)) {
                         int ms = msInstances[(int) in.value(0)];
                         eixo.addElement(new InstancesSimultaneas(ms != 0 ? ms : 0));
@@ -432,7 +471,7 @@ public final class ManexadorScatterPlots {
                             }
                             nodoActual = nodo;
                             t = Math.min(t + paso, getTFinal());
-                            slider.setValue(slider.getMaximum() * (getTActual() - getTInicial()) / (getTFinal() - getTInicial()));
+                            ajustarSlider();
                             textField.setText(String.valueOf(Integer.parseInt(textField.getText()) + items));
                         }
                     }

@@ -21,8 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package jdatamotion.excepcions;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import jdatamotion.Modelo;
+import jdatamotioncommon.ComparableInstances;
+import weka.core.Instance;
 
 /**
  *
@@ -30,19 +36,41 @@ package jdatamotion.excepcions;
  */
 public class ExcepcionFormatoIdentificacionTemporal extends Exception {
 
-    private int tipo;
+    private final int indiceTemporal;
+    private final ComparableInstances comparableInstances;
 
-    public ExcepcionFormatoIdentificacionTemporal(int tipo) {
+    public ExcepcionFormatoIdentificacionTemporal(int indiceTemporal, ComparableInstances comparableInstances) {
         super();
-        this.tipo = tipo;
+        this.indiceTemporal = indiceTemporal;
+        this.comparableInstances = comparableInstances;
     }
 
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
+    @Override
+    public String getMessage() {
+        if (comparableInstances.attribute(indiceTemporal).isNumeric()) {
+            int index = 0;
+            for (int i = 0; i < comparableInstances.numInstances(); i++) {
+                if (comparableInstances.get(i).value(indiceTemporal) < 0.0) {
+                    index = i;
+                    break;
+                }
+            }
+            return "O atributo " + comparableInstances.attribute(indiceTemporal).name() + " é negativo na entrada número " + (index + 1) + ".";
+        } else if (comparableInstances.attribute(indiceTemporal).isString()) {
+            int index = 0;
+            for (int i = 0; i < comparableInstances.numInstances(); i++) {
+                SimpleDateFormat timeFormat = new SimpleDateFormat(Modelo.formatoTimeIdentificadorTemporal, Locale.getDefault());
+                try {
+                    timeFormat.parse(Modelo.normalizarTime(comparableInstances.get(i).stringValue(indiceTemporal)));
+                } catch (ParseException pe) {
+                    index = i;
+                    break;
+                }
+            }
+            return "O atributo '" + comparableInstances.attribute(indiceTemporal).name() + "' non segue o formato '" + Modelo.formatoTimeIdentificadorTemporal + "' na entrada número " + (index + 1) + ".";
+        } else {
+            return "O atributo '" + comparableInstances.attribute(indiceTemporal).name() + "' non é nin de tipo numérico nin de tipo string.";
+        }
     }
 
-    public int getTipo() {
-        return tipo;
-    }
-    
 }

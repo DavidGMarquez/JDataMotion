@@ -379,6 +379,11 @@ public class Controlador implements Sesionizable {
     private void mudarDato(int numFila, int numColumna, Object dato) {
         try {
             xestorComandos.ExecutarComando(new ComandoMudarDato(meuModelo, numFila, numColumna, dato));
+        } catch (ExcepcionFormatoIdentificacionTemporal ex) {
+            minaVista.amosarDialogo("Erro: Ese valor pertence ao atributo de identificación nominal.\n" + (meuModelo.getInstancesComparable().attribute(numColumna).isNumeric() ? "Débense introducir valores numéricos non negativos." : meuModelo.getInstancesComparable().attribute(numColumna).isString() ? "Débense introducir valores de hora en formato '" + Modelo.formatoTimeIdentificadorTemporal + "'." : ""), Vista.ERROR_MESSAGE);
+            if (Controlador.debug) {
+                Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (NumberFormatException e) {
             minaVista.amosarDialogo("Erro: o novo dato non pertence ao rango do atributo (" + meuModelo.obterTipoAtributo(numColumna) + ").\n" + e.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -484,7 +489,10 @@ public class Controlador implements Sesionizable {
         ArrayList<ComandoDesfacible> comandos = new ArrayList<>(xestorComandos.getPilaDesfacer());
         for (Comando c : comandos) {
             actualizarObxectivosComando(c);
-            c.Executar();
+            try {
+                c.Executar();
+            } catch (ExcepcionComandoInutil e) {
+            }
         }
         xestorComandos.getPilaRefacer().stream().forEach((c) -> {
             actualizarObxectivosComando(c);
@@ -503,7 +511,7 @@ public class Controlador implements Sesionizable {
         try {
             xestorComandos.ExecutarComando(new ComandoMudarIndiceTemporal(meuModelo, i));
         } catch (ExcepcionFormatoIdentificacionTemporal ex) {
-            minaVista.amosarDialogo("Erro: Non se pode empregar o tipo " + Modelo.obterNomeTipo(ex.getTipo()) + " para representar o índice temporal.\nEmpregue o tipo numérico para representar a orde.\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
+            minaVista.amosarDialogo("Erro: O índice de identificación temporal debe ser de tipo numérico (en formato non negativo) ou string (formato de hora '" + Modelo.formatoTimeIdentificadorTemporal + "').\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
                 Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -725,7 +733,10 @@ public class Controlador implements Sesionizable {
         public void Desfacer() throws Exception {
             if (!pilaDesfacer.empty()) {
                 ComandoDesfacible cmd = (ComandoDesfacible) pilaDesfacer.peek();
-                cmd.Desfacer();
+                try {
+                    cmd.Desfacer();
+                } catch (ExcepcionComandoInutil e) {
+                }
                 pilaRefacer.push(pilaDesfacer.pop());
             }
         }
@@ -733,7 +744,10 @@ public class Controlador implements Sesionizable {
         public void Refacer() throws Exception {
             if (!pilaRefacer.empty()) {
                 ComandoDesfacible cmd = (ComandoDesfacible) pilaRefacer.peek();
-                cmd.Executar();
+                try {
+                    cmd.Executar();
+                } catch (ExcepcionComandoInutil e) {
+                }
                 pilaDesfacer.push(pilaRefacer.pop());
             }
         }

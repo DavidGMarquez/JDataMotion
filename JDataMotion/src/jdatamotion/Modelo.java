@@ -11,12 +11,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.MessageDigest;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Observable;
@@ -31,6 +32,7 @@ import jdatamotioncommon.ComparableInstances;
 import jdatamotioncommon.filtros.IFilter;
 import jdatamotioncommon.filtros.Parameter;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import weka.core.Attribute;
@@ -58,6 +60,7 @@ public class Modelo extends Observable implements Sesionizable {
     private byte[] hashCode;
     private int indiceAtributoNominal;
     private List<FilterHandler> filtros;
+    public static final String formatoTimeIdentificadorTemporal = "HH:mm:ss.SSS";
 
     public int getIndiceAtributoNominal() {
         return indiceAtributoNominal;
@@ -116,11 +119,37 @@ public class Modelo extends Observable implements Sesionizable {
         return instancesComparable.stream().noneMatch((instancesComparable1) -> (instancesComparable1.value(indiceAtributo) < 0.0));
     }
 
+    public static final String normalizarTime(String time) {
+        String timeNormalizado = time.replace('?', '0');
+        int n = 2 - StringUtils.countMatches(timeNormalizado, ":");
+        for (int i = 0; i < n; i++) {
+            timeNormalizado = "0:" + timeNormalizado;
+        }
+        if (!StringUtils.contains(timeNormalizado, ".")) {
+            timeNormalizado = timeNormalizado + ".0";
+        }
+        return timeNormalizado;
+    }
+
+    private boolean contenDatasValidas(int indiceAtributo) {
+        if (!instancesComparable.attribute(indiceAtributo).isString()) {
+            return false;
+        }
+        SimpleDateFormat timeFormat = new SimpleDateFormat(formatoTimeIdentificadorTemporal, Locale.getDefault());
+        for (Instance ic : instancesComparable) {
+            try {
+                timeFormat.parse(normalizarTime(ic.stringValue(indiceAtributo)));
+            } catch (ParseException pe) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void setIndiceTemporal(int indiceTemporal) throws ExcepcionFormatoIdentificacionTemporal {
         if (indiceTemporal > -1) {
-            int tipo = instancesComparable.attribute(indiceTemporal).type();
-            if (!contenSoValoresPositivos(indiceTemporal)) {
-                throw new ExcepcionFormatoIdentificacionTemporal(tipo);
+            if (!contenSoValoresPositivos(indiceTemporal) && !contenDatasValidas(indiceTemporal)) {
+                throw new ExcepcionFormatoIdentificacionTemporal(indiceTemporal, instancesComparable);
             }
         }
         this.indiceTemporal = indiceTemporal;
@@ -651,15 +680,24 @@ public class Modelo extends Observable implements Sesionizable {
         } else {
             switch (instancesComparable.attribute(columna).type()) {
                 case Attribute.DATE:
-
                     instancesComparable.get(fila).setValue(columna, instancesComparable.attribute(columna).parseDate(stringValor));
                     break;
                 case Attribute.NOMINAL:
                 case Attribute.RELATIONAL:
                 case Attribute.STRING:
+                    if (indiceTemporal == columna) {
+                        try {
+                            new SimpleDateFormat(formatoTimeIdentificadorTemporal, Locale.getDefault()).parse(normalizarTime(stringValor));
+                        } catch (ParseException pe) {
+                            throw new ExcepcionFormatoIdentificacionTemporal(columna, instancesComparable);
+                        }
+                    }
                     instancesComparable.get(fila).setValue(columna, stringValor);
                     break;
                 case Attribute.NUMERIC:
+                    if (indiceTemporal == columna && Double.parseDouble(stringValor) < 0.0) {
+                        throw new ExcepcionFormatoIdentificacionTemporal(columna, instancesComparable);
+                    }
                     instancesComparable.get(fila).setValue(columna, Double.parseDouble(stringValor));
                     break;
             }

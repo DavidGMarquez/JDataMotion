@@ -3172,7 +3172,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 buttonGroup2.setSelected(jRadioButton4.getModel(), true);
                 break;
         }
-        boolean ordeNumericoDisponible = meuModelo.getIndiceTemporal() >= 0 && meuModelo.getInstancesComparable().attribute(meuModelo.getIndiceTemporal()).isNumeric();
+        boolean ordeNumericoDisponible = meuModelo.getIndiceTemporal() > -1;
         jRadioButton3.setEnabled(ordeNumericoDisponible);
         jRadioButton4.setEnabled(ordeNumericoDisponible);
         jTextField2.setText(String.valueOf(paso));
