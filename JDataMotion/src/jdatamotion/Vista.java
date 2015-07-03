@@ -85,6 +85,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -207,6 +208,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private JTableModeloMenu jTableModelo;
     private int ultimoEstadoReproductor;
     private int lonxitudeEstela;
+    private Color corEstela;
     public static ResourceBundle bundle;
     private static final String ficheiroConfiguracion = "configuracion.properties";
     private static final String ficheiroConfiguracionPorDefecto = "/jdatamotion/default_config.properties";
@@ -221,11 +223,16 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         return bundle;
     }
 
+    public Color getCorEstela() {
+        return corEstela;
+    }
+
     public final void reset() {
         this.pulsarSlider = false;
         this.ordeVisualizacion = ORDE_MODELO;
         this.paso = 100;
         this.lonxitudeEstela = 5;
+        this.corEstela = Color.WHITE;
         this.jTableModelo = null;
         this.scatterPlotsVisibles = new boolean[0][0];
     }
@@ -395,8 +402,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     }
                     htJarContents.put(ze.getName(), b);
                 }
-            } catch (NullPointerException e) {
-            } catch (IOException e) {
+            } catch (NullPointerException | IOException e) {
             }
         }
 
@@ -1289,13 +1295,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             ArrayList<String> classes = new ArrayList<>();
             String pkgname = pkg.getName();
             String relPath = pkgname.replace('.', '/');
-            URL resource = ClassLoader.getSystemClassLoader().getResource(relPath);
-            if (resource == null) {
-                throw new RuntimeException("Unexpected problem: No resource for " + relPath);
-            }
-            log("Package: '" + pkgname + "' becomes Resource: '" + resource.toString() + "'");
-            resource.getPath();
-            processDirectory(new File(resource.getPath()), pkgname, classes);
+            processDirectory(new File("build\\classes\\" + relPath), pkgname, classes);
             return classes;
         }
     }
@@ -1585,6 +1585,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jButton13 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jFrameModeloParcial = new javax.swing.JFrame();
         panelDetallarAtributo = new JPanelActualizable();
@@ -1982,6 +1984,19 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         jTextField3.setName("jTextField3"); // NOI18N
 
+        jLabel14.setText(bundle.getString("Vista.jLabel14.text")); // NOI18N
+        jLabel14.setName("jLabel14"); // NOI18N
+
+        jLabel15.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel15.setName("jLabel15"); // NOI18N
+        jLabel15.setOpaque(true);
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel15MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jDialog4Layout = new javax.swing.GroupLayout(jDialog4.getContentPane());
         jDialog4.getContentPane().setLayout(jDialog4Layout);
         jDialog4Layout.setHorizontalGroup(
@@ -2012,7 +2027,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jDialog4Layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jDialog4Layout.setVerticalGroup(
             jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2030,10 +2050,14 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     .addComponent(jLabel5)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDialog4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton7)
                     .addComponent(jButton13))
@@ -3177,6 +3201,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jRadioButton4.setEnabled(ordeNumericoDisponible);
         jTextField2.setText(String.valueOf(paso));
         jTextField3.setText(String.valueOf(lonxitudeEstela));
+        jLabel15.setBackground(corEstela);
         jDialog4.setLocation((getWidth() - jDialog4.getPreferredSize().width) / 2, (getHeight() - jDialog4.getPreferredSize().height) / 2);
         jDialog4.pack();
         jDialog4.setVisible(true);
@@ -3196,6 +3221,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             lonxitudeEstela = Integer.parseInt(jTextField3.getText());
         } catch (NumberFormatException e) {
         }
+        corEstela = jLabel15.getBackground();
         pintarMenuVisualizacion();
         jDialog4.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
@@ -3308,6 +3334,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         puntoA = null;
         puntoB = null;
     }//GEN-LAST:event_jFrame1WindowClosed
+
+    private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
+        Color c = JColorChooser.showDialog(jDialog4, bundle.getString("Vista.jLabel14.text"), jLabel15.getBackground());
+        if (c != null) {
+            jLabel15.setBackground(c);
+        }
+    }//GEN-LAST:event_jLabel15MouseClicked
 
     public JSlider getjSlider1() {
         return jSlider1;
@@ -4921,6 +4954,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     javax.swing.JLabel jLabel11;
     javax.swing.JLabel jLabel12;
     javax.swing.JLabel jLabel13;
+    javax.swing.JLabel jLabel14;
+    javax.swing.JLabel jLabel15;
     javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel3;
     javax.swing.JLabel jLabel4;

@@ -83,7 +83,7 @@ public class Controlador implements Sesionizable {
     public static final int EXPORTAR_FILTROS = 23;
     public static final int IMPORTAR_FILTRO_DESDE_JAR = 24;
 
-    public static final boolean debug = true;
+    public static final boolean debug = false;
     private transient Modelo meuModelo;
     private transient Vista minaVista;
     private XestorComandos xestorComandos;

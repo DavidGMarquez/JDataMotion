@@ -734,6 +734,7 @@ public final class ManexadorScatterPlots {
         }
 
         public synchronized Nodo<InstancesSimultaneas> visualizarItems(ScatterPlot sp, int numeroItems) {
+            setNotify(false);
             sp.eliminarAnotacions(XYAnnotation.class);
             int e = numeroItems;
             Nodo<InstancesSimultaneas> nodo = nodoActual;
@@ -746,7 +747,7 @@ public final class ManexadorScatterPlots {
                 }
             }
             sp.pintarEstela(nodo, lonxitudeEstela);
-            fireDatasetChanged();
+            setNotify(true);
             return nodo;
         }
 
@@ -959,7 +960,7 @@ public final class ManexadorScatterPlots {
         }
 
         private synchronized void pintarEstela(Nodo<InstancesSimultaneas> nodo, int lonxitudeEstela) {
-            Color corEstela = Color.white, corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint(), corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
+            Color corEstela = vista.getCorEstela(), corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint(), corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
             Nodo<InstancesSimultaneas> nAnterior, nActual = nodo;
             for (int i = 0; i < lonxitudeEstela; i++) {
                 if (nActual != null) {

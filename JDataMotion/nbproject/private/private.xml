@@ -5,12 +5,12 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="3">
                 <name/>
-                <line>543</line>
+                <line>549</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>824</line>
+                <line>830</line>
                 <key/>
             </bookmark>
         </file>
@@ -24,17 +24,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Controlador.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/idiomas/Bundle.properties</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Vista.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/JDataMotion.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/comandos/ComandoMudarIndiceTemporal.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/default_config.properties</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/excepcions/ExcepcionFormatoIdentificacionTemporal.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Modelo.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/comandos/ComandoMudarDato.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
