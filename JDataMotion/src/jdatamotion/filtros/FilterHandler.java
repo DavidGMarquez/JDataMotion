@@ -81,7 +81,7 @@ public class FilterHandler implements Serializable {
         return null;
     }
 
-    public ComparableInstances filter(ComparableInstances instancesComparable) {
+    public ComparableInstances filtrar(ComparableInstances instancesComparable) {
         return filtro.filter(new ComparableInstances(instancesComparable), indiceAtributoFiltrado, parameters);
     }
 

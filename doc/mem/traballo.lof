@@ -8,10 +8,20 @@
 \contentsline {figure}{\numberline {3.4}{\ignorespaces Software Weka}}{37}{figure.3.4}
 \contentsline {figure}{\numberline {3.5}{\ignorespaces Diagramas de dispersi\IeC {\'o}n en Weka}}{37}{figure.3.5}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Modelo-Vista-Controlador para JDataMotion}}{40}{figure.4.1}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Modelo-Vista-Controlador con Observer}}{42}{figure.4.2}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Dese\IeC {\~n}o global dos 3 m\IeC {\'o}dulos que se incluir\IeC {\'a}n dentro do proxecto}}{40}{figure.4.1}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Modelo-Vista-Controlador para JDataMotion}}{41}{figure.4.2}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Modelo-Vista-Controlador con Observer}}{43}{figure.4.3}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Diagrama de clases do modelo}}{45}{figure.4.4}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Diagrama de clases do controlador}}{47}{figure.4.5}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Inputs do m\IeC {\'e}todo manexarEvento}}{48}{figure.4.6}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Diagrama de secuencia evento-notificaci\IeC {\'o}n}}{49}{figure.4.7}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Xerarqu\IeC {\'\i }a de comandos}}{50}{figure.4.8}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Diagrama de secuencia dos eventos desfacer e refacer}}{51}{figure.4.9}
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Mockup da secci\IeC {\'o}n Modelo}}{53}{figure.4.10}
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Mockup da secci\IeC {\'o}n Filtros}}{53}{figure.4.11}
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Mockup da secci\IeC {\'o}n Visualizacion}}{54}{figure.4.12}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Esta \IeC {\'e} a figura de tal e cal.}}{45}{figure.5.1}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Esta \IeC {\'e} a figura de tal e cal.}}{63}{figure.5.1}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

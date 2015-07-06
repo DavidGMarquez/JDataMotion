@@ -34,13 +34,13 @@ public class ComandoImportarFiltros extends ComandoDesfacible {
     private final String url;
     private Integer numeroFiltrosEngadidos;
     
-    public ComandoImportarFiltros(Object obxectivo, String url) {
+    public ComandoImportarFiltros(Modelo obxectivo, String url) {
         super(obxectivo, url);
         this.url = url;
     }
     
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         int nAntes = ((Modelo) getObxectivo()).getFiltros().size();
         ((Modelo) getObxectivo()).importarFiltros(url);
         int nDespois = ((Modelo) getObxectivo()).getFiltros().size();
@@ -48,7 +48,7 @@ public class ComandoImportarFiltros extends ComandoDesfacible {
     }
     
     @Override
-    public void Desfacer() throws Exception {
+    public void desfacer() throws Exception {
         for (int i = 0; i < numeroFiltrosEngadidos; i++) {
             ((Modelo) getObxectivo()).eliminarFiltro(((Modelo) getObxectivo()).getFiltros().size() - 1);
         }

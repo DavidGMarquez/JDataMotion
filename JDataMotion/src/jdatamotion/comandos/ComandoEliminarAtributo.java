@@ -46,15 +46,15 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
     }
 
     @Override
-    public void Desfacer() throws Exception {
+    public void desfacer() throws Exception {
         ((Modelo) getObxectivo()).setIndiceTemporal(indiceAtributoTemporalAntigo);
         ((Modelo) getObxectivo()).setFiltros(filtrosAntigos);
-        ((Modelo) getObxectivo()).setInstancesComparable(modeloAntigo);
+        ((Modelo) getObxectivo()).setComparableInstances(modeloAntigo);
     }
 
     @Override
-    public void Executar() throws Exception {
-        this.modeloAntigo = new ComparableInstances(((Modelo) getObxectivo()).getInstancesComparable());
+    public void executar() throws Exception {
+        this.modeloAntigo = new ComparableInstances(((Modelo) getObxectivo()).getComparableInstances());
         this.indiceAtributoTemporalAntigo = ((Modelo) getObxectivo()).getIndiceTemporal();
         this.filtrosAntigos = ((Modelo) getObxectivo()).getFiltros();
         if (indiceAtributoNoModelo == ((Modelo) getObxectivo()).getIndiceTemporal()) {

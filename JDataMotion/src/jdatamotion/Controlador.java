@@ -81,7 +81,7 @@ public class Controlador implements Sesionizable {
     public static final int INTERCAMBIAR_FILTROS = 21;
     public static final int IMPORTAR_FILTROS = 22;
     public static final int EXPORTAR_FILTROS = 23;
-    public static final int IMPORTAR_FILTRO_DESDE_JAR = 24;
+    public static final int IMPORTAR_FILTRO_DENDE_JAR = 24;
 
     public static final boolean debug = false;
     private transient Modelo meuModelo;
@@ -98,15 +98,15 @@ public class Controlador implements Sesionizable {
     }
 
     public void reset() {
-        xestorComandos.vaciarPilaDesfacer();
-        xestorComandos.vaciarPilaRefacer();
+        xestorComandos.baleirarPilaDesfacer();
+        xestorComandos.baleirarPilaRefacer();
     }
 
     private void importarFicheiro(String url) {
         try {
             reset();
             minaVista.reset();
-            xestorComandos.ExecutarComando(new ComandoImportarFicheiro(meuModelo, url));
+            xestorComandos.executarComando(new ComandoImportarFicheiro(meuModelo, url));
         } catch (Exception ex) {
             if (Controlador.debug) {
                 Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -136,11 +136,11 @@ public class Controlador implements Sesionizable {
      * <tr><td>Mudar dato</td><td>Controlador.MUDAR_DATO</td><td>{int numFila,
      * int numColumna, Object novoDato}</td></tr>
      * <tr><td>Engadir
-     * datos</td><td>Controlador,ENGADIR_DATOS</td><td>-</td></tr>
+     * datos</td><td>Controlador.ENGADIR_DATOS</td><td>-</td></tr>
      * <tr><td>Eliminar
      * datos</td><td>Controlador.ELIMINAR_DATOS</td><td>Integer[]
      * numsFilas</td></tr>
-     * <tr><td>Desfacer</td><td>Controlador.DESFACER</td><td>-</td></tr>
+     * <tr><td>desfacer</td><td>Controlador.DESFACER</td><td>-</td></tr>
      * <tr><td>Refacer</td><td>Controlador.REFACER</td><td>-</td></tr>
      * <tr><td>Restaurar</td><td>Controlador.RESTAURAR</td><td>-</td></tr>
      * <tr><td>Mudar índice
@@ -171,6 +171,9 @@ public class Controlador implements Sesionizable {
      * </td><td>String url</td></tr>
      * <tr><td>Exportar filtros</td><td>Controlador.EXPORTAR_FILTROS
      * </td><td>{String url, Integer[] indicesFiltros}</td></tr>
+     * <tr><td>Importar filtros dende
+     * JAR</td><td>Controlador.IMPORTAR_FILTRO_DENDE_JAR
+     * </td><td>String url</td></tr>
      * </table>
      *
      * @param opcion o tipo de evento
@@ -244,16 +247,16 @@ public class Controlador implements Sesionizable {
             case EXPORTAR_FILTROS:
                 exportarFiltros((String) ((Object[]) argumento)[0], (Integer[]) ((Object[]) argumento)[1]);
                 break;
-            case IMPORTAR_FILTRO_DESDE_JAR:
-                anadirFiltro((String) argumento);
+            case IMPORTAR_FILTRO_DENDE_JAR:
+                importarFiltroDendeJAR((String) argumento);
                 break;
         }
-        meuModelo.update();
+        meuModelo.notifyChanged();
     }
 
     private void mudarNomeRelacion(String nomeRelacion) {
         try {
-            xestorComandos.ExecutarComando(new ComandoMudarNomeRelacion(meuModelo, nomeRelacion));
+            xestorComandos.executarComando(new ComandoMudarNomeRelacion(meuModelo, nomeRelacion));
         } catch (Exception ex) {
             if (Controlador.debug) {
                 Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -263,7 +266,7 @@ public class Controlador implements Sesionizable {
 
     private void desfacer() {
         try {
-            xestorComandos.Desfacer();
+            xestorComandos.desfacer();
         } catch (Exception ex) {
             if (Controlador.debug) {
                 Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -273,7 +276,7 @@ public class Controlador implements Sesionizable {
 
     private void refacer() {
         try {
-            xestorComandos.Refacer();
+            xestorComandos.refacer();
         } catch (Exception ex) {
             if (Controlador.debug) {
                 Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -302,7 +305,7 @@ public class Controlador implements Sesionizable {
         }
     }
 
-    public static void addURLToSystemClassLoader(URL url) throws IntrospectionException {
+    private static void addURLToSystemClassLoader(URL url) throws IntrospectionException {
         URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Class<URLClassLoader> classLoaderClass = URLClassLoader.class;
 
@@ -368,7 +371,7 @@ public class Controlador implements Sesionizable {
 
     private void exportarFicheiro(String path, String extension) {
         try {
-            xestorComandos.ExecutarComando(new ComandoExportarFicheiro(meuModelo, path, extension));
+            xestorComandos.executarComando(new ComandoExportarFicheiro(meuModelo, path, extension));
         } catch (Exception ex) {
             if (Controlador.debug) {
                 Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -378,9 +381,9 @@ public class Controlador implements Sesionizable {
 
     private void mudarDato(int numFila, int numColumna, Object dato) {
         try {
-            xestorComandos.ExecutarComando(new ComandoMudarDato(meuModelo, numFila, numColumna, dato));
+            xestorComandos.executarComando(new ComandoMudarDato(meuModelo, numFila, numColumna, dato));
         } catch (ExcepcionFormatoIdentificacionTemporal ex) {
-            minaVista.amosarDialogo("Erro: Ese valor pertence ao atributo de identificación nominal.\n" + (meuModelo.getInstancesComparable().attribute(numColumna).isNumeric() ? "Débense introducir valores numéricos non negativos." : meuModelo.getInstancesComparable().attribute(numColumna).isString() ? "Débense introducir valores de hora en formato '" + Modelo.formatoTimeIdentificadorTemporal + "'." : ""), Vista.ERROR_MESSAGE);
+            minaVista.amosarDialogo("Erro: Ese valor pertence ao atributo de identificación nominal.\n" + (meuModelo.getComparableInstances().attribute(numColumna).isNumeric() ? "Débense introducir valores numéricos non negativos." : meuModelo.getComparableInstances().attribute(numColumna).isString() ? "Débense introducir valores de hora en formato '" + Modelo.formatoTimeIdentificadorTemporal + "'." : ""), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
                 Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -404,7 +407,7 @@ public class Controlador implements Sesionizable {
 
     private void engadirDatos() {
         try {
-            xestorComandos.ExecutarComando(new ComandoEngadirDatos(meuModelo));
+            xestorComandos.executarComando(new ComandoEngadirDatos(meuModelo));
         } catch (NumberFormatException e) {
             minaVista.amosarDialogo("Erro: algún dato novo non pertence ao rango do seu atributo.\n" + e.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -429,7 +432,7 @@ public class Controlador implements Sesionizable {
 
     private void eliminarDatos(Integer[] filas) {
         try {
-            xestorComandos.ExecutarComando(new ComandoEliminarDatos(meuModelo, filas));
+            xestorComandos.executarComando(new ComandoEliminarDatos(meuModelo, filas));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -445,18 +448,8 @@ public class Controlador implements Sesionizable {
         return s;
     }
 
-    public void setXestorComandos(XestorComandos xestorComandos) {
-        this.xestorComandos = xestorComandos;
-    }
-
     private void actualizarObxectivosComando(Comando c) {
-        if (c.getObxectivo().getClass().equals(Modelo.class)) {
-            c.setObxectivo(meuModelo);
-        } else if (c.getObxectivo().getClass().equals(Controlador.class)) {
-            c.setObxectivo(this);
-        } else if (c.getObxectivo().getClass().equals(Vista.class)) {
-            c.setObxectivo(minaVista);
-        }
+        c.setObxectivo(meuModelo);
     }
 
     @Override
@@ -485,12 +478,12 @@ public class Controlador implements Sesionizable {
     @Override
     public void aplicarSesion(Sesion sesion) throws Exception {
         SesionControlador s = (SesionControlador) sesion;
-        setXestorComandos(s.getXestorComandos());
+        xestorComandos = s.getXestorComandos();
         ArrayList<ComandoDesfacible> comandos = new ArrayList<>(xestorComandos.getPilaDesfacer());
         for (Comando c : comandos) {
             actualizarObxectivosComando(c);
             try {
-                c.Executar();
+                c.executar();
             } catch (ExcepcionComandoInutil e) {
             }
         }
@@ -501,7 +494,7 @@ public class Controlador implements Sesionizable {
 
     private void restaurar() {
         try {
-            xestorComandos.ExecutarComando(new ComandoRestaurar(meuModelo));
+            xestorComandos.executarComando(new ComandoRestaurar(meuModelo));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
         }
@@ -509,7 +502,7 @@ public class Controlador implements Sesionizable {
 
     private void mudarIndiceTemporal(int i) {
         try {
-            xestorComandos.ExecutarComando(new ComandoMudarIndiceTemporal(meuModelo, i));
+            xestorComandos.executarComando(new ComandoMudarIndiceTemporal(meuModelo, i));
         } catch (ExcepcionFormatoIdentificacionTemporal ex) {
             minaVista.amosarDialogo("Erro: O índice de identificación temporal debe ser de tipo numérico (en formato non negativo) ou string (formato de hora '" + Modelo.formatoTimeIdentificadorTemporal + "').\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -525,7 +518,7 @@ public class Controlador implements Sesionizable {
 
     private void mudarTipo(int columnaTaboa, int tipo) {
         try {
-            xestorComandos.ExecutarComando(new ComandoMudarTipo(meuModelo, columnaTaboa, tipo));
+            xestorComandos.executarComando(new ComandoMudarTipo(meuModelo, columnaTaboa, tipo));
         } catch (ExcepcionCambiarTipoAtributo ex) {
             minaVista.amosarDialogo("Erro: Non se pode converter algún dato de tipo " + Modelo.obterNomeTipo(ex.getTipoAntigo()) + " a " + Modelo.obterNomeTipo(ex.getTipoNovo()) + ". Utilizaranse campos nulos para a súa conversión.\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -541,7 +534,7 @@ public class Controlador implements Sesionizable {
 
     private void renomearAtributo(int i, String novoNome) {
         try {
-            xestorComandos.ExecutarComando(new ComandoRenomearAtributo(meuModelo, novoNome, i));
+            xestorComandos.executarComando(new ComandoRenomearAtributo(meuModelo, novoNome, i));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -552,7 +545,7 @@ public class Controlador implements Sesionizable {
 
     private void engadirAtributo() {
         try {
-            xestorComandos.ExecutarComando(new ComandoEngadirAtributo(meuModelo));
+            xestorComandos.executarComando(new ComandoEngadirAtributo(meuModelo));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -563,7 +556,7 @@ public class Controlador implements Sesionizable {
 
     private void eliminarAtributo(int i) {
         try {
-            xestorComandos.ExecutarComando(new ComandoEliminarAtributo(meuModelo, i));
+            xestorComandos.executarComando(new ComandoEliminarAtributo(meuModelo, i));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -574,7 +567,7 @@ public class Controlador implements Sesionizable {
 
     private void engadirFiltro(int i, IFilter abstractFilter) {
         try {
-            xestorComandos.ExecutarComando(new ComandoEngadirFiltro(meuModelo, i, abstractFilter));
+            xestorComandos.executarComando(new ComandoEngadirFiltro(meuModelo, i, abstractFilter));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -585,7 +578,7 @@ public class Controlador implements Sesionizable {
 
     private void eliminarFiltro(int i) {
         try {
-            xestorComandos.ExecutarComando(new ComandoEliminarFiltro(meuModelo, i));
+            xestorComandos.executarComando(new ComandoEliminarFiltro(meuModelo, i));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -596,7 +589,7 @@ public class Controlador implements Sesionizable {
 
     private void configurarFiltro(int i, HashMap<String, Parameter> configuracion) {
         try {
-            xestorComandos.ExecutarComando(new ComandoConfigurarFiltro(meuModelo, i, configuracion));
+            xestorComandos.executarComando(new ComandoConfigurarFiltro(meuModelo, i, configuracion));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -607,7 +600,7 @@ public class Controlador implements Sesionizable {
 
     private void intercambiarFiltros(int indiceFiltroA, int indiceFiltroB) {
         try {
-            xestorComandos.ExecutarComando(new ComandoIntercambiarFiltros(meuModelo, indiceFiltroA, indiceFiltroB));
+            xestorComandos.executarComando(new ComandoIntercambiarFiltros(meuModelo, indiceFiltroA, indiceFiltroB));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -618,7 +611,7 @@ public class Controlador implements Sesionizable {
 
     private void importarFiltros(String url) {
         try {
-            xestorComandos.ExecutarComando(new ComandoImportarFiltros(meuModelo, url));
+            xestorComandos.executarComando(new ComandoImportarFiltros(meuModelo, url));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -629,7 +622,7 @@ public class Controlador implements Sesionizable {
 
     private void exportarFiltros(String url, Integer[] indicesFiltros) {
         try {
-            xestorComandos.ExecutarComando(new ComandoExportarFiltros(meuModelo, url, indicesFiltros));
+            xestorComandos.executarComando(new ComandoExportarFiltros(meuModelo, url, indicesFiltros));
         } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -638,9 +631,9 @@ public class Controlador implements Sesionizable {
         }
     }
 
-    private void anadirFiltro(String string) {
+    private void importarFiltroDendeJAR(String url) {
         try {
-            minaVista.anadirFiltro(string);
+            meuModelo.incluirFiltro(url);
         } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
@@ -689,17 +682,17 @@ public class Controlador implements Sesionizable {
             return pilaRefacer;
         }
 
-        public void ExecutarComando(Comando cmd) throws Exception {
+        public void executarComando(Comando cmd) throws Exception {
             ExcepcionLeve excepcionLeve = null;
             try {
                 try {
-                    cmd.Executar();
+                    cmd.executar();
                 } catch (ExcepcionLeve e) {
                     excepcionLeve = e;
                 }
                 if (cmd instanceof ComandoDesfacible) {
                     pilaDesfacer.push((ComandoDesfacible) cmd);
-                    vaciarPilaRefacer();
+                    baleirarPilaRefacer();
                 }
                 if (excepcionLeve != null) {
                     throw excepcionLeve;
@@ -708,21 +701,15 @@ public class Controlador implements Sesionizable {
             }
         }
 
-        public void Reverter() throws Exception {
-            for (int i = pilaDesfacer.size() - 1; i >= 0; i--) {
-                pilaDesfacer.get(i).Desfacer();
-            }
-        }
-
         public boolean pilaDesfacerVacia() {
             return pilaDesfacer.empty();
         }
 
-        public void vaciarPilaRefacer() {
+        public void baleirarPilaRefacer() {
             pilaRefacer.removeAllElements();
         }
 
-        public void vaciarPilaDesfacer() {
+        public void baleirarPilaDesfacer() {
             pilaDesfacer.removeAllElements();
         }
 
@@ -730,22 +717,22 @@ public class Controlador implements Sesionizable {
             return pilaRefacer.empty();
         }
 
-        public void Desfacer() throws Exception {
+        public void desfacer() throws Exception {
             if (!pilaDesfacer.empty()) {
                 ComandoDesfacible cmd = (ComandoDesfacible) pilaDesfacer.peek();
                 try {
-                    cmd.Desfacer();
+                    cmd.desfacer();
                 } catch (ExcepcionComandoInutil e) {
                 }
                 pilaRefacer.push(pilaDesfacer.pop());
             }
         }
 
-        public void Refacer() throws Exception {
+        public void refacer() throws Exception {
             if (!pilaRefacer.empty()) {
                 ComandoDesfacible cmd = (ComandoDesfacible) pilaRefacer.peek();
                 try {
-                    cmd.Executar();
+                    cmd.executar();
                 } catch (ExcepcionComandoInutil e) {
                 }
                 pilaDesfacer.push(pilaRefacer.pop());

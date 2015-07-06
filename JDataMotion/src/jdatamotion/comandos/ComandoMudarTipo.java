@@ -49,16 +49,16 @@ public class ComandoMudarTipo extends ComandoDesfacible {
     }
 
     @Override
-    public void Desfacer() throws Exception {
+    public void desfacer() throws Exception {
         ((Modelo) getObxectivo()).setIndiceAtributoNominal(indiceAtributoNominalAntigo);
-        ((Modelo) getObxectivo()).setInstancesComparable(modeloAntigo);
+        ((Modelo) getObxectivo()).setComparableInstances(modeloAntigo);
         ((Modelo) getObxectivo()).setFiltros(filtrosAntigos);
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         this.indiceAtributoNominalAntigo = ((Modelo) getObxectivo()).getIndiceAtributoNominal();
-        this.modeloAntigo = new ComparableInstances(((Modelo) getObxectivo()).getInstancesComparable());
+        this.modeloAntigo = new ComparableInstances(((Modelo) getObxectivo()).getComparableInstances());
         this.filtrosAntigos = ((Modelo) getObxectivo()).getFiltros();
         try {
             ((Modelo) getObxectivo()).mudarTipo(columnaModelo, novoTipo);

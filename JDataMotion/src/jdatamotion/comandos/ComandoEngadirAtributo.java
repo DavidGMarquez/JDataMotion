@@ -37,12 +37,12 @@ public class ComandoEngadirAtributo extends ComandoDesfacible {
     }
 
     @Override
-    public void Desfacer() throws Exception {
+    public void desfacer() throws Exception {
         ((Modelo) getObxectivo()).eliminarAtributo(((Modelo) getObxectivo()).obterNumAtributos() - 1);
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         ((Modelo) getObxectivo()).engadirAtributo();
     }
 }

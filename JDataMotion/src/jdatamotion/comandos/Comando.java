@@ -25,6 +25,7 @@ package jdatamotion.comandos;
 
 import java.io.Serializable;
 import java.util.Objects;
+import jdatamotion.Modelo;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
@@ -34,10 +35,10 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
  */
 public abstract class Comando implements Serializable {
 
-    private Object obxectivo;
+    private Modelo obxectivo;
     private final String nome;
 
-    public Comando(Object obxectivo, String nome) {
+    public Comando(Modelo obxectivo, String nome) {
         this.obxectivo = obxectivo;
         this.nome = nome;
     }
@@ -68,9 +69,9 @@ public abstract class Comando implements Serializable {
         return ReflectionToStringBuilder.toString(this);
     }
 
-    public abstract void Executar() throws Exception;
+    public abstract void executar() throws Exception;
 
-    public void setObxectivo(Object obxectivo) {
+    public void setObxectivo(Modelo obxectivo) {
         this.obxectivo = obxectivo;
     }
 

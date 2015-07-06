@@ -23,10 +23,7 @@
  */
 package jdatamotion.comandos;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
@@ -55,13 +52,13 @@ public class ComandoConfigurarFiltro extends ComandoDesfacible {
     }
 
     @Override
-    public void Desfacer() throws Exception {
+    public void desfacer() throws Exception {
         ((Modelo) getObxectivo()).configurarFiltro(index, parametrosAntigos);
         ((Modelo) getObxectivo()).getFiltro(index).setIndiceAtributoFiltrado(indiceAtributoAntigo);
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         ((Modelo) getObxectivo()).configurarFiltro(index, parametrosNovos);
         ((Modelo) getObxectivo()).getFiltro(index).setIndiceAtributoFiltrado(indiceAtributoNovo);
     }

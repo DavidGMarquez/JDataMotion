@@ -5,12 +5,12 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="3">
                 <name/>
-                <line>549</line>
+                <line>559</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>830</line>
+                <line>840</line>
                 <key/>
             </bookmark>
         </file>
@@ -24,6 +24,14 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/HistogramDemo.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Vista.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/comandos/ComandoMudarTipo.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/lib/jfreechart-1.0.19-sources/org/jfree/data/statistics/HistogramDataset.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Modelo.java</file>
+            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/sesions/SesionModelo.java</file>
+        </group>
     </open-files>
 </project-private>

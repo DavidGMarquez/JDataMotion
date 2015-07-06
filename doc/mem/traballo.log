@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  26 MAR 2015 00:30
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  6 JUL 2015 11:17
 entering extended mode
 **traballo.tex
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.tex
@@ -771,7 +771,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 ! Undefined control sequence.
 \MakeUppercase ...ppercaseUnsupportedInPdfStrings 
                                                   
-l.37 ...ibles ampliaci\IeC {\'o}ns}{47}{chapter.6}
+l.36 ...subsecci\IeC {\'o}n}{61}{subsection.5.1.2}
                                                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -781,67 +781,67 @@ and I'll forget about whatever was undefined.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 37.
+(hyperref)                removing `\<let>-command' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 37.
+(hyperref)                removing `\@tempdima' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\divide' on input line 37.
+(hyperref)                removing `\divide' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 37.
+(hyperref)                removing `\@tempdima' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\multiply' on input line 37.
+(hyperref)                removing `\multiply' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 37.
+(hyperref)                removing `\@tempdima' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 37.
+(hyperref)                removing `\<def>-command' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\f@size' on input line 37.
+(hyperref)                removing `\f@size' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\hbox' on input line 37.
+(hyperref)                removing `\hbox' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 37.
+(hyperref)                removing `\<def>-command' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\tf@size' on input line 37.
+(hyperref)                removing `\tf@size' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 37.
+(hyperref)                removing `\<def>-command' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\sf@size' on input line 37.
+(hyperref)                removing `\sf@size' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 37.
+(hyperref)                removing `\<def>-command' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\ssf@size' on input line 37.
+(hyperref)                removing `\ssf@size' on input line 36.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 37.
+(hyperref)                removing `\<let>-command' on input line 36.
 
 [3
 
@@ -851,7 +851,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 ! Undefined control sequence.
 \MakeUppercase ...ppercaseUnsupportedInPdfStrings 
                                                   
-l.52 \listoffigures
+l.54 \listoffigures
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -861,67 +861,67 @@ and I'll forget about whatever was undefined.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 52.
+(hyperref)                removing `\<let>-command' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 52.
+(hyperref)                removing `\@tempdima' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\divide' on input line 52.
+(hyperref)                removing `\divide' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 52.
+(hyperref)                removing `\@tempdima' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\multiply' on input line 52.
+(hyperref)                removing `\multiply' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 52.
+(hyperref)                removing `\@tempdima' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 52.
+(hyperref)                removing `\<def>-command' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\f@size' on input line 52.
+(hyperref)                removing `\f@size' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\hbox' on input line 52.
+(hyperref)                removing `\hbox' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 52.
+(hyperref)                removing `\<def>-command' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\tf@size' on input line 52.
+(hyperref)                removing `\tf@size' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 52.
+(hyperref)                removing `\<def>-command' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\sf@size' on input line 52.
+(hyperref)                removing `\sf@size' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 52.
+(hyperref)                removing `\<def>-command' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\ssf@size' on input line 52.
+(hyperref)                removing `\ssf@size' on input line 54.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 52.
+(hyperref)                removing `\<let>-command' on input line 54.
 
 [4] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.lof)
 \tf@lof=\write5
@@ -929,7 +929,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 ! Undefined control sequence.
 \MakeUppercase ...ppercaseUnsupportedInPdfStrings 
                                                   
-l.53 \listoftables
+l.55 \listoftables
                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -939,67 +939,67 @@ and I'll forget about whatever was undefined.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 53.
+(hyperref)                removing `\<let>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 53.
+(hyperref)                removing `\@tempdima' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\divide' on input line 53.
+(hyperref)                removing `\divide' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 53.
+(hyperref)                removing `\@tempdima' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\multiply' on input line 53.
+(hyperref)                removing `\multiply' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 53.
+(hyperref)                removing `\@tempdima' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 53.
+(hyperref)                removing `\<def>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\f@size' on input line 53.
+(hyperref)                removing `\f@size' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\hbox' on input line 53.
+(hyperref)                removing `\hbox' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 53.
+(hyperref)                removing `\<def>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\tf@size' on input line 53.
+(hyperref)                removing `\tf@size' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 53.
+(hyperref)                removing `\<def>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\sf@size' on input line 53.
+(hyperref)                removing `\sf@size' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 53.
+(hyperref)                removing `\<def>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\ssf@size' on input line 53.
+(hyperref)                removing `\ssf@size' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 53.
+(hyperref)                removing `\<let>-command' on input line 55.
 
 [5
 
@@ -1007,7 +1007,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 ! Undefined control sequence.
 \MakeUppercase ...ppercaseUnsupportedInPdfStrings 
                                                   
-l.53 \listoftables
+l.55 \listoftables
                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1017,67 +1017,67 @@ and I'll forget about whatever was undefined.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 53.
+(hyperref)                removing `\<let>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 53.
+(hyperref)                removing `\@tempdima' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\divide' on input line 53.
+(hyperref)                removing `\divide' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 53.
+(hyperref)                removing `\@tempdima' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\multiply' on input line 53.
+(hyperref)                removing `\multiply' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 53.
+(hyperref)                removing `\@tempdima' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 53.
+(hyperref)                removing `\<def>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\f@size' on input line 53.
+(hyperref)                removing `\f@size' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\hbox' on input line 53.
+(hyperref)                removing `\hbox' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 53.
+(hyperref)                removing `\<def>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\tf@size' on input line 53.
+(hyperref)                removing `\tf@size' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 53.
+(hyperref)                removing `\<def>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\sf@size' on input line 53.
+(hyperref)                removing `\sf@size' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 53.
+(hyperref)                removing `\<def>-command' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\ssf@size' on input line 53.
+(hyperref)                removing `\ssf@size' on input line 55.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 53.
+(hyperref)                removing `\<let>-command' on input line 55.
 
 [6
 
@@ -1087,7 +1087,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 ! Undefined control sequence.
 \MakeUppercase ...ppercaseUnsupportedInPdfStrings 
                                                   
-l.56 \cleardoublepage
+l.58 \cleardoublepage
                      
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1097,73 +1097,73 @@ and I'll forget about whatever was undefined.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 56.
+(hyperref)                removing `\<let>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 56.
+(hyperref)                removing `\@tempdima' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\divide' on input line 56.
+(hyperref)                removing `\divide' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 56.
+(hyperref)                removing `\@tempdima' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\multiply' on input line 56.
+(hyperref)                removing `\multiply' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 56.
+(hyperref)                removing `\@tempdima' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 56.
+(hyperref)                removing `\<def>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\f@size' on input line 56.
+(hyperref)                removing `\f@size' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\hbox' on input line 56.
+(hyperref)                removing `\hbox' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 56.
+(hyperref)                removing `\<def>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\tf@size' on input line 56.
+(hyperref)                removing `\tf@size' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 56.
+(hyperref)                removing `\<def>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\sf@size' on input line 56.
+(hyperref)                removing `\sf@size' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 56.
+(hyperref)                removing `\<def>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\ssf@size' on input line 56.
+(hyperref)                removing `\ssf@size' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 56.
+(hyperref)                removing `\<let>-command' on input line 58.
 
 [7]
 ! Undefined control sequence.
 \MakeUppercase ...ppercaseUnsupportedInPdfStrings 
                                                   
-l.56 \cleardoublepage
+l.58 \cleardoublepage
                      
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1173,67 +1173,67 @@ and I'll forget about whatever was undefined.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 56.
+(hyperref)                removing `\<let>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 56.
+(hyperref)                removing `\@tempdima' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\divide' on input line 56.
+(hyperref)                removing `\divide' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 56.
+(hyperref)                removing `\@tempdima' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\multiply' on input line 56.
+(hyperref)                removing `\multiply' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 56.
+(hyperref)                removing `\@tempdima' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 56.
+(hyperref)                removing `\<def>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\f@size' on input line 56.
+(hyperref)                removing `\f@size' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\hbox' on input line 56.
+(hyperref)                removing `\hbox' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 56.
+(hyperref)                removing `\<def>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\tf@size' on input line 56.
+(hyperref)                removing `\tf@size' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 56.
+(hyperref)                removing `\<def>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\sf@size' on input line 56.
+(hyperref)                removing `\sf@size' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 56.
+(hyperref)                removing `\<def>-command' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\ssf@size' on input line 56.
+(hyperref)                removing `\ssf@size' on input line 58.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 56.
+(hyperref)                removing `\<let>-command' on input line 58.
 
 [8
 
@@ -1482,7 +1482,7 @@ and I'll forget about whatever was undefined.
 
 ! Undefined control sequence.
 l.684 \subsubsubsection
-                       {NetBeans IDE}
+                       {Lumzy}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -1491,7 +1491,16 @@ and I'll forget about whatever was undefined.
 
 [36] [37]
 ! Undefined control sequence.
-l.692 \subsubsubsection
+l.688 \subsubsubsection
+                       {NetBeans IDE}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+l.696 \subsubsubsection
                        {JUnit}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -1502,23 +1511,100 @@ and I'll forget about whatever was undefined.
 ) [38]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap4.tex
 Cap\'{\i }tulo 4.
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 5.
-
 [39
 
 
 
 
 ]
+File: figuras/disenhoGlobal.eps Graphic file (type eps)
+ <figuras/disenhoGlobal.eps> [40]
 File: figuras/MVC.eps Graphic file (type eps)
- <figuras/MVC.eps> [40] [41]
+ <figuras/MVC.eps> [41] [42]
 File: figuras/MVC-observer.eps Graphic file (type eps)
- <figuras/MVC-observer.eps>) [42]
+
+<figuras/MVC-observer.eps>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [43]
+Overfull \hbox (0.53592pt too wide) in paragraph at lines 96--97
+[]\OT1/cmr/m/n/12 O Mo-de-lo tamen al-ma-ce-na ou-tros da-tos mais dis-cre-to
+s acer-
+ []
+
+File: figuras/UMLModelo.eps Graphic file (type eps)
+<figuras/UMLModelo.eps> [44] [45]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [46]
+File: figuras/UMLcontrolador.eps Graphic file (type eps)
+
+<figuras/UMLcontrolador.eps> [47]
+File: figuras/manexarEvento.eps Graphic file (type eps)
+ <figuras/manexarEvento.eps> [48]
+File: figuras/DScomandos.eps Graphic file (type eps)
+
+<figuras/DScomandos.eps>
+File: figuras/xerarquiaComandos.eps Graphic file (type eps)
+ <figuras/xerarquiaComandos.eps> [49]
+File: figuras/desfacerRefacer.eps Graphic file (type eps)
+
+<figuras/desfacerRefacer.eps>
+Underfull \vbox (badness 2529) has occurred while \output is active []
+
+ [50]
+
+LaTeX Warning: Reference `UMLvista' on page 51 undefined on input line 194.
+
+[51]
+File: figuras/Modelo.eps Graphic file (type eps)
+ <figuras/Modelo.eps>
+File: figuras/Filtros.eps Graphic file (type eps)
+ <figuras/Filtros.eps>
+File: figuras/Visualizacion.eps Graphic file (type eps)
+ <figuras/Visualizacion.eps>
+[52] [53] [54]
+Overfull \hbox (62.45pt too wide) in paragraph at lines 285--286
+[]\OT1/cmr/m/n/12 Enva ao Con-tro-la-dor un even-to de ti-po ELI-MI-NAR[]ATRI
+BUTO,
+ []
+
+[55] [56] [57]
+Overfull \hbox (12.1863pt too wide) in paragraph at lines 397--399
+\OT1/cmr/m/n/12 Enva ao Con-tro-la-dor un even-to de ti-po MU-DAR[]INDICE[]TE
+MPORAL,
+ []
+
+
+Overfull \hbox (29.1401pt too wide) in paragraph at lines 406--408
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 406--408
+
+ []
+
+[58]
+Overfull \hbox (1.42635pt too wide) in paragraph at lines 462--464
+\OT1/cmr/m/n/12 Permite mo-ver-se a dis-tin-tos pun-tos da re-pro-du-cion, cha
+-man-do ao meto-
+ []
+
+[59]
+Overfull \hbox (29.1401pt too wide) in paragraph at lines 486--488
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 486--488
+
+ []
+
+) [60]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/exemplos.tex
 Cap\'{\i }tulo 5.
-[43
+[61
 
 
 
@@ -1555,24 +1641,24 @@ If that doesn't work, type  X <return>  to quit.
 File: figuras/figura01.eps Graphic file (type eps)
 <figuras/figura01.eps>
 
-LaTeX Warning: Citation `cuda' on page 44 undefined on input line 48.
+LaTeX Warning: Citation `cuda' on page 62 undefined on input line 48.
 
 
-LaTeX Warning: Citation `cdma' on page 44 undefined on input line 48.
+LaTeX Warning: Citation `cdma' on page 62 undefined on input line 48.
 
 
-LaTeX Warning: Citation `gonzalez' on page 44 undefined on input line 48.
+LaTeX Warning: Citation `gonzalez' on page 62 undefined on input line 48.
 
 
-LaTeX Warning: Citation `patricia' on page 44 undefined on input line 48.
+LaTeX Warning: Citation `patricia' on page 62 undefined on input line 48.
 
 
-LaTeX Warning: Citation `cuda' on page 44 undefined on input line 48.
+LaTeX Warning: Citation `cuda' on page 62 undefined on input line 48.
 
 
-LaTeX Warning: Citation `gonzalez' on page 44 undefined on input line 48.
+LaTeX Warning: Citation `gonzalez' on page 62 undefined on input line 48.
 
-[44] [45] ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
+[62] [63] ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2014/03/04 1.5c listings language file
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
@@ -1588,43 +1674,43 @@ Overfull \hbox (53.36043pt too wide) in paragraph at lines 97--98
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-) [46]
+) [64]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/conclusions.te
 x
 Cap\'{\i }tulo 6.
-) [47
+) [65
 
 
 
 
-] [48
+] [66
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.tex
 Ap\'endice A.
-) [49
+) [67
 
 
-] [50
+] [68
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.tex
 Ap\'endice B.
-) [51
+) [69
 
 
-] [52
+] [70
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.tex
 Ap\'endice C.
-) [53
+) [71
 
 
-] [54
+] [72
 
 
 ]
@@ -1657,20 +1743,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 17--18
 r/m/n/12 [[]Ulti-ma con-sul-ta:
  []
 
-) [55
+) [73
 
 
-] [56
+] [74
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/glosario.tex
-[57
+[75
 
 
-]) [58]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 88.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 88.
+]) [76]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 90.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 90.
  (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.aux
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/titulo.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/certificacion.
@@ -1688,10 +1774,10 @@ x)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/bibliografia.a
 ux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/glosario.aux))
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 88.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 88.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 90.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 90.
 Package rerunfilecheck Info: File `traballo.out' has not changed.
-(rerunfilecheck)             Checksum: D233B11F746371D922B041B6359EAFD0;2356.
+(rerunfilecheck)             Checksum: 54937BDEA8F6F59FB893C69A6A896CA4;3350.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.13947pt have occurred.
@@ -1702,15 +1788,15 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 88.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 90.
  ) 
 Here is how much of TeX's memory you used:
- 8455 strings out of 493922
- 124848 string characters out of 3147299
- 227667 words of memory out of 3000000
- 11522 multiletter control sequences out of 15000+200000
+ 8501 strings out of 493922
+ 125664 string characters out of 3147299
+ 228609 words of memory out of 3000000
+ 11558 multiletter control sequences out of 15000+200000
  13879 words of font info for 53 fonts, out of 3000000 for 9000
  842 hyphenation exceptions out of 8191
- 30i,9n,51p,1214b,1133s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 30i,9n,51p,1214b,1134s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on traballo.dvi (68 pages, 203656 bytes).
+Output written on traballo.dvi (86 pages, 273688 bytes).

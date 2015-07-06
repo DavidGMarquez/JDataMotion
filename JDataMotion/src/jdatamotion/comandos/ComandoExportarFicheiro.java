@@ -42,7 +42,7 @@ public class ComandoExportarFicheiro extends Comando {
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         ((Modelo) getObxectivo()).exportarFicheiro(url, extension);
     }
 }

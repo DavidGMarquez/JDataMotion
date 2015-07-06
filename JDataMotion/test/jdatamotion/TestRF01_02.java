@@ -46,7 +46,7 @@ public class TestRF01_02 extends TestCase {
             String pathEntrada = new URI(getClass().getResource("example01.arff").toString()).getPath();
             String pathSaida = new URI(getClass().getResource(".").toString()).getPath() + "temp01.arff";
             vista.getControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathEntrada);
-            ComparableInstances is1 = modelo.getInstancesComparable();
+            ComparableInstances is1 = modelo.getComparableInstances();
             vista.getControlador().manexarEvento(Controlador.EXPORTAR_FICHEIRO, new Object[]{"arff", pathSaida});
             vista.getControlador().manexarEvento(Controlador.IMPORTAR_FICHEIRO, pathSaida);
 
@@ -56,7 +56,7 @@ public class TestRF01_02 extends TestCase {
             //modelo.getAtributos().renameAttribute(5, "OTRO NOMBRE ATRIBUTO");
             //Altera o nome da relación
             //modelo.getAtributos().setRelationName("OTRO NOMBRE RELACION");
-            ComparableInstances is2 = modelo.getInstancesComparable();
+            ComparableInstances is2 = modelo.getComparableInstances();
             assertEquals(is1, is2);
         } catch (URISyntaxException ex) {
             Logger.getLogger(TestRF01_02.class.getName()).log(Level.SEVERE, null, ex);

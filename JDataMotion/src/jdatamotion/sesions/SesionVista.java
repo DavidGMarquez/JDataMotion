@@ -23,7 +23,7 @@
  */
 package jdatamotion.sesions;
 
-import jdatamotion.ManexadorScatterPlots;
+import java.awt.Color;
 
 /**
  *
@@ -32,8 +32,43 @@ import jdatamotion.ManexadorScatterPlots;
 public class SesionVista extends Sesion {
 
     private boolean scatterPlotsVisibles[][];
-    private ManexadorScatterPlots manexadorScatterPlots;
     private int ordeVisualizacion;
+    private int lonxitudeEstela;
+    private Color corEstela;
+    private int paso;
+    private String distanceFormula;
+
+    public String getDistanceFormula() {
+        return distanceFormula;
+    }
+
+    public void setDistanceFormula(String distanceFormula) {
+        this.distanceFormula = distanceFormula;
+    }
+
+    public void setLonxitudeEstela(int lonxitudeEstela) {
+        this.lonxitudeEstela = lonxitudeEstela;
+    }
+
+    public void setCorEstela(Color corEstela) {
+        this.corEstela = corEstela;
+    }
+
+    public void setPaso(int paso) {
+        this.paso = paso;
+    }
+
+    public int getLonxitudeEstela() {
+        return lonxitudeEstela;
+    }
+
+    public Color getCorEstela() {
+        return corEstela;
+    }
+
+    public int getPaso() {
+        return paso;
+    }
 
     public int getOrdeVisualizacion() {
         return ordeVisualizacion;
@@ -43,20 +78,12 @@ public class SesionVista extends Sesion {
         this.ordeVisualizacion = ordeVisualizacion;
     }
 
-    public void setManexadorScatterPlots(ManexadorScatterPlots manexadorScatterPlots) {
-        this.manexadorScatterPlots = manexadorScatterPlots;
-    }
-
     public void setScatterPlotsVisibles(boolean[][] scatterPlotsVisibles) {
         this.scatterPlotsVisibles = scatterPlotsVisibles;
     }
 
     public boolean[][] getScatterPlotsVisibles() {
         return scatterPlotsVisibles;
-    }
-
-    public ManexadorScatterPlots getManexadorScatterPlots() {
-        return manexadorScatterPlots;
     }
 
     public SesionVista() {

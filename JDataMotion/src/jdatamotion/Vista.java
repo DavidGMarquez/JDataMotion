@@ -34,7 +34,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -45,15 +44,10 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -68,9 +62,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -136,6 +127,7 @@ import javax.swing.text.JTextComponent;
 import jdatamotion.ManexadorScatterPlots.ChartPanelConfigurable;
 import jdatamotion.ManexadorScatterPlots.JFrameChartPanel;
 import jdatamotion.ManexadorScatterPlots.ScatterPlot;
+import jdatamotion.Modelo.JarClassLoader;
 import jdatamotion.charteditors.ChartEditorManagerConfigurable;
 import jdatamotioncommon.filtros.DoubleParameter;
 import jdatamotioncommon.filtros.StringParameter;
@@ -146,6 +138,7 @@ import jdatamotion.charteditors.DefaultChartEditorConfigurable;
 import jdatamotion.charteditors.RegularPolygon;
 import jdatamotion.charteditors.StarPolygon;
 import jdatamotioncommon.ComparableInstances;
+import jdatamotioncommon.Utils;
 import jdatamotioncommon.filtros.IFilter;
 import jdatamotioncommon.filtros.IntegerParameter;
 import jdatamotioncommon.filtros.Parameter;
@@ -344,210 +337,12 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         Matcher m = Pattern.compile("\\$([12])\\.`(.*?)`").matcher(formula);
         String s = formula;
         while (m.find()) {
-            Attribute atributo = meuModelo.getInstancesComparable().attribute(m.group(2));
+            Attribute atributo = meuModelo.getComparableInstances().attribute(m.group(2));
             if (atributo != null) {
                 s = s.replaceAll("\\$" + m.group(1) + "\\.`" + m.group(2) + "`", String.valueOf((m.group(1).equals("1") ? puntoA : puntoB).value(atributo)));
             }
         }
         return new Evaluator().evaluate(s);
-    }
-
-    private final class JarResources {
-
-        private final Hashtable htSizes = new Hashtable();
-        private final Hashtable htJarContents = new Hashtable();
-
-        private final String jarFileName;
-
-        public JarResources(String jarFileName) {
-            this.jarFileName = jarFileName;
-            init();
-        }
-
-        public byte[] getResource(String name) {
-            return (byte[]) htJarContents.get(name);
-        }
-
-        private void init() {
-            try {
-                try (ZipFile zf = new ZipFile(jarFileName)) {
-                    Enumeration e = zf.entries();
-                    while (e.hasMoreElements()) {
-                        ZipEntry ze = (ZipEntry) e.nextElement();
-
-                        htSizes.put(ze.getName(), (int) ze.getSize());
-                    }
-                }
-                FileInputStream fis = new FileInputStream(jarFileName);
-                BufferedInputStream bis = new BufferedInputStream(fis);
-                ZipInputStream zis = new ZipInputStream(bis);
-                ZipEntry ze;
-                while ((ze = zis.getNextEntry()) != null) {
-                    if (ze.isDirectory()) {
-                        continue;
-                    }
-                    int size = (int) ze.getSize();
-                    if (size == -1) {
-                        size = ((Integer) htSizes.get(ze.getName()));
-                    }
-                    byte[] b = new byte[(int) size];
-                    int rb = 0;
-                    int chunk;
-                    while (((int) size - rb) > 0) {
-                        chunk = zis.read(b, rb, (int) size - rb);
-                        if (chunk == -1) {
-                            break;
-                        }
-                        rb += chunk;
-                    }
-                    htJarContents.put(ze.getName(), b);
-                }
-            } catch (NullPointerException | IOException e) {
-            }
-        }
-
-        private String dumpZipEntry(ZipEntry ze) {
-            StringBuilder sb = new StringBuilder();
-            if (ze.isDirectory()) {
-                sb.append("d ");
-            } else {
-                sb.append("f ");
-            }
-            if (ze.getMethod() == ZipEntry.STORED) {
-                sb.append("stored   ");
-            } else {
-                sb.append("defalted ");
-            }
-            sb.append(ze.getName());
-            sb.append("\t");
-            sb.append("").append(ze.getSize());
-            if (ze.getMethod() == ZipEntry.DEFLATED) {
-                sb.append("/").append(ze.getCompressedSize());
-            }
-            return (sb.toString());
-        }
-    }
-
-    private abstract class MultiClassLoader extends ClassLoader {
-
-        private final Hashtable classes = new Hashtable();
-        private char classNameReplacementChar;
-
-        protected boolean monitorOn = false;
-        protected boolean sourceMonitorOn = true;
-
-        public MultiClassLoader() {
-        }
-
-        @Override
-        public Class loadClass(String className) throws ClassNotFoundException {
-            return (loadClass(className, true));
-        }
-
-        @Override
-        public synchronized Class loadClass(String className,
-                boolean resolveIt) throws ClassNotFoundException {
-
-            Class result;
-            byte[] classBytes;
-            monitor(">> MultiClassLoader.loadClass(" + className + ", " + resolveIt + ")");
-
-            result = (Class) classes.get(className);
-            if (result != null) {
-                monitor(">> returning cached result.");
-                return result;
-            }
-
-            try {
-                result = super.findSystemClass(className);
-                monitor(">> returning system class (in CLASSPATH).");
-                return result;
-            } catch (ClassNotFoundException e) {
-                monitor(">> Not a system class.");
-            }
-
-            classBytes = loadClassBytes(className);
-            if (classBytes == null) {
-                throw new ClassNotFoundException();
-            }
-
-            result = defineClass(className, classBytes, 0, classBytes.length);
-            if (result == null) {
-                throw new ClassFormatError();
-            }
-
-            if (resolveIt) {
-                resolveClass(result);
-            }
-
-            classes.put(className, result);
-            monitor(">> Returning newly loaded class.");
-            return result;
-        }
-
-        public void setClassNameReplacementChar(char replacement) {
-            classNameReplacementChar = replacement;
-        }
-
-        protected abstract byte[] loadClassBytes(String className);
-
-        protected String formatClassName(String className) {
-            if (classNameReplacementChar == '\u0000') {
-                return className.replace('.', '/') + ".class";
-            } else {
-                return className.replace('.',
-                        classNameReplacementChar) + ".class";
-            }
-        }
-
-        protected void monitor(String text) {
-            if (monitorOn) {
-                print(text);
-            }
-        }
-
-        protected void print(String text) {
-            System.out.println(text);
-        }
-
-    }
-
-    class JarClassLoader extends MultiClassLoader {
-
-        private final JarResources jarResources;
-
-        public JarClassLoader(String jarName) {
-            jarResources = new JarResources(jarName);
-        }
-
-        @Override
-        protected byte[] loadClassBytes(String className) {
-            className = formatClassName(className);
-            return (jarResources.getResource(className));
-        }
-    }
-
-    void anadirFiltro(String jarUrl) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        JarClassLoader jarLoader = new JarClassLoader(jarUrl);
-        JarFile jarFile = new JarFile(jarUrl);
-        Enumeration ee = jarFile.entries();
-        boolean valido = false;
-        while (ee.hasMoreElements()) {
-            JarEntry entry = (JarEntry) ee.nextElement();
-            String name = entry.getName();
-            if (name.endsWith(".class")) {
-                Class c = jarLoader.loadClass(name.substring(0, name.lastIndexOf('.')).replaceAll("/", "."), true);
-                Object o = c.newInstance();
-                if (o instanceof IFilter) {
-                    valido = true;
-                    break;
-                }
-            }
-        }
-        if (valido) {
-            Files.copy(Paths.get(jarUrl), Paths.get("filters\\" + jarUrl.substring(jarUrl.lastIndexOf("\\") + 1)), REPLACE_EXISTING);
-            pintarMenuFiltros();
-        }
     }
 
     public static class GraphicConfigurationManager {
@@ -722,12 +517,23 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         return jPanel4;
     }
 
+    public int getPaso() {
+        return paso;
+    }
+
+    public String getDistanceFormula() {
+        return distanceFormula;
+    }
+
     @Override
     public Sesion obterSesion() {
         SesionVista s = new SesionVista();
         s.setOrdeVisualizacion(getOrdeVisualizacion());
         s.setScatterPlotsVisibles(getScatterPlotsVisibles());
-        s.setManexadorScatterPlots(s.getManexadorScatterPlots());
+        s.setLonxitudeEstela(getLonxitudeEstela());
+        s.setPaso(getPaso());
+        s.setCorEstela(getCorEstela());
+        s.setDistanceFormula(getDistanceFormula());
         return s;
     }
 
@@ -740,15 +546,14 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         SesionVista s = (SesionVista) sesion;
         scatterPlotsVisibles = s.getScatterPlotsVisibles();
         ordeVisualizacion = s.getOrdeVisualizacion();
-        mansp = s.getManexadorScatterPlots();
+        paso = s.getPaso();
+        corEstela = s.getCorEstela();
+        lonxitudeEstela = s.getLonxitudeEstela();
+        distanceFormula = s.getDistanceFormula();
     }
 
     public void crearControlador() {
         meuControlador = new Controlador();
-    }
-
-    public void activar() {
-        this.setEnabled(true);
     }
 
     public void visualizar() {
@@ -785,7 +590,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 mansp.pecharJFramesChartPanel();
                 mansp.pause();
             }
-            ComparableInstances instanciasFiltradas = meuModelo.getFilteredInstancesComparable();
+            ComparableInstances instanciasFiltradas = meuModelo.getComparableInstancesFiltradas();
             ArrayList<Integer> indices = new ArrayList<>();
             for (int i = 0; i < instanciasFiltradas.numAttributes(); i++) {
                 if (instanciasFiltradas.attribute(i).isNumeric()) {
@@ -897,7 +702,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         if (sp == null) {
             jPanel4.add(new JLabel(), new TableLayoutConstraints(i, j));
         } else {
-            configureMatrixScatterPlot(sp, meuModelo.getInstancesComparable());
+            configureMatrixScatterPlot(sp, meuModelo.getComparableInstances());
             ChartPanel chartPanelCela = sp.getChartPanelCela();
             chartPanelCela.setLayout(new GridBagLayout());
             JButton clickmeButton = new JButton();
@@ -975,7 +780,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
         jPanel.add(new JLabel(bundle.getString("atributo") + " :"));
         JComboBox jcb = new JComboBox<>(new DefaultComboBoxModel<>(ArrayUtils.addAll(new String[]{null}, meuModelo.getNomesAtributos())));
-        jcb.setSelectedItem(meuModelo.getFiltro(indiceFiltro).getIndiceAtributoFiltrado() != null ? meuModelo.getInstancesComparable().attribute(meuModelo.getFiltro(indiceFiltro).getIndiceAtributoFiltrado()).name() : null);
+        jcb.setSelectedItem(meuModelo.getFiltro(indiceFiltro).getIndiceAtributoFiltrado() != null ? meuModelo.getComparableInstances().attribute(meuModelo.getFiltro(indiceFiltro).getIndiceAtributoFiltrado()).name() : null);
         jPanel.add(jcb);
         int result = JOptionPane.showConfirmDialog(this, jPanel, bundle.getString("configuracionFiltro") + " - " + meuModelo.getFiltro(indiceFiltro).toString(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
@@ -1257,21 +1062,14 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         } else {
             actualizarPaneis();
         }
-        jLabel2.setText(meuModelo.getInstancesComparable().relationName());
+        jLabel2.setText(meuModelo.getComparableInstances().relationName());
     }
 
     private static class ClassEnumerator {
 
         private final static boolean log = false;
 
-        private static void log(String msg) {
-            if (log) {
-                System.out.println("ClassDiscovery: " + msg);
-            }
-        }
-
         private static void processDirectory(File directory, String pkgname, ArrayList<String> classes) {
-            log("Reading Directory '" + directory + "'");
             String[] files = directory.list();
             for (String fileName : files) {
                 String className = null;
@@ -1280,7 +1078,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     // removes the .class extension
                     className = pkgname + '.' + fileName.substring(0, fileName.length() - 6);
                 }
-                log("FileName '" + fileName + "'  =>  class '" + className + "'");
                 if (className != null) {
                     classes.add(className);
                 }
@@ -1313,7 +1110,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     if (!c.equals(FilterHandler.class)) {
                         Object object = null;
                         try {
-                            object = c.getDeclaredConstructor(ComparableInstances.class).newInstance(meuModelo.getInstancesComparable());
+                            object = c.getDeclaredConstructor(ComparableInstances.class).newInstance(meuModelo.getComparableInstances());
                         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                             try {
                                 object = c.getDeclaredConstructor().newInstance();
@@ -1382,7 +1179,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         b.addActionListener((ActionEvent e) -> {
             JTableModelo jtm = new JTableModelo(jPanel12, jScrollPane13, meuModelo, (JPanelActualizable) panelDetallarAtributo, false, 0, filler4);
             jtm.inicializar();
-            jFrameModeloParcial.setTitle(meuModelo.getInstancesComparable().relationName() + " - " + bundle.getString("modeloInicial"));
+            jFrameModeloParcial.setTitle(meuModelo.getComparableInstances().relationName() + " - " + bundle.getString("modeloInicial"));
             jFrameModeloParcial.pack();
             jFrameModeloParcial.setVisible(true);
         });
@@ -1405,10 +1202,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     }
                     Modelo modeloParcial = new Modelo(meuModelo);
                     modeloParcial.setFiltros(filtrosParciais);
-                    modeloParcial.setInstancesComparable(modeloParcial.getFilteredInstancesComparable());
+                    modeloParcial.setComparableInstances(modeloParcial.getComparableInstancesFiltradas());
                     JTableModelo jtm = new JTableModelo(jPanel12, jScrollPane13, modeloParcial, (JPanelActualizable) panelDetallarAtributo, false, 0, filler4);
                     jtm.inicializar();
-                    jFrameModeloParcial.setTitle(meuModelo.getInstancesComparable().relationName() + " - " + bundle.getString("modeloParcial") + " (" + a + "/" + n + ")");
+                    jFrameModeloParcial.setTitle(meuModelo.getComparableInstances().relationName() + " - " + bundle.getString("modeloParcial") + " (" + a + "/" + n + ")");
                     jFrameModeloParcial.pack();
                     jFrameModeloParcial.setVisible(true);
                 });
@@ -1452,7 +1249,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     break;
                 }
             }
-            pf.addAtributoFiltrado(f.getIndiceAtributoFiltrado() != null ? meuModelo.getInstancesComparable().attribute(f.getIndiceAtributoFiltrado()) : null);
+            pf.addAtributoFiltrado(f.getIndiceAtributoFiltrado() != null ? meuModelo.getComparableInstances().attribute(f.getIndiceAtributoFiltrado()) : null);
             horizontalBox.add(pf);
             if (i == n - 1) {
                 horizontalBox.add(Box.createHorizontalStrut(gap));
@@ -1463,10 +1260,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 b = new JButton();
                 b.addActionListener((ActionEvent e) -> {
                     Modelo modeloParcial = new Modelo(meuModelo);
-                    modeloParcial.setInstancesComparable(modeloParcial.getFilteredInstancesComparable());
+                    modeloParcial.setComparableInstances(modeloParcial.getComparableInstancesFiltradas());
                     JTableModelo jtm = new JTableModelo(jPanel12, jScrollPane13, modeloParcial, (JPanelActualizable) panelDetallarAtributo, false, 0, filler4);
                     jtm.inicializar();
-                    jFrameModeloParcial.setTitle(meuModelo.getInstancesComparable().relationName() + " - " + bundle.getString("modeloFinal"));
+                    jFrameModeloParcial.setTitle(meuModelo.getComparableInstances().relationName() + " - " + bundle.getString("modeloFinal"));
                     jFrameModeloParcial.pack();
                     jFrameModeloParcial.setVisible(true);
                 });
@@ -1512,7 +1309,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     @Override
     public void update(final Observable o, Object arg) {
-        if (!jTabbedPane1.isEnabled() && o != null && !((Modelo) o).getInstancesComparable().isEmpty()) {
+        if (!jTabbedPane1.isEnabled() && o != null && !((Modelo) o).getComparableInstances().isEmpty()) {
             jMenuItem2.setEnabled(true);
             jMenuItem4.setEnabled(true);
             jMenuItem10.setEnabled(true);
@@ -2531,12 +2328,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton14)
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton14))
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -3033,7 +2829,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void botonIndiceTemporalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIndiceTemporalActionPerformed
-        if (getColumnaModeloSeleccionada() == meuModelo.getIndiceTemporal() || !meuModelo.getInstancesComparable().attribute(getColumnaModeloSeleccionada()).isNumeric()) {
+        if (getColumnaModeloSeleccionada() == meuModelo.getIndiceTemporal() || !meuModelo.getComparableInstances().attribute(getColumnaModeloSeleccionada()).isNumeric()) {
             ordeVisualizacion = ORDE_MODELO;
         }
         meuControlador.manexarEvento(Controlador.MUDAR_INDICE_TEMPORAL, getColumnaModeloSeleccionada() == meuModelo.getIndiceTemporal() ? -1 : getColumnaModeloSeleccionada());
@@ -3088,7 +2884,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
-        String novoNomeRelacion = (String) JOptionPane.showInputDialog(this, bundle.getString("mudarNomeRelacionMensaxe"), bundle.getString("Vista.jMenuItem15.text"), JOptionPane.QUESTION_MESSAGE, null, null, meuModelo.getInstancesComparable().relationName());
+        String novoNomeRelacion = (String) JOptionPane.showInputDialog(this, bundle.getString("mudarNomeRelacionMensaxe"), bundle.getString("Vista.jMenuItem15.text"), JOptionPane.QUESTION_MESSAGE, null, null, meuModelo.getComparableInstances().relationName());
         if (novoNomeRelacion != null) {
             meuControlador.manexarEvento(Controlador.MUDAR_NOME_RELACION, novoNomeRelacion);
         }
@@ -3167,7 +2963,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
-        String novoNomeAtributo = (String) JOptionPane.showInputDialog(this, bundle.getString("mudarNomeAtributoMensaxe"), bundle.getString("Vista.jMenuItem20.text"), JOptionPane.QUESTION_MESSAGE, null, null, meuModelo.getInstancesComparable().attribute(getColumnaModeloSeleccionada()).name());
+        String novoNomeAtributo = (String) JOptionPane.showInputDialog(this, bundle.getString("mudarNomeAtributoMensaxe"), bundle.getString("Vista.jMenuItem20.text"), JOptionPane.QUESTION_MESSAGE, null, null, meuModelo.getComparableInstances().attribute(getColumnaModeloSeleccionada()).name());
         if (novoNomeAtributo != null) {
             meuControlador.manexarEvento(Controlador.RENOMEAR_ATRIBUTO, new Object[]{getColumnaModeloSeleccionada(), novoNomeAtributo});
         }
@@ -3238,13 +3034,13 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        if (meuModelo.getIndiceAtributoNominal() != meuModelo.obterArrayListNomesAtributos().indexOf(jComboBox1.getSelectedItem())) {
+        if (meuModelo.getIndiceAtributoNominal() != meuModelo.obterListaNomesAtributos().indexOf(jComboBox1.getSelectedItem())) {
             if (jComboBox1.getSelectedIndex() == 0) {
                 meuModelo.setIndiceAtributoNominal(-1);
             } else {
-                meuModelo.setIndiceAtributoNominal(meuModelo.obterArrayListNomesAtributos().indexOf(jComboBox1.getSelectedItem()));
+                meuModelo.setIndiceAtributoNominal(meuModelo.obterListaNomesAtributos().indexOf(jComboBox1.getSelectedItem()));
             }
-            pintarMenuVisualizacion();
+            pintarMenus();
         }
         jDialog3.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -3286,7 +3082,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jFrame1.setVisible(true);
 
         ArrayList<String> words = new ArrayList<>();
-        Enumeration<Attribute> en = meuModelo.getInstancesComparable().enumerateAttributes();
+        Enumeration<Attribute> en = meuModelo.getComparableInstances().enumerateAttributes();
         while (en.hasMoreElements()) {
             Attribute at = en.nextElement();
             words.add("`" + at.name() + "`");
@@ -3350,7 +3146,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog3.setLocation((getWidth() - jDialog3.getPreferredSize().width) / 2, (getHeight() - jDialog3.getPreferredSize().height) / 2);
         jComboBox1.removeAllItems();
         jComboBox1.addItem("- " + bundle.getString("ningun") + " -");
-        meuModelo.obterIndicesAtributosNominaisNoModelo().stream().forEach((a) -> {
+        meuModelo.obterIndicesAtributosNominais().stream().forEach((a) -> {
             jComboBox1.addItem(meuModelo.obterNomeAtributo(a));
         });
         if (meuModelo.getIndiceAtributoNominal() == -1) {
@@ -3378,7 +3174,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         for (int i = 0; i < scatterPlotsVisibles.length; i++) {
             System.arraycopy(scatterPlotsVisibles[i], 0, scatterPlotsVisiblesAux[i], 0, scatterPlotsVisibles[i].length);
         }
-        ArrayList<Integer> atributosNumericos = meuModelo.obterIndicesAtributosNumericosNoModelo();
+        ArrayList<Integer> atributosNumericos = meuModelo.obterIndicesAtributosNumericos();
         if (!atributosNumericos.isEmpty()) {
             jPanel5.setLayout(new GridLayout(0, atributosNumericos.size(), 2, 2));
             for (int j = atributosNumericos.size() - 1; j >= 0; j--) {
@@ -3568,7 +3364,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private void abrirExploradorFicheiros(int opcion) {
         switch (opcion) {
             case EXPLORADOR_IMPORTAR_FILTRO_DESDE_JAR:
-                configurarJFileChooserAbrir(Controlador.IMPORTAR_FILTRO_DESDE_JAR);
+                configurarJFileChooserAbrir(Controlador.IMPORTAR_FILTRO_DENDE_JAR);
                 break;
             case EXPLORADOR_ABRIR_SESION:
                 configurarJFileChooserAbrir(Controlador.ABRIR_SESION);
@@ -3654,7 +3450,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 jDialog1.setTitle(bundle.getString("Vista.jMenuItem23.text"));
                 jFileChooser1.setApproveButtonText(bundle.getString("importar"));
                 break;
-            case Controlador.IMPORTAR_FILTRO_DESDE_JAR:
+            case Controlador.IMPORTAR_FILTRO_DENDE_JAR:
                 ext.add(new FiltroExtension(bundle.getString("formatoJAR") + " (*.jar)", new String[]{"jar"}));
                 ext.add(new FiltroExtension(bundle.getString("todosOsFicheiros") + " (*.*)", null));
                 definirExtensions(ext);
@@ -3928,8 +3724,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 int indiceModeloEliminar = -1, indiceTaboaEliminar = -1;
                 for (int j = 0; j < getColumnModel().getColumnCount(); j++) {
                     boolean disponible = false;
-                    for (int i = 0; !disponible && i < modelo.getInstancesComparable().numAttributes(); i++) {
-                        if (modelo.getInstancesComparable().attribute(i).name() == getColumnModel().getColumn(j).getHeaderValue()) {
+                    for (int i = 0; !disponible && i < modelo.getComparableInstances().numAttributes(); i++) {
+                        if (modelo.getComparableInstances().attribute(i).name() == getColumnModel().getColumn(j).getHeaderValue()) {
                             disponible = true;
                             break;
                         }
@@ -3949,7 +3745,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 }
             } else if (numColumnasTaboa < numColumnasModelo) {
                 for (int i = numColumnasModelo - 1; i >= numColumnasTaboa; i--) {
-                    ((TableModelPanelModelo) getModel()).getAtributos().add(modelo.getInstancesComparable().attribute(i).name());
+                    ((TableModelPanelModelo) getModel()).getAtributos().add(modelo.getComparableInstances().attribute(i).name());
                     ((TableModelPanelModelo) getModel()).getDatos().stream().forEach((alo) -> {
                         alo.add("");
                     });
@@ -4003,9 +3799,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 for (int i = 0; i < getRowCount(); i++) {
                     ((TableModelPanelModelo) getModel()).setValueNoFiring(modelo.obterStringDato(i, columnaModelo, false), i, columnaModelo);
                 }
-                if (modelo.obterArrayListAtributos().get(columnaModelo).type() == Attribute.NOMINAL) {
+                if (modelo.obterListaAtributos().get(columnaModelo).type() == Attribute.NOMINAL) {
                     ArrayList<String> valoresNominais = new ArrayList<>();
-                    Enumeration e = modelo.getInstancesComparable().attribute(columnaModelo).enumerateValues();
+                    Enumeration e = modelo.getComparableInstances().attribute(columnaModelo).enumerateValues();
                     while (e.hasMoreElements()) {
                         String el = (String) e.nextElement();
                         valoresNominais.add(el);
@@ -4042,19 +3838,19 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         class TableModelPanelModelo extends AbstractTableModel {
 
-            private final ArrayList<String> atributos;
-            private final ArrayList<ArrayList<Object>> datos;
+            private final List<String> atributos;
+            private final List<List<Object>> datos;
             private final boolean editable;
 
-            public ArrayList<String> getAtributos() {
+            public List<String> getAtributos() {
                 return atributos;
             }
 
-            public ArrayList<ArrayList<Object>> getDatos() {
+            public List<List<Object>> getDatos() {
                 return datos;
             }
 
-            TableModelPanelModelo(ArrayList<String> columnNames, ArrayList<ArrayList<Object>> data, boolean editable) {
+            TableModelPanelModelo(List<String> columnNames, List<List<Object>> data, boolean editable) {
                 super();
                 this.atributos = columnNames;
                 this.datos = data;
@@ -4135,7 +3931,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
         public void inicializar() {
             removeAll();
-            setModel(new TableModelPanelModelo(modelo.obterArrayListNomesAtributos(), modelo.obterArrayListStringDatos(false), editable));
+            setModel(new TableModelPanelModelo(modelo.obterListaNomesAtributos(), modelo.obterListaDatos(false), editable));
             setFillsViewportHeight(true);
             getColumnModel().addColumnModelListener(new TableColumnModelListener() {
                 @Override
@@ -4166,11 +3962,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     columnaTaboaSeleccionada = columnAtPoint(e.getPoint());
-                    resaltarColumnaSeleccionada();
                     actualizar();
                 }
             });
-            resaltarColumnaSeleccionada();
             actualizar();
         }
     }
@@ -4445,20 +4239,64 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     class JPanelActualizable extends JPanel {
 
-        private JFreeChart createChartAtributoNumerico(ComparableInstances instancias, int indiceAtributoNumerico, double min, double max, int bin) {
+        private JFreeChart createChartAtributoNumerico(ComparableInstances instancias, int indiceAtributoNumerico, int indiceAtributoNominal) {
             JFreeChart chart = null;
             Attribute atributo = instancias.attribute(indiceAtributoNumerico);
             if (atributo.isNumeric()) {
-                HistogramDataset dataset = new HistogramDataset();
-                List<Double> v = new ArrayList<>();
-                for (int j = 0; j < instancias.numInstances(); j++) {
-                    if (!instancias.instance(j).isMissing(atributo)) {
-                        v.add(instancias.instance(j).value(atributo));
+                if (indiceAtributoNominal > -1) {
+                    HistogramDataset histogramdataset = new HistogramDataset();
+                    List<List<Instance>> ad = new ArrayList<>();
+                    for (int j = 0; j < instancias.attribute(indiceAtributoNominal).numValues() + 1; j++) {
+                        ad.add(new ArrayList<>());
                     }
+                    for (int j = 0; j < instancias.numInstances(); j++) {
+                        if (instancias.instance(j).isMissing(indiceAtributoNominal)) {
+                            ad.get(0).add(instancias.instance(j));
+                        } else {
+                            ad.get((int) (instancias.instance(j).value(indiceAtributoNominal) + 1.0)).add(instancias.instance(j));
+                        }
+                    }
+                    for (int i = 0; i < ad.size(); i++) {
+                        double[] target = new double[ad.get(i).size()];
+                        for (int j = 0; j < target.length; j++) {
+                            target[j] = ad.get(i).get(j).value(indiceAtributoNumerico);
+                        }
+                        ComparableInstances aux = new ComparableInstances(instancias);
+                        for (int j = aux.numInstances() - 1; j >= 0; j--) {
+                            aux.delete(j);
+                        }
+                        for (int j = 0; j < ad.get(i).size(); j++) {
+                            aux.add(ad.get(i).get(j));
+                        }
+                        int bin = getFreedmanDiaconisNumberOfBins(aux, indiceAtributoNumerico);
+                        Double max = Utils.getMaximo(aux, indiceAtributoNumerico),
+                                min = Utils.getMinimo(aux, indiceAtributoNumerico);
+                        min = min != null ? min : 0.0;
+                        max = max != null ? max : 0.0;
+                        histogramdataset.addSeries(i == 0 ? bundle.getString("senDefinir") : instancias.attribute(indiceAtributoNominal).value(i - 1), target, bin, min, max);
+                    }
+                    chart = ChartFactory.createHistogram(null, null, null, histogramdataset, PlotOrientation.VERTICAL, true, true, false);
+                    XYPlot xyplot = (XYPlot) chart.getPlot();
+                    xyplot.setForegroundAlpha(0.85F);
+                    XYBarRenderer xybarrenderer = (XYBarRenderer) xyplot.getRenderer();
+                    xybarrenderer.setDrawBarOutline(false);
+                } else {
+                    HistogramDataset dataset = new HistogramDataset();
+                    List<Double> v = new ArrayList<>();
+                    for (int j = 0; j < instancias.numInstances(); j++) {
+                        if (!instancias.instance(j).isMissing(atributo)) {
+                            v.add(instancias.instance(j).value(atributo));
+                        }
+                    }
+                    int bin = getFreedmanDiaconisNumberOfBins(instancias, indiceAtributoNumerico);
+                    Double max = Utils.getMaximo(instancias, indiceAtributoNumerico),
+                            min = Utils.getMinimo(instancias, indiceAtributoNumerico);
+                    min = min != null ? min : 0.0;
+                    max = max != null ? max : 0.0;
+                    dataset.addSeries(-1, ArrayUtils.toPrimitive(v.toArray(new Double[v.size()])), bin, min, max);
+                    chart = ChartFactory.createHistogram(null, null, null, dataset, PlotOrientation.VERTICAL, false, false, false);
                 }
-                dataset.addSeries(-1, ArrayUtils.toPrimitive(v.toArray(new Double[v.size()])), bin, min, max);
-                chart = ChartFactory.createHistogram(null, null, null, dataset, PlotOrientation.VERTICAL, false, false, false);
-                chart.setBackgroundPaint(new Color(230, 230, 230));
+                chart.setBackgroundPaint(new Color(240, 240, 240));
                 XYPlot xyplot = (XYPlot) chart.getPlot();
                 xyplot.setForegroundAlpha(0.7F);
                 xyplot.setBackgroundPaint(Color.WHITE);
@@ -4492,7 +4330,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     dataset.addValue((Number) reconto[i], -1, i > 0 ? atributo.value(i - 1) : bundle.getString("senDefinir"));
                 }
                 chart = ChartFactory.createBarChart(null, null, null, dataset, PlotOrientation.VERTICAL, false, false, false);
-                chart.setBackgroundPaint(new Color(230, 230, 230));
+                chart.setBackgroundPaint(new Color(240, 240, 240));
                 CategoryPlot categoryPlot = (CategoryPlot) chart.getPlot();
                 categoryPlot.setForegroundAlpha(0.7F);
                 categoryPlot.setBackgroundPaint(Color.WHITE);
@@ -4514,35 +4352,35 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 add(new JLabel(bundle.getString("indiceTemporal") + ": " + (modelo.getIndiceTemporal() == columnaModeloSeleccionada ? bundle.getString("si") : bundle.getString("non"))));
                 switch (modelo.obterTipoAtributo(columnaModeloSeleccionada)) {
                     case "numérico":
-                        Double max = Modelo.getMaximo(modelo.getInstancesComparable(), columnaModeloSeleccionada),
-                         min = Modelo.getMinimo(modelo.getInstancesComparable(), columnaModeloSeleccionada),
-                         media = Modelo.getMedia(modelo.getInstancesComparable(), columnaModeloSeleccionada),
-                         desvTipica = Modelo.getDesviacionTipica(modelo.getInstancesComparable(), columnaModeloSeleccionada),
-                         varianza = Modelo.getVarianza(modelo.getInstancesComparable(), columnaModeloSeleccionada);
+                        Double max = Utils.getMaximo(modelo.getComparableInstances(), columnaModeloSeleccionada),
+                         min = Utils.getMinimo(modelo.getComparableInstances(), columnaModeloSeleccionada),
+                         media = Utils.getMedia(modelo.getComparableInstances(), columnaModeloSeleccionada),
+                         desvTipica = Utils.getDesviacionTipica(modelo.getComparableInstances(), columnaModeloSeleccionada),
+                         varianza = Utils.getVarianza(modelo.getComparableInstances(), columnaModeloSeleccionada);
                         add(new JLabel(bundle.getString("maximo") + ": " + (max != null ? max : "-")));
                         add(new JLabel(bundle.getString("minimo") + ": " + (min != null ? min : "-")));
                         add(new JLabel(bundle.getString("media") + ": " + (media != null ? media : "-")));
                         add(new JLabel(bundle.getString("varianza") + ": " + (varianza != null && Double.compare(varianza, Double.NaN) != 0 ? varianza : "-")));
                         add(new JLabel(bundle.getString("desviacionTipica") + ": " + (desvTipica != null && Double.compare(desvTipica, Double.NaN) != 0 ? desvTipica : "-")));
-                        ChartPanel cp = new ChartPanelConfigurable(createChartAtributoNumerico(modelo.getInstancesComparable(), columnaModeloSeleccionada, min != null ? min : 0.0, max != null ? max : 0.0, 10), false, true, true, true, true);
+                        ChartPanel cp = new ChartPanel(createChartAtributoNumerico(modelo.getComparableInstances(), columnaModeloSeleccionada, modelo.getIndiceAtributoNominal()), false, true, true, true, true);
                         configureChartPanel(cp, 0, (int) Math.round(getPreferredSize().getWidth() * cp.getPreferredSize().getHeight() / cp.getPreferredSize().getWidth()));
                         add(cp);
                         break;
                     case "nominal":
                         ArrayList<Integer> coincidencias = new ArrayList<>();
-                        for (int i = 0; i < modelo.getInstancesComparable().attribute(columnaModeloSeleccionada).numValues() + 1; i++) {
+                        for (int i = 0; i < modelo.getComparableInstances().attribute(columnaModeloSeleccionada).numValues() + 1; i++) {
                             coincidencias.add(0);
                         }
-                        for (int i = 0; i < modelo.getInstancesComparable().numInstances(); i++) {
-                            int index = modelo.getInstancesComparable().instance(i).isMissing(columnaModeloSeleccionada) ? 0 : (int) modelo.getInstancesComparable().instance(i).value(columnaModeloSeleccionada) + 1;
+                        for (int i = 0; i < modelo.getComparableInstances().numInstances(); i++) {
+                            int index = modelo.getComparableInstances().instance(i).isMissing(columnaModeloSeleccionada) ? 0 : (int) modelo.getComparableInstances().instance(i).value(columnaModeloSeleccionada) + 1;
                             coincidencias.set(index, coincidencias.get(index) + 1);
                         }
                         add(new JLabel(bundle.getString("valores") + ": "));
                         add(new JLabel("  " + bundle.getString("senDefinir") + " (" + coincidencias.get(0) + ")"));
                         for (int i = 1; i < coincidencias.size(); i++) {
-                            add(new JLabel("  " + modelo.getInstancesComparable().attribute(columnaModeloSeleccionada).value(i - 1) + " (" + coincidencias.get(i) + ")"));
+                            add(new JLabel("  " + modelo.getComparableInstances().attribute(columnaModeloSeleccionada).value(i - 1) + " (" + coincidencias.get(i) + ")"));
                         }
-                        cp = new ChartPanelConfigurable(createChartAtributoNominal(modelo.getInstancesComparable(), columnaModeloSeleccionada), false, true, true, true, true);
+                        cp = new ChartPanelConfigurable(createChartAtributoNominal(modelo.getComparableInstances(), columnaModeloSeleccionada), false, true, true, true, true);
                         configureChartPanel(cp, 0, (int) Math.round(getPreferredSize().getWidth() * cp.getPreferredSize().getHeight() / cp.getPreferredSize().getWidth()));
                         add(cp);
                         break;
@@ -4557,28 +4395,15 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
-    private static JarFile jarForClass(Class<?> clazz, JarFile defaultJar) {
-        String path = "/" + clazz.getName().replace('.', '/') + ".class";
-        URL jarUrl = clazz.getResource(path);
-        if (jarUrl == null) {
-            return defaultJar;
+    private static int getFreedmanDiaconisNumberOfBins(ComparableInstances comparableInstances, int indice) {
+        int n = Utils.getNumeroObservaciones(comparableInstances, indice);
+        if (n == 0) {
+            return 1;
         }
-
-        String url = jarUrl.toString();
-        int bang = url.indexOf("!");
-        String JAR_URI_PREFIX = "jar:file:";
-        if (url.startsWith(JAR_URI_PREFIX) && bang != -1) {
-            try {
-                return new JarFile(url.substring(JAR_URI_PREFIX.length(), bang));
-            } catch (IOException e) {
-                throw new IllegalStateException("Error loading jar file.", e);
-            }
-        } else {
-            return defaultJar;
-        }
+        return Math.max(1, Math.round((float) Math.ceil(1.0 * Math.pow(n, 1.0 / 3) * (Utils.getMaximo(comparableInstances, indice) - Utils.getMinimo(comparableInstances, indice)) / (2 * (Utils.getValorPercentil(comparableInstances, 75, indice) - Utils.getValorPercentil(comparableInstances, 25, indice))))));
     }
 
-    class AutoSuggestor {
+    private class AutoSuggestor {
 
         private final JTextComponent textComp;
         private final Window container;

@@ -30,6 +30,7 @@ import java.util.Map;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
 import jdatamotioncommon.ComparableInstances;
+import jdatamotioncommon.Utils;
 import jdatamotioncommon.filtros.IFilter;
 import jdatamotioncommon.filtros.Parameter;
 import weka.core.Instance;
@@ -54,7 +55,7 @@ public class FiltroEliminacionOutliers implements IFilter {
         if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
             return comparableInstances;
         }
-        Double desvTipica = Modelo.getDesviacionTipica(comparableInstances, filteredAttributeIndex), media = Modelo.getMedia(comparableInstances, filteredAttributeIndex);
+        Double desvTipica = Utils.getDesviacionTipica(comparableInstances, filteredAttributeIndex), media = Utils.getMedia(comparableInstances, filteredAttributeIndex);
         Double numDTs = (Double) parameters.get(NUMERO_DE_DTS).getValue();
         Iterator<Instance> it = comparableInstances.iterator();
         while (it.hasNext()) {

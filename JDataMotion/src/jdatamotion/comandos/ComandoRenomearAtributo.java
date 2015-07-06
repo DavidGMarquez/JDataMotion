@@ -41,16 +41,16 @@ public class ComandoRenomearAtributo extends ComandoDesfacible {
         super(modelo, Vista.bundle.getString("Vista.jMenuItem20.text"));
         this.indiceAtributoNoModelo=indiceAtributoNoModelo;
         this.novoNome=novoNome;
-        this.antigoNome=modelo.getInstancesComparable().attribute(indiceAtributoNoModelo).name();
+        this.antigoNome=modelo.getComparableInstances().attribute(indiceAtributoNoModelo).name();
     }
 
     @Override
-    public void Desfacer() throws Exception {
+    public void desfacer() throws Exception {
         ((Modelo) getObxectivo()).renomearAtributo(antigoNome,indiceAtributoNoModelo);
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         ((Modelo) getObxectivo()).renomearAtributo(novoNome,indiceAtributoNoModelo);
     }
 }

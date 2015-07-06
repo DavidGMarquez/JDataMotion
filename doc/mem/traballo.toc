@@ -18,24 +18,30 @@
 \contentsline {section}{\numberline {3.2}An\IeC {\'a}lise de tecnolox\IeC {\'\i }as}{32}{section.3.2}
 \contentsline {subsection}{\numberline {3.2.1}Arquitectura}{32}{subsection.3.2.1}
 \contentsline {subsection}{\numberline {3.2.2}Tecnolox\IeC {\'\i }as}{32}{subsection.3.2.2}
-\contentsline {subsubsection}{Ferramentas de dese\IeC {\~n}o}{32}{section*.54}
-\contentsline {subsubsection}{Ferramentas de desenvolvemento}{33}{section*.55}
-\contentsline {subsubsection}{Ferramentas de validaci\IeC {\'o}n}{38}{section*.56}
+\contentsline {subsubsection}{\numberline {3.2.2.1}Ferramentas de dese\IeC {\~n}o}{32}{subsubsection.3.2.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2.2}Ferramentas de desenvolvemento}{33}{subsubsection.3.2.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.3}Ferramentas de validaci\IeC {\'o}n}{38}{subsubsection.3.2.2.3}
 \contentsline {chapter}{\numberline {4}Dese\IeC {\~n}o}{39}{chapter.4}
-\contentsline {subsection}{\numberline {4.0.3}Estrutura do dese\IeC {\~n}o}{39}{subsection.4.0.3}
-\contentsline {subsection}{\numberline {4.0.4}Interface gr\IeC {\'a}fica}{42}{subsection.4.0.4}
-\contentsline {chapter}{\numberline {5}Exemplos}{43}{chapter.5}
-\contentsline {section}{\numberline {5.1}Un exemplo de secci\IeC {\'o}n}{43}{section.5.1}
-\contentsline {subsection}{\numberline {5.1.1}Un exemplo de subsecci\IeC {\'o}n}{43}{subsection.5.1.1}
-\contentsline {subsection}{\numberline {5.1.2}Otro exemplo de subsecci\IeC {\'o}n}{43}{subsection.5.1.2}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{43}{section*.57}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{44}{section*.58}
-\contentsline {subsubsection}{Un exemplo de subsubsecci\IeC {\'o}n}{44}{section*.59}
-\contentsline {section}{\numberline {5.2}Exemplos de figuras e cadros}{44}{section.5.2}
-\contentsline {section}{\numberline {5.3}Exemplos de referencias \IeC {\'a} bibliograf\IeC {\'\i }a}{44}{section.5.3}
-\contentsline {section}{\numberline {5.4}Exemplos de enumeraci\IeC {\'o}ns}{44}{section.5.4}
-\contentsline {chapter}{\numberline {6}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{47}{chapter.6}
-\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{49}{appendix.Alph1}
-\contentsline {chapter}{\numberline {B}Manuais de usuario}{51}{appendix.Alph2}
-\contentsline {chapter}{\numberline {C}Licenza}{53}{appendix.Alph3}
-\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{55}{appendix.Alph3}
+\contentsline {section}{\numberline {4.1}Dese\IeC {\~n}o global}{39}{section.4.1}
+\contentsline {section}{\numberline {4.2}Dese\IeC {\~n}o de JDataMotion}{40}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Modelo}{44}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Controlador}{47}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Vista}{51}{subsection.4.2.3}
+\contentsline {subsubsection}{\numberline {4.2.3.1}Dese\IeC {\~n}o da interface gr\IeC {\'a}fica}{52}{subsubsection.4.2.3.1}
+\contentsline {section}{\numberline {4.3}Dese\IeC {\~n}o de JDataMotion.common}{60}{section.4.3}
+\contentsline {section}{\numberline {4.4}Dese\IeC {\~n}o de JDataMotion.filters.sample}{60}{section.4.4}
+\contentsline {chapter}{\numberline {5}Exemplos}{61}{chapter.5}
+\contentsline {section}{\numberline {5.1}Un exemplo de secci\IeC {\'o}n}{61}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}Un exemplo de subsecci\IeC {\'o}n}{61}{subsection.5.1.1}
+\contentsline {subsection}{\numberline {5.1.2}Otro exemplo de subsecci\IeC {\'o}n}{61}{subsection.5.1.2}
+\contentsline {subsubsection}{\numberline {5.1.2.1}Un exemplo de subsubsecci\IeC {\'o}n}{61}{subsubsection.5.1.2.1}
+\contentsline {subsubsection}{\numberline {5.1.2.2}Un exemplo de subsubsecci\IeC {\'o}n}{62}{subsubsection.5.1.2.2}
+\contentsline {subsubsection}{\numberline {5.1.2.3}Un exemplo de subsubsecci\IeC {\'o}n}{62}{subsubsection.5.1.2.3}
+\contentsline {section}{\numberline {5.2}Exemplos de figuras e cadros}{62}{section.5.2}
+\contentsline {section}{\numberline {5.3}Exemplos de referencias \IeC {\'a} bibliograf\IeC {\'\i }a}{62}{section.5.3}
+\contentsline {section}{\numberline {5.4}Exemplos de enumeraci\IeC {\'o}ns}{62}{section.5.4}
+\contentsline {chapter}{\numberline {6}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{65}{chapter.6}
+\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{67}{appendix.Alph1}
+\contentsline {chapter}{\numberline {B}Manuais de usuario}{69}{appendix.Alph2}
+\contentsline {chapter}{\numberline {C}Licenza}{71}{appendix.Alph3}
+\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{73}{appendix.Alph3}

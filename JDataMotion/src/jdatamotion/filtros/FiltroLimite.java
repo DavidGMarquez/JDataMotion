@@ -31,6 +31,7 @@ import java.util.Map;
 import jdatamotion.Modelo;
 import jdatamotion.Vista;
 import jdatamotioncommon.ComparableInstances;
+import jdatamotioncommon.Utils;
 import jdatamotioncommon.filtros.IFilter;
 import jdatamotioncommon.filtros.Parameter;
 import weka.core.Instance;
@@ -69,7 +70,7 @@ public class FiltroLimite implements IFilter {
         if (parameters.get(TIPO_LIMITE).getValue().equals(LIMITE_VALOR)) {
             valorNumerico = (Double) parameters.get(VALOR).getValue();
         } else if (parameters.get(TIPO_LIMITE).getValue().equals(LIMITE_PERCENTIL)) {
-            valorNumerico = Modelo.getValorPercentil(comparableInstances, ((Double) parameters.get(VALOR).getValue()).intValue(), filteredAttributeIndex);
+            valorNumerico = Utils.getValorPercentil(comparableInstances, ((Double) parameters.get(VALOR).getValue()).intValue(), filteredAttributeIndex);
         }
         Iterator<Instance> it = comparableInstances.iterator();
         while (it.hasNext()) {

@@ -27,15 +27,15 @@ implementar editor de formas y colores de puntos OK
 
 -------------------------------------------------------------------------------
 
-agilizar descripciones de columnas en modelo (muy pesado)
+agilizar descripciones de columnas en modelo (muy pesado) -> no se pudo hacer mucho más
 
-trabajar histogramas: mostrar clases mediante colores (y filtrar al visualizar datos no representativos)
+trabajar histogramas: mostrar clases mediante colores (y filtrar al visualizar datos no representativos) -> OK (ft Freedman-Diaconis)
 
-analisis de pruebas en documentación
+analisis de pruebas en documentación -> pte
 
-eficiencia computacional: estudio
+eficiencia computacional: estudio -> pte
 
-configurar (número de barras) y ampliar histogramas
+configurar (número de barras) y ampliar histogramas -> no pero ya no es necesario
 
 tests unitarios validan métodos, no RF
 
@@ -43,4 +43,4 @@ no tener dependencias (usar mockups)
 
 tests públicos para validar RFs
 
-esconder puntos
+esconder puntos -> deshabilitado

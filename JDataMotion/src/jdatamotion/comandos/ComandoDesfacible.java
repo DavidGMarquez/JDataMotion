@@ -23,15 +23,17 @@
  */
 package jdatamotion.comandos;
 
+import jdatamotion.Modelo;
+
 /**
  *
  * @author usuario
  */
 public abstract class ComandoDesfacible extends Comando {
 
-    public abstract void Desfacer() throws Exception;
+    public abstract void desfacer() throws Exception;
 
-    public ComandoDesfacible(Object obxectivo, String nome) {
+    public ComandoDesfacible(Modelo obxectivo, String nome) {
         super(obxectivo, nome);
     }
 }

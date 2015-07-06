@@ -44,12 +44,12 @@ public class ComandoEngadirFiltro extends ComandoDesfacible {
     }
 
     @Override
-    public void Desfacer() throws Exception {
+    public void desfacer() throws Exception {
         ((Modelo) getObxectivo()).eliminarFiltro(index);
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         ((Modelo) getObxectivo()).engadirFiltro(index, filtro);
     }
 }

@@ -40,7 +40,7 @@ public class ComandoImportarFicheiro extends Comando {
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         ((Modelo) getObxectivo()).importarFicheiro(url);
     }
 }

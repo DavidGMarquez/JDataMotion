@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.Map;
 import jdatamotion.Modelo;
 import jdatamotioncommon.ComparableInstances;
+import jdatamotioncommon.Utils;
 import jdatamotioncommon.filtros.DoubleParameter;
 import jdatamotioncommon.filtros.IFilter;
 import jdatamotioncommon.filtros.Parameter;
@@ -54,7 +55,7 @@ public class FiltroNormalizacion implements IFilter {
         if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
             return comparableInstances;
         }
-        Double desvTipica = Modelo.getDesviacionTipica(comparableInstances, filteredAttributeIndex), media = Modelo.getMedia(comparableInstances, filteredAttributeIndex);
+        Double desvTipica = Utils.getDesviacionTipica(comparableInstances, filteredAttributeIndex), media = Utils.getMedia(comparableInstances, filteredAttributeIndex);
         Iterator<Instance> it = comparableInstances.iterator();
         while (it.hasNext()) {
             Instance instance = it.next();

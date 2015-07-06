@@ -37,12 +37,12 @@ public class ComandoEngadirDatos extends ComandoDesfacible {
     }
 
     @Override
-    public void Desfacer() throws Exception {
+    public void desfacer() throws Exception {
         ((Modelo) getObxectivo()).eliminarDatos(new Integer[]{((Modelo) getObxectivo()).obterNumInstancias()-1});
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         ((Modelo) getObxectivo()).engadirDatos();
     }
 }

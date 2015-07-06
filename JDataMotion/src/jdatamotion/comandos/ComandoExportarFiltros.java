@@ -34,14 +34,14 @@ public class ComandoExportarFiltros extends Comando {
     private final String url;
     private final Integer[] indicesFiltros;
 
-    public ComandoExportarFiltros(Object obxectivo, String url, Integer[] indicesFiltros) {
+    public ComandoExportarFiltros(Modelo obxectivo, String url, Integer[] indicesFiltros) {
         super(obxectivo, url);
         this.url = url;
         this.indicesFiltros=indicesFiltros;
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         ((Modelo) getObxectivo()).exportarFiltros(url, indicesFiltros);
     }
 

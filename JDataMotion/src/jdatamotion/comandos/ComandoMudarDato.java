@@ -62,12 +62,12 @@ public class ComandoMudarDato extends ComandoDesfacible {
     }
 
     @Override
-    public void Desfacer() throws Exception {
+    public void desfacer() throws Exception {
         ((Modelo) getObxectivo()).mudarDato(fila, columna, antigoValor);
     }
 
     @Override
-    public void Executar() throws Exception {
+    public void executar() throws Exception {
         ((Modelo) getObxectivo()).mudarDato(fila, columna, novoValor);
     }
 }

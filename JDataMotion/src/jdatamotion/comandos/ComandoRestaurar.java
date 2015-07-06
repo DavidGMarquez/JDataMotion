@@ -40,13 +40,13 @@ public class ComandoRestaurar extends ComandoDesfacible {
     }
 
     @Override
-    public void Desfacer() throws Exception {
-        ((Modelo) getObxectivo()).setInstancesComparable(datosAntigos);
+    public void desfacer() throws Exception {
+        ((Modelo) getObxectivo()).setComparableInstances(datosAntigos);
     }
 
     @Override
-    public void Executar() throws Exception {
-        this.datosAntigos = new ComparableInstances(((Modelo) getObxectivo()).getInstancesComparable());
+    public void executar() throws Exception {
+        this.datosAntigos = new ComparableInstances(((Modelo) getObxectivo()).getComparableInstances());
         ((Modelo) getObxectivo()).restaurar();
     }
 }

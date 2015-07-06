@@ -42,13 +42,13 @@ public class ComandoEliminarDatos extends ComandoDesfacible {
     }
 
     @Override
-    public void Desfacer() throws Exception {
-        ((Modelo) getObxectivo()).setInstancesComparable(modeloAntigo);
+    public void desfacer() throws Exception {
+        ((Modelo) getObxectivo()).setComparableInstances(modeloAntigo);
     }
 
     @Override
-    public void Executar() throws Exception {
-        this.modeloAntigo = new ComparableInstances(((Modelo) getObxectivo()).getInstancesComparable());
+    public void executar() throws Exception {
+        this.modeloAntigo = new ComparableInstances(((Modelo) getObxectivo()).getComparableInstances());
         ((Modelo) getObxectivo()).eliminarDatos(indicesDatos);
     }
 }
