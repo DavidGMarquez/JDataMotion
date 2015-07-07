@@ -35,7 +35,7 @@ public class ComandoImportarFicheiro extends Comando {
     private final String url;
 
     public ComandoImportarFicheiro(Modelo modelo, String url) {
-        super(modelo, Vista.bundle.getString("Vista.jMenuItem1.text"));
+        super(modelo, Vista.recursosIdioma.getString("Vista.jMenuItem1.text"));
         this.url = url;
     }
 

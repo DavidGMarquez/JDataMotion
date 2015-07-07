@@ -139,7 +139,7 @@ public class DefaultAxisEditorConfigurable extends JPanel implements ActionListe
     protected static ResourceBundle localizationResources
             //            = ResourceBundleWrapper.getBundle(
             //                    "org.jfree.chart.editor.LocalizationBundle");
-            = Vista.bundle;
+            = Vista.recursosIdioma;
 
     /**
      * A static method that returns a panel that is appropriate for the axis

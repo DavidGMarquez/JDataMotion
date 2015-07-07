@@ -37,7 +37,7 @@ public class ComandoEliminarDatos extends ComandoDesfacible {
     private ComparableInstances modeloAntigo;
 
     public ComandoEliminarDatos(Modelo modelo, Integer[] datos) {
-        super(modelo, Vista.bundle.getString("Vista.jMenuItem14.text"));
+        super(modelo, Vista.recursosIdioma.getString("Vista.jMenuItem14.text"));
         this.indicesDatos = datos;
     }
 

@@ -36,7 +36,7 @@ public class ComandoMudarIndiceTemporal extends ComandoDesfacible {
     private final int antigoValor;
 
     public ComandoMudarIndiceTemporal(Modelo modelo, int indiceTemporal) {
-        super(modelo, Vista.bundle.getString("comandoMudarIndiceTemporal"));
+        super(modelo, Vista.recursosIdioma.getString("comandoMudarIndiceTemporal"));
         this.novoValor = indiceTemporal;
         this.antigoValor = modelo.getIndiceTemporal();
     }

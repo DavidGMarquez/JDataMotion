@@ -98,7 +98,7 @@ public class DefaultTitleEditorConfigurable extends JPanel implements ActionList
     protected static ResourceBundle localizationResources
             //            = ResourceBundleWrapper.getBundle(
             //                    "org.jfree.chart.editor.LocalizationBundle");
-            = Vista.bundle;
+            = Vista.recursosIdioma;
 
     /**
      * Standard constructor: builds a panel for displaying/editing the

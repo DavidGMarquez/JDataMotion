@@ -39,7 +39,7 @@ public class ComandoEliminarFiltro extends ComandoDesfacible {
     private IFilter filtroAntigo;
 
     public ComandoEliminarFiltro(Modelo modelo, int index) {
-        super(modelo, Vista.bundle.getString("comandoEliminarFiltro"));
+        super(modelo, Vista.recursosIdioma.getString("comandoEliminarFiltro"));
         this.index = index;
     }
 

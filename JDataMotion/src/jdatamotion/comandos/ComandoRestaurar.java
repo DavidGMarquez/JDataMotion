@@ -36,7 +36,7 @@ public class ComandoRestaurar extends ComandoDesfacible {
     private ComparableInstances datosAntigos;
 
     public ComandoRestaurar(Modelo modelo) {
-        super(modelo, Vista.bundle.getString("Vista.jMenuItem10.text"));
+        super(modelo, Vista.recursosIdioma.getString("Vista.jMenuItem10.text"));
     }
 
     @Override

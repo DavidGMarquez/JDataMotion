@@ -43,7 +43,7 @@ public class ComandoMudarTipo extends ComandoDesfacible {
     private List<FilterHandler> filtrosAntigos;
 
     public ComandoMudarTipo(Modelo modelo, int columnaModelo, int novoTipo) {
-        super(modelo, Vista.bundle.getString("comandoMudarTipo"));
+        super(modelo, Vista.recursosIdioma.getString("comandoMudarTipo"));
         this.novoTipo = novoTipo;
         this.columnaModelo = columnaModelo;
     }

@@ -33,7 +33,7 @@ import jdatamotion.Vista;
 public class ComandoEngadirDatos extends ComandoDesfacible {
 
     public ComandoEngadirDatos(Modelo modelo) {
-        super(modelo, Vista.bundle.getString("Vista.jMenuItem13.text"));
+        super(modelo, Vista.recursosIdioma.getString("Vista.jMenuItem13.text"));
     }
 
     @Override

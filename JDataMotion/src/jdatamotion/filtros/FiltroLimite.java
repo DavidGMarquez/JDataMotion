@@ -42,15 +42,15 @@ import weka.core.Instance;
  */
 public class FiltroLimite implements IFilter {
 
-    private static final String TIPO_LIMITE = Vista.bundle.getString("tipoLimite");
-    private static final String LIMITE_VALOR = Vista.bundle.getString("limiteValor");
-    private static final String LIMITE_PERCENTIL = Vista.bundle.getString("limitePercentil");
+    private static final String TIPO_LIMITE = Vista.recursosIdioma.getString("tipoLimite");
+    private static final String LIMITE_VALOR = Vista.recursosIdioma.getString("limiteValor");
+    private static final String LIMITE_PERCENTIL = Vista.recursosIdioma.getString("limitePercentil");
 
-    private static final String TIPO_COTA = Vista.bundle.getString("tipoCota");
-    private static final String COTA_SUPERIOR = Vista.bundle.getString("cotaSuperior");
-    private static final String COTA_INFERIOR = Vista.bundle.getString("cotaInferior");
+    private static final String TIPO_COTA = Vista.recursosIdioma.getString("tipoCota");
+    private static final String COTA_SUPERIOR = Vista.recursosIdioma.getString("cotaSuperior");
+    private static final String COTA_INFERIOR = Vista.recursosIdioma.getString("cotaInferior");
 
-    private static final String VALOR = Vista.bundle.getString("valor");
+    private static final String VALOR = Vista.recursosIdioma.getString("valor");
 
     @Override
     public Map<String, Parameter> getParametersNeeded() {

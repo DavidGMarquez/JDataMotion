@@ -42,7 +42,7 @@ public class ComandoConfigurarFiltro extends ComandoDesfacible {
     private final Integer indiceAtributoNovo;
 
     public ComandoConfigurarFiltro(Modelo modelo, int index, HashMap<String, Parameter> parametrosNovos) throws CloneNotSupportedException {
-        super(modelo, Vista.bundle.getString("comandoConfigurarFiltro"));
+        super(modelo, Vista.recursosIdioma.getString("comandoConfigurarFiltro"));
         this.index = index;
         HashMap<String, Parameter> parametrosNovosAux = (HashMap<String, Parameter>) parametrosNovos.clone();
         this.indiceAtributoNovo = parametrosNovosAux.containsKey("indiceAtributo") ? (Integer) parametrosNovosAux.remove("indiceAtributo").getValue() : null;

@@ -89,7 +89,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
     protected static ResourceBundle localizationResources
             // = ResourceBundleWrapper.getBundle(
             //      "org.jfree.chart.editor.LocalizationBundle");
-            = Vista.bundle;
+            = Vista.recursosIdioma;
 
     private List<Color> seriesPaint;
     private List<Shape> seriesOutlineStroke;
@@ -418,7 +418,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         JPanel linea = new JPanel();
         linea.add(Box.createHorizontalStrut(10));
         linea.setLayout(new BoxLayout(linea, BoxLayout.X_AXIS));
-        JLabel etiqueta = new JLabel(localizationResources.getString("corNumero") + " " + String.valueOf(p.getComponentCount()) + " " + (p.getComponentCount() == 0 ? "(" + Vista.bundle.getString("senDefinir") + ")" : "") + ": ");
+        JLabel etiqueta = new JLabel(localizationResources.getString("corNumero") + " " + String.valueOf(p.getComponentCount()) + " " + (p.getComponentCount() == 0 ? "(" + Vista.recursosIdioma.getString("senDefinir") + ")" : "") + ": ");
         linea.add(etiqueta);
         linea.add(Box.createHorizontalGlue());
         MuestraColor ps = c != null ? c : new MuestraColor(null);
@@ -431,7 +431,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         linea.setPreferredSize(new Dimension(400, 30));
         linea.add(Box.createHorizontalStrut(20));
         final JColorChooser jcc = new JColorChooser(c != null ? (Color) c.getPaint() : Color.BLACK);
-        JButton boton1 = new JButton(ps.getPaint() != null ? Vista.bundle.getString("modificar") : Vista.bundle.getString("engadir"));
+        JButton boton1 = new JButton(ps.getPaint() != null ? Vista.recursosIdioma.getString("modificar") : Vista.recursosIdioma.getString("engadir"));
         ActionListener okActionListener1 = (ActionEvent e1) -> {
             if (ps.getPaint() == null) {
                 colors.add(ps);
@@ -447,7 +447,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         linea.add(boton1);
         linea.add(Box.createHorizontalStrut(10));
         if (ps.getPaint() != null) {
-            JButton boton2 = new JButton(Vista.bundle.getString("eliminar"));
+            JButton boton2 = new JButton(Vista.recursosIdioma.getString("eliminar"));
             boton2.addActionListener((ActionEvent e1) -> {
                 colors.remove(ps);
                 pintarLineasColor(p, colors);
@@ -482,7 +482,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         JPanel linea = new JPanel();
         linea.add(Box.createHorizontalStrut(10));
         linea.setLayout(new BoxLayout(linea, BoxLayout.X_AXIS));
-        JLabel etiqueta = new JLabel(localizationResources.getString("formaNumero") + " " + String.valueOf(p.getComponentCount()) + " " + (p.getComponentCount() == 0 ? "(" + Vista.bundle.getString("senDefinir") + ")" : "") + ": ");
+        JLabel etiqueta = new JLabel(localizationResources.getString("formaNumero") + " " + String.valueOf(p.getComponentCount()) + " " + (p.getComponentCount() == 0 ? "(" + Vista.recursosIdioma.getString("senDefinir") + ")" : "") + ": ");
         linea.add(etiqueta);
         linea.add(Box.createHorizontalGlue());
         MuestraForma ps = c != null ? c : new MuestraForma(null);
@@ -495,7 +495,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         linea.setPreferredSize(new Dimension(400, 30));
         linea.add(Box.createHorizontalStrut(20));
         JPanel co = new JPanel(new FlowLayout());
-        JComboBox<String> jcb = new JComboBox(new String[]{Vista.bundle.getString("ningun"), Vista.bundle.getString("estrela"), Vista.bundle.getString("poligono")});
+        JComboBox<String> jcb = new JComboBox(new String[]{Vista.recursosIdioma.getString("ningun"), Vista.recursosIdioma.getString("estrela"), Vista.recursosIdioma.getString("poligono")});
         if (c != null) {
             if (c.getForma() instanceof StarPolygon) {
                 jcb.setSelectedIndex(1);
@@ -507,7 +507,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         co.add(jcb);
         JSpinner js = new JSpinner(new SpinnerNumberModel(c != null ? c.getNumeroVertices() : 3, 3, 10, 1));
         co.add(js);
-        JButton boton1 = new JButton(ps.getForma() != null ? Vista.bundle.getString("modificar") : Vista.bundle.getString("engadir"));
+        JButton boton1 = new JButton(ps.getForma() != null ? Vista.recursosIdioma.getString("modificar") : Vista.recursosIdioma.getString("engadir"));
         boton1.addActionListener((ActionEvent e) -> {
             if (JOptionPane.showConfirmDialog(null, co, localizationResources.getString("seleccionarListaFormas"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION) {
                 if (jcb.getSelectedIndex() != 0 && ps.getForma() == null) {
@@ -532,7 +532,7 @@ public class DefaultChartEditorConfigurable extends JPanel implements ActionList
         linea.add(boton1);
         linea.add(Box.createHorizontalStrut(10));
         if (ps.getForma() != null) {
-            JButton boton2 = new JButton(Vista.bundle.getString("eliminar"));
+            JButton boton2 = new JButton(Vista.recursosIdioma.getString("eliminar"));
             boton2.addActionListener((ActionEvent e1) -> {
                 shapes.remove(ps);
                 pintarLineasForma(p, shapes);

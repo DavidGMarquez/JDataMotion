@@ -36,7 +36,7 @@ public class ComandoExportarFicheiro extends Comando {
     private final String extension;
 
     public ComandoExportarFicheiro(Modelo modelo, String url, String extension) {
-        super(modelo, Vista.bundle.getString("Vista.jMenuItem2.text"));
+        super(modelo, Vista.recursosIdioma.getString("Vista.jMenuItem2.text"));
         this.url = url;
         this.extension = extension;
     }

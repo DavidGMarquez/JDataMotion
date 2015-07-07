@@ -51,7 +51,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import static jdatamotion.Modelo.formatoTimeIdentificadorTemporal;
 import static jdatamotion.Modelo.normalizarTime;
-import static jdatamotion.Vista.bundle;
+import static jdatamotion.Vista.recursosIdioma;
 import jdatamotioncommon.ComparableInstances;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -105,6 +105,7 @@ public final class ManexadorScatterPlots {
     private final int lonxitudeEstela;
     private static Vista vista;
     Object createPropertiesPopupMenu;
+    private final Color corEstela;
 
     public synchronized int getTInicial() {
         if (eixoTemporal.isEmpty()) {
@@ -518,7 +519,7 @@ public final class ManexadorScatterPlots {
         tarefaPlay.play();
     }
 
-    public ManexadorScatterPlots(Vista vista, ComparableInstances instances, int atributoColor, int indiceTemporal, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField, int ordeVisualizacion, int paso, int lonxitudeEstela) {
+    public ManexadorScatterPlots(Vista vista, ComparableInstances instances, int atributoColor, int indiceTemporal, boolean[][] scatterPlotsVisibles, JSlider slider, JTextField textField, int ordeVisualizacion, int paso, int lonxitudeEstela, Color corEstela) {
         int numAtributosNumericos = scatterPlotsVisibles.length;
         ManexadorScatterPlots.vista = vista;
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
@@ -545,6 +546,7 @@ public final class ManexadorScatterPlots {
         this.textField = textField;
         this.eixoTemporal = fabricarEixo(instances, indiceTemporal, ordeVisualizacion);
         this.t = getTInicial();
+        this.corEstela = corEstela;
     }
 
     public class JFrameChartPanel extends JFrame {
@@ -606,7 +608,7 @@ public final class ManexadorScatterPlots {
             if (atributoColor < 0) {
                 return "";
             }
-            return i > 0 ? atributos.attribute(atributoColor).value(i - 1) : bundle.getString("senDefinir");
+            return i > 0 ? atributos.attribute(atributoColor).value(i - 1) : recursosIdioma.getString("senDefinir");
         }
 
         public Number getRangeMax() {
@@ -960,7 +962,7 @@ public final class ManexadorScatterPlots {
         }
 
         private synchronized void pintarEstela(Nodo<InstancesSimultaneas> nodo, int lonxitudeEstela) {
-            Color corEstela = vista.getCorEstela(), corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint(), corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
+            Color corBackgroundChartPanel = (Color) chartPanelCela.getChart().getPlot().getBackgroundPaint(), corBackgroundJFrameAmpliar = (Color) jFrameAmpliado.getChartPanel().getChart().getPlot().getBackgroundPaint();
             Nodo<InstancesSimultaneas> nAnterior, nActual = nodo;
             for (int i = 0; i < lonxitudeEstela; i++) {
                 if (nActual != null) {
@@ -1000,7 +1002,7 @@ public final class ManexadorScatterPlots {
             this.chartPanelCela = new ChartPanelConfigurable(jfreechart1);
             ChartPanel chartPanelAmpliado = new ChartPanelConfigurable(jfreechart2);
             this.chartPanelCela.getChart().setTitle((String) null);
-            this.jFrameAmpliado = new JFrameChartPanel("'" + instances.attribute(indiceAtributoY).name() + "' " + bundle.getString("fronteA") + " '" + instances.attribute(indiceAtributoX).name() + "'", chartPanelAmpliado, indiceAtributoX, indiceAtributoY);
+            this.jFrameAmpliado = new JFrameChartPanel("'" + instances.attribute(indiceAtributoY).name() + "' " + recursosIdioma.getString("fronteA") + " '" + instances.attribute(indiceAtributoX).name() + "'", chartPanelAmpliado, indiceAtributoX, indiceAtributoY);
             for (JFreeChart jf : new JFreeChart[]{this.jFrameAmpliado.getChartPanel().getChart(), this.chartPanelCela.getChart()}) {
                 if (jf.getLegend() != null) {
                     jf.getLegend().setBorder(0, 0, 0, 0);
@@ -1027,7 +1029,7 @@ public final class ManexadorScatterPlots {
         }
 
         private JFreeChart createChart(ComparableInstances instances, XYDatasetModelo xydataset) {
-            JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + Vista.getBundle().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, false, false);
+            JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + Vista.getRecursosIdioma().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, false, false);
             XYPlot xyplot = (XYPlot) jfreechart.getPlot();
             xyplot.setDomainCrosshairVisible(true);
             xyplot.setDomainCrosshairLockedOnData(true);
@@ -1058,7 +1060,7 @@ public final class ManexadorScatterPlots {
     public static class ChartPanelConfigurable extends ChartPanel {
 
         static {
-            ChartPanel.localizationResources = Vista.bundle;
+            ChartPanel.localizationResources = Vista.recursosIdioma;
         }
 
         public ChartPanelConfigurable(JFreeChart chart) {

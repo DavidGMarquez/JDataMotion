@@ -153,7 +153,7 @@ public class DefaultPlotEditorConfigurable extends JPanel implements ActionListe
     protected static ResourceBundle localizationResources
             //            = ResourceBundleWrapper.getBundle(
             //                    "org.jfree.chart.editor.LocalizationBundle");
-            = Vista.bundle;
+            = Vista.recursosIdioma;
 
     /**
      * Standard constructor - constructs a panel for editing the properties of

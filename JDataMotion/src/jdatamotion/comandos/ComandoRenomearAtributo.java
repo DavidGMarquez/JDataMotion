@@ -38,7 +38,7 @@ public class ComandoRenomearAtributo extends ComandoDesfacible {
     private final String novoNome;
     
     public ComandoRenomearAtributo(Modelo modelo,String novoNome,int indiceAtributoNoModelo) {
-        super(modelo, Vista.bundle.getString("Vista.jMenuItem20.text"));
+        super(modelo, Vista.recursosIdioma.getString("Vista.jMenuItem20.text"));
         this.indiceAtributoNoModelo=indiceAtributoNoModelo;
         this.novoNome=novoNome;
         this.antigoNome=modelo.getComparableInstances().attribute(indiceAtributoNoModelo).name();

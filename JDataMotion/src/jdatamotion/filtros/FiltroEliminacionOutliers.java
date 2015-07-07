@@ -41,7 +41,7 @@ import weka.core.Instance;
  */
 public class FiltroEliminacionOutliers implements IFilter {
 
-    private static final String NUMERO_DE_DTS = Vista.bundle.getString("numeroDeDTs");
+    private static final String NUMERO_DE_DTS = Vista.recursosIdioma.getString("numeroDeDTs");
 
     @Override
     public Map<String, Parameter> getParametersNeeded() {

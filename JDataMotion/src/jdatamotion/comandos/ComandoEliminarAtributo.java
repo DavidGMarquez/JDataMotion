@@ -41,7 +41,7 @@ public class ComandoEliminarAtributo extends ComandoDesfacible {
     private List<FilterHandler> filtrosAntigos;
 
     public ComandoEliminarAtributo(Modelo modelo, int indiceAtributoNoModelo) {
-        super(modelo, Vista.bundle.getString("Vista.jMenuItem19.text"));
+        super(modelo, Vista.recursosIdioma.getString("Vista.jMenuItem19.text"));
         this.indiceAtributoNoModelo = indiceAtributoNoModelo;
     }
 

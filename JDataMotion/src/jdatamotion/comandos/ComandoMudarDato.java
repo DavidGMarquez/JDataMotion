@@ -54,7 +54,7 @@ public class ComandoMudarDato extends ComandoDesfacible {
     }
 
     public ComandoMudarDato(Modelo modelo, int fila, int columna, Object novoValor) {
-        super(modelo, Vista.bundle.getString("comandoMudarDato"));
+        super(modelo, Vista.recursosIdioma.getString("comandoMudarDato"));
         this.fila = fila;
         this.columna = columna;
         this.novoValor = novoValor;

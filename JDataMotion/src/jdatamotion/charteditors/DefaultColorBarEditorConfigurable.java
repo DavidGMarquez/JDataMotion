@@ -84,7 +84,7 @@ class DefaultColorBarEditorConfigurable extends DefaultNumberAxisEditorConfigura
     protected static ResourceBundle localizationResources
 //            = ResourceBundleWrapper.getBundle(
 //                    "org.jfree.chart.editor.LocalizationBundle");
-            = Vista.bundle;
+            = Vista.recursosIdioma;
 
     /**
      * Creates a new edit panel for a color bar.

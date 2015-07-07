@@ -38,7 +38,7 @@ public class ComandoEngadirFiltro extends ComandoDesfacible {
     private final IFilter filtro;
 
     public ComandoEngadirFiltro(Modelo modelo, int index, IFilter filtro) {
-        super(modelo, Vista.bundle.getString("Vista.jButton14.text"));
+        super(modelo, Vista.recursosIdioma.getString("Vista.jButton14.text"));
         this.index = index;
         this.filtro = filtro;
     }

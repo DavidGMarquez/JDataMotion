@@ -916,7 +916,7 @@ public class Modelo extends Observable implements Sesionizable {
         while (!unico) {
             indice++;
             unico = true;
-            nomeColumna = Vista.bundle.getString("novoAtributo");
+            nomeColumna = Vista.recursosIdioma.getString("novoAtributo");
             Enumeration e = instancesComparable.enumerateAttributes();
             while (e.hasMoreElements()) {
                 Attribute a = (Attribute) e.nextElement();

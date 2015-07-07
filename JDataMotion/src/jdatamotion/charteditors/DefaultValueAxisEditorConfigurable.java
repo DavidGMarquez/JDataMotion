@@ -117,7 +117,7 @@ class DefaultValueAxisEditorConfigurable extends DefaultAxisEditorConfigurable
     protected static ResourceBundle localizationResources
 //            = ResourceBundleWrapper.getBundle(
 //                    "org.jfree.chart.editor.LocalizationBundle");
-            = Vista.bundle;
+            = Vista.recursosIdioma;
 
     /**
      * Standard constructor: builds a property panel for the specified axis.

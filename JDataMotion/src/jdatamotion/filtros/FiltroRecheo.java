@@ -39,7 +39,7 @@ import weka.core.Instance;
  */
 public class FiltroRecheo implements IFilter {
 
-    private static final String VALOR = Vista.bundle.getString("valor");
+    private static final String VALOR = Vista.recursosIdioma.getString("valor");
 
     @Override
     public Map<String, Parameter> getParametersNeeded() {

@@ -36,7 +36,7 @@ public class ComandoMudarNomeRelacion extends ComandoDesfacible {
     private final String antigoNome;
 
     public ComandoMudarNomeRelacion(Modelo modelo, String novoNome) {
-        super(modelo, Vista.bundle.getString("Vista.jMenuItem15.text"));
+        super(modelo, Vista.recursosIdioma.getString("Vista.jMenuItem15.text"));
         this.novoNome = novoNome;
         this.antigoNome = modelo.getComparableInstances().relationName();
     }

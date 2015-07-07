@@ -1,6 +1,6 @@
-\chapter{Deseño}
+\chapter{Deseño e implementación}
 
-Neste capítulo documentarase o proceso de deseño que se irá formando de xeito incremental nas sucesivas iteracións da metodoloxía Scrum. Comentarase a arquitectura do modelo de datos que vai manexar a aplicación, así como a distribución deses datos na aplicación, o que nos obrigará a falar da interface gráfica de usuario. Despois disto, mergullarémonos no que é o deseño e máis a implementación dos compoñentes da aplicación.
+Neste capítulo documentarase o proceso de deseño, e algúns trazos da consecuente implementación, que se irá formando de xeito incremental nas sucesivas iteracións da metodoloxía Scrum. Comentarase a arquitectura do modelo de datos que vai manexar a aplicación, así como a distribución deses datos na aplicación, o que nos obrigará a falar da interface gráfica de usuario. Despois disto, mergullarémonos no que é o deseño e máis a implementación dos compoñentes da aplicación.
 
 \section{Deseño global}
 
@@ -188,6 +188,8 @@ Baixo a mesma filosofía anterior, os accesos a disco carecen da necesidade de s
 O inicio dun novo experimento reinicia por completo os datos do sistema. Non se deben manter as pilas do XestorComandos dun experimento a outro.
 
 \end{description}
+
+Como xa mencionamos, os Comandos teñen un parámetro obxectivo que non é outro ca o Modelo sobre o cal operan TODOTODOTODO
 
 \subsection{Vista}
 
@@ -481,6 +483,23 @@ Acerca ou afasta o zoom o diagrama de dispersión sobre o que repousa o cursor.
 \end{description}
 
 \end{description}
+
+\subsection{Clase JDataMotion}
+
+É a clase que contén o método estático main() da aplicación JDataMotion. Este método é o que se procesa en canto executamos o programa. O seu contido basease unicamente na instanciación dun Modelo, seguido da instanciación dunha Vista. Por último, invoca ao método inicializar(Modelo modelo, boolean visualizar) da instancia de Vista que se creou, pasándolle o modelo como primeiro parámetro e un valor true como segundo.
+
+A responsabilidade do main() remata cando xunta unha vista cun modelo por medio do procedemento inicializar(Modelo modelo, boolean visualizar). Este proceso encárgase de que a vista rexistre a instancia de Modelo que acaba de recibir, e invoca no modelo ao método público addObserver(Observer o), pasándose a vista a sí mesma como parámetro. Como vimos anteriormente, o Modelo estende a clase Observable e por tanto herda os seus métodos. Un destes métodos, o addObserver, permite que as instancias de calquera clase que implemente a interface Observer poidan engadirse como observadoras.
+
+O método inicializar da vista tamén ten a responsabilidade de instanciar un controlador para interactuar co Modelo e que interceda polos dous en transaccións como a xestión e notificación de comandos. Do mesmo xeito, a vista invocará ao método inicializar(Modelo modelo, Vista vista) do controlador, pasando o modelo que recibiu e rexistrou de primeiro argumento, e a si mesma como segundo argumento. O método inicializar que ten o controlador unicamente rexistra as dúas instancias que recibiu, e polas que terá que interceder en varios procesos. Ao rematar, segue a execución do método inicializar da vista, ao cal só lle queda arrancar a interface gráfica se o parámetro visualizar é igual a true. Isto pode non ser de interese no caso da execución de tests de proba, nos que non se desexa interactuar coa nova ventá, se non executar unicamente métodos e comprobar o seu resultado.
+
+Podemos observar mellor o proceso de arranque da aplicación a través da figura \ref{DSarranque}, que contén un diagrama de secuencia con todas as instanciacións e invocacións.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/DSarranque}
+\caption{Diagrama de secuencia do arranque}
+\label{DSarranque}
+\end{figure}
 
 \section{Deseño de JDataMotion.common}
 

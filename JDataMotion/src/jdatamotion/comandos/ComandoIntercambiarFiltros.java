@@ -37,7 +37,7 @@ public class ComandoIntercambiarFiltros extends ComandoDesfacible {
     private final int indiceB;
 
     public ComandoIntercambiarFiltros(Modelo modelo, int indiceA,int indiceB) {
-        super(modelo, Vista.bundle.getString("comandoMudarDato"));
+        super(modelo, Vista.recursosIdioma.getString("comandoMudarDato"));
         this.indiceA=indiceA;
         this.indiceB=indiceB;
     }
