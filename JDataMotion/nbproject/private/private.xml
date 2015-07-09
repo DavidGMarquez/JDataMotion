@@ -5,12 +5,12 @@
             <url>src/jdatamotion/Vista.java</url>
             <bookmark id="3">
                 <name/>
-                <line>524</line>
+                <line>525</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>760</line>
+                <line>765</line>
                 <key/>
             </bookmark>
         </file>
@@ -24,11 +24,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Controlador.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/ManexadorScatterPlots.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/Vista.java</file>
-            <file>file:/C:/Users/usuario/Documents/GitHub/JDataMotion/JDataMotion/src/jdatamotion/JDataMotion.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

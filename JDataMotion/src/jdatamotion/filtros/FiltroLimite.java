@@ -28,7 +28,6 @@ import jdatamotioncommon.filtros.DoubleParameter;
 import jdatamotioncommon.filtros.StringParameter;
 import java.util.Iterator;
 import java.util.Map;
-import jdatamotion.Modelo;
 import jdatamotion.Vista;
 import jdatamotioncommon.ComparableInstances;
 import jdatamotioncommon.Utils;

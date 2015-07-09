@@ -85,6 +85,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -196,7 +197,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private boolean scatterPlotsVisibles[][];
     private boolean pulsarSlider;
     private JTableModeloMenu jTableModelo;
-    private int ultimoEstadoReproductor;
+    private int ultimoEstadoReprodutor;
     private int lonxitudeEstela;
     private Color corEstela;
     public static ResourceBundle recursosIdioma;
@@ -226,7 +227,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     @Override
     public synchronized void propertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
-            case "estadoReproductor":
+            case "estadoReprodutor":
                 int newValue = (int) evt.getNewValue();
                 if (newValue != ManexadorScatterPlots.FREEZE) {
                     for (ActionListener al : jButton8.getActionListeners()) {
@@ -277,7 +278,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         recursosIdioma = ResourceBundle.getBundle("jdatamotion/idiomas/Bundle", Locale.getDefault());
         reset();
         initComponents();
-        this.task = new TarefaProgreso();
+        this.task = new TarefaProgreso(jProgressBar1);
         this.visualizacionDesactualizada = false;
         this.jPanel8.setVisible(false);
         this.distanceFormula = "sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2))";
@@ -396,9 +397,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             gravarEscribirPropiedade(propiedades, propiedad, colorListString, ficheiroConfiguracion);
         }
 
-        public static void writeListShapeProperty(String propiedad, List<Shape> colorList) {
+        public static void writeListShapeProperty(String propiedad, List<Shape> shapeList) {
             String shapeListString = "";
-            for (Shape s : colorList) {
+            for (Shape s : shapeList) {
                 if (s instanceof RegularPolygon) {
                     shapeListString += "regular," + ((RegularPolygon) s).getVertexCount();
                 } else if (s instanceof StarPolygon) {
@@ -542,7 +543,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         @Override
         public void mouseClicked(MouseEvent e) {
             if (SwingUtilities.isRightMouseButton(e)) {
-                mansp.createPropertiesPopupMenu().show(c, e.getX(), e.getY());
+                ManexadorScatterPlots.createPropertiesPopupMenu().show(c, e.getX(), e.getY());
             }
         }
     }
@@ -550,6 +551,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     private void pintarMenuVisualizacion() {
         visualizacionDesactualizada = true;
         if (jTabbedPane1.getSelectedIndex() == 2) {
+            final long startTime = System.currentTimeMillis();;
             activarPanelReproduccion(false);
             if (mansp != null) {
                 mansp.pecharJFramesChartPanel();
@@ -569,7 +571,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             jPopupMenu1.setVisible(false);
             jPanel4.removeAll();
             setScatterPlotsBackground();
-            int numCols = mansp.numColumnasNonVacias(), numFilas = mansp.numFilasNonVacias();
+            int numCols = mansp.numColumnasNonBaleiras(), numFilas = mansp.numFilasNonBaleiras();
             if (numCols * numFilas != 0) {
                 int max = Math.max(numFilas, numCols);
                 double cols[] = new double[numCols], filas[] = new double[numFilas];
@@ -622,6 +624,9 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                     jLabel3.setText("");
                     activarPanelReproduccion(true);
                     task.reset();
+                    if (Controlador.debug) {
+                        System.out.println("Menú Visualización pintado en " + (System.currentTimeMillis() - startTime) / 1000.0 + " segundos.");
+                    }
                 }).start();
             } else {
                 jPanel4.setLayout(new GridBagLayout());
@@ -663,8 +668,8 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
-    private int getColumnaModeloSeleccionada(JTableModelo jtm) {
-        return jtm.getColumnModel().getColumn(jtm.columnaTaboaSeleccionada).getModelIndex();
+    private Integer getColumnaModeloSeleccionada(JTableModelo jtm) {
+        return jtm.columnaTaboaSeleccionada < 0 ? 0 : jtm.getColumnModel().getColumn(jtm.columnaTaboaSeleccionada).getModelIndex();
     }
 
     private int getColumnaModeloSeleccionada() {
@@ -765,10 +770,11 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         GraphicConfigurationManager.writeListShapeProperty("series_shape", editor.getSeriesShape());
     }
 
-    public class TarefaProgreso extends SwingWorker<Void, Void> {
+    private class TarefaProgreso extends SwingWorker<Void, Void> {
 
         private int end;
         private int acumulated;
+        private final JProgressBar jProgressBar;
 
         public void setEnd(int end) {
             this.end = end;
@@ -791,16 +797,17 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
             }
         }
 
-        public TarefaProgreso() {
+        public TarefaProgreso(JProgressBar jProgressBar) {
             super();
+            this.jProgressBar = jProgressBar;
             this.end = 0;
             this.acumulated = 0;
         }
 
         @Override
         protected Void doInBackground() throws Exception {
-            int value = (int) (end != 0 ? Math.round(1.0 * jProgressBar1.getMaximum() * acumulated / end) : 0);
-            jProgressBar1.setValue(value);
+            int value = (int) (end != 0 ? Math.round(1.0 * jProgressBar.getMaximum() * acumulated / end) : 0);
+            jProgressBar.setValue(value);
             return null;
         }
 
@@ -924,7 +931,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                                     }
                                 }
                                 jPopupMenu1.show(event.getTrigger().getComponent(), event.getTrigger().getX(), event.getTrigger().getY());
-
                                 mansp.procesarSeleccion(instances, indicesInstancesPuntos);
                             }
                         }
@@ -1194,8 +1200,19 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }
 
     private void pintarMenus() {
+        long startTime = 0;
+        if (Controlador.debug) {
+            startTime = System.currentTimeMillis();
+        }
         pintarMenuModelo();
+        if (Controlador.debug) {
+            System.out.println("Menú Modelo pintado en " + (System.currentTimeMillis() - startTime) / 1000.0 + " segundos.");
+            startTime = System.currentTimeMillis();
+        }
         pintarMenuFiltros();
+        if (Controlador.debug) {
+            System.out.println("Menú Filtros pintado en " + (System.currentTimeMillis() - startTime) / 1000.0 + " segundos.");
+        }
         pintarMenuVisualizacion();
     }
 
@@ -1929,9 +1946,10 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
                 .addContainerGap()
                 .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel8)
-                        .addComponent(jButton17)))
+                    .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jButton17)
+                        .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2685,20 +2703,6 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    class ComponenteImaxe extends JComponent {
-
-        Image imaxe;
-
-        public ComponenteImaxe(Image i) {
-            this.imaxe = i;
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            g.drawImage(imaxe, 0, 0, getWidth(), getHeight(), this);
-        }
-    }
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         abrirExploradorFicheiros(EXPLORADOR_IMPORTAR_FICHEIRO);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -2816,7 +2820,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jSlider1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MouseReleased
-        if (ultimoEstadoReproductor == ManexadorScatterPlots.PLAY) {
+        if (ultimoEstadoReprodutor == ManexadorScatterPlots.PLAY) {
             mansp.play();
         }
         pulsarSlider = false;
@@ -2824,7 +2828,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private void jSlider1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSlider1MousePressed
         pulsarSlider = true;
-        ultimoEstadoReproductor = mansp.getEstado();
+        ultimoEstadoReprodutor = mansp.getEstado();
         mansp.freeze();
     }//GEN-LAST:event_jSlider1MousePressed
 
@@ -2843,7 +2847,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         if (mansp.getTActual() > mansp.getTInicial()) {
-            mansp.goToBefore();
+            mansp.goToPrevious();
         }
     }//GEN-LAST:event_jButton12ActionPerformed
 
@@ -3168,7 +3172,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         JDataMotion.main(null);
     }
 
-    static class VerticalLabelUI extends BasicLabelUI {
+    private static class VerticalLabelUI extends BasicLabelUI {
 
         static {
             labelUI = new VerticalLabelUI(false);
@@ -3288,7 +3292,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jDialog1.setVisible(true);
     }
 
-    class FiltroExtension implements Serializable {
+    private class FiltroExtension implements Serializable {
 
         public String nome;
         public String[] extensions;
@@ -3550,7 +3554,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         JOptionPane.showMessageDialog(this, mensaxe, titulo, tipo);
     }
 
-    class JTableModelo extends JTable {
+    private class JTableModelo extends JTable {
 
         final JPanel columnaNumerais;
         final boolean editable;
@@ -3713,26 +3717,27 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
 
         public void resaltarColumnaSeleccionada() {
+            if (columnaTaboaSeleccionada < 0) {
+                columnaTaboaSeleccionada = 0;
+            }
             for (int i = 0; i < getColumnModel().getColumnCount(); i++) {
                 if (columnaTaboaSeleccionada != i) {
                     getColumnModel().getColumn(i).setHeaderRenderer(null);
                 }
             }
-            if (columnaTaboaSeleccionada > -1) {
-                final DefaultTableCellRenderer hr = (DefaultTableCellRenderer) getTableHeader().getDefaultRenderer();
-                getColumnModel().getColumn(columnaTaboaSeleccionada).setHeaderRenderer(new DefaultTableCellRenderer() {
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                        JLabel lbl = (JLabel) hr.getTableCellRendererComponent(table, value, true, true, row, column);
-                        lbl.setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.RED, 2, false), new EmptyBorder(4, 3, 2, 3)));
-                        return lbl;
-                    }
-                });
-            }
+            final DefaultTableCellRenderer hr = (DefaultTableCellRenderer) getTableHeader().getDefaultRenderer();
+            getColumnModel().getColumn(columnaTaboaSeleccionada).setHeaderRenderer(new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                    JLabel lbl = (JLabel) hr.getTableCellRendererComponent(table, value, true, true, row, column);
+                    lbl.setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.RED, 2, false), new EmptyBorder(4, 3, 2, 3)));
+                    return lbl;
+                }
+            });
             panelDetallarAtributo.actualizar(getColumnaModeloSeleccionada(this), modelo);
         }
 
-        class TableModelPanelModelo extends AbstractTableModel {
+        private class TableModelPanelModelo extends AbstractTableModel {
 
             private final List<String> atributos;
             private final List<List<Object>> datos;
@@ -3865,7 +3870,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         }
     }
 
-    class JTableModeloMenu extends JTableModelo {
+    private class JTableModeloMenu extends JTableModelo {
 
         public JTableModeloMenu(JPanel columnaNumerais, JScrollPane taboa, Modelo modelo, JPanelActualizable panelDetallarAtributo, int columnaTaboaSeleccionada, Filler filler) {
             super(columnaNumerais, taboa, modelo, panelDetallarAtributo, true, columnaTaboaSeleccionada, filler);
@@ -3933,7 +3938,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         jMenuItem20.setEnabled(activar);
     }
 
-    public class PanelFiltro extends javax.swing.JPanel {
+    private class PanelFiltro extends javax.swing.JPanel {
 
         private String stringParameters;
         private final int indiceFiltro;
@@ -4133,7 +4138,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         ((JPanelActualizable) jPanel15).actualizar(getColumnaModeloSeleccionada(jTableModelo), meuModelo);
     }
 
-    class JPanelActualizable extends JPanel {
+    private class JPanelActualizable extends JPanel {
 
         private JFreeChart createChartAtributoNumerico(ComparableInstances instancias, int indiceAtributoNumerico, int indiceAtributoNominal) {
             JFreeChart chart = null;

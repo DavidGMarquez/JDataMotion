@@ -62,7 +62,7 @@ import weka.filters.unsupervised.attribute.StringToNominal;
  */
 public class Modelo extends Observable implements Sesionizable {
 
-    private ComparableInstances instancesComparable;
+    private ComparableInstances comparableInstances;
     private int indiceTemporal;
     private String direccionAoFicheiro;
     private byte[] hashCodeFicheiro;
@@ -78,13 +78,8 @@ public class Modelo extends Observable implements Sesionizable {
         return hashCodeFicheiro;
     }
 
-    public void setComparableInstances(ComparableInstances instancesComparable) {
-        this.instancesComparable = instancesComparable;
-        setChanged();
-    }
-
     public String obterNomeAtributo(int columna) {
-        return instancesComparable.attribute(columna).name();
+        return comparableInstances.attribute(columna).name();
     }
 
     public void setIndiceAtributoNominal(int indiceAtributoNominal) {
@@ -94,14 +89,14 @@ public class Modelo extends Observable implements Sesionizable {
     public String[] getNomesAtributos() {
         String[] ats = new String[obterNumAtributos()];
         for (int i = 0; i < ats.length; i++) {
-            ats[i] = instancesComparable.attribute(i).name();
+            ats[i] = comparableInstances.attribute(i).name();
         }
         return ats;
     }
 
     public Integer getIndiceAtributo(String nome) {
-        for (int i = 0; i < instancesComparable.numAttributes(); i++) {
-            if (instancesComparable.attribute(i).name().equals(nome)) {
+        for (int i = 0; i < comparableInstances.numAttributes(); i++) {
+            if (comparableInstances.attribute(i).name().equals(nome)) {
                 return i;
             }
         }
@@ -111,16 +106,16 @@ public class Modelo extends Observable implements Sesionizable {
     public Attribute[] getAtributos() {
         Attribute[] ats = new Attribute[obterNumAtributos()];
         for (int i = 0; i < ats.length; i++) {
-            ats[i] = instancesComparable.attribute(i);
+            ats[i] = comparableInstances.attribute(i);
         }
         return ats;
     }
 
     private boolean contenSoValoresPositivos(int indiceAtributo) {
-        if (!instancesComparable.attribute(indiceAtributo).isNumeric()) {
+        if (!comparableInstances.attribute(indiceAtributo).isNumeric()) {
             return false;
         }
-        return instancesComparable.stream().noneMatch((instancesComparable1) -> (instancesComparable1.value(indiceAtributo) < 0.0));
+        return comparableInstances.stream().noneMatch((instancesComparable1) -> (instancesComparable1.value(indiceAtributo) < 0.0));
     }
 
     public static final String normalizarTime(String time) {
@@ -136,11 +131,11 @@ public class Modelo extends Observable implements Sesionizable {
     }
 
     private boolean contenDatasValidas(int indiceAtributo) {
-        if (!instancesComparable.attribute(indiceAtributo).isString()) {
+        if (!comparableInstances.attribute(indiceAtributo).isString()) {
             return false;
         }
         SimpleDateFormat timeFormat = new SimpleDateFormat(formatoTimeIdentificadorTemporal, Locale.getDefault());
-        for (Instance ic : instancesComparable) {
+        for (Instance ic : comparableInstances) {
             try {
                 timeFormat.parse(normalizarTime(ic.stringValue(indiceAtributo)));
             } catch (ParseException pe) {
@@ -153,7 +148,7 @@ public class Modelo extends Observable implements Sesionizable {
     public void setIndiceTemporal(int indiceTemporal) throws ExcepcionFormatoIdentificacionTemporal {
         if (indiceTemporal > -1) {
             if (!contenSoValoresPositivos(indiceTemporal) && !contenDatasValidas(indiceTemporal)) {
-                throw new ExcepcionFormatoIdentificacionTemporal(indiceTemporal, instancesComparable);
+                throw new ExcepcionFormatoIdentificacionTemporal(indiceTemporal, comparableInstances);
             }
         }
         this.indiceTemporal = indiceTemporal;
@@ -166,7 +161,7 @@ public class Modelo extends Observable implements Sesionizable {
 
     Modelo(ComparableInstances instancesComparable, int indiceTemporal, String direccionAoFicheiro, byte[] hashCode, int indiceAtributoNominal, List<FilterHandler> filtros) {
         super();
-        this.instancesComparable = instancesComparable;
+        this.comparableInstances = instancesComparable;
         this.indiceTemporal = indiceTemporal;
         this.direccionAoFicheiro = direccionAoFicheiro;
         this.hashCodeFicheiro = hashCode;
@@ -175,11 +170,11 @@ public class Modelo extends Observable implements Sesionizable {
     }
 
     Modelo(Modelo modelo) {
-        this(new ComparableInstances(modelo.instancesComparable), modelo.indiceTemporal, modelo.direccionAoFicheiro, ArrayUtils.clone(modelo.hashCodeFicheiro), modelo.indiceAtributoNominal, new ArrayList<>(modelo.filtros));
+        this(new ComparableInstances(modelo.comparableInstances), modelo.indiceTemporal, modelo.direccionAoFicheiro, ArrayUtils.clone(modelo.hashCodeFicheiro), modelo.indiceAtributoNominal, new ArrayList<>(modelo.filtros));
     }
 
     public ComparableInstances getComparableInstancesFiltradas() {
-        ComparableInstances ins = instancesComparable;
+        ComparableInstances ins = comparableInstances;
         for (int i = 0; i < contarFiltros(); i++) {
             ins = getFiltro(i).filtrar(ins);
         }
@@ -194,7 +189,7 @@ public class Modelo extends Observable implements Sesionizable {
     }
 
     public ComparableInstances getComparableInstances() {
-        return instancesComparable;
+        return comparableInstances;
     }
 
     public int getIndiceTemporal() {
@@ -206,11 +201,11 @@ public class Modelo extends Observable implements Sesionizable {
     }
 
     public int obterNumInstancias() {
-        return instancesComparable.numInstances();
+        return comparableInstances.numInstances();
     }
 
     public int obterNumAtributos() {
-        return instancesComparable.numAttributes();
+        return comparableInstances.numAttributes();
     }
 
     @Override
@@ -225,7 +220,7 @@ public class Modelo extends Observable implements Sesionizable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.instancesComparable);
+        hash = 53 * hash + Objects.hashCode(this.comparableInstances);
         hash = 53 * hash + this.indiceTemporal;
         hash = 53 * hash + Objects.hashCode(this.direccionAoFicheiro);
         hash = 53 * hash + Arrays.hashCode(this.hashCodeFicheiro);
@@ -249,7 +244,7 @@ public class Modelo extends Observable implements Sesionizable {
 
     public String obterTipoAtributo(int indice) {
         String nome = "";
-        switch (instancesComparable.attribute(indice).type()) {
+        switch (comparableInstances.attribute(indice).type()) {
             case Attribute.DATE:
                 nome = "data";
                 break;
@@ -293,7 +288,7 @@ public class Modelo extends Observable implements Sesionizable {
 
     public List<Attribute> obterListaAtributos() {
         List<Attribute> cabeceiras = new ArrayList<>();
-        Enumeration e = instancesComparable.enumerateAttributes();
+        Enumeration e = comparableInstances.enumerateAttributes();
         while (e.hasMoreElements()) {
             cabeceiras.add((Attribute) e.nextElement());
         }
@@ -303,7 +298,7 @@ public class Modelo extends Observable implements Sesionizable {
     public List<String> obterListaNomesAtributos() {
         int numAtributos = obterNumAtributos();
         ArrayList<String> cabeceiras = new ArrayList<>(numAtributos);
-        Enumeration e = instancesComparable.enumerateAttributes();
+        Enumeration e = comparableInstances.enumerateAttributes();
         for (int i = 0; i < numAtributos; i++) {
             cabeceiras.add(i, ((Attribute) e.nextElement()).name());
         }
@@ -314,7 +309,7 @@ public class Modelo extends Observable implements Sesionizable {
         importarFicheiro(direccionAoFicheiro);
     }
 
-    public byte[] resumirFicheiroSHA1(File file) throws Exception {
+    public static byte[] resumirFicheiroSHA1(File file) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
         InputStream fis = new FileInputStream(file);
         int n = 0;
@@ -345,7 +340,7 @@ public class Modelo extends Observable implements Sesionizable {
     public ArrayList<Integer> obterIndicesAtributosNumericos() {
         ArrayList<Integer> indices = new ArrayList<>();
         for (int i = 0; i < obterNumAtributos(); i++) {
-            if (instancesComparable.attribute(i).isNumeric()) {
+            if (comparableInstances.attribute(i).isNumeric()) {
                 indices.add(i);
             }
         }
@@ -355,7 +350,7 @@ public class Modelo extends Observable implements Sesionizable {
     public ArrayList<Integer> obterIndicesAtributosNominais() {
         ArrayList<Integer> indices = new ArrayList<>();
         for (int i = 0; i < obterNumAtributos(); i++) {
-            if (instancesComparable.attribute(i).isNominal()) {
+            if (comparableInstances.attribute(i).isNominal()) {
                 indices.add(i);
             }
         }
@@ -394,12 +389,12 @@ public class Modelo extends Observable implements Sesionizable {
             case "arff":
                 ArffLoader loaderARFF = new ArffLoader();
                 loaderARFF.setFile(new File(url));
-                instancesComparable = new ComparableInstances(loaderARFF.getDataSet());
+                comparableInstances = new ComparableInstances(loaderARFF.getDataSet());
                 break;
             case "csv":
                 CSVLoader loaderCSV = new CSVLoader();
                 loaderCSV.setSource(new File(url));
-                instancesComparable = new ComparableInstances(loaderCSV.getDataSet());
+                comparableInstances = new ComparableInstances(loaderCSV.getDataSet());
                 break;
         }
     }
@@ -631,10 +626,10 @@ public class Modelo extends Observable implements Sesionizable {
     public Sesion obterSesion() {
         SesionModelo s = new SesionModelo();
         ArrayList<Attribute> aux = new ArrayList<>();
-        for (int i = 0; i < instancesComparable.numAttributes(); i++) {
-            aux.add(extraerCabeceira(instancesComparable.attribute(i).name(), instancesComparable.attribute(i).type(), instancesComparable.attribute(i).enumerateValues()));
+        for (int i = 0; i < comparableInstances.numAttributes(); i++) {
+            aux.add(extraerCabeceira(comparableInstances.attribute(i).name(), comparableInstances.attribute(i).type(), comparableInstances.attribute(i).enumerateValues()));
         }
-        ComparableInstances cabeceras = new ComparableInstances(instancesComparable.relationName(), aux, 0);
+        ComparableInstances cabeceras = new ComparableInstances(comparableInstances.relationName(), aux, 0);
         s.setCabeceiras(cabeceras);
         s.setDireccionAoFicheiro(getDireccionAoFicheiro());
         s.setIndiceTemporal(getIndiceTemporal());
@@ -643,13 +638,26 @@ public class Modelo extends Observable implements Sesionizable {
         return s;
     }
 
+    public void setComparableInstances(ComparableInstances comparableInstances) {
+        this.comparableInstances = comparableInstances;
+        setChanged();
+    }
+
+    public void setDireccionAoFicheiro(String direccionAoFicheiro) {
+        this.direccionAoFicheiro = direccionAoFicheiro;
+    }
+
+    public void setHashCodeFicheiro(byte[] hashCodeFicheiro) {
+        this.hashCodeFicheiro = hashCodeFicheiro;
+    }
+
     @Override
     public void aplicarSesion(Sesion sesion) throws Exception {
         SesionModelo s = (SesionModelo) sesion;
         if (!Arrays.equals(resumirFicheiroSHA1(new File(s.getDireccionAoFicheiro())), s.getHash())) {
             throw new ExcepcionArquivoModificado(s.getDireccionAoFicheiro());
         }
-        instancesComparable = s.getCabeceiras();
+        comparableInstances = s.getCabeceiras();
         indiceTemporal = s.getIndiceTemporal();
         hashCodeFicheiro = s.getHash();
         direccionAoFicheiro = s.getDireccionAoFicheiro();
@@ -684,16 +692,16 @@ public class Modelo extends Observable implements Sesionizable {
     }
 
     public void engadirDatos() {
-        instancesComparable.add(new DenseInstance(obterNumAtributos()));
+        comparableInstances.add(new DenseInstance(obterNumAtributos()));
         setChanged();
     }
 
     public Object obterDato(int fila, int columna) {
-        return Utils.obterDato(instancesComparable, fila, columna);
+        return Utils.obterDato(comparableInstances, fila, columna);
     }
 
     public String obterStringDato(int fila, int columna, boolean caracterParaNulos) {
-        String valor = instancesComparable.get(fila).toString(columna);
+        String valor = comparableInstances.get(fila).toString(columna);
         String dato = "";
         if ("?".equals(valor)) {
             if (caracterParaNulos) {
@@ -711,16 +719,16 @@ public class Modelo extends Observable implements Sesionizable {
 
     public void mudarDato(int fila, int columna, Object valor) throws Exception {
         String stringValor = valor.toString();
-        if (obterDato(fila, columna).toString().equals(valor.toString()) || ("".equals(stringValor) && instancesComparable.get(fila).isMissing(columna))) {
+        if (obterDato(fila, columna).toString().equals(valor.toString()) || ("".equals(stringValor) && comparableInstances.get(fila).isMissing(columna))) {
             setChanged();
             throw new ExcepcionComandoInutil();
         }
         if ("".equals(stringValor)) {
-            instancesComparable.get(fila).setMissing(columna);
+            comparableInstances.get(fila).setMissing(columna);
         } else {
-            switch (instancesComparable.attribute(columna).type()) {
+            switch (comparableInstances.attribute(columna).type()) {
                 case Attribute.DATE:
-                    instancesComparable.get(fila).setValue(columna, instancesComparable.attribute(columna).parseDate(stringValor));
+                    comparableInstances.get(fila).setValue(columna, comparableInstances.attribute(columna).parseDate(stringValor));
                     break;
                 case Attribute.NOMINAL:
                 case Attribute.RELATIONAL:
@@ -729,16 +737,16 @@ public class Modelo extends Observable implements Sesionizable {
                         try {
                             new SimpleDateFormat(formatoTimeIdentificadorTemporal, Locale.getDefault()).parse(normalizarTime(stringValor));
                         } catch (ParseException pe) {
-                            throw new ExcepcionFormatoIdentificacionTemporal(columna, instancesComparable);
+                            throw new ExcepcionFormatoIdentificacionTemporal(columna, comparableInstances);
                         }
                     }
-                    instancesComparable.get(fila).setValue(columna, stringValor);
+                    comparableInstances.get(fila).setValue(columna, stringValor);
                     break;
                 case Attribute.NUMERIC:
                     if (indiceTemporal == columna && Double.parseDouble(stringValor) < 0.0) {
-                        throw new ExcepcionFormatoIdentificacionTemporal(columna, instancesComparable);
+                        throw new ExcepcionFormatoIdentificacionTemporal(columna, comparableInstances);
                     }
-                    instancesComparable.get(fila).setValue(columna, Double.parseDouble(stringValor));
+                    comparableInstances.get(fila).setValue(columna, Double.parseDouble(stringValor));
                     break;
             }
         }
@@ -748,46 +756,46 @@ public class Modelo extends Observable implements Sesionizable {
     public void eliminarDatos(Integer[] indices) {
         ArrayList<Instance> candidatos = new ArrayList<>();
         for (Integer i : indices) {
-            candidatos.add(instancesComparable.get(i));
+            candidatos.add(comparableInstances.get(i));
         }
         candidatos.stream().forEach((in) -> {
-            instancesComparable.remove(in);
+            comparableInstances.remove(in);
         });
         setChanged();
     }
 
     public void mudarNomeRelacion(String nomeRelacion) {
-        instancesComparable.setRelationName(nomeRelacion);
+        comparableInstances.setRelationName(nomeRelacion);
         setChanged();
     }
 
     public void mudarTipo(int columnaTaboa, int novoTipo) throws Exception {
         try {
-            String nomeRelacion = instancesComparable.relationName();
-            int antigoTipo = instancesComparable.attribute(columnaTaboa).type();
+            String nomeRelacion = comparableInstances.relationName();
+            int antigoTipo = comparableInstances.attribute(columnaTaboa).type();
             switch (antigoTipo) {
                 case Attribute.STRING:
                     switch (novoTipo) {
                         case Attribute.NOMINAL:
                             StringToNominal filtro = new StringToNominal();
                             filtro.setOptions(new String[]{"-R", String.valueOf(columnaTaboa + 1)});
-                            filtro.setInputFormat(instancesComparable);
-                            instancesComparable = new ComparableInstances(Filter.useFilter(instancesComparable, filtro));
+                            filtro.setInputFormat(comparableInstances);
+                            comparableInstances = new ComparableInstances(Filter.useFilter(comparableInstances, filtro));
                             break;
                         case Attribute.NUMERIC:
                             ArrayList<Attribute> temp = new ArrayList<>();
-                            Enumeration e = instancesComparable.enumerateInstances();
+                            Enumeration e = comparableInstances.enumerateInstances();
                             Attribute at;
                             boolean erroParseo = false;
-                            for (int i = 0; i < instancesComparable.numAttributes(); i++) {
+                            for (int i = 0; i < comparableInstances.numAttributes(); i++) {
                                 if (i != columnaTaboa) {
-                                    at = instancesComparable.attribute(i);
+                                    at = comparableInstances.attribute(i);
                                 } else {
-                                    at = new Attribute(instancesComparable.attribute(i).name());
+                                    at = new Attribute(comparableInstances.attribute(i).name());
                                 }
                                 temp.add(at);
                             }
-                            ComparableInstances tempInstances = new ComparableInstances(instancesComparable.relationName(), temp, 0);
+                            ComparableInstances tempInstances = new ComparableInstances(comparableInstances.relationName(), temp, 0);
                             while (e.hasMoreElements()) {
                                 Instance in = (Instance) e.nextElement();
                                 try {
@@ -798,24 +806,24 @@ public class Modelo extends Observable implements Sesionizable {
                                 }
                                 tempInstances.add(in);
                             }
-                            instancesComparable = tempInstances;
+                            comparableInstances = tempInstances;
                             if (erroParseo) {
                                 throw new ExcepcionCambiarTipoAtributo(antigoTipo, novoTipo);
                             }
                             break;
                         case Attribute.DATE:
                             temp = new ArrayList<>();
-                            e = instancesComparable.enumerateInstances();
+                            e = comparableInstances.enumerateInstances();
                             erroParseo = false;
-                            for (int i = 0; i < instancesComparable.numAttributes(); i++) {
+                            for (int i = 0; i < comparableInstances.numAttributes(); i++) {
                                 if (i != columnaTaboa) {
-                                    at = instancesComparable.attribute(i);
+                                    at = comparableInstances.attribute(i);
                                 } else {
-                                    at = new Attribute(instancesComparable.attribute(i).name(), "yyyy-MM-dd");
+                                    at = new Attribute(comparableInstances.attribute(i).name(), "yyyy-MM-dd");
                                 }
                                 temp.add(at);
                             }
-                            tempInstances = new ComparableInstances(instancesComparable.relationName(), temp, 0);
+                            tempInstances = new ComparableInstances(comparableInstances.relationName(), temp, 0);
                             while (e.hasMoreElements()) {
                                 Instance in = (Instance) e.nextElement();
                                 try {
@@ -826,7 +834,7 @@ public class Modelo extends Observable implements Sesionizable {
                                 }
                                 tempInstances.add(in);
                             }
-                            instancesComparable = tempInstances;
+                            comparableInstances = tempInstances;
                             if (erroParseo) {
                                 throw new ExcepcionCambiarTipoAtributo(antigoTipo, novoTipo);
                             }
@@ -842,8 +850,8 @@ public class Modelo extends Observable implements Sesionizable {
                         case Attribute.STRING:
                             NominalToString filtro = new NominalToString();
                             filtro.setOptions(new String[]{"-C", String.valueOf(columnaTaboa + 1)});
-                            filtro.setInputFormat(instancesComparable);
-                            instancesComparable = new ComparableInstances(Filter.useFilter(instancesComparable, filtro));
+                            filtro.setInputFormat(comparableInstances);
+                            comparableInstances = new ComparableInstances(Filter.useFilter(comparableInstances, filtro));
                             break;
                         case Attribute.DATE:
                             mudarTipo(columnaTaboa, Attribute.STRING);
@@ -863,20 +871,20 @@ public class Modelo extends Observable implements Sesionizable {
                         case Attribute.STRING:
                             ArrayList<Attribute> temp = new ArrayList<>();
                             Attribute at;
-                            for (int i = 0; i < instancesComparable.numAttributes(); i++) {
+                            for (int i = 0; i < comparableInstances.numAttributes(); i++) {
                                 if (i != columnaTaboa) {
-                                    at = instancesComparable.attribute(i);
+                                    at = comparableInstances.attribute(i);
                                 } else {
-                                    at = new Attribute(instancesComparable.attribute(i).name(), (ArrayList<String>) null);
+                                    at = new Attribute(comparableInstances.attribute(i).name(), (ArrayList<String>) null);
                                 }
                                 temp.add(at);
                             }
-                            ComparableInstances tempInstances = new ComparableInstances(instancesComparable.relationName(), temp, instancesComparable.numInstances());
-                            for (int i = 0; i < instancesComparable.numInstances(); i++) {
-                                tempInstances.add(instancesComparable.instance(i));
+                            ComparableInstances tempInstances = new ComparableInstances(comparableInstances.relationName(), temp, comparableInstances.numInstances());
+                            for (int i = 0; i < comparableInstances.numInstances(); i++) {
+                                tempInstances.add(comparableInstances.instance(i));
                                 tempInstances.instance(i).setValue(columnaTaboa, obterStringDato(i, columnaTaboa, false));
                             }
-                            instancesComparable = tempInstances;
+                            comparableInstances = tempInstances;
                             break;
                         case Attribute.NOMINAL:
                             mudarTipo(columnaTaboa, Attribute.STRING);
@@ -889,8 +897,8 @@ public class Modelo extends Observable implements Sesionizable {
                         case Attribute.NOMINAL:
                             NumericToNominal filtro = new NumericToNominal();
                             filtro.setOptions(new String[]{"-R", String.valueOf(columnaTaboa + 1)});
-                            filtro.setInputFormat(instancesComparable);
-                            instancesComparable = new ComparableInstances(Filter.useFilter(instancesComparable, filtro));
+                            filtro.setInputFormat(comparableInstances);
+                            comparableInstances = new ComparableInstances(Filter.useFilter(comparableInstances, filtro));
                             break;
                         case Attribute.STRING:
                             mudarTipo(columnaTaboa, Attribute.NOMINAL);
@@ -903,7 +911,7 @@ public class Modelo extends Observable implements Sesionizable {
                     }
                     break;
             }
-            instancesComparable.setRelationName(nomeRelacion);
+            comparableInstances.setRelationName(nomeRelacion);
         } finally {
             setChanged();
         }
@@ -917,7 +925,7 @@ public class Modelo extends Observable implements Sesionizable {
             indice++;
             unico = true;
             nomeColumna = Vista.recursosIdioma.getString("novoAtributo");
-            Enumeration e = instancesComparable.enumerateAttributes();
+            Enumeration e = comparableInstances.enumerateAttributes();
             while (e.hasMoreElements()) {
                 Attribute a = (Attribute) e.nextElement();
                 if (a.name().equals(nomeColumna + indice)) {
@@ -926,17 +934,17 @@ public class Modelo extends Observable implements Sesionizable {
                 }
             }
         }
-        instancesComparable.insertAttributeAt(new Attribute(nomeColumna + indice, (List<String>) null), instancesComparable.numAttributes());
+        comparableInstances.insertAttributeAt(new Attribute(nomeColumna + indice, (List<String>) null), comparableInstances.numAttributes());
         setChanged();
     }
 
     public void eliminarAtributo(int indiceAtributoNoModelo) {
-        instancesComparable.deleteAttributeAt(indiceAtributoNoModelo);
+        comparableInstances.deleteAttributeAt(indiceAtributoNoModelo);
         setChanged();
     }
 
     public void renomearAtributo(String nome, int indiceAtributoNoModelo) {
-        instancesComparable.renameAttribute(indiceAtributoNoModelo, nome);
+        comparableInstances.renameAttribute(indiceAtributoNoModelo, nome);
         setChanged();
     }
 

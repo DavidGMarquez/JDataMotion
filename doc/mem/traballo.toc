@@ -5,34 +5,39 @@
 \contentsline {chapter}{\numberline {2}Xesti\IeC {\'o}n do proxecto}{5}{chapter.2}
 \contentsline {section}{\numberline {2.1}Xesti\IeC {\'o}n de riscos}{5}{section.2.1}
 \contentsline {section}{\numberline {2.2}Metodolox\IeC {\'\i }a de desenvolvemento}{8}{section.2.2}
-\contentsline {section}{\numberline {2.3}Planificaci\IeC {\'o}n temporal}{10}{section.2.3}
-\contentsline {section}{\numberline {2.4}Xesti\IeC {\'o}n da configuraci\IeC {\'o}n}{11}{section.2.4}
-\contentsline {section}{\numberline {2.5}An\IeC {\'a}lise de custos}{12}{section.2.5}
-\contentsline {chapter}{\numberline {3}An\IeC {\'a}lise}{13}{chapter.3}
-\contentsline {section}{\numberline {3.1}An\IeC {\'a}lise de requisitos}{13}{section.3.1}
-\contentsline {subsection}{\numberline {3.1.1}Requisitos funcionais}{15}{subsection.3.1.1}
-\contentsline {subsection}{\numberline {3.1.2}Requisitos de calidade}{24}{subsection.3.1.2}
-\contentsline {subsection}{\numberline {3.1.3}Requisitos de dese\IeC {\~n}o}{24}{subsection.3.1.3}
-\contentsline {subsection}{\numberline {3.1.4}Requisitos non funcionais}{25}{subsection.3.1.4}
-\contentsline {subsection}{\numberline {3.1.5}RFs dos sprints}{26}{subsection.3.1.5}
-\contentsline {section}{\numberline {3.2}An\IeC {\'a}lise de tecnolox\IeC {\'\i }as}{32}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Arquitectura}{32}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Tecnolox\IeC {\'\i }as}{32}{subsection.3.2.2}
-\contentsline {subsubsection}{\numberline {3.2.2.1}Ferramentas de dese\IeC {\~n}o}{32}{subsubsection.3.2.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2.2}Ferramentas de desenvolvemento}{33}{subsubsection.3.2.2.2}
-\contentsline {subsubsection}{\numberline {3.2.2.3}Ferramentas de validaci\IeC {\'o}n}{38}{subsubsection.3.2.2.3}
-\contentsline {chapter}{\numberline {4}Dese\IeC {\~n}o e implementaci\IeC {\'o}n}{39}{chapter.4}
-\contentsline {section}{\numberline {4.1}Dese\IeC {\~n}o global}{39}{section.4.1}
-\contentsline {section}{\numberline {4.2}Dese\IeC {\~n}o de JDataMotion}{40}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Modelo}{44}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Controlador}{47}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Vista}{51}{subsection.4.2.3}
-\contentsline {subsubsection}{\numberline {4.2.3.1}Dese\IeC {\~n}o da interface gr\IeC {\'a}fica}{52}{subsubsection.4.2.3.1}
-\contentsline {subsection}{\numberline {4.2.4}Clase JDataMotion}{60}{subsection.4.2.4}
-\contentsline {section}{\numberline {4.3}Dese\IeC {\~n}o de JDataMotion.common}{61}{section.4.3}
-\contentsline {section}{\numberline {4.4}Dese\IeC {\~n}o de JDataMotion.filters.sample}{61}{section.4.4}
-\contentsline {chapter}{\numberline {5}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{63}{chapter.5}
-\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{65}{appendix.Alph1}
-\contentsline {chapter}{\numberline {B}Manuais de usuario}{67}{appendix.Alph2}
-\contentsline {chapter}{\numberline {C}Licenza}{69}{appendix.Alph3}
-\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{71}{appendix.Alph3}
+\contentsline {section}{\numberline {2.3}Planificaci\IeC {\'o}n temporal}{11}{section.2.3}
+\contentsline {section}{\numberline {2.4}Xesti\IeC {\'o}n da configuraci\IeC {\'o}n}{12}{section.2.4}
+\contentsline {section}{\numberline {2.5}An\IeC {\'a}lise de custos}{13}{section.2.5}
+\contentsline {chapter}{\numberline {3}An\IeC {\'a}lise}{15}{chapter.3}
+\contentsline {section}{\numberline {3.1}An\IeC {\'a}lise de requisitos}{15}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Requisitos funcionais}{17}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}Requisitos de calidade}{26}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.3}Requisitos de dese\IeC {\~n}o}{27}{subsection.3.1.3}
+\contentsline {subsection}{\numberline {3.1.4}Requisitos non funcionais}{27}{subsection.3.1.4}
+\contentsline {subsection}{\numberline {3.1.5}RFs dos sprints}{29}{subsection.3.1.5}
+\contentsline {section}{\numberline {3.2}An\IeC {\'a}lise de tecnolox\IeC {\'\i }as}{36}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Arquitectura}{36}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Tecnolox\IeC {\'\i }as}{36}{subsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.1}Ferramentas de dese\IeC {\~n}o}{36}{subsubsection.3.2.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2.2}Ferramentas de desenvolvemento}{37}{subsubsection.3.2.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.3}Ferramentas de validaci\IeC {\'o}n}{42}{subsubsection.3.2.2.3}
+\contentsline {chapter}{\numberline {4}Dese\IeC {\~n}o e implementaci\IeC {\'o}n}{43}{chapter.4}
+\contentsline {section}{\numberline {4.1}Dese\IeC {\~n}o global}{43}{section.4.1}
+\contentsline {section}{\numberline {4.2}Dese\IeC {\~n}o de JDataMotion}{44}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Modelo}{48}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Controlador}{51}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Vista}{58}{subsection.4.2.3}
+\contentsline {subsubsection}{\numberline {4.2.3.1}Dese\IeC {\~n}o da interface gr\IeC {\'a}fica}{67}{subsubsection.4.2.3.1}
+\contentsline {subsection}{\numberline {4.2.4}Clase JDataMotion}{77}{subsection.4.2.4}
+\contentsline {section}{\numberline {4.3}Dese\IeC {\~n}o de JDataMotion.common}{78}{section.4.3}
+\contentsline {section}{\numberline {4.4}Dese\IeC {\~n}o de JDataMotion.filters.sample}{81}{section.4.4}
+\contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n e probas}{85}{chapter.5}
+\contentsline {subsection}{\numberline {5.0.1}Requisitos funcionais}{87}{subsection.5.0.1}
+\contentsline {subsection}{\numberline {5.0.2}Requisitos de calidade}{131}{subsection.5.0.2}
+\contentsline {subsection}{\numberline {5.0.3}Requisitos de dese\IeC {\~n}o}{131}{subsection.5.0.3}
+\contentsline {subsection}{\numberline {5.0.4}Requisitos non funcionais}{132}{subsection.5.0.4}
+\contentsline {chapter}{\numberline {6}Conclusi\IeC {\'o}ns e posibles ampliaci\IeC {\'o}ns}{137}{chapter.6}
+\contentsline {chapter}{\numberline {A}Manuais t\IeC {\'e}cnicos}{139}{appendix.Alph1}
+\contentsline {chapter}{\numberline {B}Manuais de usuario}{141}{appendix.Alph2}
+\contentsline {chapter}{\numberline {C}Licenza}{143}{appendix.Alph3}
+\contentsline {chapter}{Bibliograf\IeC {\'\i }a}{145}{appendix.Alph3}

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import jdatamotioncommon.ComparableInstances;
-import jdatamotioncommon.filtros.DoubleParameter;
 import jdatamotioncommon.filtros.IFilter;
 import jdatamotioncommon.filtros.Parameter;
 import weka.core.Instance;
@@ -20,8 +19,6 @@ import weka.core.Instance;
  */
 public class MiFiltro2 implements IFilter {
 
-    private static final String VALOR = "valor";
-
     @Override
     public ComparableInstances filter(ComparableInstances comparableInstances, Integer filteredAttributeIndex, Map<String, Parameter> parameters) {
         if (!IFilter.isEverythingConfigured(filteredAttributeIndex, parameters) || !comparableInstances.attribute(filteredAttributeIndex).isNumeric()) {
@@ -31,7 +28,9 @@ public class MiFiltro2 implements IFilter {
         while (it.hasNext()) {
             Instance instance = it.next();
             Double v = instance.isMissing(filteredAttributeIndex) ? null : instance.value(filteredAttributeIndex);
-            instance.setValue(filteredAttributeIndex, -(double) parameters.get(VALOR).getValue() + v);
+            if (v != null) {
+                instance.setValue(filteredAttributeIndex, Math.random() * v);
+            }
         }
         return comparableInstances;
     }
@@ -39,7 +38,6 @@ public class MiFiltro2 implements IFilter {
     @Override
     public Map<String, Parameter> getParametersNeeded() {
         Map<String, Parameter> p = new HashMap<>();
-        p.put(VALOR, new DoubleParameter());
         return p;
     }
 

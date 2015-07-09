@@ -95,7 +95,6 @@ public final class ManexadorScatterPlots {
     private final ArrayList<PropertyChangeListener> propertyChangeListeners;
     private TarefaPlay tarefaPlay;
     private final transient ArrayList<ArrayList<ScatterPlot>> matrizScatterPlots;
-    private final int numSeries;
     private final NodeList<InstancesSimultaneas> eixoTemporal;
     private final ComparableInstances instances;
     private final int paso;
@@ -104,7 +103,6 @@ public final class ManexadorScatterPlots {
     private int msInstances[];
     private final int lonxitudeEstela;
     private static Vista vista;
-    Object createPropertiesPopupMenu;
     private final Color corEstela;
 
     public synchronized int getTInicial() {
@@ -123,14 +121,6 @@ public final class ManexadorScatterPlots {
             return 0;
         }
         return eixoTemporal.getLast().getObject().getMs();
-    }
-
-    public synchronized int getNumSeries() {
-        return numSeries;
-    }
-
-    public synchronized int getNumItems() {
-        return instances.numInstances();
     }
 
     public synchronized void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
@@ -241,7 +231,7 @@ public final class ManexadorScatterPlots {
         Nodo<InstancesSimultaneas> nodo = nodoActual;
         while (nodo != null && nodo.getObject().getMs() > toMs) {
             n += nodo.getObject().size();
-            nodo = nodo.getBack();
+            nodo = nodo.getPrevious();
         }
         return n;
     }
@@ -250,19 +240,19 @@ public final class ManexadorScatterPlots {
         tarefaPlay.freeze();
     }
 
-    synchronized void goToNext() {
+    public synchronized void goToNext() {
         move(1);
     }
 
-    synchronized void goToBefore() {
+    public synchronized void goToPrevious() {
         move(-1);
     }
 
-    public JPopupMenu createPropertiesPopupMenu() {
+    public static JPopupMenu createPropertiesPopupMenu() {
         return new ChartPanelConfigurable(null, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_MINIMUM_DRAW_WIDTH, DEFAULT_MINIMUM_DRAW_HEIGHT, DEFAULT_MAXIMUM_DRAW_WIDTH, DEFAULT_MAXIMUM_DRAW_HEIGHT, DEFAULT_BUFFER_USED, true, false, false, false, false, false).getPopupMenu();
     }
 
-    class Nodo<E> {
+    private class Nodo<E> {
 
         private Nodo<E> next;
         private Nodo<E> back;
@@ -272,7 +262,7 @@ public final class ManexadorScatterPlots {
             return next;
         }
 
-        public Nodo<E> getBack() {
+        public Nodo<E> getPrevious() {
             return back;
         }
 
@@ -321,7 +311,7 @@ public final class ManexadorScatterPlots {
         }
     }
 
-    class InstancesSimultaneas extends ArrayList<Instance> {
+    private class InstancesSimultaneas extends ArrayList<Instance> {
 
         private Integer ms;
 
@@ -334,9 +324,6 @@ public final class ManexadorScatterPlots {
             this.ms = ms;
         }
 
-        public void setMs(Integer ms) {
-            this.ms = ms;
-        }
     }
 
     synchronized private NodeList<InstancesSimultaneas> fabricarEixo(ComparableInstances instances, int indiceTemporal, int ordeVisualizacion) {
@@ -434,7 +421,7 @@ public final class ManexadorScatterPlots {
         return eixo;
     }
 
-    final class TarefaPlay extends SwingWorker<Void, Void> {
+    private final class TarefaPlay extends SwingWorker<Void, Void> {
 
         private int estado;
 
@@ -443,8 +430,8 @@ public final class ManexadorScatterPlots {
             setEstado(PAUSE);
         }
 
-        public void setEstado(int estado) {
-            firePropertyChange("estadoReproductor", this.estado, estado);
+        private void setEstado(int estado) {
+            firePropertyChange("estadoReprodutor", this.estado, estado);
             this.estado = estado;
         }
 
@@ -489,19 +476,19 @@ public final class ManexadorScatterPlots {
             return null;
         }
 
-        public void pause() {
+        private void pause() {
             setEstado(PAUSE);
         }
 
-        public void freeze() {
+        private void freeze() {
             setEstado(FREEZE);
         }
 
-        public int getEstado() {
+        private int getEstado() {
             return estado;
         }
 
-        public void play() {
+        private void play() {
             setEstado(PLAY);
             execute();
         }
@@ -524,11 +511,6 @@ public final class ManexadorScatterPlots {
         ManexadorScatterPlots.vista = vista;
         this.matrizScatterPlots = new ArrayList<>(numAtributosNumericos);
         this.instances = instances;
-        if (atributoColor == -1) {
-            this.numSeries = 1;
-        } else {
-            this.numSeries = instances.attribute(atributoColor).numValues();
-        }
         this.scatterPlotsVisibles = scatterPlotsVisibles;
         for (int in = 0; in < numAtributosNumericos; in++) {
             ArrayList<ScatterPlot> alsp = new ArrayList<>();
@@ -549,7 +531,7 @@ public final class ManexadorScatterPlots {
         this.corEstela = corEstela;
     }
 
-    public class JFrameChartPanel extends JFrame {
+    class JFrameChartPanel extends JFrame {
 
         private final ChartPanel chartPanel;
 
@@ -566,7 +548,7 @@ public final class ManexadorScatterPlots {
         }
     }
 
-    class XYDatasetModelo extends XYSeriesCollection {
+    private class XYDatasetModelo extends XYSeriesCollection {
 
         private Number domainMin;
         private Number domainMax;
@@ -579,52 +561,12 @@ public final class ManexadorScatterPlots {
         private final int atributoColor;
         private final ComparableInstances atributos;
 
-        public int getAtributoY() {
-            return atributoY;
-        }
-
-        public int getAtributoX() {
-            return atributoX;
-        }
-
-        public int getAtributoColor() {
-            return atributoColor;
-        }
-
-        public Number getDomainMin() {
-            return domainMin;
-        }
-
-        public Number getDomainMax() {
-            return domainMax;
-        }
-
-        public Number getRangeMin() {
-            return rangeMin;
-        }
-
         @Override
         public Comparable<String> getSeriesKey(int i) {
             if (atributoColor < 0) {
                 return "";
             }
             return i > 0 ? atributos.attribute(atributoColor).value(i - 1) : recursosIdioma.getString("senDefinir");
-        }
-
-        public Number getRangeMax() {
-            return rangeMax;
-        }
-
-        public Range getRange() {
-            return range;
-        }
-
-        public int obterItemsTotais() {
-            int r = 0;
-            for (int j = 0; j < getSeriesCount(); j++) {
-                r += getSeries(j).getItemCount();
-            }
-            return r;
         }
 
         public XYDatasetModelo(ComparableInstances atributos, int atributoX, int atributoY, int atributoColor) {
@@ -676,17 +618,9 @@ public final class ManexadorScatterPlots {
             }
         }
 
-        public double getDomainLowerBound() {
-            return domainMin.doubleValue();
-        }
-
         @Override
         public double getDomainLowerBound(boolean flag) {
             return domainMin.doubleValue();
-        }
-
-        public double getDomainUpperBound() {
-            return domainMax.doubleValue();
         }
 
         @Override
@@ -694,45 +628,9 @@ public final class ManexadorScatterPlots {
             return domainMax.doubleValue();
         }
 
-        public Range getDomainBounds() {
-            return domainRange;
-        }
-
         @Override
         public Range getDomainBounds(boolean flag) {
             return domainRange;
-        }
-
-        public Range getDomainRange() {
-            return domainRange;
-        }
-
-        public double getRangeLowerBound() {
-            return rangeMin.doubleValue();
-        }
-
-        public double getRangeUpperBound() {
-            return rangeMax.doubleValue();
-        }
-
-        public Range getValueRange() {
-            return range;
-        }
-
-        public Number getMinimumDomainValue() {
-            return domainMin;
-        }
-
-        public Number getMaximumDomainValue() {
-            return domainMax;
-        }
-
-        public Number getMinimumRangeValue() {
-            return domainMin;
-        }
-
-        public Number getMaximumRangeValue() {
-            return domainMax;
         }
 
         public synchronized Nodo<InstancesSimultaneas> visualizarItems(ScatterPlot sp, int numeroItems) {
@@ -764,7 +662,7 @@ public final class ManexadorScatterPlots {
                     xys.remove(xys.getItemCount() - 1);
                     e--;
                 }
-                nodo = nodo.getBack();
+                nodo = nodo.getPrevious();
             }
             sp.pintarEstela(nodo, lonxitudeEstela);
             setNotify(true);
@@ -772,7 +670,7 @@ public final class ManexadorScatterPlots {
         }
     }
 
-    public synchronized void procesarSeleccion(ComparableInstances instances, ArrayList<Integer> indicesInstances) {
+    public synchronized void procesarSeleccion(ComparableInstances instances, List<Integer> indicesInstances) {
         double radioInicial = 15.0;
         double grosorInicial = 1.0;
         double pasoGrosor = 0.0;
@@ -799,7 +697,7 @@ public final class ManexadorScatterPlots {
         });
     }
 
-    public synchronized int numColumnasNonVacias() {
+    public synchronized int numColumnasNonBaleiras() {
         int n = 0;
         for (int i = 0; i < matrizScatterPlots.size(); i++) {
             if (!columnaScatterPlotsVacia(i)) {
@@ -809,7 +707,7 @@ public final class ManexadorScatterPlots {
         return n;
     }
 
-    public synchronized int numFilasNonVacias() {
+    public synchronized int numFilasNonBaleiras() {
         int n = 0;
         for (int i = 0; i < matrizScatterPlots.size(); i++) {
             if (!filaScatterPlotsVacia(i)) {
@@ -837,12 +735,8 @@ public final class ManexadorScatterPlots {
         return true;
     }
 
-    public synchronized ScatterPlot getScatterPlot(int i, int j) {
+    synchronized ScatterPlot getScatterPlot(int i, int j) {
         return matrizScatterPlots.get(i).get(j);
-    }
-
-    public synchronized int getNumScatterplots() {
-        return matrizScatterPlots.size();
     }
 
     public synchronized void cubrirConScatterPlot(int i, int j, List<Integer> indices, int indiceAtributoNominal) {
@@ -859,7 +753,7 @@ public final class ManexadorScatterPlots {
         return Color.getHSBColor((float) cor / totalCores, (float) 0.9, (float) 0.9);
     }
 
-    public static Color obterCorIntermedia(int cor, int totalCores, Color cor1, Color cor2) {
+    private static Color obterCorIntermedia(int cor, int totalCores, Color cor1, Color cor2) {
         int r1 = cor1.getRed(), g1 = cor1.getGreen(), b1 = cor1.getBlue(), r2 = cor2.getRed(), g2 = cor2.getGreen(), b2 = cor2.getBlue();
         return new Color((int) Math.round(1.0 * r1 + (r2 - r1) * cor / totalCores), (int) Math.round(1.0 * g1 + (g2 - g1) * cor / totalCores), (int) Math.round(1.0 * b1 + (b2 - b1) * cor / totalCores));
     }
@@ -873,7 +767,7 @@ public final class ManexadorScatterPlots {
         });
     }
 
-    public void aplicarConfiguracionGraficaScatterPlot(ScatterPlot sp) {
+    private void aplicarConfiguracionGraficaScatterPlot(ScatterPlot sp) {
         Color ccbp = Vista.GraphicConfigurationManager.readColorProperty("chart_background_paint");
         Color csbp = Vista.GraphicConfigurationManager.readColorProperty("scatterplot_background_paint");
         Color cop = Vista.GraphicConfigurationManager.readColorProperty("outline_paint");
@@ -937,7 +831,7 @@ public final class ManexadorScatterPlots {
         return c;
     }
 
-    public class ScatterPlot implements Serializable {
+    class ScatterPlot implements Serializable {
 
         private final int indiceAtributoX;
         private final int indiceAtributoY;
@@ -945,16 +839,8 @@ public final class ManexadorScatterPlots {
         private ChartPanel chartPanelCela;
         private final JFrameChartPanel jFrameAmpliado;
 
-        public void setChartPanelCela(ChartPanel meuChartPanel) {
-            this.chartPanelCela = meuChartPanel;
-        }
-
         public JFrameChartPanel getJFrameAmpliado() {
             return jFrameAmpliado;
-        }
-
-        public int getIndiceAtributoColor() {
-            return indiceAtributoColor;
         }
 
         public void pintarEstela() {
@@ -966,7 +852,7 @@ public final class ManexadorScatterPlots {
             Nodo<InstancesSimultaneas> nAnterior, nActual = nodo;
             for (int i = 0; i < lonxitudeEstela; i++) {
                 if (nActual != null) {
-                    nAnterior = nActual.getBack();
+                    nAnterior = nActual.getPrevious();
                     if (nAnterior == null) {
                         break;
                     }
@@ -1010,7 +896,7 @@ public final class ManexadorScatterPlots {
             }
         }
 
-        public void eliminarAnotacions(Class claseAnotacion) {
+        void eliminarAnotacions(Class claseAnotacion) {
             XYPlot xyp1 = chartPanelCela.getChart().getXYPlot(), xyp2 = jFrameAmpliado.getChartPanel().getChart().getXYPlot();
             List annotations = xyp1.getAnnotations();
             Iterator it = annotations.iterator();
@@ -1023,12 +909,12 @@ public final class ManexadorScatterPlots {
             }
         }
 
-        public void engadirAnotacion(XYAnnotation a) {
+        void engadirAnotacion(XYAnnotation a) {
             chartPanelCela.getChart().getXYPlot().addAnnotation(a, false);
             jFrameAmpliado.getChartPanel().getChart().getXYPlot().addAnnotation(a, false);
         }
 
-        private JFreeChart createChart(ComparableInstances instances, XYDatasetModelo xydataset) {
+        final JFreeChart createChart(ComparableInstances instances, XYDatasetModelo xydataset) {
             JFreeChart jfreechart = ChartFactory.createScatterPlot("'" + instances.attribute(indiceAtributoX).name() + "' " + Vista.getRecursosIdioma().getString("fronteA") + " '" + instances.attribute(indiceAtributoY).name() + "'", instances.attribute(indiceAtributoX).name(), instances.attribute(indiceAtributoY).name(), xydataset, PlotOrientation.VERTICAL, true, false, false);
             XYPlot xyplot = (XYPlot) jfreechart.getPlot();
             xyplot.setDomainCrosshairVisible(true);
@@ -1057,7 +943,7 @@ public final class ManexadorScatterPlots {
         }
     }
 
-    public static class ChartPanelConfigurable extends ChartPanel {
+    static class ChartPanelConfigurable extends ChartPanel {
 
         static {
             ChartPanel.localizationResources = Vista.recursosIdioma;
@@ -1082,7 +968,7 @@ public final class ManexadorScatterPlots {
 
     }
 
-    class CircleDrawer implements Drawable {
+    private class CircleDrawer implements Drawable {
 
         private final Paint outlinePaint;
         private final Stroke outlineStroke;

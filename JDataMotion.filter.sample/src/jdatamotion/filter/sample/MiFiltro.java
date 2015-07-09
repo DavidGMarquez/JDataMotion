@@ -31,7 +31,9 @@ public class MiFiltro implements IFilter {
         while (it.hasNext()) {
             Instance instance = it.next();
             Double v = instance.isMissing(filteredAttributeIndex) ? null : instance.value(filteredAttributeIndex);
-            instance.setValue(filteredAttributeIndex, -(double) parameters.get(VALOR).getValue() * v);
+            if (v != null) {
+                instance.setValue(filteredAttributeIndex, -(double) parameters.get(VALOR).getValue() * v);
+            }
         }
         return comparableInstances;
     }

@@ -31,6 +31,7 @@ import jdatamotion.comandos.ComandoExportarFicheiro;
 import jdatamotion.comandos.ComandoExportarFiltros;
 import jdatamotion.comandos.ComandoImportarFicheiro;
 import jdatamotion.comandos.ComandoImportarFiltros;
+import jdatamotion.comandos.ComandoImportarFiltrosDendeJAR;
 import jdatamotion.comandos.ComandoIntercambiarFiltros;
 import jdatamotion.comandos.ComandoMudarDato;
 import jdatamotion.comandos.ComandoMudarIndiceTemporal;
@@ -66,30 +67,33 @@ public class Controlador implements Sesionizable {
     public static final int ENGADIR_DATOS = 5;
     public static final int ELIMINAR_DATOS = 6;
     public static final int DESFACER = 7;
-    public static final int REFACER = 9;
-    public static final int RESTAURAR = 10;
-    public static final int RESTAURAR_CO_FICHEIRO = 11;
-    public static final int MUDAR_INDICE_TEMPORAL = 12;
-    public static final int MUDAR_TIPO = 13;
-    public static final int MUDAR_NOME_RELACION = 14;
-    public static final int RENOMEAR_ATRIBUTO = 15;
-    public static final int ENGADIR_ATRIBUTO = 16;
-    public static final int ELIMINAR_ATRIBUTO = 17;
-    public static final int ENGADIR_FILTRO = 18;
-    public static final int ELIMINAR_FILTRO = 19;
-    public static final int CONFIGURAR_FILTRO = 20;
-    public static final int INTERCAMBIAR_FILTROS = 21;
-    public static final int IMPORTAR_FILTROS = 22;
-    public static final int EXPORTAR_FILTROS = 23;
-    public static final int IMPORTAR_FILTRO_DENDE_JAR = 24;
+    public static final int REFACER = 8;
+    public static final int RESTAURAR = 9;
+    public static final int MUDAR_INDICE_TEMPORAL = 10;
+    public static final int MUDAR_TIPO = 11;
+    public static final int MUDAR_NOME_RELACION = 12;
+    public static final int RENOMEAR_ATRIBUTO = 13;
+    public static final int ENGADIR_ATRIBUTO = 14;
+    public static final int ELIMINAR_ATRIBUTO = 15;
+    public static final int ENGADIR_FILTRO = 16;
+    public static final int ELIMINAR_FILTRO = 17;
+    public static final int CONFIGURAR_FILTRO = 18;
+    public static final int INTERCAMBIAR_FILTROS = 19;
+    public static final int IMPORTAR_FILTROS = 20;
+    public static final int EXPORTAR_FILTROS = 21;
+    public static final int IMPORTAR_FILTRO_DENDE_JAR = 22;
 
-    public static final boolean debug = false;
+    public static boolean debug = false;
     private transient Modelo meuModelo;
     private transient Vista minaVista;
     private XestorComandos xestorComandos;
 
     public Controlador() {
         xestorComandos = new XestorComandos();
+    }
+
+    static void setDebug(boolean debug) {
+        Controlador.debug = debug;
     }
 
     public void inicializar(Modelo modelo, Vista vista) {
@@ -633,8 +637,8 @@ public class Controlador implements Sesionizable {
 
     private void importarFiltroDendeJAR(String url) {
         try {
-            meuModelo.incluirFiltro(url);
-        } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            xestorComandos.executarComando(new ComandoImportarFiltrosDendeJAR(meuModelo, url));
+        } catch (Exception ex) {
             minaVista.amosarDialogo("Erro:\n" + ex.getMessage(), Vista.ERROR_MESSAGE);
             if (Controlador.debug) {
                 Logger.getLogger(Controlador.class.getName()).log(Level.SEVERE, null, ex);
