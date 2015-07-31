@@ -1,0 +1,19 @@
+\beamer@endinputifotherversion {3.33pt}
+\select@language {galician}
+\beamer@sectionintoc {1}{Introduci\IeC {\'o}n}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Introduci\IeC {\'o}n}{4}{0}{1}
+\beamer@sectionintoc {2}{Xesti\IeC {\'o}n do proxecto}{5}{0}{2}
+\beamer@subsectionintoc {2}{1}{Metodolox\IeC {\'\i }a de desenvolvemento}{6}{0}{2}
+\beamer@sectionintoc {3}{An\IeC {\'a}lise}{7}{0}{3}
+\beamer@subsectionintoc {3}{1}{Requisitos}{8}{0}{3}
+\beamer@sectionintoc {4}{Dese\IeC {\~n}o e implementaci\IeC {\'o}n}{9}{0}{4}
+\beamer@subsectionintoc {4}{1}{Dese\IeC {\~n}o}{10}{0}{4}
+\beamer@subsectionintoc {4}{2}{Modelo}{12}{0}{4}
+\beamer@subsectionintoc {4}{3}{Vista}{13}{0}{4}
+\beamer@subsectionintoc {4}{4}{Controlador}{14}{0}{4}
+\beamer@sectionintoc {5}{Validaci\IeC {\'o}n e probas}{15}{0}{5}
+\beamer@subsectionintoc {5}{1}{Validaci\IeC {\'o}n e probas}{16}{0}{5}
+\beamer@subsectionintoc {5}{2}{An\IeC {\'a}lise de prestaci\IeC {\'o}ns}{17}{0}{5}
+\beamer@sectionintoc {6}{Demo}{18}{0}{6}
+\beamer@sectionintoc {7}{Conclusi\IeC {\'o}ns}{19}{0}{7}
+\beamer@subsectionintoc {7}{1}{Conclusi\IeC {\'o}ns}{20}{0}{7}

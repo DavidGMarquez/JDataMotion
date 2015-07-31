@@ -1,3 +1,41 @@
 \chapter{Manuais técnicos}
 
-Manuais técnicos: en función do tipo de Traballo e metodoloxía empregada, o contido poderase dividir en varios documentos. En todo caso, neles incluirase toda a información precisa para aquelas persoas que se vaian a encargar do desenvolvemento e/ou modificación do Sistema (por exemplo código fonte, recursos necesarios, operacións necesarias para modificacións e probas, posibles problemas, etc.). O código fonte poderase entregar en soporte informático en formatos PDF ou postscript.
+Como xa mencionamos, o proxecto ofrece toda esta documentación, así coma o seu código fonte e referencias bibliográficas, a calquera persoa que teña intención de colaborar no desenvolvemento da aplicación.
+
+Mención especial merece o contido da librería JDataMotion.common. Aquí os desenvolvedores dispostos a crear un filtro propio atoparán as clases e interfaces que deberán empregar. Para a implementación de filtros propios é mester ser capaz de manexar a clase Instances (estendida baixo InstancesComparable), e ser capaz de acceder e modificar as instancias e os atributos que almacena. Para isto, o propio subproxecto JDataMotion.common incorpora non só a API de programación de Weka, se non tamén os JavaDocs que describen cada clase e método da interface, e ademais inclúe o código fonte de toda a libraría. A integración dos JavaDocs na maioría dos IDEs facilitará a formación do desenvolvedor nos métodos e clases de Weka a medida que programa.
+
+O desenvolvedor tamén dispón de métodos estáticos de interese estatístico dentro do proxecto común. Estes métodos traballan coas propias InstancesComparable, e poden ser de utilidade na implementación de novos filtros.
+
+Para participar no desenvolvemento da propia aplicación JDataMotion aconséllase aproveitar a estrutura creada por Netbeans para abrir e continuar co proxecto. En calquera caso, a estrutura do programa é a seguinte:
+
+\begin{description}
+\item[/build:] \hfill
+Contén as clases compiladas. Este directorio debe excluírse da xestión da configuración, pois depende do código que a orixina, o cal si é un elemento de configuración.
+\item[/dist:] \hfill
+Contén o arquivo JAR final, que podemos executar para arrancar a aplicación. Tamén se excluirá da xestión da configuración ao depender do código fonte.
+\item[/filters:] \hfill
+Contén unha copia de uso interno das librerías JAR importadas con filtros implementados. Tamén se excluirá da xestión da configuración, pois o seu contido depende da experiencia de cada usuario coa aplicación.
+\item[/lib:] \hfill
+Contén as librerías e demais dependencias da aplicación. Si constitúe un elemento de configuración.
+\item[/nbproject:] \hfill
+Carpeta na que NetBeans garda a súa configuración con respecto ao programa. Si constitúe un elemento de configuración.
+\item[/src:] \hfill
+Contén todo o código fonte da aplicación, nunha xerarquía de carpetas que representa os paquetes. Si constitúe un elemento de configuración.
+\item[/store:] \hfill
+Contén un JAR autocontido da aplicación, é dicir, que xa conta con todas as dependencias integradas. Excluirase da xestión da configuración, xa que depende do código fonte e das librerías, e ambos son xa elementos de configuración.
+\item[/test:] \hfill
+Contén todo o código fonte das probas da aplicación, nunha xerarquía de carpetas que representa os paquetes. Si constitúe un elemento de configuración.
+\item[.gitignore:] \hfill
+Ficheiro cunha liña por cada directorio ou ficheiro que deba ser excluído da xestión da configuración. Si constitúe un elemento de configuración en si mesmo.
+\item[build.xml:] \hfill
+Ficheiro que usa NetBeans para compilar, executar ou realizar outras accións sobre este proxecto. Si constitúe un elemento de configuración.
+\item[configuracion.properties:] \hfill
+Contén a configuración de usuario almacenada. Tamén se excluirá da xestión da configuración, pois o seu contido depende da experiencia de cada usuario coa aplicación.
+\item[manifest.mf:] \hfill
+Ficheiro de configuración da extensión e do paquete. Si constitúe un elemento de configuración.
+\item[run.bat:] \hfill
+Script de arranque para plataformas Windows. Si constitúe un elemento de configuración.
+\item[run.sh:] \hfill
+Script de arranque para plataformas Linux. Si constitúe un elemento de configuración.
+\end{description}
+ 

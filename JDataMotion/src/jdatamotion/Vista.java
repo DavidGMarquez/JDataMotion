@@ -3327,6 +3327,7 @@ public class Vista extends JFrame implements Observer, Sesionizable, PropertyCha
         for (PropertyChangeListener al : jFileChooser1.getPropertyChangeListeners()) {
             jFileChooser1.removePropertyChangeListener("fileFilterChanged", al);
         }
+        jFileChooser1.setCurrentDirectory(new File("."));
         jFileChooser1.setDialogType(JFileChooser.OPEN_DIALOG);
         switch (eventoParaControlador) {
             case Controlador.ABRIR_SESION:

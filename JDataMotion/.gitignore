@@ -1,4 +1,5 @@
 build/
 store/
 dist/
+filters/
 configuracion.properties

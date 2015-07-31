@@ -7,169 +7,201 @@
 \documentclass{beamer}
 \usepackage{beamerthemeshadow}
 \usepackage[galician]{babel}
+\usepackage{eurosym}
 % \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 %\usepackage[latin1]{inputenc}
 
 \begin{document}
-\title{Título do Traballo de Fin de Grao}
+\title[JDataMotion]{JDataMotion: unha ferramenta para a visualización dinámica de diagramas de dispersión}
 \subtitle{Grao en Enxeñaría Informática \\
 Universidade de Santiago de Compostela}  
-\author{Autor: Nome do Autor}
-\institute{Director: Nome do Director}
+\author{Autor: Pablo Pérez Romaní}
+\institute
+{
+  \inst{}
+  Director: Paulo Félix Lamas
+  \and
+  \inst{}
+  Codirector: David González Márquez
+}
 \date{\today} 
 
 \begin{frame}
 \titlepage
 \end{frame}
 
-\begin{frame}
-\frametitle{Taboa de contidos}\tableofcontents
-\end{frame} 
+\frame{
+\renewcommand{\baselinestretch}{0.75}\normalsize
+\tableofcontents[hideallsubsections]
+\renewcommand{\baselinestretch}{1.0}\normalsize
+}
 
-\section{Sección 1} 
-\subsection{Ejemplo de subsección}
+\section{Introdución} 
+
 \begin{frame}
-\frametitle{Título} 
-Cada pantalla tiene su título.
+\frametitle{Introdución} 
+Introdución
 \end{frame}
 
-\subsection{Ejemplo de lista}
-
+\subsection{Introdución}
 \begin{frame}
-\frametitle{Lista no numerada}
+\frametitle{Introdución} 
 \begin{itemize}
-\item una  
-\item dos 
-\item tres 
-\item cuatro
+\item Na actual sociedade da información os datos crecen exponencialmente. Cobra valor a \textbf{minería de datos}, que ten por obxecto extraer deles \textbf{coñecemento} útil.
+\item JDataMotion é unha solución a esta necesidade, que combina:
+\vspace{-4mm}
+\begin{itemize}
+\item \textbf{Diagramas de dispersión}: axudan a atopar correlacións, distribucións ou tendencias entre os datos.
+\item A noción de tempo como \textbf{compoñente dinámica} dos conxuntos de datos.
+\end{itemize} 
+\item O seu obxectivo é posibilitar a visualización e reprodución dos datos que se amosan sobre un diagrama de dispersión.
 \end{itemize} 
 \end{frame}
 
+%%
+
+\section{Xestión do proxecto} 
+
 \begin{frame}
-\frametitle{Lista con pausa}
+\frametitle{Xestión do proxecto} 
+Xestión do proxecto
+\end{frame}
+
+\subsection{Metodoloxía de desenvolvemento}
+\begin{frame}
+\frametitle{Metodoloxía de desenvolvemento} 
 \begin{itemize}
-\item número uno \pause 
-\item número dos \pause 
-\item número tres \pause 
-\item número cuatro
+\item Premisas:
+\begin{itemize}
+\item Existencia de \textbf{riscos} de diversa gravidade.
+\item Falta de experiencia na xestión de proxectos.
+\item Proxecto aberto a cambios na especificación.
+\item Necesidade de retroalimentación ao longo do desenvolvemento.
+\end{itemize} 
+\item Necesitamos unha metodoloxía áxil.
+\item Escollemos metodoloxía \textbf{Scrum}.
+\item Recorremos á ferramenta \textbf{Acunote} para xestionar os sprints e os requisitos funcionais asociados.
+\item Elementos de configuración: código fonte e documentación. Xestionarémolos por medio da ferramenta \textbf{GitHub}.
 \end{itemize} 
 \end{frame}
 
-\subsection{Otro ejemplo de lista}
+%%
+
+\section{Análise}
 \begin{frame}
-\frametitle{Lista numerada}
-\begin{enumerate}
-\item una  
-\item dos 
-\item tres 
-\item cuatro
-\end{enumerate}
+\frametitle{Análise} 
+Análise
+\end{frame}
+\subsection{Requisitos}
+\begin{frame}
+\frametitle{Requisitos} 
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/docrequisitos}
 \end{frame}
 
-\section{Sección 2} 
-\subsection{Tablas}
+%%
 
+\section{Deseño e implementación}
 \begin{frame}
-\frametitle{Tablas}
-\begin{tabular}{|c|l|r|} \hline
-\textbf{Centrado} & \textbf{Izquierda} & \textbf{Derecha} \\ \hline
-AAAA  & 1000 & aaaa \\ \hline
-BB    & 20   & bb \\ \hline
-\end{tabular}
+\frametitle{Deseño e implementación} 
+Deseño e implementación
+\end{frame}
+\subsection{Deseño}
+\begin{frame}
+\frametitle{Deseño} 
+\begin{itemize} 
+\item O patrón \textbf{Modelo-Vista-Controlador} é a base da aplicación:
+\begin{itemize} 
+\item Modelo: almacena todos os datos cos que se traballa, xunto coa lóxica para manipulalos (filtros).
+\item Vista: implementa a interface gráfica da aplicación.
+\item Controlador: procesa en forma de comandos os eventos que a Vista recolle.
+\end{itemize} 
+\item O patrón \textbf{Observer} notifica á Vista calquera modificación no Modelo.
+\item O patrón \textbf{Command} encapsula as transaccións (comandos) que poden modificar o Modelo.
+\end{itemize} 
+\end{frame}
+\begin{frame}
+\frametitle{Arquitectura} 
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/MVC}
+\end{frame}
+\subsection{Modelo}
+\begin{frame}
+\frametitle{Modelo} 
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/modeloPresentacion}
+\end{frame}
+\subsection{Vista}
+\begin{frame}
+\frametitle{Vista} 
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/vistaPresentacion}
+\end{frame}
+\subsection{Controlador}
+\begin{frame}
+\frametitle{Controlador} 
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/controladorPresentacion}
 \end{frame}
 
+%%
+
+\section{Validación e probas} 
+
 \begin{frame}
-\frametitle{Tabla con pausa}
-\begin{tabular}{c c c}
-A & B & C \\ \pause 
-1 & 2 & 3 \\  \pause 
-A & B & C \\ 
-\end{tabular} 
+\frametitle{Validación e probas} 
+Validación e probas
 \end{frame}
 
-\section{Sección 3}
-\subsection{Bloques}
-
+\subsection{Validación e probas}
 \begin{frame}
-\frametitle{Bloques}
-
-\begin{block}{Bloque normal}
-Texto del bloque normal
-\end{block}
-
-\begin{exampleblock}{Bloque de ejemplo}
-Texto del bloque ejemplo
-\end{exampleblock}
-
-\begin{alertblock}{Bloque de alerta}
-Texto del bloque alerta
-\end{alertblock}
+\frametitle{Validación e probas} 
+\begin{itemize} 
+\item Dous métodos fundamentais de validación de requisitos:
+\begin{itemize} 
+\item \textbf{Tests de proba} (Instancias, atributos e filtros)
+\item \textbf{Avaliación heurística} (Visualización)
+\end{itemize} 
+\item Para o \textbf{RC01} (latencia mínima), fíxose unha análise de prestacións. Mediuse latencia fronte a instancias e atributos, para a carga e a visualización dos datos.
+\item Todos os tests validaron positivamente os requisitos que probaban.
+\end{itemize} 
 \end{frame}
 
-\section{Sección 4}
-\subsection{Pantalla dividida}
+\subsection{Análise de prestacións}
+\begin{frame}
+\frametitle{Análise de prestacións} 
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/eficiencia}
+\end{frame}
+
+%%
+
+\section{Demo} 
 
 \begin{frame}
-\frametitle{Pantalla dividida}
-\begin{columns}
-\begin{column}{5cm}
+\frametitle{Demo} 
+Demo
+\end{frame}
+
+%%
+
+\section{Conclusións} 
+
+\begin{frame}
+\frametitle{Conclusións} 
+Conclusións
+\end{frame}
+
+\subsection{Conclusións}
+\begin{frame}
+\frametitle{Conclusións} 
 \begin{itemize}
-\item una lista
-\item de puntos 
-\item mas una tabla 
-\end{itemize}
-\end{column}
-\begin{column}{5cm}
-\begin{tabular}{|c|c|c|} \hline
-\textbf{Mes} & \textbf{Día} & \textbf{Hora} \\ \hline
-Enero   & 10 & 15:30 \\ \hline
-Febrero & 20 & 20:00 \\ \hline
-\end{tabular}
-\end{column}
-\end{columns}
-\end{frame}
-
-\subsection{Figuras} 
-\begin{frame}
-\frametitle{Incluir figuras}
-\begin{figure}
-\includegraphics[scale=0.3]{figuras/logo_usc.eps} 
-\caption{Logo de la USC}
-\end{figure}
-\end{frame}
-
-\subsection{Listas con figuras y pausas} 
-
-\begin{frame}
-\frametitle{Listas con figuras y pausas}
-\begin{columns}
-\begin{column}{4cm}
+\item Aplicación de propósito xeral, que permite procesar e visualizar dinamicamente conxuntos de datos.
+\item A metodoloxía Scrum facilitou a xestión de riscos e evitou que en certas fases nos afastásemos da especificación inicial.
+\item Algunhas áreas de traballo propostas para un futuro desenvolvemento:
 \begin{itemize}
-\item<1-> Una
-\item<3-> Dos
-\item<5-> Tres
+\item Desvanecemento de puntos durante a reprodución.
+\item Redución de latencia no proceso de visualización.
+\item Migración de sesións.
+\item Integración de plug-ins.
+\item Asistente e/ou axuda.
 \end{itemize}
-\vspace{3cm} 
-\end{column}
-\begin{column}{4cm}
-\begin{overprint}
-\includegraphics<2>[scale=0.05]{figuras/logo_usc.eps}
-\includegraphics<4>[scale=0.10]{figuras/logo_usc.eps}
-\includegraphics<6>[scale=0.15]{figuras/logo_usc.eps}
-\end{overprint}
-\end{column}
-\end{columns}
-\end{frame}
-
-\subsection{Cuando se necesita más espacio} 
-\begin{frame}[plain]
-\frametitle{Pantalla plana con sólo una figura}
-\begin{figure}
-\includegraphics[scale=0.3]{figuras/figura01.eps} 
-\caption{Una figura grande}
-\end{figure}
+\end{itemize} 
 \end{frame}
 
 \end{document}
-

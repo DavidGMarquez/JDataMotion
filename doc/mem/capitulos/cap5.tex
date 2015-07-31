@@ -782,7 +782,7 @@ Esencial
 \item[Tipo de proba] \hfill
 Avaliación heurística
 \item[Descrición]
-Tendo algún diagrama representado, volvemos ao Modelo e seleccionamos un atributo numérico ou String (pero cun formato de tempo) pinchando nel co botón secundario. Marcámolo como índice temporal. Agora imos a Visualización \textgreater{}. Para que se teña en conta o índice temporal, seleccionaremos en Orde do modelo a opción ``Orde dos índices temporais numéricos ponderados''. Con todo isto, ao premer no botón de reprodución do menú Visualización comezaremos a ver a secuencia de puntos avanzar da forma que acabamos de configurar. O difuminado dos puntos non se pode probar porque non foi implementado todavía (debido a unha restricción das estruturas do Dataset que non permitían a reprodución cara atrás).
+Tendo algún diagrama representado, volvemos ao Modelo e seleccionamos un atributo numérico ou String (pero cun formato de tempo [[HH:]mm:]ss) pinchando nel co botón secundario. Marcámolo como índice temporal. Agora imos a Visualización \textgreater{}. Para que se teña en conta o índice temporal, seleccionaremos en Orde do modelo a opción ``Orde dos índices temporais numéricos ponderados''. Con todo isto, ao premer no botón de reprodución do menú Visualización comezaremos a ver cómo a secuencia de puntos avanza respectando o atributo temporal e a configuración de reprodución imposta. O difuminado dos puntos non se pode probar porque non foi implementado aínda (debido a unha restrición das estruturas do Dataset que non permitían a reprodución cara atrás).
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/RF23}
@@ -1133,14 +1133,16 @@ Esencial
 \item[Tipo de proba] \hfill
 Avaliación de prestacións
 \item[Descrición]
-Preparamos 16 ficheiros ARFF de datos, con 11, 22, 33 e 44 atributos, e 2500, 5000, 7500 e 10000 instancias, cubrindo todas as combinacións. Executamos estos ficheiros activando a bandeira Controlador.DEBUG para obter os tempos de execución das tres rexións que compoñen o refresco (a operación máis custosa do programa). En concreto, tomaremos individualmente o tempo que tarda en refrescar cada menú (Modelo, Filtros e Visualización coa matriz de diagramas de dispersión completa). O de filtros descartarémolo xa que a súa latencia é insignificante e non aumenta coa talla do arquivo. Os resultados obtidos foron os seguintes:
+Preparamos 16 ficheiros ARFF de datos, con 11, 22, 33 e 44 atributos, e 2500, 5000, 7500 e 10000 instancias, cubrindo todas as combinacións. Executamos estes ficheiros activando a bandeira Controlador.DEBUG para obter os tempos de execución das tres rexións que compoñen o refresco (a operación máis custosa do programa). En concreto, tomaremos individualmente o tempo que tarda en refrescar cada menú (Modelo, Filtros e Visualización coa matriz de diagramas de dispersión completa). O de filtros descartarémolo xa que a súa latencia é insignificante e non aumenta coa talla do arquivo. Os resultados obtidos plásmanse na figura \ref{eficiencia}.
+
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/eficiencia}
 \caption{Comprobación prestacións do RC01}
 \label{eficiencia}
 \end{figure}
-A latencia vólvese crítica no refresco do menú de visualización, e a escalabilidade empeora co aumento do número de atributos. O Modelo sen embargo escala relativamente mellor con respecto a instancias e atributos. Cabe destacar que é ata certo punto razonable que o menú de Visualización escale tan mal, pois sufre os aumentos no número de atributos ao cadrado (a matriz de diagramas ten n*n elementos).
+
+A latencia vólvese crítica no refresco do menú de visualización, e a escalabilidade empeora co aumento do número de atributos. O Modelo sen embargo escala relativamente mellor con respecto a instancias e atributos. Cabe destacar que é ata certo punto razoable que o menú de Visualización escale tan mal, pois sofre os aumentos no número de atributos ao cadrado (a matriz de diagramas ten n*n elementos).
 \item[Resultado]
 Aceptable.
 \end{description}
@@ -1158,7 +1160,7 @@ Esencial
 \item[Tipo de proba] \hfill
 Avaliación heurística
 \item[Descrición]
-O diagrama de deseño exposto neste documento da fe de que se cumpleu este requisito. De todos xeitos pódese probar a nivel de implementación importando un filtro dende JAR.
+O diagrama de deseño exposto neste documento da fe de que se cumpriu este requisito. De todos xeitos pódese probar que a interface é empregada correctamente, importando un filtro dende un JAR que conteña algunha clase que implemente esta interface.
 \item[Resultado]
 Correcto.
 \end{description}
@@ -1237,6 +1239,12 @@ Entrega dentro de prazo
 Débese entregar unha versión funcional e documentada antes do día 10 de Xullo de 2015, ás 14:00 horas, pois é o momento no que remata o prazo de entrega.
 \item[Importancia] \hfill
 Esencial
+\item[Tipo de proba] \hfill
+-
+\item[Descrición]
+Confirmación por parte de quen recolla o traballo de que todo está en orde.
+\item[Resultado]
+Correcto.
 \end{description}
 
 A matriz de trazabilidade que relacionaría cada requisito cun tipo de proba (heurística ou test en JUnit) é a que se presenta a continuación:

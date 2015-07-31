@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  9 JUL 2015 18:19
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=latex 2014.8.25)  10 JUL 2015 12:21
 entering extended mode
 **traballo.tex
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\traballo.tex
@@ -607,7 +607,7 @@ x) (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap2.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap4.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap5.aux
 
-LaTeX Warning: Label `RF121314' multiply defined.
+LaTeX Warning: Label `RF1213' multiply defined.
 
 
 LaTeX Warning: Label `RF1516' multiply defined.
@@ -618,19 +618,13 @@ LaTeX Warning: Label `RF202122' multiply defined.
 
 LaTeX Warning: Label `RF202122' multiply defined.
 
-)
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/conclusions.au
-x)
+) (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap6.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/bibliografia.a
-ux
-
-LaTeX Warning: Label `arff' multiply defined.
-
-) (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/glosario.aux
-))
+ux)
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/glosario.aux))
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 68.
 LaTeX Font Info:    ... okay on input line 68.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 68.
@@ -648,7 +642,7 @@ LaTeX Font Info:    ... okay on input line 68.
 \c@lstlisting=\count113
 \AtBeginShipoutBox=\box35
 Package hyperref Info: Link coloring ON on input line 68.
- ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
@@ -865,7 +859,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 ! Undefined control sequence.
 \MakeUppercase ...ppercaseUnsupportedInPdfStrings 
                                                   
-l.36 ...isitos de calidade}{128}{subsection.5.0.2}
+l.35 ...lidaci\IeC {\'o}n e probas}{87}{chapter.5}
                                                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -875,67 +869,67 @@ and I'll forget about whatever was undefined.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 36.
+(hyperref)                removing `\<let>-command' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 36.
+(hyperref)                removing `\@tempdima' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\divide' on input line 36.
+(hyperref)                removing `\divide' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 36.
+(hyperref)                removing `\@tempdima' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\multiply' on input line 36.
+(hyperref)                removing `\multiply' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\@tempdima' on input line 36.
+(hyperref)                removing `\@tempdima' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 36.
+(hyperref)                removing `\<def>-command' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\f@size' on input line 36.
+(hyperref)                removing `\f@size' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\hbox' on input line 36.
+(hyperref)                removing `\hbox' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 36.
+(hyperref)                removing `\<def>-command' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\tf@size' on input line 36.
+(hyperref)                removing `\tf@size' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 36.
+(hyperref)                removing `\<def>-command' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\sf@size' on input line 36.
+(hyperref)                removing `\sf@size' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<def>-command' on input line 36.
+(hyperref)                removing `\<def>-command' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\ssf@size' on input line 36.
+(hyperref)                removing `\ssf@size' on input line 35.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\<let>-command' on input line 36.
+(hyperref)                removing `\<let>-command' on input line 35.
 
 [3
 
@@ -1021,7 +1015,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 ! Undefined control sequence.
 \MakeUppercase ...ppercaseUnsupportedInPdfStrings 
                                                   
-l.39 ...C {\'\i }stica do RF21}}{114}{figure.5.12}
+l.39 ...C {\'\i }stica do RF21}}{117}{figure.5.12}
                                                   
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -3124,42 +3118,6 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-
-! LaTeX Error: Lonely \item--perhaps a missing list environment.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.643 O formato arff \bibitem{arff}
-                                    é un formato de arquivo que contén a m...
-
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Underfull \hbox (badness 10000) detected at line 643
-[][]
- []
-
-! Undefined control sequence.
-<argument> \@listctr 
-                     
-l.643 O formato arff \bibitem{arff}
-                                    é un formato de arquivo que contén a m...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! You can't use `\relax' after \the.
-<recently read> \c@ 
-                    
-l.643 O formato arff \bibitem{arff}
-                                    é un formato de arquivo que contén a m...
-I'm forgetting what you said and using zero instead.
-
 LaTeX Font Info:    Try loading font information for OML+cmr on input line 646.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omlcmr.fd"
@@ -3996,7 +3954,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 ! Undefined control sequence.
 \enit@enditemize ->\enit@after 
                                \endlist \ifx \enit@series \relax \else \ifnu...
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4007,7 +3965,7 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 \enit@enditemize ...x \else \ifnum \enit@resuming 
                                                   =\@ne \enit@setresumekeys ...
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4018,7 +3976,7 @@ and I'll forget about whatever was undefined.
 ! Missing number, treated as zero.
 <to be read again> 
                    =
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
@@ -4027,7 +3985,7 @@ look up `weird error' in the index to The TeXbook.)
 ! Undefined control sequence.
 \enit@setresumekeys ...xpandafter {\enit@savekeys 
                                                   }\xdef \enit@afterlist {#2...
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4038,7 +3996,7 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 \enit@setresumekeys ...it@toks }\ifnum \enit@type 
                                                   =\z@ #3\def \enit@noexcs {...
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4049,7 +4007,7 @@ and I'll forget about whatever was undefined.
 ! Missing number, treated as zero.
 <to be read again> 
                    =
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
@@ -4058,7 +4016,7 @@ look up `weird error' in the index to The TeXbook.)
 ! Undefined control sequence.
 <argument> enit@resume@series@\enit@series 
                                            
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4069,7 +4027,7 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 \enit@setresumekeys ...me@#1}{\csname c@\@listctr 
                                                   \endcsname \the \csname c@...
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4080,7 +4038,7 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 \enit@setresumekeys ...e \the \csname c@\@listctr 
                                                   \endcsname }\fi }
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4091,14 +4049,14 @@ and I'll forget about whatever was undefined.
 ! You can't use `\relax' after \the.
 <recently read> \c@ 
                     
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 I'm forgetting what you said and using zero instead.
 
 ! Undefined control sequence.
 \enit@enditemize ...ist \fi \ifnum \enit@resuming 
                                                   =\thr@@ \enit@setresumekey...
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4109,7 +4067,7 @@ and I'll forget about whatever was undefined.
 ! Missing number, treated as zero.
 <to be read again> 
                    =
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
@@ -4118,7 +4076,7 @@ look up `weird error' in the index to The TeXbook.)
 ! Undefined control sequence.
 \enit@setresumekeys ...xpandafter {\enit@savekeys 
                                                   }\xdef \enit@afterlist {#2...
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4129,7 +4087,7 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 \enit@setresumekeys ...it@toks }\ifnum \enit@type 
                                                   =\z@ #3\def \enit@noexcs {...
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4140,7 +4098,7 @@ and I'll forget about whatever was undefined.
 ! Missing number, treated as zero.
 <to be read again> 
                    =
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
@@ -4149,7 +4107,7 @@ look up `weird error' in the index to The TeXbook.)
 ! Undefined control sequence.
 \enit@setresumekeys ...me@#1}{\csname c@\@listctr 
                                                   \endcsname \the \csname c@...
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4160,7 +4118,7 @@ and I'll forget about whatever was undefined.
 ! Undefined control sequence.
 \enit@setresumekeys ...e \the \csname c@\@listctr 
                                                   \endcsname }\fi }
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -4171,138 +4129,136 @@ and I'll forget about whatever was undefined.
 ! You can't use `\relax' after \the.
 <recently read> \c@ 
                     
-l.251 \end{itemize}
+l.249 \end{itemize}
                    
 I'm forgetting what you said and using zero instead.
 
 [58] [59] [60] [61]
-Overfull \hbox (24.42627pt too wide) in paragraph at lines 329--331
+Overfull \hbox (24.42627pt too wide) in paragraph at lines 327--329
    [] \OT1/cmr/bx/n/12 add-Pro-perty-Chan-ge-Lis-te-ner(PropertyChangeListener 
 pro-perty-Chan-
  []
 
 [62] [63]
-Overfull \hbox (69.74146pt too wide) in paragraph at lines 376--378
+Overfull \hbox (69.74146pt too wide) in paragraph at lines 374--376
    [] \OT1/cmr/bx/n/12 pro-ce-sar-Se-lec-cion(ComparableInstances com-pa-ra-ble
 Ins-tan-ces, List\OML/cmm/b/it/12 <\OT1/cmr/bx/n/12 Integer\OML/cmm/b/it/12 >
  []
 
-[64] [65] [66]
-Underfull \hbox (badness 10000) in paragraph at lines 431--432
+[64] [65] [66] [67]
+Underfull \hbox (badness 10000) in paragraph at lines 430--431
 
  []
 
 File: figuras/UMLvista.eps Graphic file (type eps)
-<figuras/UMLvista.eps> [67] [68]
+<figuras/UMLvista.eps>
 File: figuras/Modelo.eps Graphic file (type eps)
  <figuras/Modelo.eps>
 File: figuras/Filtros.eps Graphic file (type eps)
- <figuras/Filtros.eps>
-Underfull \vbox (badness 1472) has occurred while \output is active []
-
- [69]
+ <figuras/Filtros.eps> [68] [69]
 File: figuras/Visualizacion.eps Graphic file (type eps)
 
-<figuras/Visualizacion.eps> [70]
-Underfull \hbox (badness 10000) in paragraph at lines 489--490
-
- []
-
-[71]
-Underfull \hbox (badness 10000) in paragraph at lines 513--514
+<figuras/Visualizacion.eps> [70] [71]
+Underfull \hbox (badness 10000) in paragraph at lines 488--489
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 525--526
+Underfull \hbox (badness 10000) in paragraph at lines 512--513
 
  []
 
 [72]
-Underfull \hbox (badness 10000) in paragraph at lines 551--552
+Underfull \hbox (badness 10000) in paragraph at lines 524--525
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 566--567
+Underfull \hbox (badness 10000) in paragraph at lines 550--551
 
  []
 
 [73]
-Underfull \hbox (badness 10000) in paragraph at lines 584--585
+Underfull \hbox (badness 10000) in paragraph at lines 565--566
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 588--589
+Underfull \hbox (badness 10000) in paragraph at lines 583--584
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 613--614
+Underfull \hbox (badness 10000) in paragraph at lines 587--588
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 628--629
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 632--633
+Underfull \hbox (badness 10000) in paragraph at lines 612--613
 
  []
 
 [74]
-Overfull \hbox (12.1863pt too wide) in paragraph at lines 650--652
+Underfull \hbox (badness 10000) in paragraph at lines 627--628
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 631--632
+
+ []
+
+
+Overfull \hbox (12.1863pt too wide) in paragraph at lines 649--651
 \OT1/cmr/m/n/12 Enva ao Con-tro-la-dor un even-to de ti-po MU-DAR[]INDICE[]TE
 MPORAL,
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 670--671
-
- []
-
 [75]
-Underfull \hbox (badness 10000) in paragraph at lines 694--695
+Underfull \hbox (badness 10000) in paragraph at lines 669--670
 
  []
 
 
-Overfull \hbox (1.42635pt too wide) in paragraph at lines 701--703
+Underfull \hbox (badness 10000) in paragraph at lines 693--694
+
+ []
+
+
+Overfull \hbox (1.42635pt too wide) in paragraph at lines 700--702
 \OT1/cmr/m/n/12 Per-mi-te mo-ver-se a dis-tin-tos pun-tos da re-pro-du-cion, c
 ha-man-do ao meto-
  []
 
 [76] [77]
 File: figuras/DSarranque.eps Graphic file (type eps)
- <figuras/DSarranque.eps>
+ <figuras/DSarranque.eps> [78] [79]
 File: figuras/JDataMotioncommon.eps Graphic file (type eps)
  <figuras/JDataMotioncommon.eps>
-Overfull \hbox (5.63884pt too wide) in paragraph at lines 766--767
+Overfull \hbox (5.63884pt too wide) in paragraph at lines 795--796
 \OT1/cmr/m/n/12 dev-3.7.10.jar'', ``weka-dev-3.7.10-javadoc.jar'' e ``weka-dev-
 3.7.10-sources.jar'', que
  []
 
-[78] [79]
-Overfull \hbox (0.28491pt too wide) in paragraph at lines 777--779
+[80] [81]
+Overfull \hbox (0.28491pt too wide) in paragraph at lines 806--808
    [] \OT1/cmr/bx/n/12 fil-ter(ComparableInstances com-pa-ra-bleIns-tan-ces, In
 -te-ger fil-te-re-dAt-tri-
  []
 
-[80]
-Overfull \hbox (17.05296pt too wide) in paragraph at lines 791--792
+
+Overfull \hbox (17.05296pt too wide) in paragraph at lines 820--821
 []\OT1/cmr/m/n/12 O pa-que-te jda-ta-mo-tion-com-mon.filters tamen conten unh
 a xe-rar-qua de parame-
  []
 
+[82]
 File: figuras/JDataMotionfilterssample.eps Graphic file (type eps)
-<figuras/JDataMotionfilterssample.eps> [81] [82]
+ <figuras/JDataMotionfilterssample.eps> [83] [84]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [83])
-[84] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap5.tex
+ [85])
+[86] (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap5.tex
 Cap\'{\i }tulo 5.
 
 Overfull \hbox (11.68883pt too wide) in paragraph at lines 9--10
@@ -4310,25 +4266,25 @@ Overfull \hbox (11.68883pt too wide) in paragraph at lines 9--10
 eto-dos son loa-dARFF(String
  []
 
-[85
+[87
 
 
 
 
-] [86]
+] [88]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
 (hyperref)                than one, level fixed on input line 48.
 
-[87]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [88]
 [89]
-Underfull \vbox (badness 1609) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [90]
 [91]
+Underfull \vbox (badness 1609) has occurred while \output is active []
+
+ [92]
+[93]
 
 ! Package inputenc Error: Unicode char \u8:�\lst@EC� not set up for use with La
 TeX.
@@ -4347,17 +4303,17 @@ or  <return>  to continue without it.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [92]
+ [94]
 File: figuras/RF05.eps Graphic file (type eps)
 
-<figuras/RF05.eps> [93] [94] [95]
+<figuras/RF05.eps> [95] [96] [97]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [96]
-[97] [98]
+ [98]
+[99] [100]
 Underfull \vbox (badness 6825) has occurred while \output is active []
 
- [99]
+ [101]
 ! Missing $ inserted.
 <inserted text> 
                 $
@@ -4521,115 +4477,1067 @@ Overfull \hbox (171.09326pt too wide) in paragraph at lines 421--425
 pormediodom[]tododeleteAttributeAt; deInstances:Correcto:$ 
  []
 
-[100] [101] [102]
+[102] [103] [104]
 File: figuras/RF11.eps Graphic file (type eps)
  <figuras/RF11.eps>
 Underfull \vbox (badness 2426) has occurred while \output is active []
 
- [103]
+ [105]
 File: figuras/RF1213.eps Graphic file (type eps)
 
 <figuras/RF1213.eps>
 File: figuras/RF1213.eps Graphic file (type eps)
- <figuras/RF1213.eps> [104] [105] [106]
+ <figuras/RF1213.eps> [106] [107] [108]
 File: figuras/RF14.eps Graphic file (type eps)
  <figuras/RF14.eps>
-[107]
+[109]
 File: figuras/RF1516.eps Graphic file (type eps)
- <figuras/RF1516.eps> [108]
+ <figuras/RF1516.eps> [110]
 File: figuras/RF1516.eps Graphic file (type eps)
  <figuras/RF1516.eps>
 Underfull \vbox (badness 2707) has occurred while \output is active []
 
- [109]
+ [111]
 File: figuras/RF17.eps Graphic file (type eps)
 
-<figuras/RF17.eps> [110]
+<figuras/RF17.eps> [112]
 File: figuras/RF18.eps Graphic file (type eps)
  <figuras/RF18.eps>
 File: figuras/RF19.eps Graphic file (type eps)
- <figuras/RF19.eps> [111] [112]
-[113]
+ <figuras/RF19.eps> [113] [114]
+[115]
 File: figuras/RF202122.eps Graphic file (type eps)
  <figuras/RF202122.eps>
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [114]
+ [116]
 File: figuras/RF202122.eps Graphic file (type eps)
 
-<figuras/RF202122.eps> [115]
+<figuras/RF202122.eps> [117]
 File: figuras/RF202122.eps Graphic file (type eps)
- <figuras/RF202122.eps> [116] [117]
+ <figuras/RF202122.eps> [118] [119]
 File: figuras/RF23.eps Graphic file (type eps)
 
-<figuras/RF23.eps>
-Underfull \vbox (badness 2426) has occurred while \output is active []
-
- [118]
+<figuras/RF23.eps> [120]
 File: figuras/RF24.eps Graphic file (type eps)
-
-<figuras/RF24.eps> [119]
+ <figuras/RF24.eps> [121]
 File: figuras/RF25.eps Graphic file (type eps)
- <figuras/RF25.eps> [120] [121]
-Underfull \vbox (badness 1960) has occurred while \output is active []
-
- [122]
+ <figuras/RF25.eps> [122]
 [123]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1960) has occurred while \output is active []
 
  [124]
 [125]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [126]
-[127] [128] [129]
+[127]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [128]
+[129] [130] [131]
 File: figuras/RF32.eps Graphic file (type eps)
  <figuras/RF32.eps>
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [130]
+ [132]
 File: figuras/eficiencia.eps Graphic file (type eps)
 
-<figuras/eficiencia.eps> [131] [132] [133] [134]
+<figuras/eficiencia.eps> [133] [134] [135] [136]
 File: figuras/trazabilidade.eps Graphic file (type eps)
  <figuras/trazabilidade.eps>)
-[135] [136]
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/conclusions.te
-x
+[137] [138]
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap6.tex
 Cap\'{\i }tulo 6.
-) [137
+File: figuras/piramide.eps Graphic file (type eps)
+<figuras/piramide.eps> [139
 
 
-
-
-] [138
 
 
 ]
+! Undefined control sequence.
+\enit@enditemize ->\enit@after 
+                               \endlist \ifx \enit@series \relax \else \ifnu...
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@enditemize ...x \else \ifnum \enit@resuming 
+                                                  =\@ne \enit@setresumekeys ...
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.22 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...xpandafter {\enit@savekeys 
+                                                  }\xdef \enit@afterlist {#2...
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...it@toks }\ifnum \enit@type 
+                                                  =\z@ #3\def \enit@noexcs {...
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.22 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+<argument> enit@resume@series@\enit@series 
+                                           
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...me@#1}{\csname c@\@listctr 
+                                                  \endcsname \the \csname c@...
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...e \the \csname c@\@listctr 
+                                                  \endcsname }\fi }
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! You can't use `\relax' after \the.
+<recently read> \c@ 
+                    
+l.22 \end{itemize}
+                  
+I'm forgetting what you said and using zero instead.
+
+! Undefined control sequence.
+\enit@enditemize ...ist \fi \ifnum \enit@resuming 
+                                                  =\thr@@ \enit@setresumekey...
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.22 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...xpandafter {\enit@savekeys 
+                                                  }\xdef \enit@afterlist {#2...
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...it@toks }\ifnum \enit@type 
+                                                  =\z@ #3\def \enit@noexcs {...
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.22 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...me@#1}{\csname c@\@listctr 
+                                                  \endcsname \the \csname c@...
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...e \the \csname c@\@listctr 
+                                                  \endcsname }\fi }
+l.22 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! You can't use `\relax' after \the.
+<recently read> \c@ 
+                    
+l.22 \end{itemize}
+                  
+I'm forgetting what you said and using zero instead.
+
+[140]
+! Undefined control sequence.
+\enit@enditemize ->\enit@after 
+                               \endlist \ifx \enit@series \relax \else \ifnu...
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@enditemize ...x \else \ifnum \enit@resuming 
+                                                  =\@ne \enit@setresumekeys ...
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.36 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...xpandafter {\enit@savekeys 
+                                                  }\xdef \enit@afterlist {#2...
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...it@toks }\ifnum \enit@type 
+                                                  =\z@ #3\def \enit@noexcs {...
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.36 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+<argument> enit@resume@series@\enit@series 
+                                           
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...me@#1}{\csname c@\@listctr 
+                                                  \endcsname \the \csname c@...
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...e \the \csname c@\@listctr 
+                                                  \endcsname }\fi }
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! You can't use `\relax' after \the.
+<recently read> \c@ 
+                    
+l.36 \end{itemize}
+                  
+I'm forgetting what you said and using zero instead.
+
+! Undefined control sequence.
+\enit@enditemize ...ist \fi \ifnum \enit@resuming 
+                                                  =\thr@@ \enit@setresumekey...
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.36 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...xpandafter {\enit@savekeys 
+                                                  }\xdef \enit@afterlist {#2...
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...it@toks }\ifnum \enit@type 
+                                                  =\z@ #3\def \enit@noexcs {...
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.36 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...me@#1}{\csname c@\@listctr 
+                                                  \endcsname \the \csname c@...
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...e \the \csname c@\@listctr 
+                                                  \endcsname }\fi }
+l.36 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! You can't use `\relax' after \the.
+<recently read> \c@ 
+                    
+l.36 \end{itemize}
+                  
+I'm forgetting what you said and using zero instead.
+
+[141]
+! Undefined control sequence.
+\enit@enditemize ->\enit@after 
+                               \endlist \ifx \enit@series \relax \else \ifnu...
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@enditemize ...x \else \ifnum \enit@resuming 
+                                                  =\@ne \enit@setresumekeys ...
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.48 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...xpandafter {\enit@savekeys 
+                                                  }\xdef \enit@afterlist {#2...
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...it@toks }\ifnum \enit@type 
+                                                  =\z@ #3\def \enit@noexcs {...
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.48 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+<argument> enit@resume@series@\enit@series 
+                                           
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...me@#1}{\csname c@\@listctr 
+                                                  \endcsname \the \csname c@...
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...e \the \csname c@\@listctr 
+                                                  \endcsname }\fi }
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! You can't use `\relax' after \the.
+<recently read> \c@ 
+                    
+l.48 \end{itemize}
+                  
+I'm forgetting what you said and using zero instead.
+
+! Undefined control sequence.
+\enit@enditemize ...ist \fi \ifnum \enit@resuming 
+                                                  =\thr@@ \enit@setresumekey...
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.48 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...xpandafter {\enit@savekeys 
+                                                  }\xdef \enit@afterlist {#2...
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...it@toks }\ifnum \enit@type 
+                                                  =\z@ #3\def \enit@noexcs {...
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.48 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...me@#1}{\csname c@\@listctr 
+                                                  \endcsname \the \csname c@...
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...e \the \csname c@\@listctr 
+                                                  \endcsname }\fi }
+l.48 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! You can't use `\relax' after \the.
+<recently read> \c@ 
+                    
+l.48 \end{itemize}
+                  
+I'm forgetting what you said and using zero instead.
+
+) [142]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.tex
 Ap\'endice A.
-) [139
+
+Overfull \hbox (3.72108pt too wide) in paragraph at lines 5--6
+[]\OT1/cmr/m/n/12 Mencion es-pe-cial me-re-ce o con-ti-do da li-brera JDa-ta
+-Mo-tion.common. Aqu os
+ []
 
 
-] [140
+Overfull \hbox (23.47366pt too wide) in paragraph at lines 9--10
+[]\OT1/cmr/m/n/12 Para par-ti-ci-par no desen-vol-ve-men-to da pro-pia apli-ca-
+cion JDa-ta-Mo-tion aconsella-
+ []
+
+[143
+
+
+
+
+] [144]) [145] [146
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.tex
 Ap\'endice B.
-) [141
+File: figuras/carpetaAplicacion.eps Graphic file (type eps)
+<figuras/carpetaAplicacion.eps>
+! Undefined control sequence.
+\enit@enditemize ->\enit@after 
+                               \endlist \ifx \enit@series \relax \else \ifnu...
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+[147
 
 
-] [142
+]
+! Undefined control sequence.
+\enit@enditemize ...x \else \ifnum \enit@resuming 
+                                                  =\@ne \enit@setresumekeys ...
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.27 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...xpandafter {\enit@savekeys 
+                                                  }\xdef \enit@afterlist {#2...
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...it@toks }\ifnum \enit@type 
+                                                  =\z@ #3\def \enit@noexcs {...
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.27 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+<argument> enit@resume@series@\enit@series 
+                                           
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...me@#1}{\csname c@\@listctr 
+                                                  \endcsname \the \csname c@...
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...e \the \csname c@\@listctr 
+                                                  \endcsname }\fi }
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! You can't use `\relax' after \the.
+<recently read> \c@ 
+                    
+l.27 \end{itemize}
+                  
+I'm forgetting what you said and using zero instead.
+
+! Undefined control sequence.
+\enit@enditemize ...ist \fi \ifnum \enit@resuming 
+                                                  =\thr@@ \enit@setresumekey...
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.27 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...xpandafter {\enit@savekeys 
+                                                  }\xdef \enit@afterlist {#2...
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...it@toks }\ifnum \enit@type 
+                                                  =\z@ #3\def \enit@noexcs {...
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   =
+l.27 \end{itemize}
+                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Undefined control sequence.
+\enit@setresumekeys ...me@#1}{\csname c@\@listctr 
+                                                  \endcsname \the \csname c@...
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Undefined control sequence.
+\enit@setresumekeys ...e \the \csname c@\@listctr 
+                                                  \endcsname }\fi }
+l.27 \end{itemize}
+                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! You can't use `\relax' after \the.
+<recently read> \c@ 
+                    
+l.27 \end{itemize}
+                  
+I'm forgetting what you said and using zero instead.
+
+File: figuras/inicial.eps Graphic file (type eps)
+<figuras/inicial.eps>
+File: figuras/importarFicheiro.eps Graphic file (type eps)
+ <figuras/importarFicheiro.eps>
+File: figuras/abrirSesion.eps Graphic file (type eps)
+ <figuras/abrirSesion.eps>
+File: figuras/manualModelo.eps Graphic file (type eps)
+
+<figuras/manualModelo.eps> [148] [149] [150] [151] [152]
+File: figuras/histogramaNominal.eps Graphic file (type eps)
+
+<figuras/histogramaNominal.eps>
+File: figuras/menuAtributo.eps Graphic file (type eps)
+ <figuras/menuAtributo.eps> [153] [154]
+File: figuras/engadirInstancia.eps Graphic file (type eps)
+
+<figuras/engadirInstancia.eps> [155]
+File: figuras/engadirAtributo.eps Graphic file (type eps)
+ <figuras/engadirAtributo.eps>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [156]
+File: figuras/manualFiltros.eps Graphic file (type eps)
+
+<figuras/manualFiltros.eps>
+File: figuras/secuenciaFiltros.eps Graphic file (type eps)
+ <figuras/secuenciaFiltros.eps>
+File: figuras/filtrosConfigurados.eps Graphic file (type eps)
+
+<figuras/filtrosConfigurados.eps> [157] [158] [159]
+File: figuras/filtrosRecuperados.eps Graphic file (type eps)
+
+<figuras/filtrosRecuperados.eps>
+File: figuras/manualVisualizacion.eps Graphic file (type eps)
+ <figuras/manualVisualizacion.eps>
+File: figuras/matrizVisualizacion.eps Graphic file (type eps)
+
+<figuras/matrizVisualizacion.eps> [160] [161] [162] [163]
+File: figuras/matrizChea.eps Graphic file (type eps)
+
+<figuras/matrizChea.eps>
+File: figuras/diagramasNominais.eps Graphic file (type eps)
+ <figuras/diagramasNominais.eps> [164] [165]
+File: figuras/resaltarPuntoSeleccionado.eps Graphic file (type eps)
+
+<figuras/resaltarPuntoSeleccionado.eps> [166] [167]
+File: figuras/propiedadesDiagramas.eps Graphic file (type eps)
+
+<figuras/propiedadesDiagramas.eps> [168] [169]
+File: figuras/configurarReproducion.eps Graphic file (type eps)
+
+<figuras/configurarReproducion.eps> [170]
+File: figuras/calcularDistancia.eps Graphic file (type eps)
+ <figuras/calcularDistancia.eps>
+! Missing $ inserted.
+<inserted text> 
+                $
+l.309 ... o atributo entre comiñas graves (\grave
+                                                  {}). Por exemplo: \$1.\gra...
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+
+LaTeX Warning: Command \' invalid in math mode on input line 309.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ...@spacefactor \spacefactor }\accent 
+                                                  #1 #2\egroup \spacefactor ...
+l.309 ...o: \$1.\grave{}sepallength\grave{}. A fó
+                                                  rmula ten autocompletado, ...
+I'm changing \accent to \mathaccent here; wish me luck.
+(Accents are not the same in formulas as they are in text.)
+
+! You can't use `\spacefactor' in math mode.
+\add@accent ...}\accent #1 #2\egroup \spacefactor 
+                                                  \accent@spacefactor 
+l.309 ...o: \$1.\grave{}sepallength\grave{}. A fó
+                                                  rmula ten autocompletado, ...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! You can't use `\spacefactor' in math mode.
+<argument> ...cefactor \spacefactor }\spacefactor 
+                                                  \accent@spacefactor 
+l.309 ...o: \$1.\grave{}sepallength\grave{}. A fó
+                                                  rmula ten autocompletado, ...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+LaTeX Warning: Command \' invalid in math mode on input line 309.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ...@spacefactor \spacefactor }\accent 
+                                                  #1 #2\egroup \spacefactor ...
+l.309 ...nha vez se definan os dous puntos e a fó
+                                                  rmula da distancia, premen...
+I'm changing \accent to \mathaccent here; wish me luck.
+(Accents are not the same in formulas as they are in text.)
+
+! You can't use `\spacefactor' in math mode.
+\add@accent ...}\accent #1 #2\egroup \spacefactor 
+                                                  \accent@spacefactor 
+l.309 ...nha vez se definan os dous puntos e a fó
+                                                  rmula da distancia, premen...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! You can't use `\spacefactor' in math mode.
+<argument> ...cefactor \spacefactor }\spacefactor 
+                                                  \accent@spacefactor 
+l.309 ...nha vez se definan os dous puntos e a fó
+                                                  rmula da distancia, premen...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+LaTeX Warning: Command \' invalid in math mode on input line 309.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ...@spacefactor \spacefactor }\accent 
+                                                  #1 #2\egroup \spacefactor ...
+l.309 ...da distancia, premendo Aceptar aparecerá
+                                                   un cadro de diálogo co r...
+I'm changing \accent to \mathaccent here; wish me luck.
+(Accents are not the same in formulas as they are in text.)
+
+! You can't use `\spacefactor' in math mode.
+\add@accent ...}\accent #1 #2\egroup \spacefactor 
+                                                  \accent@spacefactor 
+l.309 ...da distancia, premendo Aceptar aparecerá
+                                                   un cadro de diálogo co r...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! You can't use `\spacefactor' in math mode.
+<argument> ...cefactor \spacefactor }\spacefactor 
+                                                  \accent@spacefactor 
+l.309 ...da distancia, premendo Aceptar aparecerá
+                                                   un cadro de diálogo co r...
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+LaTeX Warning: Command \' invalid in math mode on input line 309.
+
+! Please use \mathaccent for accents in math mode.
+\add@accent ...@spacefactor \spacefactor }\accent 
+                                                  #1 #2\egroup \spacefactor ...
+l.309 ...mendo Aceptar aparecerá un cadro de diá
+                                                  logo co resultado.
+I'm changing \accent to \mathaccent here; wish me luck.
+(Accents are not the same in formulas as they are in text.)
+
+! You can't use `\spacefactor' in math mode.
+\add@accent ...}\accent #1 #2\egroup \spacefactor 
+                                                  \accent@spacefactor 
+l.309 ...mendo Aceptar aparecerá un cadro de diá
+                                                  logo co resultado.
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! You can't use `\spacefactor' in math mode.
+<argument> ...cefactor \spacefactor }\spacefactor 
+                                                  \accent@spacefactor 
+l.309 ...mendo Aceptar aparecerá un cadro de diá
+                                                  logo co resultado.
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.310 
+      
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+Missing character: There is no � in font cmex10!
+Missing character: There is no � in font cmex10!
+Missing character: There is no � in font cmex10!
+Missing character: There is no � in font cmex10!
+Missing character: There is no � in font cmex10!
+Missing character: There is no � in font cmex10!
+Missing character: There is no � in font cmex10!
+Missing character: There is no � in font cmex10!
+
+Overfull \hbox (859.98651pt too wide) in paragraph at lines 309--310
+\OT1/cmr/m/n/12 $1\OML/cmm/m/it/12 :[]sepallength[]:Af[]rmulatenautocompletado;
+ deformaqueaodetectarasecuencia\OT1/cmr/m/n/12 $1\OML/cmm/m/it/12 :xaamosaunhal
+istacosatributosposiblesdopuntoA:Unhavezsedefinanosdouspuntoseaf[]rmuladadistan
+cia; premendoAceptaraparecer[]uncadrodedi[]logocoresultado:$ 
+ []
+
+[171]) [172] [173] [174
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.tex
 Ap\'endice C.
-) [143
+) [175
 
 
-] [144
+] [176
 
 
 ]
@@ -4662,18 +5570,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 17--18
 r/m/n/12 [[]Ulti-ma con-sul-ta:
  []
 
-) [145
+) [177
 
 
-] [146
+] [178
 
 
 ]
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/glosario.tex
-[147
+[179
 
 
-]) [148]
+]) [180]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 119.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 119.
 
@@ -4686,8 +5594,7 @@ x) (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap2.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap3.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap4.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap5.aux)
-(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/conclusions.au
-x)
+(C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/cap6.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendicea.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/apendiceb.aux)
 (C:\Users\usuario\Documents\GitHub\JDataMotion\doc\mem\capitulos/licenza.aux)
@@ -4697,7 +5604,7 @@ ux)
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 119.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 119.
 Package rerunfilecheck Info: File `traballo.out' has not changed.
-(rerunfilecheck)             Checksum: 4B8844EB6D0069915E0829E7B65D074D;3014.
+(rerunfilecheck)             Checksum: 1A8D58D0515A314BBB02FB18BDFEBF8C;3592.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.13947pt have occurred.
@@ -4708,12 +5615,12 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 119.
  ) 
 Here is how much of TeX's memory you used:
- 8871 strings out of 493922
- 131828 string characters out of 3147299
- 329262 words of memory out of 3000000
- 11870 multiletter control sequences out of 15000+200000
+ 8951 strings out of 493922
+ 133469 string characters out of 3147299
+ 337354 words of memory out of 3000000
+ 11928 multiletter control sequences out of 15000+200000
  13579 words of font info for 52 fonts, out of 3000000 for 9000
  842 hyphenation exceptions out of 8191
  42i,9n,40p,1307b,1940s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on traballo.dvi (156 pages, 603944 bytes).
+Output written on traballo.dvi (188 pages, 705164 bytes).

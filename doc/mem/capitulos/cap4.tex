@@ -238,8 +238,6 @@ Os datos do Controlador que desexaremos salvar son:
 \item O xestor de comandos, con todos os comandos das pilas desfacer e refacer. Cos da primeira poderemos restaurar o modelo de datos a partir das instancias iniciais do experimento.
 \end{itemize}
 
-%Como xa mencionamos, os Comandos teñen un parámetro obxectivo que non é outro ca o Modelo sobre o cal operan TODOTODOTODO
-
 \subsection{Vista}
 
 A continuación expoñeremos e comentaremos o deseño da sección Vista. O diagrama de clases preséntase na figura \ref{UMLvista}, e contén un conxunto de clases (algunhas privadas e internas á clase Vista) que participan e comparten certas responsabilidades con ela. A sección Vista ten varios cometidos nesta aplicación:
@@ -423,6 +421,7 @@ permite visualizar ``numeroItems'' posicións máis dentro do NodeList de Instan
 permite agochar as últimas ``numeroItems'' posicións dentro do NodeList de InstancesSimultaneas. Inclúe o refresco da estela. Debe ter o modificador synchronized para evitar inconsistencias no sistema.
 \end{description}
 
+Estes dous métodos comezan a actuar sempre polo último nodo do NodeList (visualizando ou agochando puntos a partir de aí). O requisito funcional RF23 propoñía que os puntos dos diagramas puidesen ir desvanecéndose, ata desaparecer, conforme continuase a reprodución. Non temos problema para saber que conxunto de puntos (InstancesSimultaneas) temos que agochar, xa que o NodeList permite desprazarnos en ambos sentidos ao longo da lista. O problema radica na reprodución cara atrás. Teremos que aumentar a intensidade de cor de todos os puntos anteriores, e posiblemente, incluso volver a visualizar un punto máis, o último dos que se desvaneceron. O NodeList pode atopar que punto é o que ten que reaparecer, pero o XYSeriesCollection só engade os datos ao final das series na estrutura de datos que emprega, co cal non podemos cumprir este requisito en termos de consistencia do sistema. A única posibilidade sería implementar nun futuro un novo Dataset que posibilitase a adición de elementos por calquera banda.
 \item[ChartPanelConfigurable:] \hfill
 Estende a ChartPanel só para sobrescribir un dos seus métodos: ``doEditProperties()''. Este método é chamado ao premer no item ``Propiedades'' dentro do menú contextual dun diagrama de dispersión. Deste xeito controlamos o seu comportamento para chamar ao método estático Vista.doEditProperties().
 
@@ -451,7 +450,7 @@ A utilidade da ferramenta radica no seu uso secuencial: comezamos o noso traball
 
 \begin{description}
 \item[Modelo:] \hfill
-conterá unha táboa na que cada columna representará un dos atributos, e cada fila unha instancia que pode conter valores para cada un desos atributos. As instancias á sua esquerda unha columna adicional e non editable que indique o índice da instancia. Á dereita da táboa reservaremos un espacio para arroxar información sobre un atributo ao seleccionalo. Por exemplo, ao seleccionar un atributo de tipo numérico (pulsando na cabeceira da columna que o representa) indicarase neste espacio á dereita a media de valores, o máximo, o mínimo, a desviación típica, etc. O mockup desta sección pódese observar na figura \ref{Modelo}.
+conterá unha táboa na que cada columna representará un dos atributos, e cada fila unha instancia que pode conter valores para cada un deses atributos. As instancias terán á sua esquerda unha columna adicional e non editable que indique o índice da instancia. Á dereita da táboa reservaremos un espacio para arroxar información sobre un atributo ao seleccionalo. Por exemplo, ao seleccionar un atributo de tipo numérico (pulsando na cabeceira da columna que o representa) indicarase neste espacio á dereita a media de valores, o máximo, o mínimo, a desviación típica, etc. Tamén se amosará un histograma dos datos, que en caso de seren de tipo numérico, serán representados agrupados por cores segundo o atributo nominal (ou atributo de clase) definido no experimento. O mockup desta sección pódese observar na figura \ref{Modelo}.
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figuras/Modelo}
@@ -751,6 +750,36 @@ Podemos observar mellor o proceso de arranque da aplicación a través da figura
 \caption{Diagrama de secuencia do arranque}
 \label{DSarranque}
 \end{figure}
+
+\subsection{Outros recursos}
+
+As clases das seccións anteriores pertencen ao paquete principal do proxecto JDataMotion. Nel atópanse outros subpaquetes con recursos (clases, ficheiros, imaxes, etc.) que colaboran coas clases principais. A continuación comentaremos cales son:
+
+\begin{description}
+\item[jdatamotion.charteditors:] \hfill
+Contén clases estendidas para todos os editores gráficos de JFreeChart (menús de configuración gráfica dos diagramas de dispersión). Sobrescribimos algúns métodos destas clases para que lean e escriban cara a configuración almacenada en ficheiro, en vez de aplicar os seus cambios sobre o diagrama que os disparou. 
+\item[jdatamotion.comandos:]
+Contén todos os comandos susceptibles de ser enviados ao XestorComandos, como xa vimos.
+\item[jdatamotion.filtros:]
+Contén 4 filtros útiles que xa fornece a propia aplicación:
+\begin{description}
+\item[FiltroRecheo:] \hfill
+Utiliza un parámetro DoubleParameter para cubrir con el as instancias baleiras do atributo sobre o que ten que actuar.
+\item[FiltroEliminacionOutliers:] \hfill
+Utiliza un parámetro DoubleParameter para eliminar todas as instancias que no atributo sobre o que ten que actuar excedan tantas desviacións típicas da media.
+\item[FiltroLimite:] \hfill
+Utiliza dous StringParameter, un para saber si ten que actuar sobre un valor límite fixo ou sobre un percentil límite, e outro para saber si ten que actuar sobre valores que excedan ou sobre os que non alcancen ese límite. Tamén utiliza un DoubleParameter que almacenará o valor límite ou o percentil límite, segundo o caso. No atributo sobre o que actúa o filtro, as instancias que queden sinaladas pola configuración anterior cambiarán o seu valor para axustalo ao do límite.
+\item[FiltroNormalizacion:] \hfill
+Non emprega parámetros. Normaliza en todas as instancias o valor do atributo sobre o que actúa, normalizándoo.
+\end{description}
+Tamén contén o encapsulador (FilterHandler) de filtros que empregará o Modelo.
+\item[jdatamotion.idiomas:]
+Contén 3 ficheiros que conteñen as mesmas claves, e en cada un esta clave está relacionada cunha cadea de caracteres nun idioma. Cada ficheiro representa un idioma, e dese xeito pódense traducir mensaxes da aplicación accedendo ao ficheiro do idioma seleccionado e buscando nel o valor da clave.
+\item[jdatamotion.imaxes:]
+Contén todas as figuras, iconas e demais gráficas que emprega a aplicación na súa interface gráfica.
+\item[jdatamotion.sesions:]
+Contén a interface Sesionizable da que xa falamos, así como os 3 tipos de sesión nos que o Modelo, a Vista e o Controlador poden almacenar a configuración que desexen salvar dunha sesión a outra.
+\end{description}
 
 \section{Deseño de JDataMotion.common}
 
