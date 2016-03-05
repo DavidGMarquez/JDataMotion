@@ -12,7 +12,7 @@ A tool for scatterplots dynamic display.
 
 ### Installation
 
-* No installation is needed
+* No installation is needed. You can just place the project folder in any directory.
 
 ### Execution
 
